@@ -3,6 +3,8 @@ package com.squad13.apimonolito.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Set;
+
 @Data
 @Entity(name = "tb_padrao")
 public class Padrao {
@@ -16,4 +18,7 @@ public class Padrao {
 
     @Column(name = "is_ativo")
     private Boolean ativo;
+
+    @OneToMany(mappedBy = "padrao")
+    private Set<AmbientePadrao> ambientesPadrao;
 }

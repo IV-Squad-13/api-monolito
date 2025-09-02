@@ -1,5 +1,7 @@
 package com.squad13.apimonolito.models;
 
+import com.squad13.apimonolito.models.associative.AmbientePadrao;
+import com.squad13.apimonolito.models.associative.ItemAmbiente;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -15,15 +17,15 @@ public class Ambiente {
     @Column(name = "id_ambiente")
     private Long id;
 
-    @Column(name = "nm_ambiente", length = 50)
-    private String nome;
+    @Column(name = "nm_ambiente", unique = true,nullable = false, length = 40)
+    private String name;
 
     @Column(name = "is_ativo")
-    private Boolean ativo;
+    private Boolean isActive;
 
     @OneToMany(mappedBy = "ambiente")
-    private Set<ItemAmbiente> itemAmbientes;
+    private Set<ItemAmbiente> itemSet;
 
     @OneToMany(mappedBy = "ambiente")
-    private Set<AmbientePadrao> ambientePadroes;
+    private Set<AmbientePadrao> padraoSet;
 }

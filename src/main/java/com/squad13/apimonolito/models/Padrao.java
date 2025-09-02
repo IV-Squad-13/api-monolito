@@ -1,5 +1,6 @@
 package com.squad13.apimonolito.models;
 
+import com.squad13.apimonolito.models.associative.AmbientePadrao;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -13,12 +14,12 @@ public class Padrao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 50)
-    private String nome;
+    @Column(length = 50, name = "nm_padrao", unique = true, nullable = false)
+    private String name;
 
     @Column(name = "is_ativo")
-    private Boolean ativo;
+    private Boolean isActive;
 
     @OneToMany(mappedBy = "padrao")
-    private Set<AmbientePadrao> ambientesPadrao;
+    private Set<AmbientePadrao> ambienteSet;
 }

@@ -15,12 +15,12 @@ public class TipoItem {
     @Column(name = "id_tipo_item")
     private Long id;
 
-    @Column(name = "nm_tipo_item", length = 50)
-    private String nome;
+    @Column(name = "nm_tipo_item", unique = true, nullable = false, length = 40)
+    private String name;
 
     @Column(name = "is_ativo")
-    private Boolean ativo;
+    private Boolean isActive;
 
-    @OneToMany(mappedBy = "cdItem")
-    private Set<Item> items;
+    @OneToMany(mappedBy = "type")
+    private Set<Item> itemSet;
 }

@@ -12,9 +12,9 @@ public class Material {
     @Column(name = "id_material")
     private Long id;
 
-    @Column(name = "nm_material", length = 50)
-    private String nome;
+    @Column(name = "nm_material", unique = true, nullable = false, length = 40)
+    private String name;
 
     @Column(name = "is_ativo")
-    private Boolean ativo;
+    private Boolean isActive;
 }

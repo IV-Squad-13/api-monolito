@@ -1,16 +1,19 @@
-package com.squad13.apimonolito.models;
+package com.squad13.apimonolito.models.associative;
 
+import com.squad13.apimonolito.models.Item;
+import com.squad13.apimonolito.models.Marca;
+import com.squad13.apimonolito.models.Material;
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "tb_item_total")
-public class ItemTotal {
+@Table(name = "tb_item_composto")
+public class ItemComposto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_item_total")
+    @Column(name = "id_item_composto")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -26,5 +29,5 @@ public class ItemTotal {
     private Marca marca;
 
     @Column(name = "is_ativo")
-    private Boolean ativo;
+    private Boolean isActive;
 }

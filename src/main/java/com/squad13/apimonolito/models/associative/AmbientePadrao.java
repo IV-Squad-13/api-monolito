@@ -1,5 +1,8 @@
-package com.squad13.apimonolito.models;
+package com.squad13.apimonolito.models.associative;
 
+import com.squad13.apimonolito.models.Ambiente;
+import com.squad13.apimonolito.models.Padrao;
+import com.squad13.apimonolito.util.AssociativeId;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -8,10 +11,8 @@ import lombok.Data;
 @Table(name = "tb_ambiente_padrao")
 public class AmbientePadrao {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_ambiente_padrao")
-    private Long id;
+    @EmbeddedId
+    private AssociativeId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_ambiente", nullable = false)
@@ -22,5 +23,5 @@ public class AmbientePadrao {
     private Padrao padrao;
 
     @Column(name = "is_ativo")
-    private Boolean ativo;
+    private Boolean isActive;
 }

@@ -1,5 +1,7 @@
 package com.squad13.apimonolito.models;
 
+import com.squad13.apimonolito.models.associative.ItemAmbiente;
+import com.squad13.apimonolito.models.associative.ItemComposto;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,28 +18,25 @@ public class Item {
     @Column(name = "id_item")
     private Long id;
 
-    @Column(name = "nm_item", length = 50)
-    private String nome;
+    @Column(name = "nm_item", unique = true, nullable = false, length = 40)
+    private String name;
 
     @Column(name = "is_ativo")
-    private Boolean ativo;
+    private Boolean isActive;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cd_item", referencedColumnName = "id_tipo_item", nullable = false)
-    private TipoItem cdItem;
+    @JoinColumn(name = "tipo_item_id")
+    private TipoItem type;
 
-    @Column(name = "vl_largura")
-    private BigDecimal largura;
+    @Column(name = "vl_largura", length = 20)
+    private String width;
 
-    @Column(name = "vl_altura")
-    private BigDecimal altura;
+    @Column(name = "vl_altura", length = 20)
+    private String height;
 
-    @Column(name = "ds_item")
-    private String dsItem;
-
-    @OneToMany(mappedBy = "item")
-    private Set<ItemTotal> itensTotais;
+    @Column(name = "ds_item", length = 60)
+    private String desc;
 
     @OneToMany(mappedBy = "item")
-    private Set<ItemAmbiente> itemAmbientes;
+    private Set<ItemComposto> itemCompostoSet;
 }

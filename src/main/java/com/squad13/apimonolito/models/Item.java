@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Data
 @Entity
@@ -33,4 +34,10 @@ public class Item {
 
     @Column(name = "ds_item")
     private String dsItem;
+
+    @OneToMany(mappedBy = "item")
+    private Set<ItemTotal> itensTotais;
+
+    @OneToMany(mappedBy = "item")
+    private Set<ItemAmbiente> itemAmbientes;
 }

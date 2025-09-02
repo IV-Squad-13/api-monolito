@@ -13,4 +13,7 @@ public class Padrao {
 
     @Column(length = 50)
     private String nome;
+
+    @Column(name = "is_ativo")
+    private Boolean ativo;
 }

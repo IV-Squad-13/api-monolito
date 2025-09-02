@@ -14,15 +14,15 @@ public class ItemTotal {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_item", referencedColumnName = "id_item", nullable = false)
+    @JoinColumn(name = "id_item", nullable = false)
     private Item item;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_material", referencedColumnName = "id_material")
+    @JoinColumn(name = "id_material")
     private Material material;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_marca", referencedColumnName = "id_marca")
+    @JoinColumn(name = "id_marca")
     private Marca marca;
 
     @Column(name = "is_ativo")

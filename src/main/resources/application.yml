@@ -8,9 +8,9 @@ spring:
     import: file:.env.properties
 
   datasource:
-    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:monolito}
-    username: ${POSTGRES_USER:postgres}
-    password: ${POSTGRES_PASSWORD:postgres}
+    url: jdbc:postgresql://ep-autumn-dawn-ac53an9n-pooler.sa-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+    username: neondb_owner
+    password: npg_DO3zkrdv2oVT
     driver-class-name: org.postgresql.Driver
 
   jpa:

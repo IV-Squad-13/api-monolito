@@ -34,7 +34,7 @@ public class Item {
     @Column(name = "vl_altura", length = 20)
     private String height;
 
-    @Column(name = "ds_item", length = 60)
+    @Column(name = "ds_item", length = 60, nullable = false)
     private String desc;
 
     @OneToMany(mappedBy = "item")

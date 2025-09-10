@@ -5,12 +5,12 @@ spring:
   application:
     name: api-monolito
   config:
-    import: file:.env.properties
+    import: file:.env.dev.properties
 
   datasource:
-    url: jdbc:postgresql://ep-autumn-dawn-ac53an9n-pooler.sa-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
-    username: neondb_owner
-    password: npg_DO3zkrdv2oVT
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/monolito}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -30,3 +30,7 @@ spring:
 springdoc:
   api-docs:
     path: /api-docs
+
+api:
+  cors:
+    allowed-origins: ${ALLOWED_ORIGINS:http://localhost:5173,http://localhost:5000}

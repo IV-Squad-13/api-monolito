@@ -1,7 +1,10 @@
 package com.squad13.apimonolito.models;
 
+import com.squad13.apimonolito.models.associative.MarcaMaterial;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.Set;
 
 @Data
 @Entity
@@ -17,4 +20,7 @@ public class Marca {
 
     @Column(name = "is_ativo")
     private Boolean isActive;
+
+    @OneToMany(mappedBy = "marca")
+    private Set<MarcaMaterial> materialSet;
 }

@@ -28,7 +28,7 @@ public class AmbienteController {
     @GetMapping("/{id}")
     public ResponseEntity<Ambiente> getById(@PathVariable Long id) {
         return ambienteService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
     }
 }

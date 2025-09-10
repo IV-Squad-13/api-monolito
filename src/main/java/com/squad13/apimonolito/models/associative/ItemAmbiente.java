@@ -12,16 +12,22 @@ import lombok.Data;
 public class ItemAmbiente {
 
     @EmbeddedId
+    @AttributeOverrides({
+            @AttributeOverride(name = "relA", column = @Column(name = "id_item")),
+            @AttributeOverride(name = "relB", column = @Column(name = "id_ambiente"))
+    })
     private AssociativeId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_item_composto", nullable = false)
-    private ItemComposto item;
+    @MapsId("relA")
+    @JoinColumn(name = "id_item", nullable = false)
+    private Item item;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("relB")
     @JoinColumn(name = "id_ambiente", nullable = false)
     private Ambiente ambiente;
 
-    @Column(name = "is_ativo")
-    private Boolean isActive;
+    @Column(name = "is_obrigatorio")
+    private Boolean isRequired;
 }

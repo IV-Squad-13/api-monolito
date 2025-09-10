@@ -1,10 +1,10 @@
 package com.squad13.apimonolito.models;
 
-import com.squad13.apimonolito.models.associative.AmbientePadrao;
 import com.squad13.apimonolito.models.associative.ItemAmbiente;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -25,7 +25,4 @@ public class Ambiente {
 
     @OneToMany(mappedBy = "ambiente")
     private Set<ItemAmbiente> itemSet;
-
-    @OneToMany(mappedBy = "ambiente")
-    private Set<AmbientePadrao> padraoSet;
 }

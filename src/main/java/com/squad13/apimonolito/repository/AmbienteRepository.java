@@ -12,8 +12,8 @@ public interface AmbienteRepository extends JpaRepository<Ambiente,Long> {
     @Query("""
            SELECT DISTINCT a
            FROM Ambiente a
-           LEFT JOIN FETCH a.itemSet ia
-           LEFT JOIN FETCH ia.item ic
+           LEFT JOIN FETCH a.itemAmbiente ia
+           LEFT JOIN FETCH ia.itemComposto ic
            LEFT JOIN FETCH ic.item i
            WHERE a.isActive = true
                 AND ia.isActive = true

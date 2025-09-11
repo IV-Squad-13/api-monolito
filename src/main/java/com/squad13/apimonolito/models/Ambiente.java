@@ -24,7 +24,7 @@ public class Ambiente {
     private Boolean isActive;
 
     @OneToMany(mappedBy = "ambiente")
-    private Set<ItemAmbiente> itemSet;
+    private Set<ItemAmbiente> itemAmbiente;
 
     @OneToMany(mappedBy = "ambiente")
     private Set<AmbientePadrao> padraoSet;

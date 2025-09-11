@@ -1,8 +1,11 @@
 package com.squad13.apimonolito.models.catalog;
 
+import com.squad13.apimonolito.dto.req.SpecReqDTO;
 import com.squad13.apimonolito.dto.res.SpecAssociationResDTO;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -10,7 +13,14 @@ import java.util.List;
 @Getter
 @Setter
 @MappedSuperclass
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class CatalogEntity {
+
+    public CatalogEntity(String name) {
+        this.name = name;
+        this.isActive = true;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,4 +33,6 @@ public abstract class CatalogEntity {
     private Boolean isActive;
 
     public abstract List<SpecAssociationResDTO> getAssociations();
+
+    public abstract CatalogEntity toEntity(SpecReqDTO specReqDTO);
 }

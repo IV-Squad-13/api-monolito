@@ -1,7 +1,7 @@
-package com.squad13.apimonolito.models.associative;
+package com.squad13.apimonolito.models.catalog.associative;
 
-import com.squad13.apimonolito.models.Marca;
-import com.squad13.apimonolito.models.Material;
+import com.squad13.apimonolito.models.catalog.Marca;
+import com.squad13.apimonolito.models.catalog.Material;
 import com.squad13.apimonolito.util.AssociativeId;
 import jakarta.persistence.*;
 import lombok.Data;

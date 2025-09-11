@@ -16,7 +16,7 @@ public class ItemAmbiente {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_item_composto", nullable = false)
-    private ItemComposto item;
+    private ItemComposto itemComposto;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_ambiente", nullable = false)

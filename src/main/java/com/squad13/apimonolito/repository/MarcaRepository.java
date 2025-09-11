@@ -11,7 +11,7 @@ import java.util.List;
 public interface MarcaRepository extends JpaRepository<Marca,Long> {
     @Query("""
             SELECT ma
-            FROM Marca
+            FROM Marca ma
             WHERE ma.isActive = true
             GROUP BY ma.name
             """)

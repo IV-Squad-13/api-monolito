@@ -1,6 +1,6 @@
 package com.squad13.apimonolito.controllers;
 
-import com.squad13.apimonolito.models.Material;
+import com.squad13.apimonolito.models.catalog.Material;
 import com.squad13.apimonolito.services.MaterialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

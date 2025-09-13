@@ -1,8 +1,7 @@
 package com.squad13.apimonolito.controllers;
 
-import com.squad13.apimonolito.models.Marca;
+import com.squad13.apimonolito.models.catalog.Marca;
 import com.squad13.apimonolito.services.MarcaService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/marca")

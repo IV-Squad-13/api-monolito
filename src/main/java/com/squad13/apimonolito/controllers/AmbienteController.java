@@ -1,7 +1,7 @@
 package com.squad13.apimonolito.controllers;
 
 
-import com.squad13.apimonolito.models.Ambiente;
+import com.squad13.apimonolito.models.catalog.Ambiente;
 import com.squad13.apimonolito.services.AmbienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

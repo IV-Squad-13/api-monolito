@@ -7,6 +7,10 @@ spring:
   config:
     import: file:.env.dev.properties
 
+  data:
+    mongodb:
+      uri: ${MONGO_URI:mongodb://localhost:27017/monolito}
+
   datasource:
     url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/monolito}
     username: ${POSTGRES_USER:postgres}
@@ -15,7 +19,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create-drop
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -23,8 +27,8 @@ spring:
     generate-ddl: false
 
   flyway:
-    enabled: true
-    baseline-on-migrate: true
+    enabled: false
+    baseline-on-migrate: false
     locations: classpath:db/migration
 
 springdoc:

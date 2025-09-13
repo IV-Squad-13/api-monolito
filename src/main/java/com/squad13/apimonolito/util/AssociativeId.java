@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @Data
 @Embeddable
-public abstract class AssociativeId implements Serializable {
+public class AssociativeId implements Serializable {
     private Long relA;
     private Long relB;
 

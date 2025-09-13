@@ -12,20 +12,16 @@ import lombok.Data;
 public class MarcaMaterial {
 
     @EmbeddedId
-    @AttributeOverrides({
-            @AttributeOverride(name = "relA", column = @Column(name = "id_marca")),
-            @AttributeOverride(name = "relB", column = @Column(name = "id_material"))
-    })
     private AssociativeId id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @MapsId("relA")
-    @JoinColumn(name = "id_marca", nullable = false)
+    @JoinColumn(name = "id_marca")
     private Marca marca;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @MapsId("relB")
-    @JoinColumn(name = "id_material", nullable = false)
+    @JoinColumn(name = "id_material")
     private Material material;
 
     @Column(name = "is_obrigatorio")

@@ -1,7 +1,7 @@
 package com.squad13.apimonolito.services;
 
 import com.squad13.apimonolito.models.catalog.Item;
-import com.squad13.apimonolito.repository.ItemRepository;
+import com.squad13.apimonolito.repository.catalog.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

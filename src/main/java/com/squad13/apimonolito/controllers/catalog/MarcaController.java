@@ -1,7 +1,7 @@
-package com.squad13.apimonolito.controllers;
+package com.squad13.apimonolito.controllers.catalog;
 
-import com.squad13.apimonolito.models.catalog.Material;
-import com.squad13.apimonolito.services.MaterialService;
+import com.squad13.apimonolito.models.catalog.Marca;
+import com.squad13.apimonolito.services.MarcaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,20 +12,20 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/material")
-public class MaterialController {
+@RequestMapping("/api/marca")
+public class MarcaController {
 
     @Autowired
-    private MaterialService materialService;
+    private MarcaService marcaService;
 
-    @GetMapping()
-    public List<Material> getAll(){
-        return materialService.findAll();
+    @GetMapping
+    public List<Marca> getAll(){
+        return marcaService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Material> getById(@PathVariable Long id){
-        return materialService.findById(id)
+    public ResponseEntity<Marca> getById(@PathVariable Long id){
+        return marcaService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

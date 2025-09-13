@@ -1,7 +1,7 @@
 package com.squad13.apimonolito.services;
 
 import com.squad13.apimonolito.models.catalog.Marca;
-import com.squad13.apimonolito.repository.MarcaRepository;
+import com.squad13.apimonolito.repository.catalog.MarcaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

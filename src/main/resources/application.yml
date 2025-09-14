@@ -9,7 +9,7 @@ spring:
 
   data:
     mongodb:
-      uri: ${MONGO_URI:mongodb://localhost:27017/monolito}
+      uri: ${MONGO_URI:mongodb://admin:admin@localhost:27017/monolito?authSource=admin}
 
   datasource:
     url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/monolito}
@@ -19,7 +19,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect

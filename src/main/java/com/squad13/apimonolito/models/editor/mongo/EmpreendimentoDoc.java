@@ -1,11 +1,11 @@
 package com.squad13.apimonolito.models.editor.mongo;
 
+import com.squad13.apimonolito.util.annotations.MongoEntityType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -15,6 +15,7 @@ import java.time.Instant;
 import java.util.List;
 
 @Data
+@MongoEntityType("EMPREENDIMENTO")
 @Document(collection = "empreendimentos")
 public class EmpreendimentoDoc {
 
@@ -28,8 +29,10 @@ public class EmpreendimentoDoc {
     @Size(max = 40)
     private String name;
 
+    @Size(max = 120)
     private String desc;
 
+    @Size(max = 120)
     private String obs;
 
     @DBRef

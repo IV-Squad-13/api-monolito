@@ -20,4 +20,8 @@ public class Empreendimento {
     @Column(name = "tp_status", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
     private EmpreendimentoStatusEnum statusEnum;
+
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_empreendimento")
+    private Empreendimento empreendimento;
 }

@@ -1,4 +1,4 @@
-package com.squad13.apimonolito.models.review.relational;
+package com.squad13.apimonolito.models.revision.relational;
 
 import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import com.squad13.apimonolito.util.enums.RevisaoStatusEnum;
@@ -15,7 +15,7 @@ public class Revisao {
     @Column(name = "id_revisao")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY,  optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_empreendimento")
     private Empreendimento empreendimento;
 

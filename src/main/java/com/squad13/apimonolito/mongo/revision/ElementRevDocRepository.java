@@ -1,6 +1,6 @@
-package com.squad13.apimonolito.mongo.review;
+package com.squad13.apimonolito.mongo.revision;
 
-import com.squad13.apimonolito.models.review.structures.ElementRevDoc;
+import com.squad13.apimonolito.models.revision.structures.ElementRevDoc;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 

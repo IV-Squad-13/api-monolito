@@ -5,12 +5,14 @@ import com.squad13.apimonolito.models.revision.structures.ElementRevDoc;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Document(collection = "items_rev")
+@CompoundIndex(name = "catalog_name_unique", def = "{'revisaoId' : 1, 'item': 1}", unique = true)
 public class ItemRevDoc extends ElementRevDoc {
 
     @DBRef

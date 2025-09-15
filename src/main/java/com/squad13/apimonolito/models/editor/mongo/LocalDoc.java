@@ -11,6 +11,8 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
 
+// O local deveria ser único por valor do enum no empreendimento
+
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Document(collection = "locais")
@@ -21,6 +23,9 @@ public class LocalDoc extends ElementDoc {
 
     @Transient
     private String name;
+
+    @Transient
+    private boolean inSync;
 
     private LocalEnum local;
 

@@ -1,8 +1,7 @@
-package com.squad13.apimonolito.models.review.mongo;
+package com.squad13.apimonolito.models.revision.mongo;
 
 import com.squad13.apimonolito.models.editor.mongo.MaterialDoc;
-import com.squad13.apimonolito.models.review.structures.ElementRevDoc;
-import com.squad13.apimonolito.util.annotations.MongoEntityType;
+import com.squad13.apimonolito.models.revision.structures.ElementRevDoc;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,7 +12,6 @@ import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-@MongoEntityType("MATERIAL")
 @Document(collection = "material_rev")
 public class MaterialRevDoc extends ElementRevDoc {
 

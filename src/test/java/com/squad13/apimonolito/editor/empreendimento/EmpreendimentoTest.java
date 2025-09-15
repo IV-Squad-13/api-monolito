@@ -4,7 +4,6 @@ import com.squad13.apimonolito.models.editor.mongo.EmpreendimentoDoc;
 import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import com.squad13.apimonolito.mongo.editor.EmpreendimentoDocRepository;
 import com.squad13.apimonolito.repository.editor.EmpreendimentoRepository;
-import com.squad13.apimonolito.util.MongoRepositoryNavigator;
 import com.squad13.apimonolito.util.enums.EmpreendimentoStatusEnum;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
@@ -24,9 +23,6 @@ class EmpreendimentoTest {
 
     @Autowired
     private EmpreendimentoDocRepository empreendimentoDocRepository;
-
-    @Autowired
-    private MongoRepositoryNavigator mongoRepositoryNavigator;
 
     @Test
     void testFullPersistence() {

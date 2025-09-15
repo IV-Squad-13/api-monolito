@@ -1,8 +1,7 @@
-package com.squad13.apimonolito.models.review.mongo;
+package com.squad13.apimonolito.models.revision.mongo;
 
 import com.squad13.apimonolito.models.editor.mongo.EmpreendimentoDoc;
-import com.squad13.apimonolito.models.review.structures.ElementRevDoc;
-import com.squad13.apimonolito.util.annotations.MongoEntityType;
+import com.squad13.apimonolito.models.revision.structures.ElementRevDoc;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -13,7 +12,6 @@ import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-@MongoEntityType("EMPREENDIMENTO")
 @Document(collection = "empreendimento_rev")
 public class EmpreendimentoRevDoc extends ElementRevDoc {
 
@@ -23,7 +21,7 @@ public class EmpreendimentoRevDoc extends ElementRevDoc {
 
     @DBRef
     @Field("locais")
-    private List<LocalRevDoc> localRevDocList;
+    private List<LocalRevDoc> localRevList;
 
     @DBRef
     @Field("materiais")

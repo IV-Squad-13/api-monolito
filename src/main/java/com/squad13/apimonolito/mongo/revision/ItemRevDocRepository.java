@@ -1,6 +1,6 @@
-package com.squad13.apimonolito.mongo.review;
+package com.squad13.apimonolito.mongo.revision;
 
-import com.squad13.apimonolito.models.review.mongo.ItemRevDoc;
+import com.squad13.apimonolito.models.revision.mongo.ItemRevDoc;
 import org.springframework.stereotype.Repository;
 
 @Repository

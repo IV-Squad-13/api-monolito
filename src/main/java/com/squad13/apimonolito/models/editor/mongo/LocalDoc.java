@@ -1,7 +1,6 @@
 package com.squad13.apimonolito.models.editor.mongo;
 
 import com.squad13.apimonolito.models.editor.structures.ElementDoc;
-import com.squad13.apimonolito.util.annotations.MongoEntityType;
 import com.squad13.apimonolito.util.enums.LocalEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,17 +13,18 @@ import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-@MongoEntityType("LOCAL")
 @Document(collection = "locais")
 public class LocalDoc extends ElementDoc {
 
     @Transient
     private Long catalogId;
 
-    @Field("name")
-    private LocalEnum name;
+    @Transient
+    private String name;
+
+    private LocalEnum local;
 
     @DBRef
     @Field("ambientes")
-    private List<AmbienteDoc> ambienteList;
+    private List<AmbienteDoc> ambienteDocList;
 }

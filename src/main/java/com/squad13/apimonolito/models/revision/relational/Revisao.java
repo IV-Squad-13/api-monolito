@@ -15,11 +15,11 @@ public class Revisao {
     @Column(name = "id_revisao")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_empreendimento")
-    private Empreendimento empreendimento;
-
     @Column(name = "tp_status", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
     private RevisaoStatusEnum statusEnum;
+
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_empreendimento")
+    private Empreendimento empreendimento;
 }

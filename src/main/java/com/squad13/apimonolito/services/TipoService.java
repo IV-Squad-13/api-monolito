@@ -19,4 +19,5 @@ public class TipoService {
     public Optional<TipoItem> findById(Long id){
         return tipoRepository.findById(id);
     }
+
 }

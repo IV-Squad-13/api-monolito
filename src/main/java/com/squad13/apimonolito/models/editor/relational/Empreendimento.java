@@ -1,5 +1,6 @@
 package com.squad13.apimonolito.models.editor.relational;
 
+import com.squad13.apimonolito.models.revision.relational.Revisao;
 import com.squad13.apimonolito.util.enums.EmpreendimentoStatusEnum;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -20,8 +21,4 @@ public class Empreendimento {
     @Column(name = "tp_status", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
     private EmpreendimentoStatusEnum statusEnum;
-
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_empreendimento")
-    private Empreendimento empreendimento;
 }

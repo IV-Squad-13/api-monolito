@@ -23,10 +23,21 @@ public class AmbienteService {
         return ambienteRepository.findById(id);
     }
 
-    public Ambiente create(AmbienteDTO ambienteDTO) {
+    public AmbienteDTO createAmbiente(AmbienteDTO dto) {
         Ambiente ambiente = new Ambiente();
-        ambiente.setName(ambienteDTO.getName());
+        ambiente.setName(dto.getName());
+        ambiente.setIsActive(dto.getIsActive());
 
-        return ambienteRepository.save(ambiente);
+        Ambiente saved = ambienteRepository.save(ambiente);
+
+        return mapToDTO(saved);
     }
+
+    private AmbienteDTO mapToDTO(Ambiente ambiente) {
+        AmbienteDTO dto = new AmbienteDTO();
+        dto.setName(ambiente.getName());
+        dto.setIsActive(ambiente.getIsActive());
+        return dto;
+    }
+
 }

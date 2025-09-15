@@ -1,6 +1,5 @@
 package com.squad13.apimonolito.models;
 
-import com.squad13.apimonolito.DTO.AmbienteDTO;
 import com.squad13.apimonolito.models.associative.AmbientePadrao;
 import com.squad13.apimonolito.models.associative.ItemAmbiente;
 import jakarta.persistence.*;

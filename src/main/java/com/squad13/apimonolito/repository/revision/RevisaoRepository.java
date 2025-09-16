@@ -1,4 +1,4 @@
-package com.squad13.apimonolito.repository.review;
+package com.squad13.apimonolito.repository.revision;
 
 import com.squad13.apimonolito.models.revision.relational.Revisao;
 import org.springframework.data.jpa.repository.JpaRepository;

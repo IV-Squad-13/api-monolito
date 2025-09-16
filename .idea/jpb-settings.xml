@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DatabaseMigrationSettings" lastSelectedDirectory="src\main\resources\db\migration" />
+  <component name="JpaLiquibaseChangesConfig">
+    <exclude-change idName="tb_item" tagName="createTable" />
+    <exclude-change idName="tb_marca" tagName="createTable" />
+    <exclude-change idName="tb_material" tagName="createTable" />
+    <exclude-change idName="tb_ambiente#nm_ambiente" tagName="addUniqueConstraint" />
+    <exclude-change idName="tb_item#nm_item" tagName="addUniqueConstraint" />
+    <exclude-change idName="tb_marca#nm_marca" tagName="addUniqueConstraint" />
+    <exclude-change idName="tb_material#nm_material" tagName="addUniqueConstraint" />
+  </component>
 </project>

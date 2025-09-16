@@ -1,9 +1,8 @@
-package com.squad13.apimonolito.models;
+package com.squad13.apimonolito.models.catalog;
 
-
-import com.squad13.apimonolito.models.associative.ItemComposto;
 import jakarta.persistence.*;
 import lombok.Data;
+
 import java.util.Set;
 
 @Data
@@ -22,19 +21,6 @@ public class Item {
     @Column(name = "is_ativo")
     private Boolean isActive;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tipo_item_id")
-    private TipoItem type;
-
-    @Column(name = "vl_largura", length = 20)
-    private String width;
-
-    @Column(name = "vl_altura", length = 20)
-    private String height;
-
     @Column(name = "ds_item", length = 60, nullable = false)
     private String desc;
-
-    @OneToMany(mappedBy = "item")
-    private Set<ItemComposto> itemCompostoSet;
 }

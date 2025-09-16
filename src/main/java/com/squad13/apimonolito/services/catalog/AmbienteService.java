@@ -1,8 +1,8 @@
-package com.squad13.apimonolito.services;
+package com.squad13.apimonolito.services.catalog;
 
-import com.squad13.apimonolito.DTO.AmbienteDTO;
-import com.squad13.apimonolito.models.Ambiente;
-import com.squad13.apimonolito.repository.AmbienteRepository;
+import com.squad13.apimonolito.DTO.catalog.AmbienteDTO;
+import com.squad13.apimonolito.models.catalog.Ambiente;
+import com.squad13.apimonolito.repository.catalog.AmbienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

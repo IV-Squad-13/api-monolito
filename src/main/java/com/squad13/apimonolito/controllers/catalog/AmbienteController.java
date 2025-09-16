@@ -1,9 +1,9 @@
-package com.squad13.apimonolito.controllers;
+package com.squad13.apimonolito.controllers.catalog;
 
 
-import com.squad13.apimonolito.DTO.AmbienteDTO;
-import com.squad13.apimonolito.models.Ambiente;
-import com.squad13.apimonolito.services.AmbienteService;
+import com.squad13.apimonolito.DTO.catalog.AmbienteDTO;
+import com.squad13.apimonolito.models.catalog.Ambiente;
+import com.squad13.apimonolito.services.catalog.AmbienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

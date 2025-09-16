@@ -1,4 +1,4 @@
-package com.squad13.apimonolito.DTO;
+package com.squad13.apimonolito.DTO.catalog;
 
 import lombok.Data;
 

@@ -9,19 +9,19 @@ import java.util.Objects;
 @Data
 @Embeddable
 public abstract class AssociativeId implements Serializable {
-    private Long associationA;
-    private Long associationB;
+    private Long relA;
+    private Long relB;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof AssociativeId that)) return false;
-        return Objects.equals(associationA, that.associationA) &&
-                Objects.equals(associationB, that.associationB);
+        return Objects.equals(relA, that.relA) &&
+                Objects.equals(relB, that.relB);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(associationA, associationB);
+        return Objects.hash(relA, relB);
     }
 }

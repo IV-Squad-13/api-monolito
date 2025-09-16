@@ -8,7 +8,7 @@ import com.squad13.apimonolito.models.revision.relational.Revisao;
 import com.squad13.apimonolito.mongo.editor.EmpreendimentoDocRepository;
 import com.squad13.apimonolito.mongo.revision.EmpreendimentoRevDocRepository;
 import com.squad13.apimonolito.repository.editor.EmpreendimentoRepository;
-import com.squad13.apimonolito.repository.review.RevisaoRepository;
+import com.squad13.apimonolito.repository.revision.RevisaoRepository;
 import com.squad13.apimonolito.util.enums.EmpreendimentoStatusEnum;
 import com.squad13.apimonolito.util.enums.RevisaoStatusEnum;
 import jakarta.transaction.Transactional;

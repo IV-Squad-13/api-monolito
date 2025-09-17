@@ -1,8 +1,11 @@
 package com.squad13.apimonolito.editor.especificacoes;
 
 import com.squad13.apimonolito.models.editor.mongo.AmbienteDoc;
+import com.squad13.apimonolito.models.editor.mongo.EmpreendimentoDoc;
 import com.squad13.apimonolito.models.editor.mongo.ItemDoc;
+import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import com.squad13.apimonolito.mongo.editor.AmbienteDocRepository;
+import com.squad13.apimonolito.mongo.editor.EmpreendimentoDocRepository;
 import com.squad13.apimonolito.mongo.editor.ItemDocRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,10 +25,23 @@ class AmbienteDocTest {
     @Autowired
     private AmbienteDocRepository ambienteDocRepository;
 
+    @Autowired
+    private EmpreendimentoDocRepository empDocRepository;
+
+    private EmpreendimentoDoc empDoc;
+
     @BeforeEach
     void cleanDatabase() {
         itemDocRepository.deleteAll();
         ambienteDocRepository.deleteAll();
+        empDocRepository.deleteAll();
+
+        empDoc = new EmpreendimentoDoc();
+        empDoc.setName("Doc Empreendimento B");
+        empDoc.setEmpreendimentoId(1L);
+        empDoc.setDesc("Descricao B");
+        empDoc.setObs("Observacao B");
+        empDocRepository.save(empDoc);
     }
 
     @Test
@@ -33,6 +49,7 @@ class AmbienteDocTest {
         ItemDoc item = new ItemDoc();
         item.setName("Item");
         item.setCatalogId(1L);
+        item.setEmpreendimentoDoc(empDoc);
         item.setInSync(true);
         item.setDesc("Desc");
         itemDocRepository.save(item);
@@ -40,6 +57,7 @@ class AmbienteDocTest {
         AmbienteDoc ambiente = new AmbienteDoc();
         ambiente.setName("Ambiente");
         ambiente.setCatalogId(1L);
+        ambiente.setEmpreendimentoDoc(empDoc);
         ambiente.setInSync(true);
         ambiente.setItemDocList(List.of(item));
         ambienteDocRepository.save(ambiente);
@@ -47,11 +65,13 @@ class AmbienteDocTest {
         assertThat(ambiente).isNotNull();
         assertThat(ambiente.getId()).isNotNull();
         assertThat(ambiente.getName()).isEqualTo("Ambiente");
+        assertThat(ambiente.getEmpreendimentoDoc()).isEqualTo(empDoc);
 
         AmbienteDoc foundAmbiente = ambienteDocRepository.findByName("Ambiente");
         assertThat(foundAmbiente).isNotNull();
         assertThat(foundAmbiente.getId()).isEqualTo(ambiente.getId());
         assertThat(foundAmbiente.getItemDocList().getFirst().getName()).isEqualTo("Item");
+        assertThat(foundAmbiente.getEmpreendimentoDoc().getId()).isEqualTo(empDoc.getId());
     }
 
     @Test
@@ -59,6 +79,7 @@ class AmbienteDocTest {
         ItemDoc item = new ItemDoc();
         item.setName("Item");
         item.setCatalogId(1L);
+        item.setEmpreendimentoDoc(empDoc);
         item.setInSync(true);
         item.setDesc("Desc");
         itemDocRepository.save(item);
@@ -66,6 +87,7 @@ class AmbienteDocTest {
         AmbienteDoc ambiente = new AmbienteDoc();
         ambiente.setName("Ambiente");
         ambiente.setCatalogId(1L);
+        ambiente.setEmpreendimentoDoc(empDoc);
         ambiente.setInSync(true);
         ambiente.setItemDocList(List.of(item));
         ambienteDocRepository.save(ambiente);

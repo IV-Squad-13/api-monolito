@@ -1,7 +1,9 @@
 package com.squad13.apimonolito.editor.especificacoes;
 
+import com.squad13.apimonolito.models.editor.mongo.EmpreendimentoDoc;
 import com.squad13.apimonolito.models.editor.mongo.MaterialDoc;
 import com.squad13.apimonolito.models.editor.mongo.MarcaDoc;
+import com.squad13.apimonolito.mongo.editor.EmpreendimentoDocRepository;
 import com.squad13.apimonolito.mongo.editor.MaterialDocRepository;
 import com.squad13.apimonolito.mongo.editor.MarcaDocRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,10 +24,24 @@ class MaterialDocTest {
     @Autowired
     private MaterialDocRepository materialDocRepository;
 
+    @Autowired
+    private EmpreendimentoDocRepository empDocRepository;
+
+    private EmpreendimentoDoc empDoc;
+
+
     @BeforeEach
     void cleanDatabase() {
         marcaDocRepository.deleteAll();
         materialDocRepository.deleteAll();
+        empDocRepository.deleteAll();
+
+        empDoc = new EmpreendimentoDoc();
+        empDoc.setName("Doc Empreendimento B");
+        empDoc.setEmpreendimentoId(1L);
+        empDoc.setDesc("Descricao B");
+        empDoc.setObs("Observacao B");
+        empDocRepository.save(empDoc);
     }
 
     @Test
@@ -33,12 +49,14 @@ class MaterialDocTest {
         MarcaDoc marca = new MarcaDoc();
         marca.setName("Marca");
         marca.setCatalogId(1L);
+        marca.setEmpreendimentoDoc(empDoc);
         marca.setInSync(true);
         marcaDocRepository.save(marca);
 
         MaterialDoc material = new MaterialDoc();
         material.setName("Material");
         material.setCatalogId(1L);
+        material.setEmpreendimentoDoc(empDoc);
         material.setInSync(true);
         material.setMarcaDocList(List.of(marca));
         materialDocRepository.save(material);
@@ -58,12 +76,14 @@ class MaterialDocTest {
         MarcaDoc marca = new MarcaDoc();
         marca.setName("Marca");
         marca.setCatalogId(1L);
+        marca.setEmpreendimentoDoc(empDoc);
         marca.setInSync(true);
         marcaDocRepository.save(marca);
 
         MaterialDoc material = new MaterialDoc();
         material.setName("Material");
         material.setCatalogId(1L);
+        material.setEmpreendimentoDoc(empDoc);
         material.setInSync(true);
         material.setMarcaDocList(List.of(marca));
         materialDocRepository.save(material);

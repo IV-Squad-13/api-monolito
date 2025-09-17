@@ -15,7 +15,7 @@ public class Marca {
     @Column(name = "id_marca")
     private Long id;
 
-    @Column(name = "nm_marca", unique = true, nullable = false, length = 40)
+    @Column(name = "nm_marca", unique = true, nullable = false, length = 80)
     private String name;
 
     @Column(name = "is_ativo")

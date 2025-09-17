@@ -1,5 +1,6 @@
 package com.squad13.apimonolito.models.editor.structures;
 
+import com.squad13.apimonolito.models.editor.mongo.EmpreendimentoDoc;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -7,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.time.Instant;
 
@@ -19,6 +21,10 @@ public abstract class ElementDoc {
 
     @NotNull
     private Long catalogId;
+
+    @NotNull
+    @DBRef
+    private EmpreendimentoDoc empreendimentoDoc;
 
     @NotBlank
     private String name;

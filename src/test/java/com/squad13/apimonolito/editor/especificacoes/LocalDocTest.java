@@ -1,9 +1,11 @@
 package com.squad13.apimonolito.editor.especificacoes;
 
 import com.squad13.apimonolito.models.editor.mongo.AmbienteDoc;
+import com.squad13.apimonolito.models.editor.mongo.EmpreendimentoDoc;
 import com.squad13.apimonolito.models.editor.mongo.ItemDoc;
 import com.squad13.apimonolito.models.editor.mongo.LocalDoc;
 import com.squad13.apimonolito.mongo.editor.AmbienteDocRepository;
+import com.squad13.apimonolito.mongo.editor.EmpreendimentoDocRepository;
 import com.squad13.apimonolito.mongo.editor.ItemDocRepository;
 import com.squad13.apimonolito.mongo.editor.LocalDocRepository;
 import com.squad13.apimonolito.util.enums.LocalEnum;
@@ -28,11 +30,24 @@ class LocalDocTest {
     @Autowired
     private LocalDocRepository localDocRepository;
 
+    @Autowired
+    private EmpreendimentoDocRepository empDocRepository;
+
+    private EmpreendimentoDoc empDoc;
+
     @BeforeEach
     void cleanDatabase() {
         itemDocRepository.deleteAll();
         ambienteDocRepository.deleteAll();
         localDocRepository.deleteAll();
+        empDocRepository.deleteAll();
+
+        empDoc = new EmpreendimentoDoc();
+        empDoc.setName("Doc Empreendimento B");
+        empDoc.setEmpreendimentoId(1L);
+        empDoc.setDesc("Descricao B");
+        empDoc.setObs("Observacao B");
+        empDocRepository.save(empDoc);
     }
 
     @Test
@@ -40,6 +55,7 @@ class LocalDocTest {
         ItemDoc item = new ItemDoc();
         item.setName("Item");
         item.setCatalogId(1L);
+        item.setEmpreendimentoDoc(empDoc);
         item.setInSync(true);
         item.setDesc("Desc");
         itemDocRepository.save(item);
@@ -47,6 +63,7 @@ class LocalDocTest {
         AmbienteDoc ambiente = new AmbienteDoc();
         ambiente.setName("Ambiente");
         ambiente.setCatalogId(1L);
+        ambiente.setEmpreendimentoDoc(empDoc);
         ambiente.setInSync(true);
         ambiente.setItemDocList(List.of(item));
         ambienteDocRepository.save(ambiente);
@@ -54,6 +71,7 @@ class LocalDocTest {
         LocalDoc local = new LocalDoc();
         local.setName("Local");
         local.setCatalogId(1L);
+        local.setEmpreendimentoDoc(empDoc);
         local.setLocal(LocalEnum.UNIDADE_PRIVATIVA);
         local.setInSync(true);
         local.setAmbienteDocList(List.of(ambiente));
@@ -77,6 +95,7 @@ class LocalDocTest {
         LocalDoc local = new LocalDoc();
         local.setName("Local");
         local.setCatalogId(1L);
+        local.setEmpreendimentoDoc(empDoc);
         local.setLocal(LocalEnum.UNIDADE_PRIVATIVA);
         local.setInSync(true);
         localDocRepository.save(local);
@@ -99,6 +118,7 @@ class LocalDocTest {
         LocalDoc local = new LocalDoc();
         local.setName("Local");
         local.setCatalogId(1L);
+        local.setEmpreendimentoDoc(empDoc);
         local.setLocal(LocalEnum.UNIDADE_PRIVATIVA);
         local.setInSync(true);
         localDocRepository.save(local);

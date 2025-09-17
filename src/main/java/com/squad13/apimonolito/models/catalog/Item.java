@@ -7,7 +7,12 @@ import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "tb_item")
+@Table(
+        name = "tb_item",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"nm_item", "ds_item"})
+        }
+)
 public class Item {
 
     @Id
@@ -15,12 +20,12 @@ public class Item {
     @Column(name = "id_item")
     private Long id;
 
-    @Column(name = "nm_item", unique = true, nullable = false, length = 40)
+    @Column(name = "nm_item", nullable = false, length = 80)
     private String name;
 
     @Column(name = "is_ativo")
     private Boolean isActive;
 
-    @Column(name = "ds_item", length = 60, nullable = false)
+    @Column(name = "ds_item", length = 240, nullable = false)
     private String desc;
 }

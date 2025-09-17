@@ -15,7 +15,7 @@ public class Empreendimento {
     @Column(name = "id_empreendimento")
     private Long id;
 
-    @Column(name = "nm_empreendimento", unique = true, nullable = false, length = 40)
+    @Column(name = "nm_empreendimento", unique = true, nullable = false, length = 80)
     private String name;
 
     @Column(name = "tp_status", nullable = false, length = 20)

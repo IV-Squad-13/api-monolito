@@ -16,7 +16,7 @@ import java.util.List;
 
 @Data
 @Document(collection = "empreendimentos")
-@CompoundIndex(name = "catalog_name_unique", def = "{'catalogId' : 1, 'name': 1}", unique = true)
+@CompoundIndex(name = "catalog_name_unique", def = "{'empreendimentoId' : 1, 'name': 1}", unique = true)
 public class EmpreendimentoDoc {
 
     @Id
@@ -29,10 +29,10 @@ public class EmpreendimentoDoc {
     @Size(max = 40)
     private String name;
 
-    @Size(max = 120)
+    @Size(max = 160)
     private String desc;
 
-    @Size(max = 120)
+    @Size(max = 160)
     private String obs;
 
     @DBRef

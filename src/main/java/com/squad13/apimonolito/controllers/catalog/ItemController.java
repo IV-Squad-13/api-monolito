@@ -1,5 +1,6 @@
 package com.squad13.apimonolito.controllers.catalog;
 
+import com.squad13.apimonolito.DTO.catalog.EditItemDTO;
 import com.squad13.apimonolito.DTO.catalog.ItemDTO;
 import com.squad13.apimonolito.models.catalog.Item;
 import com.squad13.apimonolito.services.catalog.ItemService;
@@ -31,5 +32,17 @@ public class ItemController {
     @PostMapping("/new")
     public ResponseEntity<ItemDTO> create(@RequestBody ItemDTO dto) {
         return ResponseEntity.ok(itemService.createItem(dto));
+    }
+
+    @PutMapping
+    public ResponseEntity<ItemDTO> edit(@RequestBody EditItemDTO dto) {
+        ItemDTO updated = itemService.editItem(dto);
+        return ResponseEntity.ok(updated);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+            itemService.deleteItem(id);
+            return ResponseEntity.ok("Item excluído com sucesso.");
     }
 }

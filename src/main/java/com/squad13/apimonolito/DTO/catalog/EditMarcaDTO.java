@@ -3,8 +3,7 @@ package com.squad13.apimonolito.DTO.catalog;
 import lombok.Data;
 
 @Data
-public class MaterialDTO {
+public class EditMarcaDTO {
     private String name;
     private Boolean isActive;
 }
-

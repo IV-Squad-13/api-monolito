@@ -2,6 +2,7 @@ package com.squad13.apimonolito.controllers.catalog;
 
 
 import com.squad13.apimonolito.DTO.catalog.AmbienteDTO;
+import com.squad13.apimonolito.DTO.catalog.EditAmbienteDTO;
 import com.squad13.apimonolito.models.catalog.Ambiente;
 import com.squad13.apimonolito.services.catalog.AmbienteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,5 +34,17 @@ public class AmbienteController {
     @PostMapping("/new")
     public ResponseEntity<AmbienteDTO> create(@RequestBody AmbienteDTO dto) {
         return ResponseEntity.ok(ambienteService.createAmbiente(dto));
+    }
+
+    @PutMapping
+    public ResponseEntity<AmbienteDTO> edit(@RequestBody EditAmbienteDTO dto) {
+        AmbienteDTO updated = ambienteService.updateAmbiente(dto);
+        return ResponseEntity.ok(updated);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+            ambienteService.deleteAmbiente(id);
+            return ResponseEntity.ok("Ambiente excluído com sucesso.");
     }
 }

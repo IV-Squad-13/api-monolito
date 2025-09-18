@@ -1,5 +1,6 @@
 package com.squad13.apimonolito.services.catalog;
 
+import com.squad13.apimonolito.DTO.catalog.EditItemDTO;
 import com.squad13.apimonolito.DTO.catalog.ItemDTO;
 import com.squad13.apimonolito.models.catalog.Item;
 import com.squad13.apimonolito.repository.catalog.ItemRepository;
@@ -32,6 +33,30 @@ public class ItemService {
 
         Item saved = itemRepository.save(item);
         return mapToDTO(saved);
+    }
+
+    public ItemDTO editItem(EditItemDTO dto) {
+        Item item = itemRepository.findById(dto.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Item não encontrado."));
+
+        if (dto.getName() != null && !dto.getName().isBlank()) {
+            item.setName(dto.getName());
+        }
+        if (dto.getDesc() != null && !dto.getDesc().isBlank()) {
+            item.setDesc(dto.getDesc());
+        }
+        if (dto.getIsActive() != null) {
+            item.setIsActive(dto.getIsActive());
+        }
+
+        Item updated = itemRepository.save(item);
+        return mapToDTO(updated);
+    }
+
+    public void deleteItem(Long id) {
+        Item item = itemRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Item não encontrado."));
+        itemRepository.delete(item);
     }
 
     private ItemDTO mapToDTO(Item item) {

@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class EditItemDTO {
+    private Long id;
     private String name;
     private String desc;
     private Boolean isActive;

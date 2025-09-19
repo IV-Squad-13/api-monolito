@@ -10,5 +10,4 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
         basePackages = "com.squad13.apimonolito.mongo",
         mongoTemplateRef = "mongoTemplate"
 )
-public class MongoConfig {
-}
+public class MongoConfig { }

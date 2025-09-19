@@ -12,8 +12,8 @@ public class SwaggerConfig {
     public OpenAPI apiMonolitoOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("API CRUD de Especificações- Squad 13")
-                        .description("Documentação da API de Especificações da Jotanunes Construtora")
+                        .title("API CRUD de Especificações - Squad 13")
+                        .description("Documentação da API de Especificações da Jotanunes Construtora - Squad 13")
                         .version("v1.0"));
     }
 }

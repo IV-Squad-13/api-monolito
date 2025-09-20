@@ -1,12 +1,16 @@
 package com.squad13.apimonolito.models.catalog;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.squad13.apimonolito.models.catalog.associative.MarcaMaterial;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "tb_marca")
 public class Marca {
@@ -21,6 +25,7 @@ public class Marca {
     @Column(name = "is_ativo")
     private Boolean isActive;
 
-    @OneToMany(mappedBy = "marca")
+    @OneToMany(mappedBy = "marca", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Set<MarcaMaterial> materialSet;
 }

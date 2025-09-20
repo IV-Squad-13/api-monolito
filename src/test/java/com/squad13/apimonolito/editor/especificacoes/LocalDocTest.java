@@ -72,12 +72,12 @@ class LocalDocTest {
         local.setName("Local");
         local.setCatalogId(1L);
         local.setEmpreendimentoDoc(empDoc);
-        local.setLocal(LocalEnum.UNIDADE_PRIVATIVA);
+        local.setLocal(LocalEnum.UNIDADES_PRIVATIVAS);
         local.setInSync(true);
         local.setAmbienteDocList(List.of(ambiente));
         localDocRepository.save(local);
 
-        List<LocalDoc> foundLocals = localDocRepository.findByLocal(LocalEnum.UNIDADE_PRIVATIVA);
+        List<LocalDoc> foundLocals = localDocRepository.findByLocal(LocalEnum.UNIDADES_PRIVATIVAS);
         LocalDoc foundLocal = localDocRepository.findById(local.getId())
                 .orElseThrow(() -> new RuntimeException("Local não encontrado"));
 
@@ -96,7 +96,7 @@ class LocalDocTest {
         local.setName("Local");
         local.setCatalogId(1L);
         local.setEmpreendimentoDoc(empDoc);
-        local.setLocal(LocalEnum.UNIDADE_PRIVATIVA);
+        local.setLocal(LocalEnum.UNIDADES_PRIVATIVAS);
         local.setInSync(true);
         localDocRepository.save(local);
 
@@ -119,7 +119,7 @@ class LocalDocTest {
         local.setName("Local");
         local.setCatalogId(1L);
         local.setEmpreendimentoDoc(empDoc);
-        local.setLocal(LocalEnum.UNIDADE_PRIVATIVA);
+        local.setLocal(LocalEnum.UNIDADES_PRIVATIVAS);
         local.setInSync(true);
         localDocRepository.save(local);
 

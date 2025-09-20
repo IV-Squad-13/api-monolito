@@ -1,5 +1,6 @@
 package com.squad13.apimonolito.models.catalog;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.squad13.apimonolito.models.catalog.associative.ItemAmbiente;
 import com.squad13.apimonolito.util.enums.LocalEnum;
 import jakarta.persistence.*;
@@ -7,7 +8,8 @@ import lombok.*;
 
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(
         name = "tb_ambiente",
@@ -32,6 +34,7 @@ public class Ambiente {
     @Column(name = "is_ativo")
     private Boolean isActive;
 
-    @OneToMany(mappedBy = "ambiente")
-    private Set<ItemAmbiente> itemAmbiente;
+    @OneToMany(mappedBy = "ambiente", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private Set<ItemAmbiente> itemSet;
 }

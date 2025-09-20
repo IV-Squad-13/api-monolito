@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class EditAmbienteDTO {
+    private Long id;
     private String name;
     private LocalEnum local;
     private Boolean isActive;

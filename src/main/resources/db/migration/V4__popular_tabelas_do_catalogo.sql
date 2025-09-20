@@ -201,7 +201,7 @@ ALTER TABLE tb_ambiente DROP CONSTRAINT uc_tb_ambiente_nm_ambiente;
 ALTER TABLE tb_ambiente ADD CONSTRAINT uc_tb_ambiente_nm_ambiente_tp_local UNIQUE (nm_ambiente, tp_local);
 
 INSERT INTO tb_ambiente (nm_ambiente, tp_local, is_ativo) VALUES ('Sanitário/ Lavabo', 'UNIDADES_PRIVATIVAS', TRUE);
-INSERT INTO tb_ambiente (nm_ambiente, tp_local, is_ativo) VALUES ('Quiosques', 'ÁREA_COMUM', TRUE);
+INSERT INTO tb_ambiente (nm_ambiente, tp_local, is_ativo) VALUES ('Quiosques', 'AREA_COMUM', TRUE);
 INSERT INTO tb_ambiente (nm_ambiente, tp_local, is_ativo) VALUES ('Quadra de Areia', 'AREA_COMUM', TRUE);
 INSERT INTO tb_ambiente (nm_ambiente, tp_local, is_ativo) VALUES ('Circulação', 'UNIDADES_PRIVATIVAS', TRUE);
 INSERT INTO tb_ambiente (nm_ambiente, tp_local, is_ativo) VALUES ('Gourmets', 'AREA_COMUM', TRUE);

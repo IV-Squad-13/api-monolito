@@ -1,11 +1,16 @@
 package com.squad13.apimonolito.models.catalog;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.squad13.apimonolito.models.catalog.associative.ItemAmbiente;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(
         name = "tb_item",
@@ -28,4 +33,8 @@ public class Item {
 
     @Column(name = "ds_item", length = 240, nullable = false)
     private String desc;
+
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private Set<ItemAmbiente> ambienteSet;
 }

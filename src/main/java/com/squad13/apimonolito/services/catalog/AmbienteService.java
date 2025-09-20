@@ -55,7 +55,7 @@ public class AmbienteService {
     public void deleteAmbiente(Long id) {
         Ambiente ambiente = ambienteRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Ambiente não encontrado."));
-        if (ambiente.getItemAmbiente() != null && !ambiente.getItemAmbiente().isEmpty()) {
+        if (ambiente.getItemSet() != null && !ambiente.getItemSet().isEmpty()) {
             throw new IllegalStateException("Não é possível excluir o ambiente pois há itens vinculados.");
         }
         ambienteRepository.delete(ambiente);

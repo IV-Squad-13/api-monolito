@@ -8,12 +8,4 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface MarcaRepository extends JpaRepository<Marca,Long> {
-    @Query("""
-            SELECT ma
-            FROM Marca ma
-            WHERE ma.isActive = true
-            GROUP BY ma.name
-            """)
-    List<Marca> findMarcas();
-}
+public interface MarcaRepository extends JpaRepository<Marca,Long> { }

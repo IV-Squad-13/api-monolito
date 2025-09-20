@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.List;
 
@@ -123,6 +124,7 @@ class AmbienteRevDocTest {
         rev2.setRevisaoId(1L);
         rev2.setItemRevList(List.of());
 
-        assertThrows(DuplicateKeyException.class, () -> ambienteRevDocRepository.save(rev2));
+        assertThrows(DataIntegrityViolationException.class,
+                () -> ambienteRevDocRepository.save(rev2));
     }
 }

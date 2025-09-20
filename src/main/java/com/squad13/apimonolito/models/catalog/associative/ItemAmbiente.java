@@ -2,9 +2,8 @@ package com.squad13.apimonolito.models.catalog.associative;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.squad13.apimonolito.models.catalog.Ambiente;
-import com.squad13.apimonolito.models.catalog.Item;
+import com.squad13.apimonolito.models.catalog.ItemDesc;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +12,7 @@ import lombok.Setter;
 @Entity
 @Table(
         name = "tb_item_ambiente",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"id_item", "id_ambiente"})
+        uniqueConstraints = @UniqueConstraint(columnNames = {"id_item_desc", "id_ambiente"})
 )
 public class ItemAmbiente {
 
@@ -23,9 +22,9 @@ public class ItemAmbiente {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_item")
+    @JoinColumn(name = "id_item_desc")
     @JsonBackReference
-    private Item item;
+    private ItemDesc itemDesc;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_ambiente")

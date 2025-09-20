@@ -3,9 +3,12 @@ package com.squad13.apimonolito.controllers.catalog;
 
 import com.squad13.apimonolito.DTO.catalog.AmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.EditAmbienteDTO;
+import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.catalog.Ambiente;
 import com.squad13.apimonolito.services.catalog.AmbienteService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,13 +34,19 @@ public class AmbienteController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<Ambiente>> getByAttribute(@RequestParam String attribute, @RequestParam String value) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ambienteService.findByAttribute(attribute, value));
+    }
+
     @PostMapping("/new")
-    public ResponseEntity<AmbienteDTO> create(@RequestBody AmbienteDTO dto) {
+    public ResponseEntity<AmbienteDTO> create(@RequestBody @Valid AmbienteDTO dto) {
         return ResponseEntity.ok(ambienteService.createAmbiente(dto));
     }
 
     @PutMapping
-    public ResponseEntity<AmbienteDTO> edit(@RequestBody EditAmbienteDTO dto) {
+    public ResponseEntity<AmbienteDTO> edit(@RequestBody @Valid EditAmbienteDTO dto) {
         AmbienteDTO updated = ambienteService.updateAmbiente(dto);
         return ResponseEntity.ok(updated);
     }

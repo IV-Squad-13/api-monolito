@@ -1,7 +1,6 @@
-package com.squad13.apimonolito.models.editor.relational.associative;
+package com.squad13.apimonolito.models.catalog.associative;
 
-import com.squad13.apimonolito.models.catalog.associative.ItemAmbiente;
-import com.squad13.apimonolito.models.editor.relational.Empreendimento;
+import com.squad13.apimonolito.models.catalog.Catalogo;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -15,8 +14,8 @@ public class ComposicaoAmbiente {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_empreendimento")
-    private Empreendimento empreendimento;
+    @JoinColumn(name = "id_catalogo")
+    private Catalogo catalogo;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_item_ambiente")

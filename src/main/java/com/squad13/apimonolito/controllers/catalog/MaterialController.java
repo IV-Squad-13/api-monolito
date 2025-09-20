@@ -2,9 +2,12 @@ package com.squad13.apimonolito.controllers.catalog;
 
 import com.squad13.apimonolito.DTO.catalog.EditMaterialDTO;
 import com.squad13.apimonolito.DTO.catalog.MaterialDTO;
+import com.squad13.apimonolito.models.catalog.Ambiente;
 import com.squad13.apimonolito.models.catalog.Material;
 import com.squad13.apimonolito.services.catalog.MaterialService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,14 +32,20 @@ public class MaterialController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<Material>> getByAttribute(@RequestParam String attribute, @RequestParam String value) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(materialService.findByAttribute(attribute, value));
+    }
+
     @PostMapping("/new")
-    public ResponseEntity<MaterialDTO> create(@RequestBody MaterialDTO dto) {
+    public ResponseEntity<MaterialDTO> create(@RequestBody @Valid MaterialDTO dto) {
         return ResponseEntity.ok(materialService.createMaterial(dto));
     }
 
 
     @PutMapping
-    public ResponseEntity<MaterialDTO> update(@RequestBody EditMaterialDTO dto) {
+    public ResponseEntity<MaterialDTO> update(@RequestBody @Valid EditMaterialDTO dto) {
         MaterialDTO updated = materialService.updateMaterial(dto);
         return ResponseEntity.ok(updated);
     }

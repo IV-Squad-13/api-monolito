@@ -1,6 +1,6 @@
 package com.squad13.apimonolito.services.catalog;
 
-import com.squad13.apimonolito.DTO.catalog.EditItemTypeDTO;
+import com.squad13.apimonolito.DTO.catalog.edit.EditItemTypeDTO;
 import com.squad13.apimonolito.DTO.catalog.ItemTypeDTO;
 import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
@@ -31,7 +31,7 @@ public class ItemTypeService {
                 .orElseThrow(() -> new ResourceNotFoundException("Tipo de item com nome " + name + " não encontrado."));
     }
 
-    public ItemType create(ItemTypeDTO dto) {
+    public ItemType createItemType(ItemTypeDTO dto) {
         itemTypeRepository.findByName(dto.getName())
                 .ifPresent(t -> {
                     throw new ResourceAlreadyExistsException("Já existe um tipo de item com nome " + dto.getName());
@@ -44,8 +44,8 @@ public class ItemTypeService {
         return itemTypeRepository.save(itemType);
     }
 
-    public ItemType update(EditItemTypeDTO dto) {
-        ItemType existing = findByIdOrThrow(dto.getId());
+    public ItemType updateItemType(Long id, EditItemTypeDTO dto) {
+        ItemType existing = findByIdOrThrow(id);
 
         if (dto.getName() != null && !dto.getName().equals(existing.getName())) {
             itemTypeRepository.findByName(dto.getName())
@@ -63,12 +63,12 @@ public class ItemTypeService {
         return itemTypeRepository.save(existing);
     }
 
-    public void delete(Long id) {
+    public void deleteItemType(Long id) {
         ItemType existing = findByIdOrThrow(id);
         itemTypeRepository.delete(existing);
     }
 
-    public ItemType deactivate(Long id) {
+    public ItemType deactivateItemType(Long id) {
         ItemType existing = findByIdOrThrow(id);
         existing.setIsActive(false);
         return itemTypeRepository.save(existing);

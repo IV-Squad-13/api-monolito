@@ -16,6 +16,12 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(ex.getMessage(), request.getDescription(false), HttpStatus.CONFLICT.value()));
     }
 
+    @ExceptionHandler(AssociationAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleAssociationConflict(AssociationAlreadyExistsException ex, WebRequest request) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ErrorResponse(ex.getMessage(), request.getDescription(false), HttpStatus.CONFLICT.value()));
+    }
+
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFound(ResourceNotFoundException ex, WebRequest request) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -23,7 +29,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(InvalidAttributeException.class)
-    public ResponseEntity<ErrorResponse> handleNotFound(InvalidAttributeException ex, WebRequest request) {
+    public ResponseEntity<ErrorResponse> handleInvalidAttribute(InvalidAttributeException ex, WebRequest request) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(ex.getMessage(), request.getDescription(false), HttpStatus.NOT_FOUND.value()));
     }

@@ -1,16 +1,11 @@
 package com.squad13.apimonolito.services.catalog;
 
 import com.squad13.apimonolito.DTO.catalog.CatalogoDTO;
-import com.squad13.apimonolito.DTO.catalog.EditCatalogoDTO;
-import com.squad13.apimonolito.DTO.catalog.EditItemTypeDTO;
+import com.squad13.apimonolito.DTO.catalog.edit.EditCatalogoDTO;
 import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
-import com.squad13.apimonolito.models.catalog.Ambiente;
 import com.squad13.apimonolito.models.catalog.Catalogo;
-import com.squad13.apimonolito.models.catalog.ItemType;
-import com.squad13.apimonolito.models.catalog.Marca;
 import com.squad13.apimonolito.repository.catalog.CatalogoRepository;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

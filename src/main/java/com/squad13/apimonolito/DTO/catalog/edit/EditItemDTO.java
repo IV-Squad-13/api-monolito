@@ -1,14 +1,10 @@
-package com.squad13.apimonolito.DTO.catalog;
+package com.squad13.apimonolito.DTO.catalog.edit;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 public class EditItemDTO {
-
-    @NotNull(message = "O ID do item é obrigatório.")
-    private Long id;
-
     private String name;
 
     private String desc;

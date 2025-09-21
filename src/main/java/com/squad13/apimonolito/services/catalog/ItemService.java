@@ -1,17 +1,18 @@
 package com.squad13.apimonolito.services.catalog;
 
-import com.squad13.apimonolito.DTO.catalog.EditAmbienteDTO;
-import com.squad13.apimonolito.DTO.catalog.EditItemDTO;
+import com.squad13.apimonolito.DTO.catalog.edit.EditItemDTO;
 import com.squad13.apimonolito.DTO.catalog.ItemDTO;
+import com.squad13.apimonolito.exceptions.AssociationAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.InvalidAttributeException;
 import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.catalog.Ambiente;
 import com.squad13.apimonolito.models.catalog.ItemDesc;
 import com.squad13.apimonolito.models.catalog.ItemType;
+import com.squad13.apimonolito.models.catalog.associative.ItemAmbiente;
+import com.squad13.apimonolito.repository.catalog.AmbienteRepository;
 import com.squad13.apimonolito.repository.catalog.ItemRepository;
 import com.squad13.apimonolito.repository.catalog.ItemTypeRepository;
-import com.squad13.apimonolito.util.enums.LocalEnum;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.*;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,12 +40,9 @@ public class ItemService {
         return itemRepository.findAll();
     }
 
-    public Optional<ItemDesc> findById(Long id) {
-        return itemRepository.findById(id);
-    }
-
-    public Optional<ItemType> findTypeByName(String name) {
-        return itemRepository.findByName(name);
+    public ItemDesc findByIdOrThrow(Long id) {
+        return itemRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Item com ID: " + id + " não encontrado."));
     }
 
     public List<ItemDesc> findByAttribute(String attribute, String value) {
@@ -77,7 +76,6 @@ public class ItemService {
         }
 
         cq.select(root).where(predicate);
-
         return em.createQuery(cq).getResultList();
     }
 
@@ -102,9 +100,8 @@ public class ItemService {
         return mapToDTO(saved);
     }
 
-    public ItemDTO updateItem(EditItemDTO dto) {
-        ItemDesc item = itemRepository.findById(dto.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Item não encontrado para o id " + dto.getId()));
+    public ItemDTO updateItem(Long id, EditItemDTO dto) {
+        ItemDesc item = findByIdOrThrow(id);
 
         if (dto.getName() != null && !dto.getName().isBlank()) {
             item.setName(dto.getName());
@@ -125,9 +122,14 @@ public class ItemService {
     }
 
     public void deleteItem(Long id) {
-        ItemDesc item = itemRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Item não encontrado para o id " + id));
+        ItemDesc item = findByIdOrThrow(id);
         itemRepository.delete(item);
+    }
+
+    public ItemDesc deactivateItem(Long id) {
+        ItemDesc existing = findByIdOrThrow(id);
+        existing.setIsActive(false);
+        return itemRepository.save(existing);
     }
 
     private ItemDTO mapToDTO(ItemDesc item) {

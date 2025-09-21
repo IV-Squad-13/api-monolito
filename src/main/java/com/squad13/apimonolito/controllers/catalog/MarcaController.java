@@ -1,10 +1,13 @@
 package com.squad13.apimonolito.controllers.catalog;
 
-import com.squad13.apimonolito.DTO.catalog.EditItemDTO;
-import com.squad13.apimonolito.DTO.catalog.EditMarcaDTO;
+import com.squad13.apimonolito.DTO.catalog.edit.EditMarcaDTO;
 import com.squad13.apimonolito.DTO.catalog.MarcaDTO;
-import com.squad13.apimonolito.models.catalog.Ambiente;
+import com.squad13.apimonolito.models.catalog.ItemDesc;
 import com.squad13.apimonolito.models.catalog.Marca;
+import com.squad13.apimonolito.models.catalog.Material;
+import com.squad13.apimonolito.models.catalog.associative.ItemAmbiente;
+import com.squad13.apimonolito.models.catalog.associative.MarcaMaterial;
+import com.squad13.apimonolito.services.catalog.MarcaMaterialService;
 import com.squad13.apimonolito.services.catalog.MarcaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,9 @@ public class MarcaController {
 
     @Autowired
     private MarcaService marcaService;
+
+    @Autowired
+    private MarcaMaterialService marcaMaterialService;
 
     @GetMapping
     public List<Marca> getAll(){
@@ -39,10 +45,21 @@ public class MarcaController {
                 .body(marcaService.findByAttribute(attribute, value));
     }
 
+    @GetMapping("/rel")
+    public ResponseEntity<List<Material>> getAssociations(@RequestParam(required = false) Long id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(marcaMaterialService.findMarcaMaterials(id));
+    }
+
     @PostMapping
     public ResponseEntity<MarcaDTO> create(@RequestBody @Valid MarcaDTO dto) {
             MarcaDTO created = marcaService.createMarca(dto);
             return ResponseEntity.ok(created);
+    }
+
+    @PostMapping("/{id}/material")
+    public ResponseEntity<MarcaMaterial> addAssociation(@PathVariable Long id, @RequestParam Long materialId) {
+        return ResponseEntity.ok(marcaMaterialService.associateMarcaAndMaterial(id, materialId));
     }
 
     @PutMapping
@@ -55,6 +72,12 @@ public class MarcaController {
     public ResponseEntity<?> delete(@PathVariable Long id) {
             marcaService.deleteMarca(id);
             return ResponseEntity.ok("Marca excluída com sucesso.");
+    }
+
+    @DeleteMapping("/{id}/material")
+    public ResponseEntity<?> deleteAssociation(@PathVariable Long id, @RequestParam Long materialId) {
+        marcaMaterialService.deleteMarcaAndMaterialAssociation(id, materialId);
+        return ResponseEntity.ok("Marca removida do material com sucesso.");
     }
 
     @DeleteMapping("/{id}/deactivate")

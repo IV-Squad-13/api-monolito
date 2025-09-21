@@ -13,7 +13,5 @@ import java.util.Optional;
 @Repository
 public interface ItemRepository extends JpaRepository<ItemDesc, Long> {
 
-    Optional<Object> findByNameAndDescAndType(String name, String desc, ItemType type);
-
-    Optional<ItemType> findByName(String name);
+    Optional<ItemDesc> findByNameAndDescAndType(String name, String desc, ItemType type);
 }

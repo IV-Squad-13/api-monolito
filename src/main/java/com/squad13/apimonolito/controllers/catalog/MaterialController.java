@@ -1,10 +1,11 @@
 package com.squad13.apimonolito.controllers.catalog;
 
-import com.squad13.apimonolito.DTO.catalog.EditItemDTO;
-import com.squad13.apimonolito.DTO.catalog.EditMaterialDTO;
+import com.squad13.apimonolito.DTO.catalog.edit.EditMaterialDTO;
 import com.squad13.apimonolito.DTO.catalog.MaterialDTO;
-import com.squad13.apimonolito.models.catalog.Ambiente;
+import com.squad13.apimonolito.models.catalog.Marca;
 import com.squad13.apimonolito.models.catalog.Material;
+import com.squad13.apimonolito.models.catalog.associative.MarcaMaterial;
+import com.squad13.apimonolito.services.catalog.MarcaMaterialService;
 import com.squad13.apimonolito.services.catalog.MaterialService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class MaterialController {
 
     @Autowired
     private MaterialService materialService;
+
+    @Autowired
+    private MarcaMaterialService marcaMaterialService;
 
     @GetMapping()
     public List<Material> getAll(){
@@ -39,11 +43,21 @@ public class MaterialController {
                 .body(materialService.findByAttribute(attribute, value));
     }
 
+    @GetMapping("/rel")
+    public ResponseEntity<List<Marca>> getAssociations(@RequestParam(required = false) Long id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(marcaMaterialService.findMaterialMarcas(id));
+    }
+
     @PostMapping("/new")
     public ResponseEntity<MaterialDTO> create(@RequestBody @Valid MaterialDTO dto) {
         return ResponseEntity.ok(materialService.createMaterial(dto));
     }
 
+    @PostMapping("/{id}/marca")
+    public ResponseEntity<MarcaMaterial> addAssociation(@PathVariable Long id, @RequestParam Long marcaId) {
+        return ResponseEntity.ok(marcaMaterialService.associateMarcaAndMaterial(marcaId, id));
+    }
 
     @PutMapping
     public ResponseEntity<MaterialDTO> update(@RequestBody @Valid EditMaterialDTO dto) {
@@ -55,6 +69,12 @@ public class MaterialController {
     public ResponseEntity<?> delete(@PathVariable Long id) {
             materialService.deleteMaterial(id);
             return ResponseEntity.ok("Material excluído com sucesso.");
+    }
+
+    @DeleteMapping("/{id}/marca")
+    public ResponseEntity<?> deleteAssociation(@PathVariable Long id, @RequestParam Long marcaId) {
+        marcaMaterialService.deleteMarcaAndMaterialAssociation(marcaId, id);
+        return ResponseEntity.ok("Marca removida do material com sucesso.");
     }
 
     @DeleteMapping("/{id}/deactivate")

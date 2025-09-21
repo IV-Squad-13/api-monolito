@@ -1,12 +1,11 @@
 package com.squad13.apimonolito.controllers.catalog;
 
 import com.squad13.apimonolito.DTO.catalog.CatalogoDTO;
-import com.squad13.apimonolito.DTO.catalog.EditAmbienteDTO;
-import com.squad13.apimonolito.DTO.catalog.EditCatalogoDTO;
-import com.squad13.apimonolito.models.catalog.Ambiente;
+import com.squad13.apimonolito.DTO.catalog.edit.EditCatalogoDTO;
 import com.squad13.apimonolito.models.catalog.Catalogo;
 import com.squad13.apimonolito.services.catalog.CatalogoService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +15,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/catalogo")
+@RequiredArgsConstructor
 public class CatalogoController {
 
-    @Autowired
-    private CatalogoService catalogoService;
+    private final CatalogoService catalogoService;
 
     @GetMapping()
     public ResponseEntity<List<Catalogo>> getAll() {

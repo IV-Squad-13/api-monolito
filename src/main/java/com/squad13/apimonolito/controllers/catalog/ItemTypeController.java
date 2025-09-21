@@ -1,7 +1,6 @@
 package com.squad13.apimonolito.controllers.catalog;
 
-import com.oracle.svm.core.annotate.Inject;
-import com.squad13.apimonolito.DTO.catalog.EditItemTypeDTO;
+import com.squad13.apimonolito.DTO.catalog.edit.EditItemTypeDTO;
 import com.squad13.apimonolito.DTO.catalog.ItemTypeDTO;
 import com.squad13.apimonolito.models.catalog.ItemType;
 import com.squad13.apimonolito.services.catalog.ItemTypeService;
@@ -36,23 +35,22 @@ public class ItemTypeController {
 
     @PostMapping("/new")
     public ResponseEntity<ItemType> create(@RequestBody @Valid ItemTypeDTO dto) {
-        return ResponseEntity.ok(itemTypeService.create(dto));
+        return ResponseEntity.ok(itemTypeService.createItemType(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ItemType> update(@PathVariable Long id, @RequestBody EditItemTypeDTO dto) {
-        dto.setId(id);
-        return ResponseEntity.ok(itemTypeService.update(dto));
+    public ResponseEntity<ItemType> edit(@PathVariable Long id, @RequestBody EditItemTypeDTO dto) {
+        return ResponseEntity.ok(itemTypeService.updateItemType(id, dto));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        itemTypeService.delete(id);
+        itemTypeService.deleteItemType(id);
         return ResponseEntity.ok("ItemType excluído com sucesso.");
     }
 
     @PatchMapping("/{id}/deactivate")
     public ResponseEntity<ItemType> deactivate(@PathVariable Long id) {
-        return ResponseEntity.ok(itemTypeService.deactivate(id));
+        return ResponseEntity.ok(itemTypeService.deactivateItemType(id));
     }
 }

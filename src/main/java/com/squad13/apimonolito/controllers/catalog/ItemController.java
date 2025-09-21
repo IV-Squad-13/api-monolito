@@ -1,11 +1,11 @@
 package com.squad13.apimonolito.controllers.catalog;
 
-import com.squad13.apimonolito.DTO.catalog.EditAmbienteDTO;
-import com.squad13.apimonolito.DTO.catalog.EditItemDTO;
+import com.squad13.apimonolito.DTO.catalog.edit.EditItemDTO;
 import com.squad13.apimonolito.DTO.catalog.ItemDTO;
 import com.squad13.apimonolito.models.catalog.Ambiente;
 import com.squad13.apimonolito.models.catalog.ItemDesc;
-import com.squad13.apimonolito.models.catalog.ItemType;
+import com.squad13.apimonolito.models.catalog.associative.ItemAmbiente;
+import com.squad13.apimonolito.services.catalog.ItemAmbienteService;
 import com.squad13.apimonolito.services.catalog.ItemService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +22,9 @@ public class ItemController {
     @Autowired
     private ItemService itemService;
 
+    @Autowired
+    private ItemAmbienteService itemAmbienteService;
+
     @GetMapping
     public List<ItemDesc> getAll() {
         return itemService.findAll();
@@ -29,15 +32,18 @@ public class ItemController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ItemDesc> getById(@PathVariable Long id) {
-        return itemService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(itemService.findByIdOrThrow(id));
     }
 
     @GetMapping("/search")
     public ResponseEntity<List<ItemDesc>> getByAttribute(@RequestParam String attribute, @RequestParam(required = false) String value) {
-        List<ItemDesc> items = itemService.findByAttribute(attribute, value);
-        return ResponseEntity.ok(items);
+        return ResponseEntity.ok(itemService.findByAttribute(attribute, value));
+    }
+
+    @GetMapping("/rel")
+    public ResponseEntity<List<Ambiente>> getAssociations(@RequestParam(required = false) Long id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(itemAmbienteService.findItemAmbientes(id));
     }
 
     @PostMapping("/new")
@@ -45,10 +51,14 @@ public class ItemController {
         return ResponseEntity.ok(itemService.createItem(dto));
     }
 
-    @PutMapping
-    public ResponseEntity<ItemDTO> edit(@RequestBody @Valid EditItemDTO dto) {
-        ItemDTO updated = itemService.updateItem(dto);
-        return ResponseEntity.ok(updated);
+    @PostMapping("/{id}/ambiente")
+    public ResponseEntity<ItemAmbiente> addAssociation(@PathVariable Long id, @RequestParam Long ambienteId) {
+        return ResponseEntity.ok(itemAmbienteService.associateItemAndAmbiente(id, ambienteId));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ItemDTO> edit(@PathVariable Long id, @RequestBody @Valid EditItemDTO dto) {
+        return ResponseEntity.ok(itemService.updateItem(id, dto));
     }
 
     @DeleteMapping("/{id}")
@@ -57,13 +67,14 @@ public class ItemController {
             return ResponseEntity.ok("Item excluído com sucesso.");
     }
 
-    @DeleteMapping("/{id}/deactivate")
-    public ResponseEntity<?> deactivate(@PathVariable Long id) {
-        EditItemDTO dto = new EditItemDTO();
-        dto.setId(id);
-        dto.setIsActive(false);
+    @DeleteMapping("/{id}/ambiente")
+    public ResponseEntity<?> deleteAssociation(@PathVariable Long id, @RequestParam Long ambienteId) {
+        itemAmbienteService.deleteItemAndAmbienteAssociation(id, ambienteId);
+        return ResponseEntity.ok("Ambiente removido do item com sucesso.");
+    }
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(itemService.updateItem(dto));
+    @DeleteMapping("/{id}/deactivate")
+    public ResponseEntity<ItemDesc> deactivate(@PathVariable Long id) {
+        return ResponseEntity.ok(itemService.deactivateItem(id));
     }
 }

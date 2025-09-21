@@ -6,7 +6,10 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "tb_composicao_ambiente")
+@Table(
+        name = "tb_composicao_ambiente",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"id_catalogo", "id_item_ambiente"})
+)
 public class ComposicaoAmbiente {
 
     @Id

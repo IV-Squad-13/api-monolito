@@ -9,11 +9,11 @@ import lombok.Data;
 @Data
 public class AmbienteDTO {
 
-    @NotBlank(message = "O nome do ambiente é obrigatório")
-    @Size(max = 80, message = "O nome do ambiente não pode ultrapassar 80 caracteres")
+    @NotBlank(message = "O nome do ambiente é obrigatório.")
+    @Size(max = 80, message = "O nome do ambiente não pode ultrapassar 80 caracteres.")
     private String name;
 
-    @NotNull(message = "O ambiente deve estar associado a um local")
+    @NotNull(message = "O ambiente deve estar associado a um local.")
     private LocalEnum local;
 
     private Boolean isActive = true;

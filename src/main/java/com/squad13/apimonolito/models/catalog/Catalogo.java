@@ -24,6 +24,9 @@ public class Catalogo {
     @Column(name = "nm_catalogo", unique = true, nullable = false, length = 80)
     private String name;
 
+    @Column(name = "is_ativo")
+    private Boolean isActive;
+
     @OneToMany(mappedBy = "catalogo",
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,

@@ -8,6 +8,7 @@ import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.catalog.Ambiente;
 import com.squad13.apimonolito.models.catalog.Marca;
 import com.squad13.apimonolito.repository.catalog.MarcaRepository;
+import com.squad13.apimonolito.util.enums.LocalEnum;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -77,6 +78,14 @@ public class MarcaService {
                 .orElseThrow(() -> new ResourceNotFoundException("Marca não encontrada para o ID: " + dto.getId()));
 
         if (dto.getName() != null && !dto.getName().isBlank()) {
+            marcaRepository.findByName(dto.getName())
+                    .filter(existing -> !existing.getId().equals(dto.getId()))
+                    .ifPresent(existing -> {
+                        throw new ResourceAlreadyExistsException(
+                                "Já existe uma marca com o nome " + dto.getName()
+                        );
+                    });
+
             marca.setName(dto.getName());
         }
         if (dto.getIsActive() != null) {

@@ -1,14 +1,17 @@
 package com.squad13.apimonolito.services.catalog;
 
+import com.squad13.apimonolito.DTO.catalog.EditAmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.EditItemDTO;
 import com.squad13.apimonolito.DTO.catalog.ItemDTO;
 import com.squad13.apimonolito.exceptions.InvalidAttributeException;
 import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
+import com.squad13.apimonolito.models.catalog.Ambiente;
 import com.squad13.apimonolito.models.catalog.ItemDesc;
 import com.squad13.apimonolito.models.catalog.ItemType;
 import com.squad13.apimonolito.repository.catalog.ItemRepository;
 import com.squad13.apimonolito.repository.catalog.ItemTypeRepository;
+import com.squad13.apimonolito.util.enums.LocalEnum;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.*;
@@ -39,6 +42,10 @@ public class ItemService {
         return itemRepository.findById(id);
     }
 
+    public Optional<ItemType> findTypeByName(String name) {
+        return itemRepository.findByName(name);
+    }
+
     public List<ItemDesc> findByAttribute(String attribute, String value) {
         boolean attributeExists = Arrays.stream(ItemDesc.class.getDeclaredFields())
                 .anyMatch(f -> f.getName().equals(attribute));
@@ -52,7 +59,7 @@ public class ItemService {
 
         Predicate predicate;
 
-        if ("type".equals(attribute)) {
+        if (attribute.equals("type")) {
             Join<ItemDesc, ItemType> itemType = root.join("type", JoinType.LEFT);
 
             if (value == null) {
@@ -95,7 +102,7 @@ public class ItemService {
         return mapToDTO(saved);
     }
 
-    public ItemDTO editItem(EditItemDTO dto) {
+    public ItemDTO updateItem(EditItemDTO dto) {
         ItemDesc item = itemRepository.findById(dto.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Item não encontrado para o id " + dto.getId()));
 
@@ -108,7 +115,7 @@ public class ItemService {
         if (dto.getIsActive() != null) {
             item.setIsActive(dto.getIsActive());
         }
-        if (dto.getDesc() != null || dto.getType() != null) {
+        if (dto.getType() != null || dto.getTypeId() != null) {
             itemTypeRepository.findByIdOrName(dto.getTypeId(), dto.getType())
                     .ifPresent(item::setType);
         }

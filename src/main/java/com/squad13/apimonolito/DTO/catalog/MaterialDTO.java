@@ -7,8 +7,8 @@ import lombok.Data;
 @Data
 public class MaterialDTO {
 
-    @NotBlank(message = "O nome da material é obrigatório")
-    @Size(max = 80, message = "O nome da material não pode ultrapassar 80 caracteres")
+    @NotBlank(message = "O nome da material é obrigatório.")
+    @Size(max = 80, message = "O nome da material não pode ultrapassar 80 caracteres.")
     private String name;
 
     private Boolean isActive;

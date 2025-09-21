@@ -30,7 +30,4 @@ public class ItemAmbiente {
     @JoinColumn(name = "id_ambiente")
     @JsonBackReference
     private Ambiente ambiente;
-
-    @Column(name = "is_obrigatorio")
-    private Boolean isRequired;
 }

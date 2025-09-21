@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface ItemTypeRepository extends JpaRepository<ItemType, Long> {
     Optional<ItemType> findByIdOrName(Long id, String name);
+
+    Optional<ItemType> findByName(String name);
 }

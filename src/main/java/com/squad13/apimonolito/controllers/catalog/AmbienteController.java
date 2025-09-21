@@ -7,6 +7,7 @@ import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.catalog.Ambiente;
 import com.squad13.apimonolito.services.catalog.AmbienteService;
 import jakarta.validation.Valid;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,5 +56,15 @@ public class AmbienteController {
     public ResponseEntity<?> delete(@PathVariable Long id) {
             ambienteService.deleteAmbiente(id);
             return ResponseEntity.ok("Ambiente excluído com sucesso.");
+    }
+
+    @DeleteMapping("/{id}/deactivate")
+    public ResponseEntity<?> deactivate(@PathVariable Long id) {
+        EditAmbienteDTO dto = new EditAmbienteDTO();
+        dto.setId(id);
+        dto.setIsActive(false);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ambienteService.updateAmbiente(dto));
     }
 }

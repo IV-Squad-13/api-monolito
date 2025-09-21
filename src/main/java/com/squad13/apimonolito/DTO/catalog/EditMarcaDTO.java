@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class EditMarcaDTO {
 
-    @NotNull(message = "O ID da marca é obrigatório")
+    @NotNull(message = "O ID da marca é obrigatório.")
     private Long id;
 
     private String name;

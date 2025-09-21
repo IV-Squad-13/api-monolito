@@ -1,0 +1,76 @@
+package com.squad13.apimonolito.services.catalog;
+
+import com.squad13.apimonolito.DTO.catalog.EditItemTypeDTO;
+import com.squad13.apimonolito.DTO.catalog.ItemTypeDTO;
+import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
+import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
+import com.squad13.apimonolito.models.catalog.ItemType;
+import com.squad13.apimonolito.repository.catalog.ItemTypeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class ItemTypeService {
+
+    @Autowired
+    private ItemTypeRepository itemTypeRepository;
+
+    public List<ItemType> findAll() {
+        return itemTypeRepository.findAll();
+    }
+
+    public ItemType findByIdOrThrow(Long id) {
+        return itemTypeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Tipo de item com id " + id + " não encontrado."));
+    }
+
+    public ItemType findByNameOrThrow(String name) {
+        return itemTypeRepository.findByName(name)
+                .orElseThrow(() -> new ResourceNotFoundException("Tipo de item com nome " + name + " não encontrado."));
+    }
+
+    public ItemType create(ItemTypeDTO dto) {
+        itemTypeRepository.findByName(dto.getName())
+                .ifPresent(t -> {
+                    throw new ResourceAlreadyExistsException("Já existe um tipo de item com nome " + dto.getName());
+                });
+
+        ItemType itemType = new ItemType();
+        itemType.setName(dto.getName());
+        itemType.setIsActive(true);
+
+        return itemTypeRepository.save(itemType);
+    }
+
+    public ItemType update(EditItemTypeDTO dto) {
+        ItemType existing = findByIdOrThrow(dto.getId());
+
+        if (dto.getName() != null && !dto.getName().equals(existing.getName())) {
+            itemTypeRepository.findByName(dto.getName())
+                    .ifPresent(t -> {
+                        throw new ResourceAlreadyExistsException("Já existe um tipo de item com nome " + dto.getName());
+                    });
+
+            existing.setName(dto.getName());
+        }
+
+        if (dto.getIsActive() != null) {
+            existing.setIsActive(dto.getIsActive());
+        }
+
+        return itemTypeRepository.save(existing);
+    }
+
+    public void delete(Long id) {
+        ItemType existing = findByIdOrThrow(id);
+        itemTypeRepository.delete(existing);
+    }
+
+    public ItemType deactivate(Long id) {
+        ItemType existing = findByIdOrThrow(id);
+        existing.setIsActive(false);
+        return itemTypeRepository.save(existing);
+    }
+}

@@ -1,5 +1,6 @@
 package com.squad13.apimonolito.controllers.catalog;
 
+import com.squad13.apimonolito.DTO.catalog.EditItemDTO;
 import com.squad13.apimonolito.DTO.catalog.EditMaterialDTO;
 import com.squad13.apimonolito.DTO.catalog.MaterialDTO;
 import com.squad13.apimonolito.models.catalog.Ambiente;
@@ -54,5 +55,15 @@ public class MaterialController {
     public ResponseEntity<?> delete(@PathVariable Long id) {
             materialService.deleteMaterial(id);
             return ResponseEntity.ok("Material excluído com sucesso.");
+    }
+
+    @DeleteMapping("/{id}/deactivate")
+    public ResponseEntity<?> deactivate(@PathVariable Long id) {
+        EditMaterialDTO dto = new EditMaterialDTO();
+        dto.setId(id);
+        dto.setIsActive(false);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(materialService.updateMaterial(dto));
     }
 }

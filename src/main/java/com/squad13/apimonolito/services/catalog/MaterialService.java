@@ -76,6 +76,14 @@ public class MaterialService {
                 .orElseThrow(() -> new ResourceNotFoundException("Material não encontrado para o ID " + dto.getId()));
 
         if (dto.getName() != null && !dto.getName().isBlank()) {
+            materialRepository.findByName(dto.getName())
+                    .filter(existing -> !existing.getId().equals(dto.getId()))
+                    .ifPresent(existing -> {
+                        throw new ResourceAlreadyExistsException(
+                                "Já existe um material com o nome " + dto.getName()
+                        );
+                    });
+
             material.setName(dto.getName());
         }
         if (dto.getIsActive() != null) {

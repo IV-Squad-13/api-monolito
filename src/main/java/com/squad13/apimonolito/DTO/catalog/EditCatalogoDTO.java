@@ -4,13 +4,12 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class EditMaterialDTO {
+public class EditCatalogoDTO {
 
-    @NotNull(message = "O ID do material é obrigatório.")
+    @NotNull(message = "O ID do catálogo é obrigatório.")
     private Long id;
 
     private String name;
 
     private Boolean isActive;
 }
-

@@ -31,7 +31,4 @@ public class MarcaMaterial {
     @JoinColumn(name = "id_material")
     @JsonBackReference
     private Material material;
-
-    @Column(name = "is_obrigatorio")
-    private boolean isRequired;
 }

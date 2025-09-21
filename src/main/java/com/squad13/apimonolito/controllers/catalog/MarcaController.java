@@ -1,5 +1,6 @@
 package com.squad13.apimonolito.controllers.catalog;
 
+import com.squad13.apimonolito.DTO.catalog.EditItemDTO;
 import com.squad13.apimonolito.DTO.catalog.EditMarcaDTO;
 import com.squad13.apimonolito.DTO.catalog.MarcaDTO;
 import com.squad13.apimonolito.models.catalog.Ambiente;
@@ -54,5 +55,15 @@ public class MarcaController {
     public ResponseEntity<?> delete(@PathVariable Long id) {
             marcaService.deleteMarca(id);
             return ResponseEntity.ok("Marca excluída com sucesso.");
+    }
+
+    @DeleteMapping("/{id}/deactivate")
+    public ResponseEntity<?> deactivate(@PathVariable Long id) {
+        EditMarcaDTO dto = new EditMarcaDTO();
+        dto.setId(id);
+        dto.setIsActive(false);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(marcaService.updateMarca(dto));
     }
 }

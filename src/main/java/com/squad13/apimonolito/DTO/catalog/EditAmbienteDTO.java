@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class EditAmbienteDTO {
 
-    @NotNull(message = "o ID do item é obrigatório")
+    @NotNull(message = "o ID do item é obrigatório.")
     private Long id;
 
     private String name;

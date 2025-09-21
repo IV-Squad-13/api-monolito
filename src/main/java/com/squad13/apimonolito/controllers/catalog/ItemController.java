@@ -1,9 +1,11 @@
 package com.squad13.apimonolito.controllers.catalog;
 
+import com.squad13.apimonolito.DTO.catalog.EditAmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.EditItemDTO;
 import com.squad13.apimonolito.DTO.catalog.ItemDTO;
 import com.squad13.apimonolito.models.catalog.Ambiente;
 import com.squad13.apimonolito.models.catalog.ItemDesc;
+import com.squad13.apimonolito.models.catalog.ItemType;
 import com.squad13.apimonolito.services.catalog.ItemService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +36,8 @@ public class ItemController {
 
     @GetMapping("/search")
     public ResponseEntity<List<ItemDesc>> getByAttribute(@RequestParam String attribute, @RequestParam(required = false) String value) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(itemService.findByAttribute(attribute, value));
+        List<ItemDesc> items = itemService.findByAttribute(attribute, value);
+        return ResponseEntity.ok(items);
     }
 
     @PostMapping("/new")
@@ -45,7 +47,7 @@ public class ItemController {
 
     @PutMapping
     public ResponseEntity<ItemDTO> edit(@RequestBody @Valid EditItemDTO dto) {
-        ItemDTO updated = itemService.editItem(dto);
+        ItemDTO updated = itemService.updateItem(dto);
         return ResponseEntity.ok(updated);
     }
 
@@ -53,5 +55,15 @@ public class ItemController {
     public ResponseEntity<?> delete(@PathVariable Long id) {
             itemService.deleteItem(id);
             return ResponseEntity.ok("Item excluído com sucesso.");
+    }
+
+    @DeleteMapping("/{id}/deactivate")
+    public ResponseEntity<?> deactivate(@PathVariable Long id) {
+        EditItemDTO dto = new EditItemDTO();
+        dto.setId(id);
+        dto.setIsActive(false);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(itemService.updateItem(dto));
     }
 }

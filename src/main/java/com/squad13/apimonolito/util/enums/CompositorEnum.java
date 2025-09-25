@@ -1,18 +1,16 @@
 package com.squad13.apimonolito.util.enums;
 
-import com.squad13.apimonolito.models.catalog.associative.ItemAmbiente;
-import com.squad13.apimonolito.models.catalog.associative.MarcaMaterial;
-import lombok.*;
+import com.squad13.apimonolito.exceptions.InvalidCompositorException;
 
-@Getter
+import java.util.Arrays;
+
 public enum CompositorEnum {
+    AMBIENTE, MATERIAL;
 
-    AMBIENTE(ItemAmbiente.class),
-    MATERIAL(MarcaMaterial.class);
-
-    private final Class<?> clazz;
-
-    CompositorEnum(Class<?> clazz) {
-        this.clazz = clazz;
+    public static CompositorEnum fromString(String value) {
+        return Arrays.stream(values())
+                .filter(e -> e.name().equalsIgnoreCase(value))
+                .findFirst()
+                .orElseThrow(() -> new InvalidCompositorException("Compositor inválido: " + value));
     }
 }

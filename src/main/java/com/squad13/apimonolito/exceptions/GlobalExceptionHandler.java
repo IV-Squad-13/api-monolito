@@ -34,6 +34,12 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(ex.getMessage(), request.getDescription(false), HttpStatus.NOT_FOUND.value()));
     }
 
+    @ExceptionHandler(InvalidCompositorException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidCompositor(InvalidCompositorException ex, WebRequest request) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(ex.getMessage(), request.getDescription(false), HttpStatus.NOT_FOUND.value()));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> exception(Exception ex, WebRequest request) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

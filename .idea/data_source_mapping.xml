@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourcePerFileMappings">
+    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V2__popular_catalogo.sql" value="000c45dd-9f0a-497e-bf91-e8d6a4741c5b" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V3__popular_associassoes_do_catalogo.sql" value="000c45dd-9f0a-497e-bf91-e8d6a4741c5b" />
+  </component>
+</project>

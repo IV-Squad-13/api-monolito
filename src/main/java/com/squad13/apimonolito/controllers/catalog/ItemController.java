@@ -8,6 +8,7 @@ import com.squad13.apimonolito.models.catalog.associative.ItemAmbiente;
 import com.squad13.apimonolito.services.catalog.ItemAmbienteService;
 import com.squad13.apimonolito.services.catalog.ItemService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,16 +18,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/catalogo/item")
+@RequiredArgsConstructor
 public class ItemController {
 
-    @Autowired
-    private ItemService itemService;
+    private final ItemService itemService;
 
-    @Autowired
-    private ItemAmbienteService itemAmbienteService;
+    private final ItemAmbienteService itemAmbienteService;
 
     @GetMapping
-    public List<ItemDesc> getAll() {
+    public List<ItemDTO> getAll() {
         return itemService.findAll();
     }
 

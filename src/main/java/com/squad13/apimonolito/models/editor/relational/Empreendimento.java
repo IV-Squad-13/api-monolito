@@ -1,10 +1,8 @@
 package com.squad13.apimonolito.models.editor.relational;
 
-import com.squad13.apimonolito.models.catalog.Catalogo;
-import com.squad13.apimonolito.models.revision.relational.Revisao;
+import com.squad13.apimonolito.models.catalog.Padrao;
 import com.squad13.apimonolito.util.enums.EmpreendimentoStatusEnum;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
@@ -29,7 +27,7 @@ public class Empreendimento {
     private EmpreendimentoStatusEnum statusEnum;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_catalogo")
+    @JoinColumn(name = "id_padrao")
     @OnDelete(action = OnDeleteAction.SET_NULL)
-    private Catalogo catalogo;
+    private Padrao padrao;
 }

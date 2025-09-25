@@ -1,6 +1,6 @@
 package com.squad13.apimonolito.models.catalog.associative;
 
-import com.squad13.apimonolito.models.catalog.Catalogo;
+import com.squad13.apimonolito.models.catalog.Padrao;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -8,7 +8,7 @@ import lombok.Data;
 @Entity
 @Table(
         name = "tb_composicao_material",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"id_catalogo", "id_marca_material"})
+        uniqueConstraints = @UniqueConstraint(columnNames = {"id_padrao", "id_marca_material"})
 )
 public class ComposicaoMaterial {
 
@@ -18,10 +18,10 @@ public class ComposicaoMaterial {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_catalogo")
-    private Catalogo catalogo;
+    @JoinColumn(name = "id_padrao")
+    private Padrao padrao;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_marca_material")
-    private MarcaMaterial materialCompositor;
+    private MarcaMaterial compositor;
 }

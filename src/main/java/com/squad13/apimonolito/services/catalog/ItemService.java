@@ -16,6 +16,7 @@ import com.squad13.apimonolito.repository.catalog.ItemTypeRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,19 +26,31 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ItemService {
 
-    @Autowired
-    private ItemRepository itemRepository;
+    private final ItemRepository itemRepository;
 
     @PersistenceContext
-    private EntityManager em;
+    private final EntityManager em;
 
-    @Autowired
-    private ItemTypeRepository itemTypeRepository;
+    private final ItemTypeRepository itemTypeRepository;
 
-    public List<ItemDesc> findAll() {
-        return itemRepository.findAll();
+    public List<ItemDTO> findAll() {
+        return itemRepository.findAll()
+                .stream().map(item -> {
+                    ItemDTO dto = new ItemDTO();
+                    dto.setName(item.getName());
+                    dto.setDesc(item.getDesc());
+                    dto.setIsActive(item.getIsActive());
+
+                    if (dto.getType() != null) {
+                        dto.setTypeId(item.getType().getId());
+                        dto.setType(item.getType().getName());
+                    }
+
+                    return dto;
+                }).toList();
     }
 
     public ItemDesc findByIdOrThrow(Long id) {

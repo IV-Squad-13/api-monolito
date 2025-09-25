@@ -24,7 +24,7 @@ public class Ambiente {
     @Column(name = "id_ambiente")
     private Long id;
 
-    @Column(name = "nm_ambiente", unique = true, nullable = false, length = 80)
+    @Column(name = "nm_ambiente", nullable = false, length = 80)
     private String name;
 
     @Column(name = "tp_local", nullable = false, length = 20)

@@ -6,16 +6,17 @@ import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.catalog.ItemType;
 import com.squad13.apimonolito.repository.catalog.ItemTypeRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ItemTypeService {
 
-    @Autowired
-    private ItemTypeRepository itemTypeRepository;
+    private final ItemTypeRepository itemTypeRepository;
 
     public List<ItemType> findAll() {
         return itemTypeRepository.findAll();

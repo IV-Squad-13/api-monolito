@@ -13,21 +13,21 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "tb_catalago")
-public class Catalogo {
+@Table(name = "tb_padrao")
+public class Padrao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_catalogo")
+    @Column(name = "id_padrao")
     private Long id;
 
-    @Column(name = "nm_catalogo", unique = true, nullable = false, length = 80)
+    @Column(name = "nm_padrao", unique = true, nullable = false, length = 80)
     private String name;
 
     @Column(name = "is_ativo")
     private Boolean isActive;
 
-    @OneToMany(mappedBy = "catalogo",
+    @OneToMany(mappedBy = "padrao",
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
             orphanRemoval = true
@@ -35,7 +35,7 @@ public class Catalogo {
     @JsonManagedReference
     private Set<ComposicaoAmbiente> ambienteSet;
 
-    @OneToMany(mappedBy = "catalogo",
+    @OneToMany(mappedBy = "padrao",
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
             orphanRemoval = true
@@ -49,7 +49,7 @@ public class Catalogo {
     @PreRemove
     private void setEmpreendimentoNull() {
         empreendimentoSet.forEach(itemDesc -> {
-            itemDesc.setCatalogo(null);
+            itemDesc.setPadrao(null);
         });
     }
 }

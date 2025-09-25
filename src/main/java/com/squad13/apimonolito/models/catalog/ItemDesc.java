@@ -32,7 +32,7 @@ public class ItemDesc {
     @Column(name = "is_ativo")
     private Boolean isActive;
 
-    @Column(name = "ds_item", length = 320, nullable = false, unique = true)
+    @Column(name = "ds_item", length = 320, nullable = false)
     private String desc;
 
     @ManyToOne(fetch = FetchType.LAZY)

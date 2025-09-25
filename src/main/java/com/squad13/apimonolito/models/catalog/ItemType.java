@@ -1,5 +1,7 @@
 package com.squad13.apimonolito.models.catalog;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import lombok.Getter;
@@ -11,6 +13,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "tb_item_type")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ItemType {
 
     @Id
@@ -25,6 +28,7 @@ public class ItemType {
     private Boolean isActive;
 
     @OneToMany(mappedBy = "type", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<ItemDesc> itemDescSet;
 
     @PreRemove

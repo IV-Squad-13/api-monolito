@@ -5,6 +5,7 @@ import com.squad13.apimonolito.DTO.catalog.ItemTypeDTO;
 import com.squad13.apimonolito.models.catalog.ItemType;
 import com.squad13.apimonolito.services.catalog.ItemTypeService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +14,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/catalogo/item-types")
+@RequiredArgsConstructor
 public class ItemTypeController {
 
-    @Autowired
-    private ItemTypeService itemTypeService;
+    private final ItemTypeService itemTypeService;
 
     @GetMapping
     public ResponseEntity<List<ItemType>> getAll() {
@@ -39,7 +40,7 @@ public class ItemTypeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ItemType> edit(@PathVariable Long id, @RequestBody EditItemTypeDTO dto) {
+    public ResponseEntity<ItemType> edit(@PathVariable Long id, @RequestBody @Valid EditItemTypeDTO dto) {
         return ResponseEntity.ok(itemTypeService.updateItemType(id, dto));
     }
 

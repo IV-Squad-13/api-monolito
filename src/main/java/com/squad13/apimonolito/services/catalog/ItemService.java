@@ -40,6 +40,7 @@ public class ItemService {
         return itemRepository.findAll()
                 .stream().map(item -> {
                     ItemDTO dto = new ItemDTO();
+                    dto.setId(item.getId());
                     dto.setName(item.getName());
                     dto.setDesc(item.getDesc());
                     dto.setIsActive(item.getIsActive());

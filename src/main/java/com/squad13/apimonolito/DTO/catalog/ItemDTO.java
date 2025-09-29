@@ -8,6 +8,9 @@ import lombok.Data;
 @Data
 public class ItemDTO {
 
+    @Null
+    private Long id;
+
     @NotBlank(message = "O nome do item é obrigatório.")
     @Size(max = 80, message = "O nome do item não pode ultrapassar 80 caracteres.")
     private String name;

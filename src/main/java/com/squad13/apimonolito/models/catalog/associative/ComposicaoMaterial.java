@@ -1,13 +1,15 @@
-package com.squad13.apimonolito.models.editor.relational.associative;
+package com.squad13.apimonolito.models.catalog.associative;
 
-import com.squad13.apimonolito.models.catalog.associative.MarcaMaterial;
-import com.squad13.apimonolito.models.editor.relational.Empreendimento;
+import com.squad13.apimonolito.models.catalog.Padrao;
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "tb_composicao_material")
+@Table(
+        name = "tb_composicao_material",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"id_padrao", "id_marca_material"})
+)
 public class ComposicaoMaterial {
 
     @Id
@@ -16,10 +18,10 @@ public class ComposicaoMaterial {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_empreendimento")
-    private Empreendimento empreendimento;
+    @JoinColumn(name = "id_padrao")
+    private Padrao padrao;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_marca_material")
-    private MarcaMaterial materialCompositor;
+    private MarcaMaterial compositor;
 }

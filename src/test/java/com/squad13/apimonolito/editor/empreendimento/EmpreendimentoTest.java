@@ -42,7 +42,7 @@ class EmpreendimentoTest {
     void testJpaPersistenceWithRevisao() {
         Empreendimento empreendimento = new Empreendimento();
         empreendimento.setName("Empreendimento A");
-        empreendimento.setStatusEnum(EmpreendimentoStatusEnum.EM_ANDAMENTO);
+        empreendimento.setStatusEnum(EmpreendimentoStatusEnum.INICIADO);
 
         Empreendimento savedEmp = empreendimentoRepository.save(empreendimento);
         assertThat(savedEmp.getId()).isNotNull();
@@ -92,7 +92,7 @@ class EmpreendimentoTest {
     void testConsistencyBetweenJpaAndMongo() {
         Empreendimento e = new Empreendimento();
         e.setName("Empreendimento C");
-        e.setStatusEnum(EmpreendimentoStatusEnum.EM_ANDAMENTO);
+        e.setStatusEnum(EmpreendimentoStatusEnum.INICIADO);
 
         Empreendimento savedEntity = empreendimentoRepository.save(e);
 

@@ -8,4 +8,5 @@ public class EditAmbienteDTO {
     private String name;
     private LocalEnum local;
     private Boolean isActive;
+    private Long typeId;
 }

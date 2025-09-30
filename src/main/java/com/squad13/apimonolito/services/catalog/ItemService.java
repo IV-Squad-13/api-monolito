@@ -36,7 +36,7 @@ public class ItemService {
     }
 
     public ItemDTO editItem(EditItemDTO dto) {
-        Item item = itemRepository.findById(dto.getId())
+        Item item = itemRepository.findById(dto.getTypeId())
                 .orElseThrow(() -> new IllegalArgumentException("Item não encontrado."));
 
         if (dto.getName() != null && !dto.getName().isBlank()) {

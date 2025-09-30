@@ -43,7 +43,7 @@ public class MarcaService {
     }
 
     public MarcaDTO updateMarca(EditMarcaDTO dto) {
-        Marca marca = marcaRepository.findById(dto.getId())
+        Marca marca = marcaRepository.findById(dto.getTypeId())
                 .orElseThrow(() -> new IllegalArgumentException("Marca não encontrada."));
 
         if (dto.getName() != null && !dto.getName().isBlank()) {

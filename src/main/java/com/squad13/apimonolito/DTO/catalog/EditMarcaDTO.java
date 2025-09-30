@@ -6,4 +6,5 @@ import lombok.Data;
 public class EditMarcaDTO {
     private String name;
     private Boolean isActive;
+    private Long typeId;
 }

@@ -35,7 +35,7 @@ public class AmbienteService {
     }
 
     public AmbienteDTO updateAmbiente(EditAmbienteDTO dto) {
-        Ambiente ambiente = ambienteRepository.findById(dto.getId()).orElseThrow(()-> new IllegalArgumentException("Ambiente não encontrado"));
+        Ambiente ambiente = ambienteRepository.findById(dto.getTypeId()).orElseThrow(()-> new IllegalArgumentException("Ambiente não encontrado"));
 
         if(dto.getName() != null && !dto.getName().isBlank()) {
             ambiente.setName(dto.getName());

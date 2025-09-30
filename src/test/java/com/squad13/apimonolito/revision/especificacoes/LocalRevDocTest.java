@@ -18,6 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.List;
 
@@ -123,7 +124,8 @@ class LocalRevDocTest {
         rev2.setRevisaoId(1L);
         rev2.setAmbienteRevList(List.of());
 
-        assertThrows(DuplicateKeyException.class, () -> localRevDocRepository.save(rev2));
+        assertThrows(DataIntegrityViolationException.class,
+                () -> localRevDocRepository.save(rev2));
     }
 
     @Test

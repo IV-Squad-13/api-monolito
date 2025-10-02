@@ -3,6 +3,7 @@ package com.squad13.apimonolito.services.catalog;
 import com.squad13.apimonolito.DTO.catalog.res.ResAmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResItemAmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResItemDTO;
+import com.squad13.apimonolito.DTO.catalog.res.ResItemTypeDTO;
 import com.squad13.apimonolito.exceptions.AssociationAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.catalog.Ambiente;
@@ -57,6 +58,12 @@ public class ItemAmbienteService {
                 .stream()
                 .map(ItemAmbiente::getAmbiente)
                 .map(ambiente -> mapper.toResponse(ambiente, false))
+                .toList();
+    }
+
+    public List<ResItemTypeDTO> findAmbienteItemTypes(Long id) {
+        return itemAmbieteRepository.findByAmbiente_Id(id)
+                .stream().map(rel -> mapper.toResponse(rel.getItemDesc().getType()))
                 .toList();
     }
 

@@ -137,4 +137,5 @@ public class AmbienteService {
         existing.setIsActive(false);
         return mapper.toResponse(ambienteRepository.save(existing), true);
     }
+
 }

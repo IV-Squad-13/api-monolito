@@ -7,10 +7,12 @@ import com.squad13.apimonolito.exceptions.AssociationAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.catalog.Ambiente;
 import com.squad13.apimonolito.models.catalog.ItemDesc;
+import com.squad13.apimonolito.models.catalog.ItemType;
 import com.squad13.apimonolito.models.catalog.associative.ItemAmbiente;
 import com.squad13.apimonolito.repository.catalog.AmbienteRepository;
 import com.squad13.apimonolito.repository.catalog.ItemAmbieteRepository;
 import com.squad13.apimonolito.repository.catalog.ItemRepository;
+import com.squad13.apimonolito.repository.catalog.ItemTypeRepository;
 import com.squad13.apimonolito.util.Mapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ public class ItemAmbienteService {
 
     private final ItemAmbieteRepository itemAmbieteRepository;
     private final ItemRepository itemRepository;
+    private final ItemTypeRepository itemTypeRepository;
     private final AmbienteRepository ambienteRepository;
 
     private final Mapper mapper;
@@ -44,10 +47,29 @@ public class ItemAmbienteService {
                 .toList();
     }
 
+    public List<ResAmbienteDTO> findItemTypeAmbientes(Long id) {
+        List<Long> itemIds = findItemTypeByIdOrThrow(id).getItemDescSet()
+                .stream()
+                .map(ItemDesc::getId)
+                .toList();
+
+        return itemAmbieteRepository.findByItemDesc_IdIn(itemIds)
+                .stream()
+                .map(ItemAmbiente::getAmbiente)
+                .map(ambiente -> mapper.toResponse(ambiente, false))
+                .toList();
+    }
+
     private ItemDesc findItemByIdOrThrow(Long id) {
         return itemRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Nenhum item com ID: " + id + " foi encontrado"));
+    }
+
+    private ItemType findItemTypeByIdOrThrow(Long id) {
+        return itemTypeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Nenhum tipo de item com ID: " + id + " foi encontrado"));
     }
 
     private Ambiente findAmbienteByIdOrThrow(Long id) {
@@ -76,6 +98,15 @@ public class ItemAmbienteService {
         return mapper.toResponse(itemAmbiente);
     }
 
+    public List<ResItemAmbienteDTO> associateItemTypeToAmbiente(Long typeId, Long ambienteId) {
+        ItemType type = findItemTypeByIdOrThrow(typeId);
+        findAmbienteByIdOrThrow(ambienteId);
+
+        return type.getItemDescSet()
+                .stream().map(item -> associateItemAndAmbiente(item.getId(), ambienteId))
+                .toList();
+    }
+
     public void deleteItemAndAmbienteAssociation(Long itemId, Long ambienteId) {
         ItemDesc item = findItemByIdOrThrow(itemId);
         Ambiente ambiente = findAmbienteByIdOrThrow(ambienteId);
@@ -83,5 +114,14 @@ public class ItemAmbienteService {
         ItemAmbiente itemAmbiente = itemAmbieteRepository.findByItemDescAndAmbiente(item, ambiente)
                 .orElseThrow(() -> new ResourceNotFoundException("Associação entre o item " + itemId + " e o ambiente " + ambienteId + " não encontrada"));
         itemAmbieteRepository.delete(itemAmbiente);
+    }
+
+    public void deleteItemAndAmbienteAssociationsByItemType(Long typeId, Long ambienteId) {
+        ItemType type = findItemTypeByIdOrThrow(typeId);
+        findAmbienteByIdOrThrow(ambienteId);
+
+        type.getItemDescSet().forEach(
+                item -> deleteItemAndAmbienteAssociation(item.getId(), ambienteId)
+        );
     }
 }

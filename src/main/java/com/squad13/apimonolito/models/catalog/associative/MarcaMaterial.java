@@ -1,12 +1,16 @@
 package com.squad13.apimonolito.models.catalog.associative;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.squad13.apimonolito.models.catalog.Marca;
 import com.squad13.apimonolito.models.catalog.Material;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -23,12 +27,20 @@ public class MarcaMaterial {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_marca")
+    @JoinColumn(name = "id_marca", nullable = false)
     @JsonBackReference
     private Marca marca;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_material")
+    @JoinColumn(name = "id_material", nullable = false)
     @JsonBackReference
     private Material material;
+
+    @OneToMany(mappedBy = "compositor",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JsonManagedReference
+    private Set<ComposicaoMaterial> compSet = new HashSet<>();
 }

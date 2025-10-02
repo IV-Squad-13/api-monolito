@@ -1,5 +1,7 @@
 package com.squad13.apimonolito.models.catalog;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.squad13.apimonolito.models.catalog.associative.ItemAmbiente;
 import jakarta.persistence.*;
@@ -35,13 +37,14 @@ public class ItemDesc {
     @Column(name = "ds_item", length = 320, nullable = false)
     private String desc;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_item_type")
     @OnDelete(action = OnDeleteAction.SET_NULL)
+    @JsonBackReference
     private ItemType type;
 
     @OneToMany(mappedBy = "itemDesc",
-            fetch = FetchType.LAZY,
+            fetch = FetchType.EAGER,
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )

@@ -41,4 +41,4 @@ api:
     allowed-origins: ${ALLOWED_ORIGINS:http://localhost:5173,http://localhost:5000}
   security:
     token:
-      secret: chave-secreta-longa-para-teste
+      secret: chave-muito-secreta-e-grande-o-suficiente-para-256bits

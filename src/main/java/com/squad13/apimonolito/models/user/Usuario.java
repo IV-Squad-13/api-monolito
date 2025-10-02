@@ -19,13 +19,16 @@ public class Usuario implements UserDetails {
     @Column(name = "id_usuario")
     private Long id;
 
-    @Column(name = "nm_usuario", nullable = false, length = 50)
+    @Column(name = "nm_usuario", nullable = false, length = 100)
     private String nome;
 
-    @Column(name = "senha", nullable = false, length = 50)
+    @Column(name = "ds_senha", nullable = false, length = 255)
     private String senha;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @Column(name = "ds_email", length = 100)
+    private String email;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "fk_papel")
     private Papel papel;
 

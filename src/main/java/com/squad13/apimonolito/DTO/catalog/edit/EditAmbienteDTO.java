@@ -15,4 +15,5 @@ public class EditAmbienteDTO {
     private LocalEnum local;
 
     private Boolean isActive;
+    private Long typeId;
 }

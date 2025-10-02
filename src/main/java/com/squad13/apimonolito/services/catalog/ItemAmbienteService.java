@@ -31,15 +31,16 @@ public class ItemAmbienteService {
 
     public List<ResItemDTO> findAmbienteItems(Long id) {
         return itemAmbieteRepository.findByAmbiente_Id(id)
-                .stream().map(ItemAmbiente::getItemDesc)
-                .map(mapper::toResponse)
+                .stream()
+                .map(ItemAmbiente::getItemDesc)
+                .map(item -> mapper.toResponse(item, false))
                 .toList();
     }
 
     public List<ResAmbienteDTO> findItemAmbientes(Long id) {
         return itemAmbieteRepository.findByItemDesc_Id(id)
                 .stream().map(ItemAmbiente::getAmbiente)
-                .map(mapper::toResponse)
+                .map(ambiente -> mapper.toResponse(ambiente, false))
                 .toList();
     }
 
@@ -57,7 +58,6 @@ public class ItemAmbienteService {
 
     public ResItemAmbienteDTO associateItemAndAmbiente(Long itemId, Long ambienteId) {
         ItemDesc item = findItemByIdOrThrow(itemId);
-
         Ambiente ambiente = findAmbienteByIdOrThrow(ambienteId);
 
         itemAmbieteRepository.findByItemDescAndAmbiente(item, ambiente)

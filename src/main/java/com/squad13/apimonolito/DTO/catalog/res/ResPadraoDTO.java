@@ -8,5 +8,7 @@ public record ResPadraoDTO(
         Boolean isActive,
 
         Set<ResMinDTO> itemSet,
-        Set<ResMinDTO> ambienteSet
+        Set<ResMinDTO> ambienteSet,
+        Set<ResMinDTO> marcaSet,
+        Set<ResMinDTO> materialSet
 ) { }

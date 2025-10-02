@@ -25,12 +25,12 @@ public class ItemAmbiente {
     @Column(name = "id_item_ambiente")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_item_desc", nullable = false)
     @JsonBackReference
     private ItemDesc itemDesc;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_ambiente", nullable = false)
     @JsonBackReference
     private Ambiente ambiente;

@@ -35,9 +35,10 @@ public class ItemService {
 
     private final ItemTypeRepository itemTypeRepository;
 
-    public List<ResItemDTO> findAll() {
+    public List<ResItemDTO> findAll(Boolean loadAssociations) {
         return itemRepository.findAll()
-                .stream().map(mapper::toResponse)
+                .stream()
+                .map(item -> mapper.toResponse(item, loadAssociations))
                 .toList();
     }
 
@@ -48,7 +49,7 @@ public class ItemService {
 
     public ResItemDTO findById(Long id) {
         return itemRepository.findById(id)
-                .map(mapper::toResponse)
+                .map(item -> mapper.toResponse(item, true))
                 .orElseThrow(() -> new ResourceNotFoundException("Item com ID: " + id + " não encontrado."));
     }
 
@@ -84,7 +85,8 @@ public class ItemService {
 
         cq.select(root).where(predicate);
         return em.createQuery(cq).getResultList()
-                .stream().map(mapper::toResponse)
+                .stream()
+                .map(item -> mapper.toResponse(item, false))
                 .toList();
     }
 
@@ -106,7 +108,7 @@ public class ItemService {
         item.setType(type);
 
         ItemDesc saved = itemRepository.save(item);
-        return mapper.toResponse(saved);
+        return mapper.toResponse(saved, true);
     }
 
     public ResItemDTO updateItem(Long id, EditItemDTO dto) {
@@ -127,7 +129,7 @@ public class ItemService {
         }
 
         ItemDesc updated = itemRepository.save(item);
-        return mapper.toResponse(updated);
+        return mapper.toResponse(updated, true);
     }
 
     public void deleteItem(Long id) {
@@ -138,6 +140,6 @@ public class ItemService {
     public ResItemDTO deactivateItem(Long id) {
         ItemDesc existing = findByIdOrThrow(id);
         existing.setIsActive(false);
-        return mapper.toResponse(itemRepository.save(existing));
+        return mapper.toResponse(itemRepository.save(existing), true);
     }
 }

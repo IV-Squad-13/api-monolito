@@ -44,7 +44,7 @@ public class ItemDesc {
     private ItemType type;
 
     @OneToMany(mappedBy = "itemDesc",
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )

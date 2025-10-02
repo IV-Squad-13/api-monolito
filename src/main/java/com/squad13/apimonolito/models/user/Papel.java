@@ -13,6 +13,6 @@ public class Papel {
     @Column(name = "id_papel")
     private Long id;
 
-    @Column(name = "nm_papel",  nullable = false, length = 50)
+    @Column(name = "nm_papel",  nullable = false, length = 50, unique = true)
     private String nome;
 }

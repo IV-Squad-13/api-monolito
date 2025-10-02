@@ -2,64 +2,57 @@ package com.squad13.apimonolito.services.catalog;
 
 import com.squad13.apimonolito.DTO.catalog.edit.EditItemDTO;
 import com.squad13.apimonolito.DTO.catalog.ItemDTO;
-import com.squad13.apimonolito.exceptions.AssociationAlreadyExistsException;
+import com.squad13.apimonolito.DTO.catalog.res.ResItemDTO;
 import com.squad13.apimonolito.exceptions.InvalidAttributeException;
 import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
-import com.squad13.apimonolito.models.catalog.Ambiente;
 import com.squad13.apimonolito.models.catalog.ItemDesc;
 import com.squad13.apimonolito.models.catalog.ItemType;
-import com.squad13.apimonolito.models.catalog.associative.ItemAmbiente;
-import com.squad13.apimonolito.repository.catalog.AmbienteRepository;
 import com.squad13.apimonolito.repository.catalog.ItemRepository;
 import com.squad13.apimonolito.repository.catalog.ItemTypeRepository;
+import com.squad13.apimonolito.util.Mapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class ItemService {
 
-    private final ItemRepository itemRepository;
-
     @PersistenceContext
     private final EntityManager em;
 
+    private final Mapper mapper;
+
+    private final ItemRepository itemRepository;
+
     private final ItemTypeRepository itemTypeRepository;
 
-    public List<ItemDTO> findAll() {
+    public List<ResItemDTO> findAll() {
         return itemRepository.findAll()
-                .stream().map(item -> {
-                    ItemDTO dto = new ItemDTO();
-                    dto.setId(item.getId());
-                    dto.setName(item.getName());
-                    dto.setDesc(item.getDesc());
-                    dto.setIsActive(item.getIsActive());
-
-                    if (dto.getType() != null) {
-                        dto.setTypeId(item.getType().getId());
-                        dto.setType(item.getType().getName());
-                    }
-
-                    return dto;
-                }).toList();
+                .stream().map(mapper::toResponse)
+                .toList();
     }
 
-    public ItemDesc findByIdOrThrow(Long id) {
+    private ItemDesc findByIdOrThrow(Long id) {
         return itemRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Item com ID: " + id + " não encontrado."));
     }
 
-    public List<ItemDesc> findByAttribute(String attribute, String value) {
+    public ResItemDTO findById(Long id) {
+        return itemRepository.findById(id)
+                .map(mapper::toResponse)
+                .orElseThrow(() -> new ResourceNotFoundException("Item com ID: " + id + " não encontrado."));
+    }
+
+    public List<ResItemDTO> findByAttribute(String attribute, String value) {
         boolean attributeExists = Arrays.stream(ItemDesc.class.getDeclaredFields())
                 .anyMatch(f -> f.getName().equals(attribute));
 
@@ -90,10 +83,12 @@ public class ItemService {
         }
 
         cq.select(root).where(predicate);
-        return em.createQuery(cq).getResultList();
+        return em.createQuery(cq).getResultList()
+                .stream().map(mapper::toResponse)
+                .toList();
     }
 
-    public ItemDTO createItem(ItemDTO dto) {
+    public ResItemDTO createItem(ItemDTO dto) {
         ItemType type = itemTypeRepository.findByIdOrName(dto.getTypeId(), dto.getName())
                         .orElse(null);
 
@@ -111,10 +106,10 @@ public class ItemService {
         item.setType(type);
 
         ItemDesc saved = itemRepository.save(item);
-        return mapToDTO(saved);
+        return mapper.toResponse(saved);
     }
 
-    public ItemDTO updateItem(Long id, EditItemDTO dto) {
+    public ResItemDTO updateItem(Long id, EditItemDTO dto) {
         ItemDesc item = findByIdOrThrow(id);
 
         if (dto.getName() != null && !dto.getName().isBlank()) {
@@ -132,7 +127,7 @@ public class ItemService {
         }
 
         ItemDesc updated = itemRepository.save(item);
-        return mapToDTO(updated);
+        return mapper.toResponse(updated);
     }
 
     public void deleteItem(Long id) {
@@ -140,19 +135,9 @@ public class ItemService {
         itemRepository.delete(item);
     }
 
-    public ItemDesc deactivateItem(Long id) {
+    public ResItemDTO deactivateItem(Long id) {
         ItemDesc existing = findByIdOrThrow(id);
         existing.setIsActive(false);
-        return itemRepository.save(existing);
-    }
-
-    private ItemDTO mapToDTO(ItemDesc item) {
-        ItemDTO dto = new ItemDTO();
-        dto.setName(item.getName());
-        dto.setIsActive(item.getIsActive());
-        dto.setDesc(item.getDesc());
-        dto.setTypeId(item.getType().getId());
-        dto.setType(item.getType().getName());
-        return dto;
+        return mapper.toResponse(itemRepository.save(existing));
     }
 }

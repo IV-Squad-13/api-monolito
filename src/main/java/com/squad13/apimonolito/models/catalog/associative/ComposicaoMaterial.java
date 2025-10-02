@@ -1,10 +1,14 @@
 package com.squad13.apimonolito.models.catalog.associative;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.squad13.apimonolito.models.catalog.Padrao;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(
         name = "tb_composicao_material",
@@ -18,10 +22,12 @@ public class ComposicaoMaterial {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_padrao")
+    @JoinColumn(name = "id_padrao", nullable = false)
+    @JsonBackReference
     private Padrao padrao;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_marca_material")
+    @JoinColumn(name = "id_marca_material", nullable = false)
+    @JsonBackReference
     private MarcaMaterial compositor;
 }

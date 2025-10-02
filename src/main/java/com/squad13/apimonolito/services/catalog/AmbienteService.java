@@ -2,6 +2,8 @@ package com.squad13.apimonolito.services.catalog;
 
 import com.squad13.apimonolito.DTO.catalog.AmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.edit.EditAmbienteDTO;
+import com.squad13.apimonolito.DTO.catalog.res.ResAmbienteDTO;
+import com.squad13.apimonolito.DTO.catalog.res.ResItemDTO;
 import com.squad13.apimonolito.exceptions.AssociationAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.InvalidAttributeException;
 import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
@@ -11,6 +13,7 @@ import com.squad13.apimonolito.models.catalog.ItemDesc;
 import com.squad13.apimonolito.models.catalog.associative.ItemAmbiente;
 import com.squad13.apimonolito.repository.catalog.AmbienteRepository;
 import com.squad13.apimonolito.repository.catalog.ItemRepository;
+import com.squad13.apimonolito.util.Mapper;
 import com.squad13.apimonolito.util.enums.LocalEnum;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -19,6 +22,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,26 +33,34 @@ import java.util.Optional;
 
 @Transactional
 @Service
+@RequiredArgsConstructor
 public class AmbienteService {
 
-    @Autowired
-    private AmbienteRepository ambienteRepository;
+    private final AmbienteRepository ambienteRepository;
 
-    @Autowired
-    private ItemRepository itemRepository;
+    private final Mapper mapper;
 
     @PersistenceContext
     private EntityManager em;
 
-    public List<Ambiente> findAll() {
-        return ambienteRepository.findAll();
+    public List<ResAmbienteDTO> findAll() {
+        return ambienteRepository.findAll()
+                .stream().map(mapper::toResponse)
+                .toList();
     }
 
-    public Optional<Ambiente> findById(Long id) {
-        return ambienteRepository.findById(id);
+    private Ambiente findByIdOrThrow(Long id) {
+        return ambienteRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Ambiente com ID: " + id + " não encontrado."));
     }
 
-    public List<Ambiente> findByAttribute(String attribute, String value) {
+    public ResAmbienteDTO findById(Long id) {
+        return ambienteRepository.findById(id)
+                .map(mapper::toResponse)
+                .orElseThrow(() -> new ResourceNotFoundException("Ambiente com ID: " + id + " não encontrado."));
+    }
+
+    public List<ResAmbienteDTO> findByAttribute(String attribute, String value) {
         boolean attributeExists = Arrays.stream(Ambiente.class.getDeclaredFields())
                 .anyMatch(f -> f.getName().equals(attribute));
 
@@ -62,10 +74,12 @@ public class AmbienteService {
         Predicate pAttributeMatch = cb.like(cb.lower(root.get(attribute)), value.toLowerCase());
 
         cq.select(root).where(pAttributeMatch);
-        return em.createQuery(cq).getResultList();
+        return em.createQuery(cq).getResultList()
+                .stream().map(mapper::toResponse)
+                .toList();
     }
 
-    public AmbienteDTO createAmbiente(AmbienteDTO dto) {
+    public ResAmbienteDTO createAmbiente(AmbienteDTO dto) {
         ambienteRepository.findByNameAndLocal(dto.getName(), dto.getLocal())
                 .ifPresent(a -> {
                     throw new ResourceAlreadyExistsException(
@@ -78,7 +92,7 @@ public class AmbienteService {
         ambiente.setLocal(dto.getLocal());
         ambiente.setIsActive(dto.getIsActive());
 
-        return mapToDTO(ambienteRepository.save(ambiente));
+        return mapper.toResponse(ambienteRepository.save(ambiente));
     }
 
     private void ensureUniqueNameAndLocal(Ambiente ambiente, EditAmbienteDTO dto) {
@@ -99,10 +113,8 @@ public class AmbienteService {
                 });
     }
 
-    public AmbienteDTO updateAmbiente(EditAmbienteDTO dto) {
-        Ambiente ambiente = ambienteRepository.findById(dto.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Ambiente não encontrado para o ID: " + dto.getId()));
-
+    public ResAmbienteDTO updateAmbiente(Long id, EditAmbienteDTO dto) {
+        Ambiente ambiente = findByIdOrThrow(id);
         ensureUniqueNameAndLocal(ambiente, dto);
 
         if (dto.getName() != null && !dto.getName().isBlank()) {
@@ -117,21 +129,17 @@ public class AmbienteService {
             ambiente.setIsActive(dto.getIsActive());
         }
 
-        return mapToDTO(ambienteRepository.save(ambiente));
+        return mapper.toResponse(ambienteRepository.save(ambiente));
     }
 
     public void deleteAmbiente(Long id) {
-        Ambiente ambiente = ambienteRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Ambiente não encontrado para o ID: " + id));
-
+        Ambiente ambiente = findByIdOrThrow(id);
         ambienteRepository.delete(ambiente);
     }
 
-    private AmbienteDTO mapToDTO(Ambiente ambiente) {
-        AmbienteDTO dto = new AmbienteDTO();
-        dto.setName(ambiente.getName());
-        dto.setLocal(ambiente.getLocal());
-        dto.setIsActive(ambiente.getIsActive());
-        return dto;
+    public ResAmbienteDTO deactivateAmbiente(Long id) {
+        Ambiente existing = findByIdOrThrow(id);
+        existing.setIsActive(false);
+        return mapper.toResponse(ambienteRepository.save(existing));
     }
 }

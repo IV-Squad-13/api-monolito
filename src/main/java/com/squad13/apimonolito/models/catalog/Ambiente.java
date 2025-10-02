@@ -35,7 +35,7 @@ public class Ambiente {
     private Boolean isActive;
 
     @OneToMany(mappedBy = "ambiente",
-            fetch = FetchType.LAZY,
+            fetch = FetchType.EAGER,
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )

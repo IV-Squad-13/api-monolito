@@ -6,15 +6,10 @@ import com.squad13.apimonolito.DTO.catalog.edit.EditAmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResAmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResItemAmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResItemDTO;
-import com.squad13.apimonolito.models.catalog.Ambiente;
-import com.squad13.apimonolito.models.catalog.ItemDesc;
-import com.squad13.apimonolito.models.catalog.associative.ItemAmbiente;
 import com.squad13.apimonolito.services.catalog.AmbienteService;
 import com.squad13.apimonolito.services.catalog.ItemAmbienteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.connector.Response;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,12 +22,11 @@ import java.util.List;
 public class AmbienteController {
 
     private final AmbienteService ambienteService;
-
     private final ItemAmbienteService itemAmbienteService;
 
     @GetMapping
-    public List<ResAmbienteDTO> getAll() {
-        return ambienteService.findAll();
+    public ResponseEntity<List<ResAmbienteDTO>> getAll(@RequestParam(defaultValue = "false") Boolean loadAssociations) {
+        return ResponseEntity.ok(ambienteService.findAll(loadAssociations));
     }
 
     @GetMapping("/{id}")

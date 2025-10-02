@@ -1,6 +1,9 @@
 package com.squad13.apimonolito.services.catalog;
 
-import com.squad13.apimonolito.DTO.catalog.ComposicaoDTO;
+import com.squad13.apimonolito.DTO.catalog.res.ResComposicaoDTO;
+import com.squad13.apimonolito.DTO.catalog.res.ResItemAmbienteDTO;
+import com.squad13.apimonolito.DTO.catalog.res.ResMarcaMaterialDTO;
+import com.squad13.apimonolito.DTO.catalog.res.ResPadraoDTO;
 import com.squad13.apimonolito.exceptions.InvalidCompositorException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.catalog.Padrao;
@@ -9,6 +12,7 @@ import com.squad13.apimonolito.models.catalog.associative.ComposicaoMaterial;
 import com.squad13.apimonolito.models.catalog.associative.ItemAmbiente;
 import com.squad13.apimonolito.models.catalog.associative.MarcaMaterial;
 import com.squad13.apimonolito.repository.catalog.*;
+import com.squad13.apimonolito.util.Mapper;
 import com.squad13.apimonolito.util.enums.CompositorEnum;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -29,6 +33,8 @@ public class ComposicaoService {
     private final ItemAmbieteRepository itemAmbienteRepository;
     private final MarcaMaterialRepository marcaMaterialRepository;
 
+    private final Mapper mapper;
+    
     @PersistenceContext
     private final EntityManager em;
 
@@ -53,19 +59,23 @@ public class ComposicaoService {
                 ));
     }
 
-    private List<Padrao> findPadraoByAmbiente(Long id) {
+    private List<ResPadraoDTO> findPadraoByAmbiente(Long id) {
         return compAmbienteRepository.findByCompositor_Ambiente_Id(id)
-                .stream().map(ComposicaoAmbiente::getPadrao)
+                .stream()
+                .map(ComposicaoAmbiente::getPadrao)
+                .map(p -> mapper.toResponse(p, false))
                 .toList();
     }
 
-    private List<Padrao> findPadraoByMaterial(Long id) {
+    private List<ResPadraoDTO> findPadraoByMaterial(Long id) {
         return compMaterialRepository.findByCompositor_Material_Id(id)
-                .stream().map(ComposicaoMaterial::getPadrao)
+                .stream()
+                .map(ComposicaoMaterial::getPadrao)
+                .map(p -> mapper.toResponse(p, false))
                 .toList();
     }
 
-    private ComposicaoDTO addAmbienteRelToPadrao(Long padraoId, Long itemAmbienteId) {
+    private ResComposicaoDTO addAmbienteRelToPadrao(Long padraoId, Long itemAmbienteId) {
         Padrao padrao = getPadrao(padraoId);
         ItemAmbiente itemAmbiente = getItemAmbiente(itemAmbienteId);
 
@@ -74,10 +84,10 @@ public class ComposicaoService {
         comp.setCompositor(itemAmbiente);
 
         compAmbienteRepository.save(comp);
-        return toDTO(comp);
+        return mapper.toCompDTO(comp);
     }
 
-    private ComposicaoDTO addMaterialRelToPadrao(Long padraoId, Long marcaMaterialId) {
+    private ResComposicaoDTO addMaterialRelToPadrao(Long padraoId, Long marcaMaterialId) {
         Padrao padrao = getPadrao(padraoId);
         MarcaMaterial marcaMaterial = getMarcaMaterial(marcaMaterialId);
 
@@ -86,10 +96,10 @@ public class ComposicaoService {
         comp.setCompositor(marcaMaterial);
 
         compMaterialRepository.save(comp);
-        return toDTO(comp);
+        return mapper.toCompDTO(comp);
     }
 
-    private List<ComposicaoDTO> addAllAmbienteRelToPadrao(Long padraoId, Long ambienteId) {
+    private List<ResComposicaoDTO> addAllAmbienteRelToPadrao(Long padraoId, Long ambienteId) {
         Padrao padrao = getPadrao(padraoId);
 
         List<ItemAmbiente> itens = itemAmbienteRepository.findByAmbiente_Id(ambienteId);
@@ -105,10 +115,10 @@ public class ComposicaoService {
         }).toList();
 
         compAmbienteRepository.saveAll(comps);
-        return comps.stream().map(this::toDTO).toList();
+        return comps.stream().map(mapper::toCompDTO).toList();
     }
 
-    private List<ComposicaoDTO> addAllMaterialRelToPadrao(Long padraoId, Long materialId) {
+    private List<ResComposicaoDTO> addAllMaterialRelToPadrao(Long padraoId, Long materialId) {
         Padrao padrao = getPadrao(padraoId);
 
         List<MarcaMaterial> marcas = marcaMaterialRepository.findByMaterial_Id(materialId);
@@ -124,7 +134,7 @@ public class ComposicaoService {
         }).toList();
 
         compMaterialRepository.saveAll(comps);
-        return comps.stream().map(this::toDTO).toList();
+        return comps.stream().map(mapper::toCompDTO).toList();
     }
 
     private void removeAllAmbienteAssociationsFromPadrao(Long padraoId, Long ambienteId) {
@@ -147,51 +157,37 @@ public class ComposicaoService {
         }
     }
 
-    private ComposicaoDTO toDTO(Object comp) {
-        ComposicaoDTO dto = new ComposicaoDTO();
-
-        if (comp instanceof ComposicaoAmbiente ca) {
-            dto.setId(ca.getId());
-            dto.setPadrao(ca.getPadrao());
-            dto.setCompAmbiente(ca);
-        } else if (comp instanceof ComposicaoMaterial cm) {
-            dto.setId(cm.getId());
-            dto.setPadrao(cm.getPadrao());
-            dto.setCompMaterial(cm);
-        } else {
-            throw new InvalidCompositorException("Tipo inválido de composição: " + comp.getClass());
-        }
-
-        return dto;
-    }
-
-    public List<Padrao> findPadraoByCompositor(Long id, CompositorEnum compType) {
+    public List<ResPadraoDTO> findPadraoByCompositor(Long id, CompositorEnum compType) {
         if (compType.equals(CompositorEnum.AMBIENTE)) return findPadraoByAmbiente(id);
         if (compType.equals(CompositorEnum.MATERIAL)) return findPadraoByMaterial(id);
 
         throw new InvalidCompositorException("Tipo de compositor inválido: " + compType);
     }
 
-    public List<ItemAmbiente> findItensAmbienteByPadrao(Long id) {
+    public List<ResItemAmbienteDTO> findItensAmbienteByPadrao(Long id) {
         return compAmbienteRepository.findByPadrao_Id(id)
-                .stream().map(ComposicaoAmbiente::getCompositor)
+                .stream()
+                .map(ComposicaoAmbiente::getCompositor)
+                .map(mapper::toResponse)
                 .toList();
     }
 
-    public List<MarcaMaterial> findMarcasMaterialByPadrao(Long id) {
+    public List<ResMarcaMaterialDTO> findMarcasMaterialByPadrao(Long id) {
         return compMaterialRepository.findByPadrao_Id(id)
-                .stream().map(ComposicaoMaterial::getCompositor)
+                .stream()
+                .map(ComposicaoMaterial::getCompositor)
+                .map(mapper::toResponse)
                 .toList();
     }
 
-    public ComposicaoDTO addSingleAssociationToPadrao(Long id, Long associationId, CompositorEnum compType) {
+    public ResComposicaoDTO addSingleAssociationToPadrao(Long id, Long associationId, CompositorEnum compType) {
         if (compType.equals(CompositorEnum.AMBIENTE)) return addAmbienteRelToPadrao(id, associationId);
         if (compType.equals(CompositorEnum.MATERIAL)) return addMaterialRelToPadrao(id, associationId);
 
         throw new InvalidCompositorException("Tipo de compositor inválido: " + compType);
     }
 
-    public List<ComposicaoDTO> addAllAssociationsToPadrao(Long id, Long associationId, CompositorEnum compType) {
+    public List<ResComposicaoDTO> addAllAssociationsToPadrao(Long id, Long associationId, CompositorEnum compType) {
         if (compType.equals(CompositorEnum.AMBIENTE)) return addAllAmbienteRelToPadrao(id, associationId);
         if (compType.equals(CompositorEnum.MATERIAL)) return addAllMaterialRelToPadrao(id, associationId);
 

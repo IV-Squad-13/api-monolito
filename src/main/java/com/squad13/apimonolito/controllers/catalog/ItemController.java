@@ -24,12 +24,11 @@ import java.util.List;
 public class ItemController {
 
     private final ItemService itemService;
-
     private final ItemAmbienteService itemAmbienteService;
 
     @GetMapping
-    public List<ResItemDTO> getAll() {
-        return itemService.findAll();
+    public ResponseEntity<List<ResItemDTO>> getAll(@RequestParam(defaultValue = "false") Boolean loadAssociations) {
+        return ResponseEntity.ok(itemService.findAll(loadAssociations));
     }
 
     @GetMapping("/{id}")

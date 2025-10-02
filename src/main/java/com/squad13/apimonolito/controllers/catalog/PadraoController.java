@@ -1,11 +1,11 @@
 package com.squad13.apimonolito.controllers.catalog;
 
 import com.squad13.apimonolito.DTO.catalog.PadraoDTO;
-import com.squad13.apimonolito.DTO.catalog.ComposicaoDTO;
+import com.squad13.apimonolito.DTO.catalog.res.ResComposicaoDTO;
 import com.squad13.apimonolito.DTO.catalog.edit.EditPadraoDTO;
-import com.squad13.apimonolito.models.catalog.Padrao;
-import com.squad13.apimonolito.models.catalog.associative.ItemAmbiente;
-import com.squad13.apimonolito.models.catalog.associative.MarcaMaterial;
+import com.squad13.apimonolito.DTO.catalog.res.ResItemAmbienteDTO;
+import com.squad13.apimonolito.DTO.catalog.res.ResMarcaMaterialDTO;
+import com.squad13.apimonolito.DTO.catalog.res.ResPadraoDTO;
 import com.squad13.apimonolito.services.catalog.PadraoService;
 import com.squad13.apimonolito.services.catalog.ComposicaoService;
 import com.squad13.apimonolito.util.enums.CompositorEnum;
@@ -26,42 +26,42 @@ public class PadraoController {
     private final ComposicaoService composicaoService;
 
     @GetMapping()
-    public ResponseEntity<List<Padrao>> getAll() {
-        return ResponseEntity.ok(padraoService.findAll());
+    public ResponseEntity<List<ResPadraoDTO>> getAll(@RequestParam(defaultValue = "false") Boolean loadAssociations) {
+        return ResponseEntity.ok(padraoService.findAll(loadAssociations));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Padrao> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(padraoService.findByIdOrThrow(id));
+    public ResponseEntity<ResPadraoDTO> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(padraoService.findById(id));
     }
 
     @GetMapping("/name/{name}")
-    public ResponseEntity<Padrao> getByName(@PathVariable String name) {
+    public ResponseEntity<ResPadraoDTO> getByName(@PathVariable String name) {
         return ResponseEntity.ok(padraoService.findByNameOrThrow(name));
     }
 
     @GetMapping("/composition/catalogo")
-    public ResponseEntity<List<Padrao>> getPadraoByCompositor(@RequestParam Long idCompositor, @RequestParam CompositorEnum compType) {
+    public ResponseEntity<List<ResPadraoDTO>> getPadraoByCompositor(@RequestParam Long idCompositor, @RequestParam CompositorEnum compType) {
         return ResponseEntity.ok(composicaoService.findPadraoByCompositor(idCompositor, compType));
     }
 
     @GetMapping("/{id}/ambiente")
-    public ResponseEntity<List<ItemAmbiente>> getItemAmbienteByPadrao(@PathVariable Long id) {
+    public ResponseEntity<List<ResItemAmbienteDTO>> getItemAmbienteByPadrao(@PathVariable Long id) {
         return ResponseEntity.ok(composicaoService.findItensAmbienteByPadrao(id));
     }
 
     @GetMapping("/{id}/material")
-    public ResponseEntity<List<MarcaMaterial>> getMarcaMaterialByPadrao(@PathVariable Long id) {
+    public ResponseEntity<List<ResMarcaMaterialDTO>> getMarcaMaterialByPadrao(@PathVariable Long id) {
         return ResponseEntity.ok(composicaoService.findMarcasMaterialByPadrao(id));
     }
 
     @PostMapping("/new")
-    public ResponseEntity<PadraoDTO> create(@RequestBody @Valid PadraoDTO dto) {
+    public ResponseEntity<ResPadraoDTO> create(@RequestBody @Valid PadraoDTO dto) {
         return ResponseEntity.ok(padraoService.createPadrao(dto));
     }
 
     @PostMapping("/{id}/rel/single")
-    public ResponseEntity<ComposicaoDTO> createSingleComposition(
+    public ResponseEntity<ResComposicaoDTO> createSingleComposition(
             @PathVariable Long id,
             @RequestParam Long associationId,
             @RequestParam CompositorEnum compType
@@ -70,7 +70,7 @@ public class PadraoController {
     }
 
     @PostMapping("/{id}/rel/all")
-    public ResponseEntity<List<ComposicaoDTO>> createAllCompositions(
+    public ResponseEntity<List<ResComposicaoDTO>> createAllCompositions(
             @PathVariable Long id,
             @RequestParam Long associationId,
             @RequestParam CompositorEnum compType
@@ -79,7 +79,7 @@ public class PadraoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PadraoDTO> edit(@PathVariable Long id, @RequestBody @Valid EditPadraoDTO dto) {
+    public ResponseEntity<ResPadraoDTO> edit(@PathVariable Long id, @RequestBody @Valid EditPadraoDTO dto) {
         return ResponseEntity.ok(padraoService.updatePadrao(id, dto));
     }
 
@@ -109,7 +109,7 @@ public class PadraoController {
     }
 
     @DeleteMapping("/{id}/deactivate")
-    public ResponseEntity<?> deactivate(@PathVariable Long id) {
+    public ResponseEntity<ResPadraoDTO> deactivate(@PathVariable Long id) {
         return ResponseEntity.ok(padraoService.deactivatePadrao(id));
     }
 }

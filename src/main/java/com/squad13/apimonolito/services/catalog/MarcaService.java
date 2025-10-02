@@ -2,44 +2,57 @@ package com.squad13.apimonolito.services.catalog;
 
 import com.squad13.apimonolito.DTO.catalog.edit.EditMarcaDTO;
 import com.squad13.apimonolito.DTO.catalog.MarcaDTO;
+import com.squad13.apimonolito.DTO.catalog.res.ResMarcaDTO;
 import com.squad13.apimonolito.exceptions.InvalidAttributeException;
 import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
-import com.squad13.apimonolito.models.catalog.Ambiente;
 import com.squad13.apimonolito.models.catalog.Marca;
-import com.squad13.apimonolito.models.catalog.associative.ItemAmbiente;
 import com.squad13.apimonolito.repository.catalog.MarcaRepository;
+import com.squad13.apimonolito.util.Mapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
+@Transactional
 @Service
+@RequiredArgsConstructor
 public class MarcaService {
 
-    @Autowired
-    private MarcaRepository marcaRepository;
+    private final MarcaRepository marcaRepository;
+
+    private final Mapper mapper;
 
     @PersistenceContext
     private EntityManager em;
 
-    public List<Marca> findAll(){
-        return marcaRepository.findAll();
+    public List<ResMarcaDTO> findAll(Boolean loadAssociations) {
+        return marcaRepository.findAll()
+                .stream()
+                .map(marca -> mapper.toResponse(marca, loadAssociations))
+                .toList();
     }
 
-    public Optional<Marca> findById(Long id){
-        return marcaRepository.findById(id);
+    private Marca findByIdOrThrow(Long id) {
+        return marcaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Marca com ID: " + id + " não encontrado."));
     }
 
-    public List<Marca> findByAttribute(String attribute, String value) {
+    public ResMarcaDTO findById(Long id) {
+        return marcaRepository.findById(id)
+                .map(marca -> mapper.toResponse(marca, true))
+                .orElseThrow(() -> new ResourceNotFoundException("Marca com ID: " + id + " não encontrado."));
+    }
+
+    public List<ResMarcaDTO> findByAttribute(String attribute, String value) {
         boolean attributeExists = Arrays.stream(Marca.class.getDeclaredFields())
                 .anyMatch(f -> f.getName().equals(attribute));
 
@@ -54,10 +67,13 @@ public class MarcaService {
 
         cq.select(root).where(pAttributeMatch);
 
-        return em.createQuery(cq).getResultList();
+        return em.createQuery(cq).getResultList()
+                .stream()
+                .map(m -> mapper.toResponse(m, false))
+                .toList();
     }
 
-    public MarcaDTO createMarca(MarcaDTO dto) {
+    public ResMarcaDTO createMarca(MarcaDTO dto) {
         marcaRepository.findByName(dto.getName())
                 .ifPresent(m -> {
                     throw new ResourceAlreadyExistsException(
@@ -70,12 +86,11 @@ public class MarcaService {
         marca.setIsActive(dto.getIsActive());
 
         Marca saved = marcaRepository.save(marca);
-        return mapToDTO(saved);
+        return mapper.toResponse(saved, true);
     }
 
-    public MarcaDTO updateMarca(EditMarcaDTO dto) {
-        Marca marca = marcaRepository.findById(dto.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Marca não encontrada para o ID: " + dto.getId()));
+    public ResMarcaDTO updateMarca(Long id, EditMarcaDTO dto) {
+        Marca marca = findByIdOrThrow(id);
 
         if (dto.getName() != null && !dto.getName().isBlank()) {
             marcaRepository.findByName(dto.getName())
@@ -93,19 +108,17 @@ public class MarcaService {
         }
 
         Marca updated = marcaRepository.save(marca);
-        return mapToDTO(updated);
+        return mapper.toResponse(updated, true);
     }
 
     public void deleteMarca(Long id) {
-        Marca marca = marcaRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Marca não encontrada para o ID: " + id));
+        Marca marca = findByIdOrThrow(id);
         marcaRepository.delete(marca);
     }
 
-    private MarcaDTO mapToDTO(Marca marca) {
-        MarcaDTO dto = new MarcaDTO();
-        dto.setName(marca.getName());
-        dto.setIsActive(marca.getIsActive());
-        return dto;
+    public ResMarcaDTO deactivateMarca(Long id) {
+        Marca existing = findByIdOrThrow(id);
+        existing.setIsActive(false);
+        return mapper.toResponse(marcaRepository.save(existing), true);
     }
 }

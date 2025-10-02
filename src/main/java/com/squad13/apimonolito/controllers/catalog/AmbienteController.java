@@ -6,6 +6,7 @@ import com.squad13.apimonolito.DTO.catalog.edit.EditAmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResAmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResItemAmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResItemDTO;
+import com.squad13.apimonolito.DTO.catalog.res.ResItemTypeDTO;
 import com.squad13.apimonolito.services.catalog.AmbienteService;
 import com.squad13.apimonolito.services.catalog.ItemAmbienteService;
 import jakarta.validation.Valid;
@@ -43,6 +44,12 @@ public class AmbienteController {
     public ResponseEntity<List<ResItemDTO>> getAssociations(@RequestParam(required = false) Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(itemAmbienteService.findAmbienteItems(id));
+    }
+
+    @GetMapping("/rel/item-type")
+    public ResponseEntity<List<ResItemTypeDTO>> getAssociatedItemTypes(@RequestParam(required = false) Long id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(itemAmbienteService.findAmbienteItemTypes(id));
     }
 
     @PostMapping("/new")

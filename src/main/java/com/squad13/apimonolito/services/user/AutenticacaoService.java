@@ -1,6 +1,7 @@
 package com.squad13.apimonolito.services.user;
 
 import com.squad13.apimonolito.DTO.register.RegisterDto;
+import com.squad13.apimonolito.exceptions.InvalidTokenException;
 import com.squad13.apimonolito.models.user.Papel;
 import com.squad13.apimonolito.models.user.Usuario;
 import com.squad13.apimonolito.repository.user.PapelRepository;
@@ -47,13 +48,18 @@ public class AutenticacaoService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Usuario> usuario = usuarioRepository.findByNome(username);
+    public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
+        Optional<Usuario> usuario = usuarioRepository.findByNome(identifier);
 
         if (usuario.isPresent()) {
             return usuario.get();
         } else {
-            throw new UsernameNotFoundException("Usuário não encontrado" + username);
+            usuario = usuarioRepository.findByEmail(identifier);
+            if (usuario.isPresent()) {
+                return usuario.get();
+            }
+
+            throw new UsernameNotFoundException("Usuário não encontrado" + identifier);
         }
     }
 

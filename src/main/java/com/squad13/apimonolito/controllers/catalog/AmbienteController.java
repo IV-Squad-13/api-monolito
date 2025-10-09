@@ -26,13 +26,8 @@ public class AmbienteController {
     private final AmbienteService ambienteService;
     private final ItemAmbienteService itemAmbienteService;
 
-    @ModelAttribute("loadDTO")
-    public LoadParametersDTO defaultLoadParams() {
-        return LoadParametersDTO.allFalse();
-    }
-
     @GetMapping
-    public ResponseEntity<List<ResAmbienteDTO>> getAll(@ModelAttribute("loadDTO") LoadParametersDTO loadDTO) {
+    public ResponseEntity<List<ResAmbienteDTO>> getAll(@ModelAttribute LoadParametersDTO loadDTO) {
         return ResponseEntity.ok(ambienteService.findAll(loadDTO));
     }
 

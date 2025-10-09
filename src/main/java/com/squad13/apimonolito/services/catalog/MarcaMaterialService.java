@@ -1,5 +1,6 @@
 package com.squad13.apimonolito.services.catalog;
 
+import com.squad13.apimonolito.DTO.catalog.LoadParametersDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResMarcaDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResMarcaMaterialDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResMaterialDTO;
@@ -31,7 +32,7 @@ public class MarcaMaterialService {
         return marcaMaterialRepository.findByMaterial_Id(materialId)
                 .stream()
                 .map(MarcaMaterial::getMarca)
-                .map(marca -> mapper.toResponse(marca, false))
+                .map(marca -> mapper.toResponse(marca, LoadParametersDTO.allFalse()))
                 .toList();
     }
 
@@ -39,7 +40,7 @@ public class MarcaMaterialService {
         return marcaMaterialRepository.findByMarca_Id(marcaId)
                 .stream()
                 .map(MarcaMaterial::getMaterial)
-                .map(material -> mapper.toResponse(material, false))
+                .map(material -> mapper.toResponse(material, LoadParametersDTO.allFalse()))
                 .toList();
     }
 

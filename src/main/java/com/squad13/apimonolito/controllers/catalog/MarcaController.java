@@ -1,5 +1,6 @@
 package com.squad13.apimonolito.controllers.catalog;
 
+import com.squad13.apimonolito.DTO.catalog.LoadParametersDTO;
 import com.squad13.apimonolito.DTO.catalog.edit.EditMarcaDTO;
 import com.squad13.apimonolito.DTO.catalog.MarcaDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResMarcaDTO;
@@ -24,18 +25,25 @@ public class MarcaController {
     private final MarcaMaterialService marcaMaterialService;
 
     @GetMapping
-    public ResponseEntity<List<ResMarcaDTO>> getAll(@RequestParam(defaultValue = "false") Boolean loadAssociations){
-        return ResponseEntity.ok(marcaService.findAll(loadAssociations));
+    public ResponseEntity<List<ResMarcaDTO>> getAll(@ModelAttribute LoadParametersDTO loadDTO) {
+        return ResponseEntity.ok(marcaService.findAll(loadDTO));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResMarcaDTO> getById(@PathVariable Long id){
-        return ResponseEntity.ok(marcaService.findById(id));
+    public ResponseEntity<ResMarcaDTO> getById(
+            @PathVariable Long id,
+            @ModelAttribute("loadAll") LoadParametersDTO loadDTO
+    ){
+        return ResponseEntity.ok(marcaService.findById(id, loadDTO));
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<ResMarcaDTO>> getByAttribute(@RequestParam String attribute, @RequestParam String value) {
-        return ResponseEntity.ok(marcaService.findByAttribute(attribute, value));
+    public ResponseEntity<List<ResMarcaDTO>> getByAttribute(
+            @RequestParam String attribute,
+            @RequestParam String value,
+            @ModelAttribute LoadParametersDTO loadDTO
+    ) {
+        return ResponseEntity.ok(marcaService.findByAttribute(attribute, value, loadDTO));
     }
 
     @GetMapping("/rel")

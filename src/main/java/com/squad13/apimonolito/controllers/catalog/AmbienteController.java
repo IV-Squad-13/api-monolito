@@ -2,6 +2,7 @@ package com.squad13.apimonolito.controllers.catalog;
 
 
 import com.squad13.apimonolito.DTO.catalog.AmbienteDTO;
+import com.squad13.apimonolito.DTO.catalog.LoadParametersDTO;
 import com.squad13.apimonolito.DTO.catalog.edit.EditAmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResAmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResItemAmbienteDTO;
@@ -25,19 +26,28 @@ public class AmbienteController {
     private final AmbienteService ambienteService;
     private final ItemAmbienteService itemAmbienteService;
 
+    @ModelAttribute("loadDTO")
+    public LoadParametersDTO defaultLoadParams() {
+        return LoadParametersDTO.allFalse();
+    }
+
     @GetMapping
-    public ResponseEntity<List<ResAmbienteDTO>> getAll(@RequestParam(defaultValue = "false") Boolean loadAssociations) {
-        return ResponseEntity.ok(ambienteService.findAll(loadAssociations));
+    public ResponseEntity<List<ResAmbienteDTO>> getAll(@ModelAttribute("loadDTO") LoadParametersDTO loadDTO) {
+        return ResponseEntity.ok(ambienteService.findAll(loadDTO));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResAmbienteDTO> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(ambienteService.findById(id));
+    public ResponseEntity<ResAmbienteDTO> getById(@PathVariable Long id, @ModelAttribute("loadAll") LoadParametersDTO loadDTO) {
+        return ResponseEntity.ok(ambienteService.findById(id, loadDTO));
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<ResAmbienteDTO>> getByAttribute(@RequestParam String attribute, @RequestParam String value) {
-        return ResponseEntity.ok(ambienteService.findByAttribute(attribute, value));
+    public ResponseEntity<List<ResAmbienteDTO>> getByAttribute(
+            @RequestParam String attribute,
+            @RequestParam String value,
+            @ModelAttribute LoadParametersDTO loadDTO
+    ) {
+        return ResponseEntity.ok(ambienteService.findByAttribute(attribute, value, loadDTO));
     }
 
     @GetMapping("/rel")

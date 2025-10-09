@@ -1,5 +1,6 @@
 package com.squad13.apimonolito.util;
 
+import com.squad13.apimonolito.DTO.catalog.LoadParametersDTO;
 import com.squad13.apimonolito.DTO.catalog.res.*;
 import com.squad13.apimonolito.exceptions.InvalidCompositorException;
 import com.squad13.apimonolito.models.catalog.*;
@@ -17,13 +18,13 @@ import java.util.stream.Collectors;
 @Component
 public class Mapper {
 
-    public ResItemDTO toResponse(ItemDesc item, boolean loadAssociations) {
+    public ResItemDTO toResponse(ItemDesc item, LoadParametersDTO loadDTO) {
         if (item == null) return null;
 
         ResItemTypeDTO typeDto = toResItemTypeDTO(item);
 
-        Set<ResMinDTO> ambientes = loadAssociations ? getMinAmbienteDTO(item.getAmbienteSet()) : Collections.emptySet();
-        Set<ResMinDTO> padroes = loadAssociations ? getAmbienteMinPadraoDTO(item.getAmbienteSet()) : Collections.emptySet();
+        Set<ResMinDTO> padroes = loadDTO.isLoadPadroes() ? getAmbienteMinPadraoDTO(item.getAmbienteSet()) : Collections.emptySet();
+        Set<ResMinDTO> ambientes = loadDTO.isLoadAmbientes() ? getMinAmbienteDTO(item.getAmbienteSet()) : Collections.emptySet();
 
         return new ResItemDTO(
                 item.getId(),
@@ -49,11 +50,11 @@ public class Mapper {
         );
     }
 
-    public ResAmbienteDTO toResponse(Ambiente ambiente, boolean loadAssociations) {
+    public ResAmbienteDTO toResponse(Ambiente ambiente, LoadParametersDTO loadDTO) {
         if (ambiente == null) return null;
 
-        Set<ResMinDTO> items = loadAssociations ? getMinItemDTO(ambiente.getItemSet()) : Collections.emptySet();
-        Set<ResMinDTO> padroes = loadAssociations ? getAmbienteMinPadraoDTO(ambiente.getItemSet()) : Collections.emptySet();
+        Set<ResMinDTO> padroes = loadDTO.isLoadPadroes() ? getAmbienteMinPadraoDTO(ambiente.getItemSet()) : Collections.emptySet();
+        Set<ResMinDTO> items = loadDTO.isLoadItems() ? getMinItemDTO(ambiente.getItemSet()) : Collections.emptySet();
 
         return new ResAmbienteDTO(
                 ambiente.getId(),
@@ -70,16 +71,16 @@ public class Mapper {
 
         return new ResItemAmbienteDTO(
                 association.getId(),
-                toResponse(association.getItemDesc(), false),
-                toResponse(association.getAmbiente(), false)
+                toResponse(association.getItemDesc(), LoadParametersDTO.allFalse()),
+                toResponse(association.getAmbiente(), LoadParametersDTO.allFalse())
         );
     }
 
-    public ResMarcaDTO toResponse(Marca marca, boolean loadAssociations) {
+    public ResMarcaDTO toResponse(Marca marca, LoadParametersDTO loadDTO) {
         if (marca == null) return null;
 
-        Set<ResMinDTO> materiais = loadAssociations ? getMinMaterialDTO(marca.getMaterialSet()) : Collections.emptySet();
-        Set<ResMinDTO> padroes = loadAssociations ? getMaterialMinPadraoDTO(marca.getMaterialSet()) : Collections.emptySet();
+        Set<ResMinDTO> padroes = loadDTO.isLoadPadroes() ? getMaterialMinPadraoDTO(marca.getMaterialSet()) : Collections.emptySet();
+        Set<ResMinDTO> materiais = loadDTO.isLoadMateriais() ? getMinMaterialDTO(marca.getMaterialSet()) : Collections.emptySet();
 
         return new ResMarcaDTO(
                 marca.getId(),
@@ -90,11 +91,11 @@ public class Mapper {
         );
     }
 
-    public ResMaterialDTO toResponse(Material material, boolean loadAssociations) {
+    public ResMaterialDTO toResponse(Material material, LoadParametersDTO loadDTO) {
         if (material == null) return null;
 
-        Set<ResMinDTO> marcas = loadAssociations ? getMinMaterialDTO(material.getMarcaSet()) : Collections.emptySet();
-        Set<ResMinDTO> padroes = loadAssociations ? getMaterialMinPadraoDTO(material.getMarcaSet()) : Collections.emptySet();
+        Set<ResMinDTO> padroes = loadDTO.isLoadPadroes() ? getMaterialMinPadraoDTO(material.getMarcaSet()) : Collections.emptySet();
+        Set<ResMinDTO> marcas = loadDTO.isLoadMarcas() ? getMinMaterialDTO(material.getMarcaSet()) : Collections.emptySet();
 
         return new ResMaterialDTO(
                 material.getId(),
@@ -110,36 +111,37 @@ public class Mapper {
 
         return new ResMarcaMaterialDTO(
                 association.getId(),
-                toResponse(association.getMarca(), false),
-                toResponse(association.getMaterial(), false)
+                toResponse(association.getMarca(), LoadParametersDTO.allFalse()),
+                toResponse(association.getMaterial(), LoadParametersDTO.allFalse())
         );
     }
 
-    public ResPadraoDTO toResponse(Padrao padrao, boolean loadAssociations) {
+    public ResPadraoDTO toResponse(Padrao padrao, LoadParametersDTO loadDTO) {
         if (padrao == null) return null;
 
-        Set<ResMinDTO> items = Set.of();
-        Set<ResMinDTO> ambientes = Set.of();
-        Set<ResMinDTO> marcas = Set.of();
-        Set<ResMinDTO> materiais = Set.of();
+        Set<ResMinDTO> items = loadDTO.isLoadItems()
+                ? padrao.getAmbienteSet().stream()
+                .map(comp -> toMinDTO(comp.getCompositor().getItemDesc()))
+                .collect(Collectors.toSet())
+                : Set.of();
 
-        if (loadAssociations) {
-            items = padrao.getAmbienteSet().stream()
-                    .map(comp -> toMinDTO(comp.getCompositor().getItemDesc()))
-                    .collect(Collectors.toSet());
+        Set<ResMinDTO> ambientes = loadDTO.isLoadAmbientes()
+                ? padrao.getAmbienteSet().stream()
+                .map(comp -> toMinDTO(comp.getCompositor().getAmbiente()))
+                .collect(Collectors.toSet())
+                : Set.of();
 
-            ambientes = padrao.getAmbienteSet().stream()
-                    .map(comp -> toMinDTO(comp.getCompositor().getAmbiente()))
-                    .collect(Collectors.toSet());
+        Set<ResMinDTO> marcas = loadDTO.isLoadMarcas()
+                ? padrao.getMaterialSet().stream()
+                .map(comp -> toMinDTO(comp.getCompositor().getMarca()))
+                .collect(Collectors.toSet())
+                : Set.of();
 
-            marcas = padrao.getMaterialSet().stream()
-                    .map(comp -> toMinDTO(comp.getCompositor().getMarca()))
-                    .collect(Collectors.toSet());
-
-            materiais = padrao.getMaterialSet().stream()
-                    .map(comp -> toMinDTO(comp.getCompositor().getMaterial()))
-                    .collect(Collectors.toSet());
-        }
+        Set<ResMinDTO> materiais = loadDTO.isLoadMateriais()
+                ? padrao.getMaterialSet().stream()
+                .map(comp -> toMinDTO(comp.getCompositor().getMaterial()))
+                .collect(Collectors.toSet())
+                : Set.of();
 
         return new ResPadraoDTO(
                 padrao.getId(),
@@ -166,7 +168,7 @@ public class Mapper {
     }
 
     private ResMinDTO toMinDTO(ItemDesc it) {
-        return new ResMinDTO(it.getId(), it.getName(), it.getIsActive());
+        return new ResMinDTO(it.getId(), it.getDesc(), it.getIsActive());
     }
 
     private ResMinDTO toMinDTO(Ambiente am) {
@@ -236,11 +238,11 @@ public class Mapper {
 
         if (comp instanceof ComposicaoAmbiente ca) {
             dto.setId(ca.getId());
-            dto.setPadrao(toResponse(ca.getPadrao(), false));
+            dto.setPadrao(toResponse(ca.getPadrao(), LoadParametersDTO.allFalse()));
             dto.setCompAmbiente(toResponse(ca.getCompositor()));
         } else if (comp instanceof ComposicaoMaterial cm) {
             dto.setId(cm.getId());
-            dto.setPadrao(toResponse(cm.getPadrao(), false));
+            dto.setPadrao(toResponse(cm.getPadrao(), LoadParametersDTO.allFalse()));
             dto.setCompMaterial(toResponse(cm.getCompositor()));
         } else {
             throw new InvalidCompositorException("Tipo inválido de composição: " + comp.getClass());

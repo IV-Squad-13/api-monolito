@@ -1,5 +1,6 @@
 package com.squad13.apimonolito.controllers.catalog;
 
+import com.squad13.apimonolito.DTO.catalog.LoadParametersDTO;
 import com.squad13.apimonolito.DTO.catalog.edit.EditItemDTO;
 import com.squad13.apimonolito.DTO.catalog.ItemDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResAmbienteDTO;
@@ -27,18 +28,22 @@ public class ItemController {
     private final ItemAmbienteService itemAmbienteService;
 
     @GetMapping
-    public ResponseEntity<List<ResItemDTO>> getAll(@RequestParam(defaultValue = "false") Boolean loadAssociations) {
-        return ResponseEntity.ok(itemService.findAll(loadAssociations));
+    public ResponseEntity<List<ResItemDTO>> getAll(@ModelAttribute LoadParametersDTO loadDTO) {
+        return ResponseEntity.ok(itemService.findAll(loadDTO));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResItemDTO> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(itemService.findById(id));
+    public ResponseEntity<ResItemDTO> getById(@PathVariable Long id, @ModelAttribute("loadAll") LoadParametersDTO loadDTO) {
+        return ResponseEntity.ok(itemService.findById(id, loadDTO));
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<ResItemDTO>> getByAttribute(@RequestParam String attribute, @RequestParam(required = false) String value) {
-        return ResponseEntity.ok(itemService.findByAttribute(attribute, value));
+    public ResponseEntity<List<ResItemDTO>> getByAttribute(
+            @RequestParam String attribute,
+            @RequestParam(required = false) String value,
+            @ModelAttribute LoadParametersDTO loadDTO
+    ) {
+        return ResponseEntity.ok(itemService.findByAttribute(attribute, value, loadDTO));
     }
 
     @GetMapping("/rel")

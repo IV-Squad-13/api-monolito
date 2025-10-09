@@ -1,5 +1,6 @@
 package com.squad13.apimonolito.services.catalog;
 
+import com.squad13.apimonolito.DTO.catalog.LoadParametersDTO;
 import com.squad13.apimonolito.DTO.catalog.PadraoDTO;
 import com.squad13.apimonolito.DTO.catalog.edit.EditPadraoDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResPadraoDTO;
@@ -21,10 +22,10 @@ public class PadraoService {
 
     private final Mapper mapper;
 
-    public List<ResPadraoDTO> findAll(Boolean loadAssociations) {
+    public List<ResPadraoDTO> findAll(LoadParametersDTO loadDTO) {
         return padraoRepository.findAll()
                 .stream()
-                .map(padrao -> mapper.toResponse(padrao, loadAssociations))
+                .map(padrao -> mapper.toResponse(padrao, loadDTO))
                 .toList();
     }
 
@@ -33,15 +34,15 @@ public class PadraoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Padrão com id " + id + " não encontrado."));
     }
 
-    public ResPadraoDTO findById(Long id) {
+    public ResPadraoDTO findById(Long id, LoadParametersDTO loadDTO) {
         return padraoRepository.findById(id)
-                .map(padrao -> mapper.toResponse(padrao, true))
+                .map(padrao -> mapper.toResponse(padrao, loadDTO))
                 .orElseThrow(() -> new ResourceNotFoundException("Padrão com id " + id + " não encontrado."));
     }
 
-    public ResPadraoDTO findByNameOrThrow(String name) {
+    public ResPadraoDTO findByNameOrThrow(String name, LoadParametersDTO loadDTO) {
         return padraoRepository.findByName(name)
-                .map(padrao -> mapper.toResponse(padrao, true))
+                .map(padrao -> mapper.toResponse(padrao, loadDTO))
                 .orElseThrow(() -> new ResourceNotFoundException("Padrão com nome " + name + " não encontrado."));
     }
 
@@ -57,7 +58,7 @@ public class PadraoService {
         padrao.setName(dto.getName());
         padrao.setIsActive(dto.isActive());
 
-        return mapper.toResponse(padraoRepository.save(padrao), true);
+        return mapper.toResponse(padraoRepository.save(padrao), LoadParametersDTO.allTrue());
     }
 
     public ResPadraoDTO updatePadrao(Long id, EditPadraoDTO dto) {
@@ -77,7 +78,7 @@ public class PadraoService {
         }
 
         Padrao updated = padraoRepository.save(padrao);
-        return mapper.toResponse(updated, true);
+        return mapper.toResponse(updated, LoadParametersDTO.allTrue());
     }
 
     public void deletePadrao(Long id) {
@@ -88,6 +89,6 @@ public class PadraoService {
     public ResPadraoDTO deactivatePadrao(Long id) {
         Padrao existing = findByIdOrThrow(id);
         existing.setIsActive(false);
-        return mapper.toResponse(padraoRepository.save(existing), true);
+        return mapper.toResponse(padraoRepository.save(existing), LoadParametersDTO.allTrue());
     }
 }

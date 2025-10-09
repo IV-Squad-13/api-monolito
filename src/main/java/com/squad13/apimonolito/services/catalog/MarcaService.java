@@ -1,5 +1,6 @@
 package com.squad13.apimonolito.services.catalog;
 
+import com.squad13.apimonolito.DTO.catalog.LoadParametersDTO;
 import com.squad13.apimonolito.DTO.catalog.edit.EditMarcaDTO;
 import com.squad13.apimonolito.DTO.catalog.MarcaDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResMarcaDTO;
@@ -34,10 +35,10 @@ public class MarcaService {
     @PersistenceContext
     private EntityManager em;
 
-    public List<ResMarcaDTO> findAll(Boolean loadAssociations) {
+    public List<ResMarcaDTO> findAll(LoadParametersDTO loadDTO) {
         return marcaRepository.findAll()
                 .stream()
-                .map(marca -> mapper.toResponse(marca, loadAssociations))
+                .map(marca -> mapper.toResponse(marca, loadDTO))
                 .toList();
     }
 
@@ -46,13 +47,13 @@ public class MarcaService {
                 .orElseThrow(() -> new ResourceNotFoundException("Marca com ID: " + id + " não encontrado."));
     }
 
-    public ResMarcaDTO findById(Long id) {
+    public ResMarcaDTO findById(Long id, LoadParametersDTO loadDTO) {
         return marcaRepository.findById(id)
-                .map(marca -> mapper.toResponse(marca, true))
+                .map(marca -> mapper.toResponse(marca, loadDTO))
                 .orElseThrow(() -> new ResourceNotFoundException("Marca com ID: " + id + " não encontrado."));
     }
 
-    public List<ResMarcaDTO> findByAttribute(String attribute, String value) {
+    public List<ResMarcaDTO> findByAttribute(String attribute, String value, LoadParametersDTO loadDTO) {
         boolean attributeExists = Arrays.stream(Marca.class.getDeclaredFields())
                 .anyMatch(f -> f.getName().equals(attribute));
 
@@ -69,7 +70,7 @@ public class MarcaService {
 
         return em.createQuery(cq).getResultList()
                 .stream()
-                .map(m -> mapper.toResponse(m, false))
+                .map(m -> mapper.toResponse(m, loadDTO))
                 .toList();
     }
 
@@ -86,7 +87,7 @@ public class MarcaService {
         marca.setIsActive(dto.getIsActive());
 
         Marca saved = marcaRepository.save(marca);
-        return mapper.toResponse(saved, true);
+        return mapper.toResponse(saved, LoadParametersDTO.allTrue());
     }
 
     public ResMarcaDTO updateMarca(Long id, EditMarcaDTO dto) {
@@ -108,7 +109,7 @@ public class MarcaService {
         }
 
         Marca updated = marcaRepository.save(marca);
-        return mapper.toResponse(updated, true);
+        return mapper.toResponse(updated, LoadParametersDTO.allTrue());
     }
 
     public void deleteMarca(Long id) {
@@ -119,6 +120,6 @@ public class MarcaService {
     public ResMarcaDTO deactivateMarca(Long id) {
         Marca existing = findByIdOrThrow(id);
         existing.setIsActive(false);
-        return mapper.toResponse(marcaRepository.save(existing), true);
+        return mapper.toResponse(marcaRepository.save(existing), LoadParametersDTO.allTrue());
     }
 }

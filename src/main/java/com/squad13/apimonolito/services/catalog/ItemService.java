@@ -1,5 +1,6 @@
 package com.squad13.apimonolito.services.catalog;
 
+import com.squad13.apimonolito.DTO.catalog.LoadParametersDTO;
 import com.squad13.apimonolito.DTO.catalog.edit.EditItemDTO;
 import com.squad13.apimonolito.DTO.catalog.ItemDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResItemDTO;
@@ -35,10 +36,10 @@ public class ItemService {
 
     private final ItemTypeRepository itemTypeRepository;
 
-    public List<ResItemDTO> findAll(Boolean loadAssociations) {
+    public List<ResItemDTO> findAll(LoadParametersDTO loadDTO) {
         return itemRepository.findAll()
                 .stream()
-                .map(item -> mapper.toResponse(item, loadAssociations))
+                .map(item -> mapper.toResponse(item, loadDTO))
                 .toList();
     }
 
@@ -47,13 +48,13 @@ public class ItemService {
                 .orElseThrow(() -> new ResourceNotFoundException("Item com ID: " + id + " não encontrado."));
     }
 
-    public ResItemDTO findById(Long id) {
+    public ResItemDTO findById(Long id, LoadParametersDTO loadDTO) {
         return itemRepository.findById(id)
-                .map(item -> mapper.toResponse(item, true))
+                .map(item -> mapper.toResponse(item, loadDTO))
                 .orElseThrow(() -> new ResourceNotFoundException("Item com ID: " + id + " não encontrado."));
     }
 
-    public List<ResItemDTO> findByAttribute(String attribute, String value) {
+    public List<ResItemDTO> findByAttribute(String attribute, String value, LoadParametersDTO loadDTO) {
         boolean attributeExists = Arrays.stream(ItemDesc.class.getDeclaredFields())
                 .anyMatch(f -> f.getName().equals(attribute));
 
@@ -86,7 +87,7 @@ public class ItemService {
         cq.select(root).where(predicate);
         return em.createQuery(cq).getResultList()
                 .stream()
-                .map(item -> mapper.toResponse(item, false))
+                .map(item -> mapper.toResponse(item, loadDTO))
                 .toList();
     }
 
@@ -108,7 +109,7 @@ public class ItemService {
         item.setType(type);
 
         ItemDesc saved = itemRepository.save(item);
-        return mapper.toResponse(saved, true);
+        return mapper.toResponse(saved, LoadParametersDTO.allTrue());
     }
 
     public ResItemDTO updateItem(Long id, EditItemDTO dto) {
@@ -129,7 +130,7 @@ public class ItemService {
         }
 
         ItemDesc updated = itemRepository.save(item);
-        return mapper.toResponse(updated, true);
+        return mapper.toResponse(updated, LoadParametersDTO.allTrue());
     }
 
     public void deleteItem(Long id) {
@@ -140,6 +141,6 @@ public class ItemService {
     public ResItemDTO deactivateItem(Long id) {
         ItemDesc existing = findByIdOrThrow(id);
         existing.setIsActive(false);
-        return mapper.toResponse(itemRepository.save(existing), true);
+        return mapper.toResponse(itemRepository.save(existing), LoadParametersDTO.allTrue());
     }
 }

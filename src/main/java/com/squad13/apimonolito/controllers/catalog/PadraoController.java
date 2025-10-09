@@ -1,5 +1,6 @@
 package com.squad13.apimonolito.controllers.catalog;
 
+import com.squad13.apimonolito.DTO.catalog.LoadParametersDTO;
 import com.squad13.apimonolito.DTO.catalog.PadraoDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResComposicaoDTO;
 import com.squad13.apimonolito.DTO.catalog.edit.EditPadraoDTO;
@@ -26,18 +27,18 @@ public class PadraoController {
     private final ComposicaoService composicaoService;
 
     @GetMapping()
-    public ResponseEntity<List<ResPadraoDTO>> getAll(@RequestParam(defaultValue = "false") Boolean loadAssociations) {
-        return ResponseEntity.ok(padraoService.findAll(loadAssociations));
+    public ResponseEntity<List<ResPadraoDTO>> getAll(@ModelAttribute LoadParametersDTO loadDTO) {
+        return ResponseEntity.ok(padraoService.findAll(loadDTO));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResPadraoDTO> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(padraoService.findById(id));
+    public ResponseEntity<ResPadraoDTO> getById(@PathVariable Long id, @ModelAttribute LoadParametersDTO loadDTO) {
+        return ResponseEntity.ok(padraoService.findById(id, loadDTO));
     }
 
     @GetMapping("/name/{name}")
-    public ResponseEntity<ResPadraoDTO> getByName(@PathVariable String name) {
-        return ResponseEntity.ok(padraoService.findByNameOrThrow(name));
+    public ResponseEntity<ResPadraoDTO> getByName(@PathVariable String name, @ModelAttribute LoadParametersDTO loadDTO) {
+        return ResponseEntity.ok(padraoService.findByNameOrThrow(name, loadDTO));
     }
 
     @GetMapping("/composition/catalogo")

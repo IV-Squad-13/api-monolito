@@ -45,4 +45,4 @@ api:
     allowed-origins: ${ALLOWED_ORIGINS:http://localhost:5173,http://localhost:5000}
   security:
     token:
-      secret: chave-muito-secreta-e-grande-o-suficiente-para-256bits
+      secret: ${SECRET:secret-00000000000000000000000000000}

@@ -1,5 +1,6 @@
 package com.squad13.apimonolito.services.catalog;
 
+import com.squad13.apimonolito.DTO.catalog.LoadParametersDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResComposicaoDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResItemAmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResMarcaMaterialDTO;
@@ -63,7 +64,7 @@ public class ComposicaoService {
         return compAmbienteRepository.findByCompositor_Ambiente_Id(id)
                 .stream()
                 .map(ComposicaoAmbiente::getPadrao)
-                .map(p -> mapper.toResponse(p, false))
+                .map(p -> mapper.toResponse(p, LoadParametersDTO.allFalse()))
                 .toList();
     }
 
@@ -71,7 +72,7 @@ public class ComposicaoService {
         return compMaterialRepository.findByCompositor_Material_Id(id)
                 .stream()
                 .map(ComposicaoMaterial::getPadrao)
-                .map(p -> mapper.toResponse(p, false))
+                .map(p -> mapper.toResponse(p, LoadParametersDTO.allFalse()))
                 .toList();
     }
 

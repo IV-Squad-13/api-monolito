@@ -1,6 +1,7 @@
 package com.squad13.apimonolito.services.catalog;
 
 import com.squad13.apimonolito.DTO.catalog.AmbienteDTO;
+import com.squad13.apimonolito.DTO.catalog.LoadParametersDTO;
 import com.squad13.apimonolito.DTO.catalog.edit.EditAmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResAmbienteDTO;
 import com.squad13.apimonolito.exceptions.InvalidAttributeException;
@@ -36,10 +37,10 @@ public class AmbienteService {
     private final Mapper mapper;
 
 
-    public List<ResAmbienteDTO> findAll(Boolean loadAssociations) {
+    public List<ResAmbienteDTO> findAll(LoadParametersDTO loadDTO) {
         return ambienteRepository.findAll()
                 .stream()
-                .map(ambiente -> mapper.toResponse(ambiente, loadAssociations))
+                .map(ambiente -> mapper.toResponse(ambiente, loadDTO))
                 .toList();
     }
 
@@ -48,13 +49,13 @@ public class AmbienteService {
                 .orElseThrow(() -> new ResourceNotFoundException("Ambiente com ID: " + id + " não encontrado."));
     }
 
-    public ResAmbienteDTO findById(Long id) {
+    public ResAmbienteDTO findById(Long id, LoadParametersDTO loadDTO) {
         return ambienteRepository.findById(id)
-                .map(ambiente -> mapper.toResponse(ambiente, true))
+                .map(ambiente -> mapper.toResponse(ambiente, loadDTO))
                 .orElseThrow(() -> new ResourceNotFoundException("Ambiente com ID: " + id + " não encontrado."));
     }
 
-    public List<ResAmbienteDTO> findByAttribute(String attribute, String value) {
+    public List<ResAmbienteDTO> findByAttribute(String attribute, String value, LoadParametersDTO loadDTO) {
         boolean attributeExists = Arrays.stream(Ambiente.class.getDeclaredFields())
                 .anyMatch(f -> f.getName().equals(attribute));
 
@@ -70,7 +71,7 @@ public class AmbienteService {
         cq.select(root).where(pAttributeMatch);
         return em.createQuery(cq).getResultList()
                 .stream()
-                .map(ambiente -> mapper.toResponse(ambiente, false))
+                .map(ambiente -> mapper.toResponse(ambiente, loadDTO))
                 .toList();
     }
 
@@ -87,7 +88,7 @@ public class AmbienteService {
         ambiente.setLocal(dto.getLocal());
         ambiente.setIsActive(dto.getIsActive());
 
-        return mapper.toResponse(ambienteRepository.save(ambiente),  true);
+        return mapper.toResponse(ambienteRepository.save(ambiente),  LoadParametersDTO.allTrue());
     }
 
     private void ensureUniqueNameAndLocal(Ambiente ambiente, EditAmbienteDTO dto) {
@@ -124,7 +125,7 @@ public class AmbienteService {
             ambiente.setIsActive(dto.getIsActive());
         }
 
-        return mapper.toResponse(ambienteRepository.save(ambiente), true);
+        return mapper.toResponse(ambienteRepository.save(ambiente), LoadParametersDTO.allTrue());
     }
 
     public void deleteAmbiente(Long id) {
@@ -135,7 +136,7 @@ public class AmbienteService {
     public ResAmbienteDTO deactivateAmbiente(Long id) {
         Ambiente existing = findByIdOrThrow(id);
         existing.setIsActive(false);
-        return mapper.toResponse(ambienteRepository.save(existing), true);
+        return mapper.toResponse(ambienteRepository.save(existing), LoadParametersDTO.allTrue());
     }
 
 }

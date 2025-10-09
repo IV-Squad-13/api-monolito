@@ -1,5 +1,6 @@
 package com.squad13.apimonolito.services.catalog;
 
+import com.squad13.apimonolito.DTO.catalog.LoadParametersDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResAmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResItemAmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResItemDTO;
@@ -37,14 +38,14 @@ public class ItemAmbienteService {
         return itemAmbieteRepository.findByAmbiente_Id(id)
                 .stream()
                 .map(ItemAmbiente::getItemDesc)
-                .map(item -> mapper.toResponse(item, false))
+                .map(item -> mapper.toResponse(item, LoadParametersDTO.allFalse()))
                 .toList();
     }
 
     public List<ResAmbienteDTO> findItemAmbientes(Long id) {
         return itemAmbieteRepository.findByItemDesc_Id(id)
                 .stream().map(ItemAmbiente::getAmbiente)
-                .map(ambiente -> mapper.toResponse(ambiente, false))
+                .map(ambiente -> mapper.toResponse(ambiente, LoadParametersDTO.allFalse()))
                 .toList();
     }
 
@@ -57,7 +58,7 @@ public class ItemAmbienteService {
         return itemAmbieteRepository.findByItemDesc_IdIn(itemIds)
                 .stream()
                 .map(ItemAmbiente::getAmbiente)
-                .map(ambiente -> mapper.toResponse(ambiente, false))
+                .map(ambiente -> mapper.toResponse(ambiente, LoadParametersDTO.allFalse()))
                 .toList();
     }
 

@@ -68,4 +68,27 @@ public class AutenticacaoController {
             return ResponseEntity.badRequest().body(error);
         }
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updateUsuario(@PathVariable Long id, @Valid @RequestBody RegisterDto dto) {
+        try {
+            Usuario usuarioAtualizado = authService.updateUser(id, dto);
+            return ResponseEntity.ok(usuarioAtualizado.getNome());
+        }  catch (UsernameNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deletarUsuario(@PathVariable Long id) {
+        try {
+            authService.deleteUser(id);
+            return ResponseEntity.noContent().build();
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+
+    }
 }

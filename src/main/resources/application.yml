@@ -42,7 +42,7 @@ springdoc:
 
 api:
   cors:
-    allowed-origins: ${ALLOWED_ORIGINS:http://localhost:5173,http://localhost:5000}
+    allowed-origins: "${ALLOWED_ORIGINS:http://localhost:5173}"
   security:
     token:
       secret: ${SECRET:secret-00000000000000000000000000000}

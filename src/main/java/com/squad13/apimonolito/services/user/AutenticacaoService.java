@@ -1,11 +1,13 @@
 package com.squad13.apimonolito.services.user;
 
 import com.squad13.apimonolito.DTO.register.RegisterDto;
+import com.squad13.apimonolito.exceptions.InvalidTokenException;
 import com.squad13.apimonolito.models.user.Papel;
 import com.squad13.apimonolito.models.user.Usuario;
 import com.squad13.apimonolito.repository.user.PapelRepository;
 import com.squad13.apimonolito.repository.user.UsuarioRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class AutenticacaoService implements UserDetailsService {
 
     @Autowired
@@ -29,14 +32,34 @@ public class AutenticacaoService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    private final TokenService tokenService;
+
+    public Usuario findMe(String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new InvalidTokenException("Token inválido");
+        }
+
+        String token = authHeader.substring(7);
+        String username = tokenService.getSubject(token);
+
+        return usuarioRepository.findByNome(username)
+                .orElseGet(() -> usuarioRepository.findByEmail(username)
+                        .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username)));
+    }
+
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Usuario> usuario = usuarioRepository.findByNome(username);
+    public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
+        Optional<Usuario> usuario = usuarioRepository.findByNome(identifier);
 
         if (usuario.isPresent()) {
             return usuario.get();
         } else {
-            throw new UsernameNotFoundException("Usuário não encontrado" + username);
+            usuario = usuarioRepository.findByEmail(identifier);
+            if (usuario.isPresent()) {
+                return usuario.get();
+            }
+
+            throw new UsernameNotFoundException("Usuário não encontrado" + identifier);
         }
     }
 
@@ -70,6 +93,5 @@ public class AutenticacaoService implements UserDetailsService {
 
         return usuarioRepository.save(usuario);
     }
-
 }
 

@@ -11,10 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,9 +30,17 @@ public class AutenticacaoController {
     @Autowired
     private TokenService tokenService;
 
+    @GetMapping("/me")
+    public ResponseEntity<Usuario> me(@RequestHeader("Authorization") String authHeader){
+        return ResponseEntity.ok(authService.findMe(authHeader));
+    }
+
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody LoginRequestDTO data) {
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.username(), data.password());
+    public ResponseEntity<String> login(@RequestBody LoginRequestDTO data) {
+        if (data.email() == null && data.username() == null) return ResponseEntity.badRequest().build();
+        var identifier = data.username() == null ? data.email() : data.username();
+
+        var usernamePassword = new UsernamePasswordAuthenticationToken(identifier, data.password());
 
         var auth = this.authenticationManager.authenticate(usernamePassword);
 

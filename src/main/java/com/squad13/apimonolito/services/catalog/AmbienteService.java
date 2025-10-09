@@ -36,7 +36,6 @@ public class AmbienteService {
 
     private final Mapper mapper;
 
-
     public List<ResAmbienteDTO> findAll(LoadParametersDTO loadDTO) {
         return ambienteRepository.findAll()
                 .stream()

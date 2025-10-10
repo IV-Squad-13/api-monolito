@@ -20,7 +20,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -28,8 +28,8 @@ spring:
     generate-ddl: false
 
   flyway:
-    enabled: true
-    baseline-on-migrate: true
+    enabled: false
+    baseline-on-migrate: false
     locations: classpath:db/migration
 
 springdoc:

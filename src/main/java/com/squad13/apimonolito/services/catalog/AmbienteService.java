@@ -1,71 +1,141 @@
 package com.squad13.apimonolito.services.catalog;
 
 import com.squad13.apimonolito.DTO.catalog.AmbienteDTO;
-import com.squad13.apimonolito.DTO.catalog.EditAmbienteDTO;
+import com.squad13.apimonolito.DTO.catalog.LoadParametersDTO;
+import com.squad13.apimonolito.DTO.catalog.edit.EditAmbienteDTO;
+import com.squad13.apimonolito.DTO.catalog.res.ResAmbienteDTO;
+import com.squad13.apimonolito.exceptions.InvalidAttributeException;
+import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
+import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.catalog.Ambiente;
 import com.squad13.apimonolito.repository.catalog.AmbienteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.squad13.apimonolito.util.Mapper;
+import com.squad13.apimonolito.util.enums.LocalEnum;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
+@Transactional
 @Service
+@RequiredArgsConstructor
 public class AmbienteService {
 
-    @Autowired
-    private AmbienteRepository ambienteRepository;
+    @PersistenceContext
+    private EntityManager em;
 
-    public List<Ambiente> findAll() {
-        return ambienteRepository.findAll();
+    private final AmbienteRepository ambienteRepository;
+
+    private final Mapper mapper;
+
+    public List<ResAmbienteDTO> findAll(LoadParametersDTO loadDTO) {
+        return ambienteRepository.findAll()
+                .stream()
+                .map(ambiente -> mapper.toResponse(ambiente, loadDTO))
+                .toList();
     }
 
-    public Optional<Ambiente> findById(Long id) {
-        return ambienteRepository.findById(id);
+    private Ambiente findByIdOrThrow(Long id) {
+        return ambienteRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Ambiente com ID: " + id + " não encontrado."));
     }
 
-    public AmbienteDTO createAmbiente(AmbienteDTO dto) {
+    public ResAmbienteDTO findById(Long id, LoadParametersDTO loadDTO) {
+        return ambienteRepository.findById(id)
+                .map(ambiente -> mapper.toResponse(ambiente, loadDTO))
+                .orElseThrow(() -> new ResourceNotFoundException("Ambiente com ID: " + id + " não encontrado."));
+    }
+
+    public List<ResAmbienteDTO> findByAttribute(String attribute, String value, LoadParametersDTO loadDTO) {
+        boolean attributeExists = Arrays.stream(Ambiente.class.getDeclaredFields())
+                .anyMatch(f -> f.getName().equals(attribute));
+
+        if (!attributeExists)
+            throw new InvalidAttributeException("Atributo inválido: " + attribute);
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Ambiente> cq = cb.createQuery(Ambiente.class);
+        Root<Ambiente> root = cq.from(Ambiente.class);
+
+        Predicate pAttributeMatch = cb.like(cb.lower(root.get(attribute)), value.toLowerCase());
+
+        cq.select(root).where(pAttributeMatch);
+        return em.createQuery(cq).getResultList()
+                .stream()
+                .map(ambiente -> mapper.toResponse(ambiente, loadDTO))
+                .toList();
+    }
+
+    public ResAmbienteDTO createAmbiente(AmbienteDTO dto) {
+        ambienteRepository.findByNameAndLocal(dto.getName(), dto.getLocal())
+                .ifPresent(a -> {
+                    throw new ResourceAlreadyExistsException(
+                            "Já existe um ambiente com o nome " + dto.getName() + " no local " + dto.getLocal()
+                    );
+                });
+
         Ambiente ambiente = new Ambiente();
         ambiente.setName(dto.getName());
+        ambiente.setLocal(dto.getLocal());
         ambiente.setIsActive(dto.getIsActive());
 
-        Ambiente saved = ambienteRepository.save(ambiente);
-
-        return mapToDTO(saved);
+        return mapper.toResponse(ambienteRepository.save(ambiente),  LoadParametersDTO.allTrue());
     }
 
-    public AmbienteDTO updateAmbiente(EditAmbienteDTO dto) {
-        Ambiente ambiente = ambienteRepository.findById(dto.getId()).orElseThrow(()-> new IllegalArgumentException("Ambiente não encontrado"));
+    private void ensureUniqueNameAndLocal(Ambiente ambiente, EditAmbienteDTO dto) {
+        String newName = dto.getName() != null && !dto.getName().isBlank()
+                ? dto.getName()
+                : ambiente.getName();
 
-        if(dto.getName() != null && !dto.getName().isBlank()) {
+        LocalEnum newLocal = dto.getLocal() != null
+                ? dto.getLocal()
+                : ambiente.getLocal();
+
+        ambienteRepository.findByNameAndLocal(newName, newLocal)
+                .filter(existing -> !existing.getId().equals(ambiente.getId()))
+                .ifPresent(existing -> {
+                    throw new ResourceAlreadyExistsException(
+                            "Já existe um ambiente com o nome " + newName + " no local " + newLocal
+                    );
+                });
+    }
+
+    public ResAmbienteDTO updateAmbiente(Long id, EditAmbienteDTO dto) {
+        Ambiente ambiente = findByIdOrThrow(id);
+        ensureUniqueNameAndLocal(ambiente, dto);
+
+        if (dto.getName() != null && !dto.getName().isBlank()) {
             ambiente.setName(dto.getName());
         }
 
         if (dto.getLocal() != null) {
             ambiente.setLocal(dto.getLocal());
         }
+
         if (dto.getIsActive() != null) {
             ambiente.setIsActive(dto.getIsActive());
         }
 
-        Ambiente updated = ambienteRepository.save(ambiente);
-        return mapToDTO(updated);
+        return mapper.toResponse(ambienteRepository.save(ambiente), LoadParametersDTO.allTrue());
     }
 
     public void deleteAmbiente(Long id) {
-        Ambiente ambiente = ambienteRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Ambiente não encontrado."));
-        if (ambiente.getItemAmbiente() != null && !ambiente.getItemAmbiente().isEmpty()) {
-            throw new IllegalStateException("Não é possível excluir o ambiente pois há itens vinculados.");
-        }
+        Ambiente ambiente = findByIdOrThrow(id);
         ambienteRepository.delete(ambiente);
     }
 
-    private AmbienteDTO mapToDTO(Ambiente ambiente) {
-        AmbienteDTO dto = new AmbienteDTO();
-        dto.setName(ambiente.getName());
-        dto.setIsActive(ambiente.getIsActive());
-        return dto;
+    public ResAmbienteDTO deactivateAmbiente(Long id) {
+        Ambiente existing = findByIdOrThrow(id);
+        existing.setIsActive(false);
+        return mapper.toResponse(ambienteRepository.save(existing), LoadParametersDTO.allTrue());
     }
 
 }

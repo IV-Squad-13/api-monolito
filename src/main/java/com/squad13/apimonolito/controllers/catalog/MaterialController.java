@@ -1,49 +1,83 @@
 package com.squad13.apimonolito.controllers.catalog;
 
-import com.squad13.apimonolito.DTO.catalog.EditMaterialDTO;
+import com.squad13.apimonolito.DTO.catalog.LoadParametersDTO;
+import com.squad13.apimonolito.DTO.catalog.edit.EditMaterialDTO;
 import com.squad13.apimonolito.DTO.catalog.MaterialDTO;
-import com.squad13.apimonolito.models.catalog.Material;
+import com.squad13.apimonolito.DTO.catalog.res.ResMarcaDTO;
+import com.squad13.apimonolito.DTO.catalog.res.ResMarcaMaterialDTO;
+import com.squad13.apimonolito.DTO.catalog.res.ResMaterialDTO;
+import com.squad13.apimonolito.services.catalog.MarcaMaterialService;
 import com.squad13.apimonolito.services.catalog.MaterialService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/material")
+@RequestMapping("/api/catalogo/material")
+@RequiredArgsConstructor
 public class MaterialController {
 
-    @Autowired
-    private MaterialService materialService;
+    private final MaterialService materialService;
+    private final MarcaMaterialService marcaMaterialService;
 
     @GetMapping()
-    public List<Material> getAll(){
-        return materialService.findAll();
+    public List<ResMaterialDTO> getAll(@ModelAttribute LoadParametersDTO loadDTO) {
+        return materialService.findAll(loadDTO);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Material> getById(@PathVariable Long id){
-        return materialService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<ResMaterialDTO> getById(@PathVariable Long id, @ModelAttribute("loadAll") LoadParametersDTO loadDTO) {
+        return ResponseEntity.ok(materialService.findById(id, loadDTO));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ResMaterialDTO>> getByAttribute(
+            @RequestParam String attribute,
+            @RequestParam String value,
+            @ModelAttribute LoadParametersDTO loadDTO
+    ) {
+        return ResponseEntity.ok(materialService.findByAttribute(attribute, value, loadDTO));
+    }
+
+    @GetMapping("/rel")
+    public ResponseEntity<List<ResMarcaDTO>> getAssociations(@RequestParam(required = false) Long id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(marcaMaterialService.findMaterialMarcas(id));
     }
 
     @PostMapping("/new")
-    public ResponseEntity<MaterialDTO> create(@RequestBody MaterialDTO dto) {
+    public ResponseEntity<ResMaterialDTO> create(@RequestBody @Valid MaterialDTO dto) {
         return ResponseEntity.ok(materialService.createMaterial(dto));
     }
 
+    @PostMapping("/{id}/marca")
+    public ResponseEntity<ResMarcaMaterialDTO> addAssociation(@PathVariable Long id, @RequestParam Long marcaId) {
+        return ResponseEntity.ok(marcaMaterialService.associateMarcaAndMaterial(marcaId, id));
+    }
 
-    @PutMapping
-    public ResponseEntity<MaterialDTO> update(@RequestBody EditMaterialDTO dto) {
-        MaterialDTO updated = materialService.updateMaterial(dto);
-        return ResponseEntity.ok(updated);
+    @PutMapping("/{id}")
+    public ResponseEntity<ResMaterialDTO> update(@PathVariable Long id, @RequestBody @Valid EditMaterialDTO dto) {
+        return ResponseEntity.ok(materialService.updateMaterial(id, dto));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
             materialService.deleteMaterial(id);
             return ResponseEntity.ok("Material excluído com sucesso.");
+    }
+
+    @DeleteMapping("/{id}/marca")
+    public ResponseEntity<?> deleteAssociation(@PathVariable Long id, @RequestParam Long marcaId) {
+        marcaMaterialService.deleteMarcaAndMaterialAssociation(marcaId, id);
+        return ResponseEntity.ok("Marca removida do material com sucesso.");
+    }
+
+    @DeleteMapping("/{id}/deactivate")
+    public ResponseEntity<ResMaterialDTO> deactivate(@PathVariable Long id) {
+        return ResponseEntity.ok(materialService.deactivateMaterial(id));
     }
 }

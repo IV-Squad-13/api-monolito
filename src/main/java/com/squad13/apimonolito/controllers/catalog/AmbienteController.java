@@ -2,49 +2,90 @@ package com.squad13.apimonolito.controllers.catalog;
 
 
 import com.squad13.apimonolito.DTO.catalog.AmbienteDTO;
-import com.squad13.apimonolito.DTO.catalog.EditAmbienteDTO;
-import com.squad13.apimonolito.models.catalog.Ambiente;
+import com.squad13.apimonolito.DTO.catalog.LoadParametersDTO;
+import com.squad13.apimonolito.DTO.catalog.edit.EditAmbienteDTO;
+import com.squad13.apimonolito.DTO.catalog.res.ResAmbienteDTO;
+import com.squad13.apimonolito.DTO.catalog.res.ResItemAmbienteDTO;
+import com.squad13.apimonolito.DTO.catalog.res.ResItemDTO;
+import com.squad13.apimonolito.DTO.catalog.res.ResItemTypeDTO;
 import com.squad13.apimonolito.services.catalog.AmbienteService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.squad13.apimonolito.services.catalog.ItemAmbienteService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/ambientes")
+@RequestMapping("/api/catalogo/ambiente")
+@RequiredArgsConstructor
 public class AmbienteController {
 
-    @Autowired
-    private AmbienteService ambienteService;
-
+    private final AmbienteService ambienteService;
+    private final ItemAmbienteService itemAmbienteService;
 
     @GetMapping
-    public List<Ambiente> getAll() {
-        return ambienteService.findAll();
+    public ResponseEntity<List<ResAmbienteDTO>> getAll(@ModelAttribute LoadParametersDTO loadDTO) {
+        return ResponseEntity.ok(ambienteService.findAll(loadDTO));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Ambiente> getById(@PathVariable Long id) {
-        return ambienteService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<ResAmbienteDTO> getById(@PathVariable Long id, @ModelAttribute("loadAll") LoadParametersDTO loadDTO) {
+        return ResponseEntity.ok(ambienteService.findById(id, loadDTO));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ResAmbienteDTO>> getByAttribute(
+            @RequestParam String attribute,
+            @RequestParam String value,
+            @ModelAttribute LoadParametersDTO loadDTO
+    ) {
+        return ResponseEntity.ok(ambienteService.findByAttribute(attribute, value, loadDTO));
+    }
+
+    @GetMapping("/rel")
+    public ResponseEntity<List<ResItemDTO>> getAssociations(@RequestParam(required = false) Long id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(itemAmbienteService.findAmbienteItems(id));
+    }
+
+    @GetMapping("/rel/item-type")
+    public ResponseEntity<List<ResItemTypeDTO>> getAssociatedItemTypes(@RequestParam(required = false) Long id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(itemAmbienteService.findAmbienteItemTypes(id));
     }
 
     @PostMapping("/new")
-    public ResponseEntity<AmbienteDTO> create(@RequestBody AmbienteDTO dto) {
+    public ResponseEntity<ResAmbienteDTO> create(@RequestBody @Valid AmbienteDTO dto) {
         return ResponseEntity.ok(ambienteService.createAmbiente(dto));
     }
 
-    @PutMapping
-    public ResponseEntity<AmbienteDTO> edit(@RequestBody EditAmbienteDTO dto) {
-        AmbienteDTO updated = ambienteService.updateAmbiente(dto);
-        return ResponseEntity.ok(updated);
+    @PostMapping("/{id}/item")
+    public ResponseEntity<ResItemAmbienteDTO> addAssociation(@PathVariable Long id, @RequestParam Long itemId) {
+        return ResponseEntity.ok(itemAmbienteService.associateItemAndAmbiente(itemId, id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ResAmbienteDTO> edit(@PathVariable Long id, @RequestBody @Valid EditAmbienteDTO dto) {
+        return ResponseEntity.ok(ambienteService.updateAmbiente(id, dto));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
             ambienteService.deleteAmbiente(id);
             return ResponseEntity.ok("Ambiente excluído com sucesso.");
+    }
+
+    @DeleteMapping("/{id}/item")
+    public ResponseEntity<?> deleteAssociation(@PathVariable Long id, @RequestParam Long itemId) {
+        itemAmbienteService.deleteItemAndAmbienteAssociation(itemId, id);
+        return ResponseEntity.ok("Item removido do ambiente com sucesso.");
+    }
+
+    @DeleteMapping("/{id}/deactivate")
+    public ResponseEntity<ResAmbienteDTO> deactivate(@PathVariable Long id) {
+        return ResponseEntity.ok(ambienteService.deactivateAmbiente(id));
     }
 }

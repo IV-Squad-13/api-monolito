@@ -1,11 +1,15 @@
 package com.squad13.apimonolito.models.editor.relational;
 
-import com.squad13.apimonolito.models.revision.relational.Revisao;
+import com.squad13.apimonolito.models.catalog.Padrao;
 import com.squad13.apimonolito.util.enums.EmpreendimentoStatusEnum;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "tb_empreendimento")
 public class Empreendimento {

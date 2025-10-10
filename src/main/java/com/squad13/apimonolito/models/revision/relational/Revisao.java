@@ -4,8 +4,11 @@ import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import com.squad13.apimonolito.util.enums.RevisaoStatusEnum;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "tb_revisao")
 public class Revisao {

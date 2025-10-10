@@ -20,7 +20,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -28,14 +28,21 @@ spring:
     generate-ddl: false
 
   flyway:
-    enabled: true
-    baseline-on-migrate: true
+    enabled: false
+    baseline-on-migrate: false
     locations: classpath:db/migration
 
 springdoc:
   api-docs:
-    path: /api-docs
+    path: /v3/api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
 
 api:
   cors:
-    allowed-origins: ${ALLOWED_ORIGINS:http://localhost:5173,http://localhost:5000}
+    allowed-origins: "${ALLOWED_ORIGINS:http://localhost:5173}"
+  security:
+    token:
+      secret: ${SECRET:secret-00000000000000000000000000000}

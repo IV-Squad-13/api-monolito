@@ -1,5 +1,7 @@
 package com.squad13.apimonolito.models.user;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.squad13.apimonolito.models.user.associative.UsuarioEmpreendimento;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -31,6 +34,14 @@ public class Usuario implements UserDetails {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "fk_papel")
     private Papel papel;
+
+    @OneToMany(mappedBy = "usuario",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JsonManagedReference
+    private Set<UsuarioEmpreendimento> empreendimentoSet;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

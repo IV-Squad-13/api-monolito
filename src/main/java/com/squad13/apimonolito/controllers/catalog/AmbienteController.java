@@ -2,7 +2,7 @@ package com.squad13.apimonolito.controllers.catalog;
 
 
 import com.squad13.apimonolito.DTO.catalog.AmbienteDTO;
-import com.squad13.apimonolito.DTO.catalog.LoadParametersDTO;
+import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
 import com.squad13.apimonolito.DTO.catalog.edit.EditAmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResAmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResItemAmbienteDTO;
@@ -27,12 +27,12 @@ public class AmbienteController {
     private final ItemAmbienteService itemAmbienteService;
 
     @GetMapping
-    public ResponseEntity<List<ResAmbienteDTO>> getAll(@ModelAttribute LoadParametersDTO loadDTO) {
+    public ResponseEntity<List<ResAmbienteDTO>> getAll(@ModelAttribute LoadCatalogParamsDTO loadDTO) {
         return ResponseEntity.ok(ambienteService.findAll(loadDTO));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResAmbienteDTO> getById(@PathVariable Long id, @ModelAttribute("loadAll") LoadParametersDTO loadDTO) {
+    public ResponseEntity<ResAmbienteDTO> getById(@PathVariable Long id, @ModelAttribute("loadAll") LoadCatalogParamsDTO loadDTO) {
         return ResponseEntity.ok(ambienteService.findById(id, loadDTO));
     }
 
@@ -40,7 +40,7 @@ public class AmbienteController {
     public ResponseEntity<List<ResAmbienteDTO>> getByAttribute(
             @RequestParam String attribute,
             @RequestParam String value,
-            @ModelAttribute LoadParametersDTO loadDTO
+            @ModelAttribute LoadCatalogParamsDTO loadDTO
     ) {
         return ResponseEntity.ok(ambienteService.findByAttribute(attribute, value, loadDTO));
     }

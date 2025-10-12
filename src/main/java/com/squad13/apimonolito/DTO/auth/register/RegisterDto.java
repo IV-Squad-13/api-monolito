@@ -1,4 +1,4 @@
-package com.squad13.apimonolito.DTO.register;
+package com.squad13.apimonolito.DTO.auth.register;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

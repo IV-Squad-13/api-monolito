@@ -1,6 +1,6 @@
 package com.squad13.apimonolito.services.catalog;
 
-import com.squad13.apimonolito.DTO.catalog.LoadParametersDTO;
+import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResAmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResItemAmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResItemDTO;
@@ -15,7 +15,7 @@ import com.squad13.apimonolito.repository.catalog.AmbienteRepository;
 import com.squad13.apimonolito.repository.catalog.ItemAmbieteRepository;
 import com.squad13.apimonolito.repository.catalog.ItemRepository;
 import com.squad13.apimonolito.repository.catalog.ItemTypeRepository;
-import com.squad13.apimonolito.util.Mapper;
+import com.squad13.apimonolito.util.mappers.CatalogMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,20 +32,20 @@ public class ItemAmbienteService {
     private final ItemTypeRepository itemTypeRepository;
     private final AmbienteRepository ambienteRepository;
 
-    private final Mapper mapper;
+    private final CatalogMapper catalogMapper;
 
     public List<ResItemDTO> findAmbienteItems(Long id) {
         return itemAmbieteRepository.findByAmbiente_Id(id)
                 .stream()
                 .map(ItemAmbiente::getItemDesc)
-                .map(item -> mapper.toResponse(item, LoadParametersDTO.allFalse()))
+                .map(item -> catalogMapper.toResponse(item, LoadCatalogParamsDTO.allFalse()))
                 .toList();
     }
 
     public List<ResAmbienteDTO> findItemAmbientes(Long id) {
         return itemAmbieteRepository.findByItemDesc_Id(id)
                 .stream().map(ItemAmbiente::getAmbiente)
-                .map(ambiente -> mapper.toResponse(ambiente, LoadParametersDTO.allFalse()))
+                .map(ambiente -> catalogMapper.toResponse(ambiente, LoadCatalogParamsDTO.allFalse()))
                 .toList();
     }
 
@@ -58,13 +58,13 @@ public class ItemAmbienteService {
         return itemAmbieteRepository.findByItemDesc_IdIn(itemIds)
                 .stream()
                 .map(ItemAmbiente::getAmbiente)
-                .map(ambiente -> mapper.toResponse(ambiente, LoadParametersDTO.allFalse()))
+                .map(ambiente -> catalogMapper.toResponse(ambiente, LoadCatalogParamsDTO.allFalse()))
                 .toList();
     }
 
     public List<ResItemTypeDTO> findAmbienteItemTypes(Long id) {
         return itemAmbieteRepository.findByAmbiente_Id(id)
-                .stream().map(rel -> mapper.toResponse(rel.getItemDesc().getType()))
+                .stream().map(rel -> catalogMapper.toResponse(rel.getItemDesc().getType()))
                 .toList();
     }
 
@@ -103,7 +103,7 @@ public class ItemAmbienteService {
         ambiente.getItemSet().add(itemAmbiente);
         ambienteRepository.save(ambiente);
 
-        return mapper.toResponse(itemAmbiente);
+        return catalogMapper.toResponse(itemAmbiente);
     }
 
     public List<ResItemAmbienteDTO> associateItemTypeToAmbiente(Long typeId, Long ambienteId) {

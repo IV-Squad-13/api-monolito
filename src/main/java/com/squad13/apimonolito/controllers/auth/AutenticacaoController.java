@@ -1,7 +1,7 @@
 package com.squad13.apimonolito.controllers.auth;
 
-import com.squad13.apimonolito.DTO.login.LoginRequestDTO;
-import com.squad13.apimonolito.DTO.register.RegisterDto;
+import com.squad13.apimonolito.DTO.auth.login.LoginRequestDTO;
+import com.squad13.apimonolito.DTO.auth.register.RegisterDto;
 import com.squad13.apimonolito.models.user.Usuario;
 import com.squad13.apimonolito.services.user.AutenticacaoService;
 import com.squad13.apimonolito.services.user.TokenService;

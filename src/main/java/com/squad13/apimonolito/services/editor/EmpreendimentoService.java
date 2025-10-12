@@ -1,0 +1,228 @@
+package com.squad13.apimonolito.services.editor;
+
+import com.squad13.apimonolito.DTO.editor.EmpDTO;
+import com.squad13.apimonolito.DTO.editor.LoadDocumentParamsDTO;
+import com.squad13.apimonolito.DTO.editor.edit.EditEmpDTO;
+import com.squad13.apimonolito.DTO.editor.res.ResEmpDTO;
+import com.squad13.apimonolito.exceptions.InvalidAttributeException;
+import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
+import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
+import com.squad13.apimonolito.models.catalog.Padrao;
+import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
+import com.squad13.apimonolito.models.editor.relational.Empreendimento;
+import com.squad13.apimonolito.models.revision.mongo.EspecificacaoRevDoc;
+import com.squad13.apimonolito.models.revision.relational.Revisao;
+import com.squad13.apimonolito.models.user.Usuario;
+import com.squad13.apimonolito.models.user.associative.UsuarioEmpreendimento;
+import com.squad13.apimonolito.mongo.editor.EspecificacaoDocRepository;
+import com.squad13.apimonolito.mongo.revision.EspecificacaoRevDocRepository;
+import com.squad13.apimonolito.repository.catalog.PadraoRepository;
+import com.squad13.apimonolito.repository.editor.EmpreendimentoRepository;
+import com.squad13.apimonolito.repository.revision.RevisaoRepository;
+import com.squad13.apimonolito.repository.user.UsuarioRepository;
+import com.squad13.apimonolito.repository.user.associative.UsuarioEmpreendimentoRepository;
+import com.squad13.apimonolito.util.enums.AccessLevelEnum;
+import com.squad13.apimonolito.util.enums.EmpStatusEnum;
+import com.squad13.apimonolito.util.mappers.EditorMapper;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.*;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class EmpreendimentoService {
+
+    private final PadraoRepository padraoRepository;
+    private final RevisaoRepository revisaoRepository;
+    @PersistenceContext
+    private EntityManager em;
+
+    private final EmpreendimentoRepository empRepository;
+
+    private final EspecificacaoDocRepository specDocRepository;
+    private final EspecificacaoRevDocRepository specRevDocRepository;
+
+    private final UsuarioRepository userRepository;
+    private final UsuarioEmpreendimentoRepository userEmpRepository;
+
+    private final EditorMapper mapper;
+
+    private ResEmpDTO mappingHelper(Empreendimento emp, LoadDocumentParamsDTO loadDTO) {
+        List<EspecificacaoDoc> docs = loadDTO.isLoadDocument()
+                ? specDocRepository.findByEmpreendimentoId(emp.getId())
+                : null;
+
+        List<EspecificacaoRevDoc> revDocs = List.of();
+
+        if (loadDTO.isLoadRevision()) {
+            List<Revisao> revs = revisaoRepository.findByEmpreendimento(emp);
+            revDocs = revs.stream()
+                    .flatMap(r -> specRevDocRepository.findByRevisaoId(r.getId()).stream())
+                    .toList();
+        }
+
+        return mapper.toResponse(emp, docs, revDocs, loadDTO);
+    }
+
+    public List<ResEmpDTO> findAll(LoadDocumentParamsDTO loadDTO) {
+        return empRepository.findAll()
+                .stream()
+                .map(emp -> mappingHelper(emp, loadDTO))
+                .toList();
+    }
+
+    private Empreendimento findByIdOrThrow(Long id) {
+        return empRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Empreendimento com ID: " + id + " não encontrado."));
+    }
+
+    public ResEmpDTO findById(Long id, LoadDocumentParamsDTO loadDTO) {
+        return empRepository.findById(id)
+                .map(emp -> mappingHelper(emp, loadDTO))
+                .orElseThrow(() -> new ResourceNotFoundException("Empreendimento com ID: " + id + " não encontrado."));
+    }
+
+    public List<ResEmpDTO> findByAttribute(String attribute, String value, LoadDocumentParamsDTO loadDTO) {
+        boolean attributeExists = Arrays.stream(Empreendimento.class.getDeclaredFields())
+                .anyMatch(f -> f.getName().equals(attribute));
+
+        if (!attributeExists && !attribute.equals("padrao") && !attribute.equals("usuarioList")) {
+            throw new InvalidAttributeException("Atributo inválido: " + attribute);
+        }
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Empreendimento> cq = cb.createQuery(Empreendimento.class);
+        Root<Empreendimento> root = cq.from(Empreendimento.class);
+
+        Predicate predicate;
+
+        if (attribute.equals("padrao")) {
+            Join<Empreendimento, Padrao> padraoJoin = root.join("padrao", JoinType.LEFT);
+            predicate = (value == null)
+                    ? cb.isNull(padraoJoin.get("name"))
+                    : cb.like(cb.lower(padraoJoin.get("name")), "%" + value.toLowerCase() + "%");
+        } else if (attribute.equals("usuarioList")) {
+            Join<Empreendimento, UsuarioEmpreendimento> relJoin = root.join("usuarioList", JoinType.LEFT);
+            Join<UsuarioEmpreendimento, Usuario> userJoin = relJoin.join("usuario", JoinType.LEFT);
+            predicate = (value == null)
+                    ? cb.isNull(userJoin.get("id"))
+                    : cb.equal(userJoin.get("id").as(String.class), value);
+        } else {
+            if (value == null) {
+                predicate = cb.isNull(root.get(attribute));
+            } else {
+                Class<?> fieldType = root.get(attribute).getJavaType();
+
+                if (fieldType.isEnum() && fieldType.equals(EmpStatusEnum.class)) {
+                    EmpStatusEnum status = EmpStatusEnum.fromString(value);
+                    predicate = cb.equal(root.get(attribute), status);
+                } else if (Number.class.isAssignableFrom(fieldType)) {
+                    predicate = cb.equal(root.get(attribute).as(String.class), value);
+                } else {
+                    predicate = cb.like(cb.lower(root.get(attribute).as(String.class)), "%" + value.toLowerCase() + "%");
+                }
+            }
+        }
+
+        cq.select(root).where(predicate);
+
+        List<Empreendimento> results = em.createQuery(cq).getResultList();
+
+        return results.stream()
+                .map(emp -> mappingHelper(emp, loadDTO))
+                .toList();
+    }
+
+    public ResEmpDTO create(EmpDTO dto) {
+        empRepository.findByName(dto.name())
+                .ifPresent(emp -> {
+                    throw new ResourceAlreadyExistsException(
+                            "Já existe um empreendimento com o nome: " + dto.name()
+                    );
+                });
+
+        Empreendimento emp = new Empreendimento();
+        emp.setName(dto.name());
+        emp.setStatus(EmpStatusEnum.INICIADO);
+
+        if (dto.padraoId() != null) {
+            Padrao padrao = padraoRepository.findById(dto.padraoId())
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "Padrão não encontrado com o ID: " + dto.padraoId()
+                    ));
+            emp.setPadrao(padrao);
+        }
+
+        Usuario user = userRepository.findById(dto.creatorId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Usuário não encontrado com o ID: " + dto.creatorId()
+                ));
+
+        UsuarioEmpreendimento userEmp = new UsuarioEmpreendimento();
+        userEmp.setUsuario(user);
+        userEmp.setEmpreendimento(emp);
+        userEmp.setAccessLevel(AccessLevelEnum.CREATOR);
+        emp.getUsuarioList().add(userEmp);
+
+        Empreendimento saved = empRepository.save(emp);
+        return mappingHelper(saved, LoadDocumentParamsDTO.allTrue());
+    }
+
+    private void ensureUniqueName(Empreendimento emp, EditEmpDTO dto) {
+        empRepository.findByName(dto.name())
+                .ifPresent(emp1 -> {
+                    if (Objects.equals(emp.getId(), emp1.getId()))
+                        throw new ResourceAlreadyExistsException(
+                                "O nome '" + dto.name() + "' já está sendo usado."
+                        );
+                });
+    }
+
+    public ResEmpDTO update(Long id, EditEmpDTO dto) {
+        Empreendimento emp = findByIdOrThrow(id);
+
+        if (dto.name() != null && !dto.name().isBlank()) {
+            ensureUniqueName(emp, dto);
+            emp.setName(dto.name());
+        }
+
+        if (dto.status() != null) {
+            emp.setStatus(dto.status());
+        }
+
+        if (dto.padraoId() != null) {
+            Long currentPadraoId = emp.getPadrao() != null ? emp.getPadrao().getId() : null;
+            if (!Objects.equals(currentPadraoId, dto.padraoId())) {
+                Padrao novoPadrao = padraoRepository.findById(dto.padraoId())
+                        .orElseThrow(() -> new ResourceNotFoundException(
+                                "Padrão não encontrado com o ID: " + dto.padraoId()
+                        ));
+                emp.setPadrao(novoPadrao);
+            }
+        } else {
+            emp.setPadrao(null);
+        }
+
+        Empreendimento updated = empRepository.save(emp);
+        return mappingHelper(updated, LoadDocumentParamsDTO.allTrue());
+    }
+
+    public void delete(Long id) {
+        Empreendimento emp = findByIdOrThrow(id);
+        empRepository.delete(emp);
+    }
+
+    public ResEmpDTO deactivate(Long id) {
+        Empreendimento existing = findByIdOrThrow(id);
+        existing.setStatus(EmpStatusEnum.CANCELADO);
+        return mappingHelper(existing, LoadDocumentParamsDTO.allTrue());
+    }
+}

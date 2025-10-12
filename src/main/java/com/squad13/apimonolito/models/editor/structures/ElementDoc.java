@@ -1,6 +1,6 @@
 package com.squad13.apimonolito.models.editor.structures;
 
-import com.squad13.apimonolito.models.editor.mongo.EmpreendimentoDoc;
+import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -24,7 +24,7 @@ public abstract class ElementDoc {
 
     @NotNull
     @DBRef
-    private EmpreendimentoDoc empreendimentoDoc;
+    private EspecificacaoDoc especificacaoDoc;
 
     @NotBlank
     private String name;

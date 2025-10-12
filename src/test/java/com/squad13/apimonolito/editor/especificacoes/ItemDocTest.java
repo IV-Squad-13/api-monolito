@@ -1,8 +1,8 @@
 package com.squad13.apimonolito.editor.especificacoes;
 
-import com.squad13.apimonolito.models.editor.mongo.EmpreendimentoDoc;
+import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
 import com.squad13.apimonolito.models.editor.mongo.ItemDoc;
-import com.squad13.apimonolito.mongo.editor.EmpreendimentoDocRepository;
+import com.squad13.apimonolito.mongo.editor.EspecificacaoDocRepository;
 import com.squad13.apimonolito.mongo.editor.ItemDocRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,16 +18,16 @@ class ItemDocTest {
     private ItemDocRepository itemDocRepository;
 
     @Autowired
-    private EmpreendimentoDocRepository empDocRepository;
+    private EspecificacaoDocRepository empDocRepository;
 
-    private EmpreendimentoDoc empDoc;
+    private EspecificacaoDoc empDoc;
 
     @BeforeEach
     void cleanDatabase() {
         itemDocRepository.deleteAll();
         empDocRepository.deleteAll();
 
-        empDoc = new EmpreendimentoDoc();
+        empDoc = new EspecificacaoDoc();
         empDoc.setName("Doc Empreendimento B");
         empDoc.setEmpreendimentoId(1L);
         empDoc.setDesc("Descricao B");
@@ -40,7 +40,7 @@ class ItemDocTest {
         ItemDoc item = new ItemDoc();
         item.setName("Item");
         item.setCatalogId(1L);
-        item.setEmpreendimentoDoc(empDoc);
+        item.setEspecificacaoDoc(empDoc);
         item.setInSync(true);
         item.setDesc("Desc");
 
@@ -60,7 +60,7 @@ class ItemDocTest {
         ItemDoc item = new ItemDoc();
         item.setName("Item");
         item.setCatalogId(1L);
-        item.setEmpreendimentoDoc(empDoc);
+        item.setEspecificacaoDoc(empDoc);
         item.setInSync(true);
         item.setDesc("Desc");
         itemDocRepository.save(item);

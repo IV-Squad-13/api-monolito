@@ -1,6 +1,6 @@
 package com.squad13.apimonolito.models.revision.mongo;
 
-import com.squad13.apimonolito.models.editor.mongo.EmpreendimentoDoc;
+import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
 import com.squad13.apimonolito.models.revision.structures.ElementRevDoc;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,11 +15,11 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 @Document(collection = "empreendimento_rev")
 @CompoundIndex(name = "catalog_name_unique", def = "{'revisaoId' : 1, 'empreendimento': 1}", unique = true)
-public class EmpreendimentoRevDoc extends ElementRevDoc {
+public class EspecificacaoRevDoc extends ElementRevDoc {
 
     @DBRef
     @Field("empreendimento")
-    private EmpreendimentoDoc empreendimento;
+    private EspecificacaoDoc empreendimento;
 
     @DBRef
     @Field("locais")

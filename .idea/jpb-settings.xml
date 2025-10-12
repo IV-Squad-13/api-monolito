@@ -7,5 +7,9 @@
     <exclude-change idName="tb_item#nm_item" tagName="addUniqueConstraint" />
     <exclude-change idName="tb_marca#nm_marca" tagName="addUniqueConstraint" />
     <exclude-change idName="tb_material#nm_material" tagName="addUniqueConstraint" />
+    <exclude-change idName="tb_papel" tagName="createTable" />
+    <exclude-change idName="tb_usuario" tagName="createTable" />
+    <exclude-change idName="tb_papel#nm_papel" tagName="addUniqueConstraint" />
+    <exclude-change idName="FK_TB_USUARIO_ON_FK_PAPEL" tagName="addForeignKeyConstraint" />
   </component>
 </project>

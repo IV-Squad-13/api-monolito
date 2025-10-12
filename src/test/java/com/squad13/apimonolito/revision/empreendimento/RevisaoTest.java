@@ -1,15 +1,15 @@
 package com.squad13.apimonolito.revision.empreendimento;
 
 
-import com.squad13.apimonolito.models.editor.mongo.EmpreendimentoDoc;
+import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
 import com.squad13.apimonolito.models.editor.relational.Empreendimento;
-import com.squad13.apimonolito.models.revision.mongo.EmpreendimentoRevDoc;
+import com.squad13.apimonolito.models.revision.mongo.EspecificacaoRevDoc;
 import com.squad13.apimonolito.models.revision.relational.Revisao;
-import com.squad13.apimonolito.mongo.editor.EmpreendimentoDocRepository;
-import com.squad13.apimonolito.mongo.revision.EmpreendimentoRevDocRepository;
+import com.squad13.apimonolito.mongo.editor.EspecificacaoDocRepository;
+import com.squad13.apimonolito.mongo.revision.EspecificacaoRevDocRepository;
 import com.squad13.apimonolito.repository.editor.EmpreendimentoRepository;
 import com.squad13.apimonolito.repository.revision.RevisaoRepository;
-import com.squad13.apimonolito.util.enums.EmpreendimentoStatusEnum;
+import com.squad13.apimonolito.util.enums.EmpStatusEnum;
 import com.squad13.apimonolito.util.enums.RevisaoStatusEnum;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,15 +32,15 @@ class RevisaoTest {
     private RevisaoRepository revisaoRepository;
 
     @Autowired
-    private EmpreendimentoDocRepository empreendimentoDocRepository;
+    private EspecificacaoDocRepository especificacaoDocRepository;
 
     @Autowired
-    private EmpreendimentoRevDocRepository empreendimentoRevDocRepository;
+    private EspecificacaoRevDocRepository especificacaoRevDocRepository;
 
     @BeforeEach
     void cleanDatabase() {
-        empreendimentoRevDocRepository.deleteAll();
-        empreendimentoDocRepository.deleteAll();
+        especificacaoRevDocRepository.deleteAll();
+        especificacaoDocRepository.deleteAll();
         revisaoRepository.deleteAll();
         empreendimentoRepository.deleteAll();
     }
@@ -49,7 +49,7 @@ class RevisaoTest {
     void testJpaPersistenceWithRevisao() {
         Empreendimento empreendimento = new Empreendimento();
         empreendimento.setName("Empreendimento A");
-        empreendimento.setStatusEnum(EmpreendimentoStatusEnum.INICIADO);
+        empreendimento.setStatus(EmpStatusEnum.INICIADO);
 
         Empreendimento savedEmp = empreendimentoRepository.save(empreendimento);
         assertThat(savedEmp.getId()).isNotNull();
@@ -72,22 +72,22 @@ class RevisaoTest {
     void testMongoPersistenceReferencingJpaEntity() {
         Empreendimento jpaEntity = new Empreendimento();
         jpaEntity.setName("Empreendimento B");
-        jpaEntity.setStatusEnum(EmpreendimentoStatusEnum.FINALIZADO);
+        jpaEntity.setStatus(EmpStatusEnum.FINALIZADO);
 
         Empreendimento savedEntity = empreendimentoRepository.save(jpaEntity);
         assertThat(savedEntity.getId()).isNotNull();
 
-        EmpreendimentoDoc doc = new EmpreendimentoDoc();
+        EspecificacaoDoc doc = new EspecificacaoDoc();
         doc.setName("Doc Empreendimento B");
         doc.setEmpreendimentoId(savedEntity.getId());
         doc.setDesc("Descricao B");
         doc.setObs("Observacao B");
 
-        EmpreendimentoDoc savedDoc = empreendimentoDocRepository.save(doc);
+        EspecificacaoDoc savedDoc = especificacaoDocRepository.save(doc);
 
         assertThat(savedDoc.getId()).isNotNull();
 
-        EmpreendimentoDoc foundDoc = empreendimentoDocRepository.findById(savedDoc.getId()).orElseThrow();
+        EspecificacaoDoc foundDoc = especificacaoDocRepository.findById(savedDoc.getId()).orElseThrow();
 
         assertThat(foundDoc.getName()).isEqualTo("Doc Empreendimento B");
         assertThat(foundDoc.getEmpreendimentoId()).isEqualTo(savedEntity.getId());
@@ -99,13 +99,13 @@ class RevisaoTest {
     void testConsistencyBetweenJpaAndMongo() {
         Empreendimento e = new Empreendimento();
         e.setName("Empreendimento C");
-        e.setStatusEnum(EmpreendimentoStatusEnum.INICIADO);
+        e.setStatus(EmpStatusEnum.INICIADO);
         Empreendimento savedEntity = empreendimentoRepository.save(e);
 
-        EmpreendimentoDoc doc = new EmpreendimentoDoc();
+        EspecificacaoDoc doc = new EspecificacaoDoc();
         doc.setName("Doc Empreendimento C");
         doc.setEmpreendimentoId(savedEntity.getId());
-        EmpreendimentoDoc savedDoc = empreendimentoDocRepository.save(doc);
+        EspecificacaoDoc savedDoc = especificacaoDocRepository.save(doc);
 
         assertThat(savedDoc.getEmpreendimentoId()).isEqualTo(savedEntity.getId());
 
@@ -119,7 +119,7 @@ class RevisaoTest {
     void testCreateEmpreendimentoRevisionDoc() {
         Empreendimento emp = new Empreendimento();
         emp.setName("Empreendimento D");
-        emp.setStatusEnum(EmpreendimentoStatusEnum.INICIADO);
+        emp.setStatus(EmpStatusEnum.INICIADO);
         Empreendimento savedEmp = empreendimentoRepository.save(emp);
 
         Revisao revisao = new Revisao();
@@ -127,19 +127,19 @@ class RevisaoTest {
         revisao.setStatusEnum(RevisaoStatusEnum.INICIADA);
         Revisao savedRevisao = revisaoRepository.save(revisao);
 
-        EmpreendimentoDoc doc = new EmpreendimentoDoc();
+        EspecificacaoDoc doc = new EspecificacaoDoc();
         doc.setName("Doc Empreendimento D");
         doc.setEmpreendimentoId(savedEmp.getId());
-        EmpreendimentoDoc savedDoc = empreendimentoDocRepository.save(doc);
+        EspecificacaoDoc savedDoc = especificacaoDocRepository.save(doc);
 
-        EmpreendimentoRevDoc revDoc = new EmpreendimentoRevDoc();
+        EspecificacaoRevDoc revDoc = new EspecificacaoRevDoc();
         revDoc.setRevisaoId(savedRevisao.getId());
         revDoc.setEmpreendimento(savedDoc);
         revDoc.setNameApproved(true);
         revDoc.setDescApproved(false);
         revDoc.setObsApproved(false);
 
-        EmpreendimentoRevDoc savedRevDoc = empreendimentoRevDocRepository.save(revDoc);
+        EspecificacaoRevDoc savedRevDoc = especificacaoRevDocRepository.save(revDoc);
 
         assertThat(savedRevDoc.getId()).isNotNull();
         assertThat(savedRevDoc.getRevisaoId()).isEqualTo(savedRevisao.getId());

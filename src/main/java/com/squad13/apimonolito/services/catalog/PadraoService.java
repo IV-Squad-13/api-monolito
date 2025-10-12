@@ -1,14 +1,14 @@
 package com.squad13.apimonolito.services.catalog;
 
-import com.squad13.apimonolito.DTO.catalog.LoadParametersDTO;
+import com.squad13.apimonolito.DTO.catalog.EditPadraoDTO;
+import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
 import com.squad13.apimonolito.DTO.catalog.PadraoDTO;
-import com.squad13.apimonolito.DTO.catalog.edit.EditPadraoDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResPadraoDTO;
 import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.catalog.Padrao;
 import com.squad13.apimonolito.repository.catalog.PadraoRepository;
-import com.squad13.apimonolito.util.Mapper;
+import com.squad13.apimonolito.util.mappers.CatalogMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +20,12 @@ public class PadraoService {
 
     private final PadraoRepository padraoRepository;
 
-    private final Mapper mapper;
+    private final CatalogMapper catalogMapper;
 
-    public List<ResPadraoDTO> findAll(LoadParametersDTO loadDTO) {
+    public List<ResPadraoDTO> findAll(LoadCatalogParamsDTO loadDTO) {
         return padraoRepository.findAll()
                 .stream()
-                .map(padrao -> mapper.toResponse(padrao, loadDTO))
+                .map(padrao -> catalogMapper.toResponse(padrao, loadDTO))
                 .toList();
     }
 
@@ -34,15 +34,15 @@ public class PadraoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Padrão com id " + id + " não encontrado."));
     }
 
-    public ResPadraoDTO findById(Long id, LoadParametersDTO loadDTO) {
+    public ResPadraoDTO findById(Long id, LoadCatalogParamsDTO loadDTO) {
         return padraoRepository.findById(id)
-                .map(padrao -> mapper.toResponse(padrao, loadDTO))
+                .map(padrao -> catalogMapper.toResponse(padrao, loadDTO))
                 .orElseThrow(() -> new ResourceNotFoundException("Padrão com id " + id + " não encontrado."));
     }
 
-    public ResPadraoDTO findByNameOrThrow(String name, LoadParametersDTO loadDTO) {
+    public ResPadraoDTO findByNameOrThrow(String name, LoadCatalogParamsDTO loadDTO) {
         return padraoRepository.findByName(name)
-                .map(padrao -> mapper.toResponse(padrao, loadDTO))
+                .map(padrao -> catalogMapper.toResponse(padrao, loadDTO))
                 .orElseThrow(() -> new ResourceNotFoundException("Padrão com nome " + name + " não encontrado."));
     }
 
@@ -58,7 +58,7 @@ public class PadraoService {
         padrao.setName(dto.getName());
         padrao.setIsActive(dto.isActive());
 
-        return mapper.toResponse(padraoRepository.save(padrao), LoadParametersDTO.allTrue());
+        return catalogMapper.toResponse(padraoRepository.save(padrao), LoadCatalogParamsDTO.allTrue());
     }
 
     public ResPadraoDTO updatePadrao(Long id, EditPadraoDTO dto) {
@@ -78,7 +78,7 @@ public class PadraoService {
         }
 
         Padrao updated = padraoRepository.save(padrao);
-        return mapper.toResponse(updated, LoadParametersDTO.allTrue());
+        return catalogMapper.toResponse(updated, LoadCatalogParamsDTO.allTrue());
     }
 
     public void deletePadrao(Long id) {
@@ -89,6 +89,6 @@ public class PadraoService {
     public ResPadraoDTO deactivatePadrao(Long id) {
         Padrao existing = findByIdOrThrow(id);
         existing.setIsActive(false);
-        return mapper.toResponse(padraoRepository.save(existing), LoadParametersDTO.allTrue());
+        return catalogMapper.toResponse(padraoRepository.save(existing), LoadCatalogParamsDTO.allTrue());
     }
 }

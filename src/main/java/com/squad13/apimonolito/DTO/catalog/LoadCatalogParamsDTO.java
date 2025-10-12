@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 @Getter
 @Setter
 @ParameterObject
-public class LoadParametersDTO {
+public class LoadCatalogParamsDTO {
 
     private boolean loadPadroes;
     private boolean loadAmbientes;
@@ -16,11 +16,7 @@ public class LoadParametersDTO {
     private boolean loadMateriais;
     private boolean loadMarcas;
 
-    public LoadParametersDTO() {
-        this(false, false, false, false, false);
-    }
-
-    public LoadParametersDTO(
+    public LoadCatalogParamsDTO(
             boolean loadPadroes,
             boolean loadAmbientes,
             boolean loadItems,
@@ -34,12 +30,16 @@ public class LoadParametersDTO {
         this.loadMarcas = loadMarcas;
     }
 
-    public static LoadParametersDTO allFalse() {
-        return new LoadParametersDTO(false, false, false, false, false);
+    public LoadCatalogParamsDTO() {
+        this(false, false, false, false, false);
+    }
+
+    public static LoadCatalogParamsDTO allFalse() {
+        return new LoadCatalogParamsDTO(false, false, false, false, false);
     }
 
     @ModelAttribute("loadAll")
-    public static LoadParametersDTO allTrue() {
-        return new LoadParametersDTO(true, true, true, true, true);
+    public static LoadCatalogParamsDTO allTrue() {
+        return new LoadCatalogParamsDTO(true, true, true, true, true);
     }
 }

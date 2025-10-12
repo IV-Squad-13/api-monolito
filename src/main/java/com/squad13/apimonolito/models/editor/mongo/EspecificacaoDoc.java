@@ -17,7 +17,7 @@ import java.util.List;
 @Data
 @Document(collection = "empreendimentos")
 @CompoundIndex(name = "catalog_name_unique", def = "{'empreendimentoId' : 1, 'name': 1}", unique = true)
-public class EmpreendimentoDoc {
+public class EspecificacaoDoc {
 
     @Id
     private String id;

@@ -1,6 +1,6 @@
 package com.squad13.apimonolito.services.user;
 
-import com.squad13.apimonolito.DTO.register.RegisterDto;
+import com.squad13.apimonolito.DTO.auth.register.RegisterDto;
 import com.squad13.apimonolito.exceptions.InvalidTokenException;
 import com.squad13.apimonolito.models.user.Papel;
 import com.squad13.apimonolito.models.user.Usuario;

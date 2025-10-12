@@ -1,7 +1,8 @@
 package com.squad13.apimonolito.models.editor.mongo;
 
-import com.squad13.apimonolito.models.editor.structures.ElementDoc;
-import jakarta.validation.constraints.NotBlank;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.squad13.apimonolito.models.editor.structures.DocElement;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.Transient;
@@ -12,13 +13,12 @@ import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-@Document(collection = "items")
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@Document(collection = "marcas")
 @CompoundIndex(name = "catalog_name_unique", def = "{'catalogId' : 1, 'name': 1, 'empreendimento': 1}", unique = true)
-public class ItemDoc extends ElementDoc {
-
-    @NotBlank
-    private String desc;
+public class MarcaDocElement extends DocElement {
 
     @Transient
-    private List<ElementDoc> elementDocList;
+    @JsonProperty
+    private List<DocElement> docElementList;
 }

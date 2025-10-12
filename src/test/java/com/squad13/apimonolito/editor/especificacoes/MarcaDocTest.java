@@ -1,9 +1,9 @@
 package com.squad13.apimonolito.editor.especificacoes;
 
 import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
-import com.squad13.apimonolito.models.editor.mongo.MarcaDoc;
+import com.squad13.apimonolito.models.editor.mongo.MarcaDocElement;
 import com.squad13.apimonolito.mongo.editor.EspecificacaoDocRepository;
-import com.squad13.apimonolito.mongo.editor.MarcaDocRepository;
+import com.squad13.apimonolito.mongo.editor.MarcaDocElementRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MarcaDocTest {
 
     @Autowired
-    private MarcaDocRepository marcaDocRepository;
+    private MarcaDocElementRepository marcaDocRepository;
 
     @Autowired
     private EspecificacaoDocRepository empDocRepository;
@@ -37,7 +37,7 @@ class MarcaDocTest {
 
     @Test
     void testMarcaPersistence() {
-        MarcaDoc marca = new MarcaDoc();
+        MarcaDocElement marca = new MarcaDocElement();
         marca.setName("Marca");
         marca.setCatalogId(1L);
         marca.setEspecificacaoDoc(empDoc);
@@ -49,14 +49,14 @@ class MarcaDocTest {
         assertThat(marca.getId()).isNotNull();
         assertThat(marca.getName()).isEqualTo("Marca");
 
-        MarcaDoc foundMarca = marcaDocRepository.findByName("Marca");
+        MarcaDocElement foundMarca = marcaDocRepository.findByName("Marca");
         assertThat(foundMarca).isNotNull();
         assertThat(foundMarca.getId()).isEqualTo(marca.getId());
     }
 
     @Test
     void testMarcaUpdate() {
-        MarcaDoc marca = new MarcaDoc();
+        MarcaDocElement marca = new MarcaDocElement();
         marca.setName("Marca");
         marca.setCatalogId(1L);
         marca.setEspecificacaoDoc(empDoc);
@@ -66,7 +66,7 @@ class MarcaDocTest {
         marca.setName("Marca1");
         marcaDocRepository.save(marca);
 
-        MarcaDoc foundMarca = marcaDocRepository.findByName("Marca1");
+        MarcaDocElement foundMarca = marcaDocRepository.findByName("Marca1");
 
         assertThat(foundMarca).isNotNull();
         assertThat(foundMarca.getUpdated()).isNotNull();
@@ -76,7 +76,7 @@ class MarcaDocTest {
     @Test
     void testMarcaDelete() {
         marcaDocRepository.deleteAllByName("Marca");
-        MarcaDoc foundMarca = marcaDocRepository.findByName("Marca");
+        MarcaDocElement foundMarca = marcaDocRepository.findByName("Marca");
 
         assertThat(foundMarca).isNull();
     }

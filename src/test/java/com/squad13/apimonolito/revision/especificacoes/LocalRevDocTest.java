@@ -1,18 +1,17 @@
 package com.squad13.apimonolito.revision.especificacoes;
 
-import com.mongodb.DuplicateKeyException;
-import com.squad13.apimonolito.models.editor.mongo.AmbienteDoc;
-import com.squad13.apimonolito.models.editor.mongo.ItemDoc;
-import com.squad13.apimonolito.models.editor.mongo.LocalDoc;
-import com.squad13.apimonolito.models.revision.mongo.AmbienteRevDoc;
-import com.squad13.apimonolito.models.revision.mongo.ItemRevDoc;
-import com.squad13.apimonolito.models.revision.mongo.LocalRevDoc;
-import com.squad13.apimonolito.mongo.editor.AmbienteDocRepository;
-import com.squad13.apimonolito.mongo.editor.ItemDocRepository;
-import com.squad13.apimonolito.mongo.editor.LocalDocRepository;
-import com.squad13.apimonolito.mongo.revision.AmbienteRevDocRepository;
-import com.squad13.apimonolito.mongo.revision.ItemRevDocRepository;
-import com.squad13.apimonolito.mongo.revision.LocalRevDocRepository;
+import com.squad13.apimonolito.models.editor.mongo.AmbienteDocElement;
+import com.squad13.apimonolito.models.editor.mongo.ItemDocElement;
+import com.squad13.apimonolito.models.editor.mongo.LocalDocElement;
+import com.squad13.apimonolito.models.revision.mongo.AmbienteRevDocElement;
+import com.squad13.apimonolito.models.revision.mongo.ItemRevDocElement;
+import com.squad13.apimonolito.models.revision.mongo.LocalRevDocElement;
+import com.squad13.apimonolito.mongo.editor.AmbienteDocElementRepository;
+import com.squad13.apimonolito.mongo.editor.ItemDocElementRepository;
+import com.squad13.apimonolito.mongo.editor.LocalDocElementRepository;
+import com.squad13.apimonolito.mongo.revision.AmbienteRevDocElementRepository;
+import com.squad13.apimonolito.mongo.revision.ItemRevDocElementRepository;
+import com.squad13.apimonolito.mongo.revision.LocalRevDocElementRepository;
 import com.squad13.apimonolito.util.enums.LocalEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,26 +28,26 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class LocalRevDocTest {
 
     @Autowired
-    private ItemDocRepository itemDocRepository;
+    private ItemDocElementRepository itemDocRepository;
 
     @Autowired
-    private ItemRevDocRepository itemRevDocRepository;
+    private ItemRevDocElementRepository itemRevDocRepository;
 
     @Autowired
-    private AmbienteDocRepository ambienteDocRepository;
+    private AmbienteDocElementRepository ambienteDocRepository;
 
     @Autowired
-    private AmbienteRevDocRepository ambienteRevDocRepository;
+    private AmbienteRevDocElementRepository ambienteRevDocRepository;
 
     @Autowired
-    private LocalDocRepository localDocRepository;
+    private LocalDocElementRepository localDocRepository;
 
     @Autowired
-    private LocalRevDocRepository localRevDocRepository;
+    private LocalRevDocElementRepository localRevDocRepository;
 
-    private ItemDoc item;
-    private AmbienteDoc ambiente;
-    private LocalDoc local;
+    private ItemDocElement item;
+    private AmbienteDocElement ambiente;
+    private LocalDocElement local;
 
     @BeforeEach
     void cleanDatabase() {
@@ -59,21 +58,21 @@ class LocalRevDocTest {
         ambienteDocRepository.deleteAll();
         itemDocRepository.deleteAll();
 
-        item = new ItemDoc();
+        item = new ItemDocElement();
         item.setName("Item");
         item.setCatalogId(1L);
         item.setInSync(true);
         item.setDesc("Desc");
         itemDocRepository.save(item);
 
-        ambiente = new AmbienteDoc();
+        ambiente = new AmbienteDocElement();
         ambiente.setName("Ambiente");
         ambiente.setCatalogId(1L);
         ambiente.setInSync(true);
         ambiente.setItemDocList(List.of(item));
         ambienteDocRepository.save(ambiente);
 
-        local = new LocalDoc();
+        local = new LocalDocElement();
         local.setLocal(LocalEnum.AREA_COMUM);
         local.setCatalogId(1L);
         local.setInSync(true);
@@ -84,26 +83,26 @@ class LocalRevDocTest {
 
     @Test
     void testLocalRevPersistence() {
-        ItemRevDoc itemRev = new ItemRevDoc();
+        ItemRevDocElement itemRev = new ItemRevDocElement();
         itemRev.setItem(item);
         itemRev.setRevisaoId(1L);
         itemRev.setApproved(true);
         itemRev.setComment("First revision");
         itemRevDocRepository.save(itemRev);
 
-        AmbienteRevDoc ambienteRev = new AmbienteRevDoc();
+        AmbienteRevDocElement ambienteRev = new AmbienteRevDocElement();
         ambienteRev.setAmbiente(ambiente);
         ambienteRev.setRevisaoId(1L);
         ambienteRev.setItemRevList(List.of(itemRev));
         ambienteRevDocRepository.save(ambienteRev);
 
-        LocalRevDoc localRev = new LocalRevDoc();
+        LocalRevDocElement localRev = new LocalRevDocElement();
         localRev.setLocal(local);
         localRev.setRevisaoId(1L);
         localRev.setAmbienteRevList(List.of(ambienteRev));
         localRevDocRepository.save(localRev);
 
-        LocalRevDoc foundRev = localRevDocRepository.findByLocalAndRevisaoId(local, 1L);
+        LocalRevDocElement foundRev = localRevDocRepository.findByLocalAndRevisaoId(local, 1L);
         assertThat(foundRev).isNotNull();
         assertThat(foundRev.getId()).isNotNull();
         assertThat(foundRev.getAmbienteRevList()).hasSize(1);
@@ -113,13 +112,13 @@ class LocalRevDocTest {
 
     @Test
     void testLocalRevDuplicateThrows() {
-        LocalRevDoc rev1 = new LocalRevDoc();
+        LocalRevDocElement rev1 = new LocalRevDocElement();
         rev1.setLocal(local);
         rev1.setRevisaoId(1L);
         rev1.setAmbienteRevList(List.of());
         localRevDocRepository.save(rev1);
 
-        LocalRevDoc rev2 = new LocalRevDoc();
+        LocalRevDocElement rev2 = new LocalRevDocElement();
         rev2.setLocal(local);
         rev2.setRevisaoId(1L);
         rev2.setAmbienteRevList(List.of());
@@ -130,30 +129,30 @@ class LocalRevDocTest {
 
     @Test
     void testLocalRevUpdate() {
-        LocalRevDoc localRev = new LocalRevDoc();
+        LocalRevDocElement localRev = new LocalRevDocElement();
         localRev.setLocal(local);
         localRev.setRevisaoId(1L);
         localRev.setAmbienteRevList(List.of());
         localRevDocRepository.save(localRev);
 
-        LocalRevDoc found = localRevDocRepository.findByLocalAndRevisaoId(local, 1L);
+        LocalRevDocElement found = localRevDocRepository.findByLocalAndRevisaoId(local, 1L);
         found.setAmbienteRevList(List.of());
         localRevDocRepository.save(found);
 
-        LocalRevDoc updated = localRevDocRepository.findByLocalAndRevisaoId(local, 1L);
+        LocalRevDocElement updated = localRevDocRepository.findByLocalAndRevisaoId(local, 1L);
         assertThat(updated).isNotNull();
         assertThat(updated.getRevisaoId()).isEqualTo(1L);
     }
 
     @Test
     void testLocalRevDelete() {
-        LocalRevDoc localRev = new LocalRevDoc();
+        LocalRevDocElement localRev = new LocalRevDocElement();
         localRev.setLocal(local);
         localRev.setRevisaoId(1L);
         localRevDocRepository.save(localRev);
 
         localRevDocRepository.deleteByLocalAndRevisaoId(local, 1L);
-        LocalRevDoc found = localRevDocRepository.findByLocalAndRevisaoId(local, 1L);
+        LocalRevDocElement found = localRevDocRepository.findByLocalAndRevisaoId(local, 1L);
         assertThat(found).isNull();
     }
 }

@@ -1,14 +1,13 @@
 package com.squad13.apimonolito.revision.especificacoes;
 
-import com.mongodb.DuplicateKeyException;
-import com.squad13.apimonolito.models.editor.mongo.AmbienteDoc;
-import com.squad13.apimonolito.models.editor.mongo.ItemDoc;
-import com.squad13.apimonolito.models.revision.mongo.AmbienteRevDoc;
-import com.squad13.apimonolito.models.revision.mongo.ItemRevDoc;
-import com.squad13.apimonolito.mongo.editor.AmbienteDocRepository;
-import com.squad13.apimonolito.mongo.editor.ItemDocRepository;
-import com.squad13.apimonolito.mongo.revision.AmbienteRevDocRepository;
-import com.squad13.apimonolito.mongo.revision.ItemRevDocRepository;
+import com.squad13.apimonolito.models.editor.mongo.AmbienteDocElement;
+import com.squad13.apimonolito.models.editor.mongo.ItemDocElement;
+import com.squad13.apimonolito.models.revision.mongo.AmbienteRevDocElement;
+import com.squad13.apimonolito.models.revision.mongo.ItemRevDocElement;
+import com.squad13.apimonolito.mongo.editor.AmbienteDocElementRepository;
+import com.squad13.apimonolito.mongo.editor.ItemDocElementRepository;
+import com.squad13.apimonolito.mongo.revision.AmbienteRevDocElementRepository;
+import com.squad13.apimonolito.mongo.revision.ItemRevDocElementRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,19 +23,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class AmbienteRevDocTest {
 
     @Autowired
-    private ItemDocRepository itemDocRepository;
+    private ItemDocElementRepository itemDocRepository;
 
     @Autowired
-    private ItemRevDocRepository itemRevDocRepository;
+    private ItemRevDocElementRepository itemRevDocRepository;
 
     @Autowired
-    private AmbienteDocRepository ambienteDocRepository;
+    private AmbienteDocElementRepository ambienteDocRepository;
 
     @Autowired
-    private AmbienteRevDocRepository ambienteRevDocRepository;
+    private AmbienteRevDocElementRepository ambienteRevDocRepository;
 
-    private ItemDoc item;
-    private AmbienteDoc ambiente;
+    private ItemDocElement item;
+    private AmbienteDocElement ambiente;
 
     @BeforeEach
     void cleanDatabase() {
@@ -45,14 +44,14 @@ class AmbienteRevDocTest {
         ambienteDocRepository.deleteAll();
         itemDocRepository.deleteAll();
 
-        item = new ItemDoc();
+        item = new ItemDocElement();
         item.setName("Item");
         item.setCatalogId(1L);
         item.setInSync(true);
         item.setDesc("Desc");
         itemDocRepository.save(item);
 
-        ambiente = new AmbienteDoc();
+        ambiente = new AmbienteDocElement();
         ambiente.setName("Ambiente");
         ambiente.setCatalogId(1L);
         ambiente.setInSync(true);
@@ -62,20 +61,20 @@ class AmbienteRevDocTest {
 
     @Test
     void testAmbienteRevPersistence() {
-        ItemRevDoc itemRev = new ItemRevDoc();
+        ItemRevDocElement itemRev = new ItemRevDocElement();
         itemRev.setItem(item);
         itemRev.setRevisaoId(1L);
         itemRev.setApproved(true);
         itemRev.setComment("First revision");
         itemRevDocRepository.save(itemRev);
 
-        AmbienteRevDoc ambienteRev = new AmbienteRevDoc();
+        AmbienteRevDocElement ambienteRev = new AmbienteRevDocElement();
         ambienteRev.setAmbiente(ambiente);
         ambienteRev.setRevisaoId(1L);
         ambienteRev.setItemRevList(List.of(itemRev));
         ambienteRevDocRepository.save(ambienteRev);
 
-        AmbienteRevDoc foundRev = ambienteRevDocRepository.findByAmbienteAndRevisaoId(ambiente, 1L);
+        AmbienteRevDocElement foundRev = ambienteRevDocRepository.findByAmbienteAndRevisaoId(ambiente, 1L);
         assertThat(foundRev).isNotNull();
         assertThat(foundRev.getId()).isNotNull();
         assertThat(foundRev.getItemRevList()).hasSize(1);
@@ -84,42 +83,42 @@ class AmbienteRevDocTest {
 
     @Test
     void testAmbienteRevUpdate() {
-        AmbienteRevDoc ambienteRev = new AmbienteRevDoc();
+        AmbienteRevDocElement ambienteRev = new AmbienteRevDocElement();
         ambienteRev.setAmbiente(ambiente);
         ambienteRev.setRevisaoId(1L);
         ambienteRev.setItemRevList(List.of());
         ambienteRevDocRepository.save(ambienteRev);
 
-        AmbienteRevDoc found = ambienteRevDocRepository.findByAmbienteAndRevisaoId(ambiente, 1L);
+        AmbienteRevDocElement found = ambienteRevDocRepository.findByAmbienteAndRevisaoId(ambiente, 1L);
         found.setItemRevList(List.of());
         ambienteRevDocRepository.save(found);
 
-        AmbienteRevDoc updated = ambienteRevDocRepository.findByAmbienteAndRevisaoId(ambiente, 1L);
+        AmbienteRevDocElement updated = ambienteRevDocRepository.findByAmbienteAndRevisaoId(ambiente, 1L);
         assertThat(updated).isNotNull();
         assertThat(updated.getRevisaoId()).isEqualTo(1L);
     }
 
     @Test
     void testAmbienteRevDelete() {
-        AmbienteRevDoc ambienteRev = new AmbienteRevDoc();
+        AmbienteRevDocElement ambienteRev = new AmbienteRevDocElement();
         ambienteRev.setAmbiente(ambiente);
         ambienteRev.setRevisaoId(1L);
         ambienteRevDocRepository.save(ambienteRev);
 
         ambienteRevDocRepository.deleteByAmbienteAndRevisaoId(ambiente, 1L);
-        AmbienteRevDoc found = ambienteRevDocRepository.findByAmbienteAndRevisaoId(ambiente, 1L);
+        AmbienteRevDocElement found = ambienteRevDocRepository.findByAmbienteAndRevisaoId(ambiente, 1L);
         assertThat(found).isNull();
     }
 
     @Test
     void testAmbienteRevDuplicateThrows() {
-        AmbienteRevDoc rev1 = new AmbienteRevDoc();
+        AmbienteRevDocElement rev1 = new AmbienteRevDocElement();
         rev1.setAmbiente(ambiente);
         rev1.setRevisaoId(1L);
         rev1.setItemRevList(List.of());
         ambienteRevDocRepository.save(rev1);
 
-        AmbienteRevDoc rev2 = new AmbienteRevDoc();
+        AmbienteRevDocElement rev2 = new AmbienteRevDocElement();
         rev2.setAmbiente(ambiente);
         rev2.setRevisaoId(1L);
         rev2.setItemRevList(List.of());

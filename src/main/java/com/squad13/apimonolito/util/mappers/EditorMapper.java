@@ -7,7 +7,7 @@ import com.squad13.apimonolito.DTO.editor.LoadDocumentParamsDTO;
 import com.squad13.apimonolito.DTO.editor.res.ResEmpDTO;
 import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
 import com.squad13.apimonolito.models.editor.relational.Empreendimento;
-import com.squad13.apimonolito.models.revision.mongo.EspecificacaoRevDoc;
+import com.squad13.apimonolito.models.revision.mongo.EspecificacaoRevDocElement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +23,7 @@ public class EditorMapper {
     public ResEmpDTO toResponse(
             Empreendimento emp,
             List<EspecificacaoDoc> docs,
-            List<EspecificacaoRevDoc> revisions,
+            List<EspecificacaoRevDocElement> revisions,
             LoadDocumentParamsDTO loadDTO
     ) {
         if (emp == null) return null;

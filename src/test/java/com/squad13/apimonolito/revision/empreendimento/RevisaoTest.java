@@ -3,10 +3,10 @@ package com.squad13.apimonolito.revision.empreendimento;
 
 import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
 import com.squad13.apimonolito.models.editor.relational.Empreendimento;
-import com.squad13.apimonolito.models.revision.mongo.EspecificacaoRevDoc;
+import com.squad13.apimonolito.models.revision.mongo.EspecificacaoRevDocElement;
 import com.squad13.apimonolito.models.revision.relational.Revisao;
 import com.squad13.apimonolito.mongo.editor.EspecificacaoDocRepository;
-import com.squad13.apimonolito.mongo.revision.EspecificacaoRevDocRepository;
+import com.squad13.apimonolito.mongo.revision.EspecificacaoRevDocElementRepository;
 import com.squad13.apimonolito.repository.editor.EmpreendimentoRepository;
 import com.squad13.apimonolito.repository.revision.RevisaoRepository;
 import com.squad13.apimonolito.util.enums.EmpStatusEnum;
@@ -35,7 +35,7 @@ class RevisaoTest {
     private EspecificacaoDocRepository especificacaoDocRepository;
 
     @Autowired
-    private EspecificacaoRevDocRepository especificacaoRevDocRepository;
+    private EspecificacaoRevDocElementRepository especificacaoRevDocRepository;
 
     @BeforeEach
     void cleanDatabase() {
@@ -132,18 +132,18 @@ class RevisaoTest {
         doc.setEmpreendimentoId(savedEmp.getId());
         EspecificacaoDoc savedDoc = especificacaoDocRepository.save(doc);
 
-        EspecificacaoRevDoc revDoc = new EspecificacaoRevDoc();
+        EspecificacaoRevDocElement revDoc = new EspecificacaoRevDocElement();
         revDoc.setRevisaoId(savedRevisao.getId());
-        revDoc.setEmpreendimento(savedDoc);
+        revDoc.setEspecificacao(savedDoc);
         revDoc.setNameApproved(true);
         revDoc.setDescApproved(false);
         revDoc.setObsApproved(false);
 
-        EspecificacaoRevDoc savedRevDoc = especificacaoRevDocRepository.save(revDoc);
+        EspecificacaoRevDocElement savedRevDoc = especificacaoRevDocRepository.save(revDoc);
 
         assertThat(savedRevDoc.getId()).isNotNull();
         assertThat(savedRevDoc.getRevisaoId()).isEqualTo(savedRevisao.getId());
-        assertThat(savedRevDoc.getEmpreendimento().getId()).isEqualTo(savedDoc.getId());
+        assertThat(savedRevDoc.getEspecificacao().getId()).isEqualTo(savedDoc.getId());
         assertThat(savedRevDoc.isNameApproved()).isTrue();
     }
 }

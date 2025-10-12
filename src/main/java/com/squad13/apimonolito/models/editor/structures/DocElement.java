@@ -1,5 +1,8 @@
 package com.squad13.apimonolito.models.editor.structures;
 
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
@@ -14,16 +17,21 @@ import java.time.Instant;
 
 @Getter
 @Setter
-public abstract class ElementDoc {
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+public abstract class DocElement {
 
     @Id
+    @JsonProperty("id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private String id;
 
     @NotNull
     private Long catalogId;
 
     @NotNull
-    @DBRef
+    @DBRef(lazy = true)
+    @JsonIgnore
     private EspecificacaoDoc especificacaoDoc;
 
     @NotBlank
@@ -32,8 +40,10 @@ public abstract class ElementDoc {
     private boolean inSync;
 
     @CreatedDate
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "America/Brasilia")
     private Instant created;
 
     @LastModifiedDate
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "America/Brasilia")
     private Instant updated;
 }

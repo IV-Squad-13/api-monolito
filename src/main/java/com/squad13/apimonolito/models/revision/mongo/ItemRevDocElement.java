@@ -1,7 +1,7 @@
 package com.squad13.apimonolito.models.revision.mongo;
 
-import com.squad13.apimonolito.models.editor.mongo.ItemDoc;
-import com.squad13.apimonolito.models.revision.structures.ElementRevDoc;
+import com.squad13.apimonolito.models.editor.mongo.ItemDocElement;
+import com.squad13.apimonolito.models.revision.structures.RevDocElement;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,9 +13,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @EqualsAndHashCode(callSuper = false)
 @Document(collection = "items_rev")
 @CompoundIndex(name = "catalog_name_unique", def = "{'revisaoId' : 1, 'item': 1}", unique = true)
-public class ItemRevDoc extends ElementRevDoc {
+public class ItemRevDocElement extends RevDocElement {
 
     @DBRef
     @NotNull
-    private ItemDoc item;
+    private ItemDocElement item;
 }

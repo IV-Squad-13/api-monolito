@@ -1,10 +1,9 @@
 package com.squad13.apimonolito.revision.especificacoes;
 
-import com.mongodb.DuplicateKeyException;
-import com.squad13.apimonolito.models.editor.mongo.MarcaDoc;
-import com.squad13.apimonolito.models.revision.mongo.MarcaRevDoc;
-import com.squad13.apimonolito.mongo.editor.MarcaDocRepository;
-import com.squad13.apimonolito.mongo.revision.MarcaRevDocRepository;
+import com.squad13.apimonolito.models.editor.mongo.MarcaDocElement;
+import com.squad13.apimonolito.models.revision.mongo.MarcaRevDocElement;
+import com.squad13.apimonolito.mongo.editor.MarcaDocElementRepository;
+import com.squad13.apimonolito.mongo.revision.MarcaRevDocElementRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,19 +17,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class MarcaRevDocTest {
 
     @Autowired
-    private MarcaDocRepository marcaDocRepository;
+    private MarcaDocElementRepository marcaDocRepository;
 
     @Autowired
-    private MarcaRevDocRepository marcaRevDocRepository;
+    private MarcaRevDocElementRepository marcaRevDocRepository;
 
-    private MarcaDoc marca;
+    private MarcaDocElement marca;
 
     @BeforeEach
     void setup() {
         marcaRevDocRepository.deleteAll();
         marcaDocRepository.deleteAll();
 
-        marca = new MarcaDoc();
+        marca = new MarcaDocElement();
         marca.setName("Marca");
         marca.setCatalogId(1L);
         marca.setInSync(true);
@@ -41,7 +40,7 @@ class MarcaRevDocTest {
 
     @Test
     void testMarcaRevPersistence() {
-        MarcaRevDoc marcaRev = new MarcaRevDoc();
+        MarcaRevDocElement marcaRev = new MarcaRevDocElement();
         marcaRev.setMarca(marca);
         marcaRev.setRevisaoId(1L);
         marcaRev.setApproved(true);
@@ -49,7 +48,7 @@ class MarcaRevDocTest {
 
         marcaRevDocRepository.save(marcaRev);
 
-        MarcaRevDoc foundMarcaRev = marcaRevDocRepository.findByMarcaAndRevisaoId(marca, 1L);
+        MarcaRevDocElement foundMarcaRev = marcaRevDocRepository.findByMarcaAndRevisaoId(marca, 1L);
         assertThat(foundMarcaRev).isNotNull();
         assertThat(foundMarcaRev.getId()).isEqualTo(marcaRev.getId());
         assertThat(foundMarcaRev.getComment()).isEqualTo(marcaRev.getComment());
@@ -59,26 +58,26 @@ class MarcaRevDocTest {
 
     @Test
     void testMarcaRevUpdate() {
-        MarcaRevDoc marcaRev = new MarcaRevDoc();
+        MarcaRevDocElement marcaRev = new MarcaRevDocElement();
         marcaRev.setMarca(marca);
         marcaRev.setRevisaoId(1L);
         marcaRev.setApproved(false);
         marcaRev.setComment("Revisão do marca");
         marcaRevDocRepository.save(marcaRev);
 
-        MarcaRevDoc found = marcaRevDocRepository.findByMarcaAndRevisaoId(marca, 1L);
+        MarcaRevDocElement found = marcaRevDocRepository.findByMarcaAndRevisaoId(marca, 1L);
         found.setApproved(true);
         found.setComment("Revisão Aprovada");
         marcaRevDocRepository.save(found);
 
-        MarcaRevDoc updated = marcaRevDocRepository.findByMarcaAndRevisaoId(marca, 1L);
+        MarcaRevDocElement updated = marcaRevDocRepository.findByMarcaAndRevisaoId(marca, 1L);
         assertThat(updated.isApproved()).isTrue();
         assertThat(updated.getComment()).isEqualTo("Revisão Aprovada");
     }
 
     @Test
     void testMarcaRevDelete() {
-        MarcaRevDoc marcaRev = new MarcaRevDoc();
+        MarcaRevDocElement marcaRev = new MarcaRevDocElement();
         marcaRev.setMarca(marca);
         marcaRev.setRevisaoId(1L);
         marcaRev.setApproved(false);
@@ -86,20 +85,20 @@ class MarcaRevDocTest {
         marcaRevDocRepository.save(marcaRev);
 
         marcaRevDocRepository.delete(marcaRev);
-        MarcaRevDoc found = marcaRevDocRepository.findByMarcaAndRevisaoId(marca, 1L);
+        MarcaRevDocElement found = marcaRevDocRepository.findByMarcaAndRevisaoId(marca, 1L);
         assertThat(found).isNull();
     }
 
     @Test
     void testDuplicateMarcaRevThrows() {
-        MarcaRevDoc rev1 = new MarcaRevDoc();
+        MarcaRevDocElement rev1 = new MarcaRevDocElement();
         rev1.setMarca(marca);
         rev1.setRevisaoId(1L);
         rev1.setApproved(true);
         rev1.setComment("First revision");
         marcaRevDocRepository.save(rev1);
 
-        MarcaRevDoc rev2 = new MarcaRevDoc();
+        MarcaRevDocElement rev2 = new MarcaRevDocElement();
         rev2.setMarca(marca);
         rev2.setRevisaoId(1L);
         rev2.setApproved(false);

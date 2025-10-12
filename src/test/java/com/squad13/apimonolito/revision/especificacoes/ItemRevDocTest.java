@@ -1,10 +1,9 @@
 package com.squad13.apimonolito.revision.especificacoes;
 
-import com.mongodb.DuplicateKeyException;
-import com.squad13.apimonolito.models.editor.mongo.ItemDoc;
-import com.squad13.apimonolito.models.revision.mongo.ItemRevDoc;
-import com.squad13.apimonolito.mongo.editor.ItemDocRepository;
-import com.squad13.apimonolito.mongo.revision.ItemRevDocRepository;
+import com.squad13.apimonolito.models.editor.mongo.ItemDocElement;
+import com.squad13.apimonolito.models.revision.mongo.ItemRevDocElement;
+import com.squad13.apimonolito.mongo.editor.ItemDocElementRepository;
+import com.squad13.apimonolito.mongo.revision.ItemRevDocElementRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,19 +17,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ItemRevDocTest {
 
     @Autowired
-    private ItemDocRepository itemDocRepository;
+    private ItemDocElementRepository itemDocRepository;
 
     @Autowired
-    private ItemRevDocRepository itemRevDocRepository;
+    private ItemRevDocElementRepository itemRevDocRepository;
 
-    private ItemDoc item;
+    private ItemDocElement item;
 
     @BeforeEach
     void setup() {
         itemRevDocRepository.deleteAll();
         itemDocRepository.deleteAll();
 
-        item = new ItemDoc();
+        item = new ItemDocElement();
         item.setName("Item");
         item.setCatalogId(1L);
         item.setInSync(true);
@@ -42,7 +41,7 @@ class ItemRevDocTest {
 
     @Test
     void testItemRevPersistence() {
-        ItemRevDoc itemRev = new ItemRevDoc();
+        ItemRevDocElement itemRev = new ItemRevDocElement();
         itemRev.setItem(item);
         itemRev.setRevisaoId(1L);
         itemRev.setApproved(true);
@@ -50,7 +49,7 @@ class ItemRevDocTest {
 
         itemRevDocRepository.save(itemRev);
 
-        ItemRevDoc foundItemRev = itemRevDocRepository.findByItemAndRevisaoId(item, 1L);
+        ItemRevDocElement foundItemRev = itemRevDocRepository.findByItemAndRevisaoId(item, 1L);
         assertThat(foundItemRev).isNotNull();
         assertThat(foundItemRev.getId()).isEqualTo(itemRev.getId());
         assertThat(foundItemRev.getComment()).isEqualTo(itemRev.getComment());
@@ -60,26 +59,26 @@ class ItemRevDocTest {
 
     @Test
     void testItemRevUpdate() {
-        ItemRevDoc itemRev = new ItemRevDoc();
+        ItemRevDocElement itemRev = new ItemRevDocElement();
         itemRev.setItem(item);
         itemRev.setRevisaoId(1L);
         itemRev.setApproved(false);
         itemRev.setComment("Revisão do item");
         itemRevDocRepository.save(itemRev);
 
-        ItemRevDoc found = itemRevDocRepository.findByItemAndRevisaoId(item, 1L);
+        ItemRevDocElement found = itemRevDocRepository.findByItemAndRevisaoId(item, 1L);
         found.setApproved(true);
         found.setComment("Revisão Aprovada");
         itemRevDocRepository.save(found);
 
-        ItemRevDoc updated = itemRevDocRepository.findByItemAndRevisaoId(item, 1L);
+        ItemRevDocElement updated = itemRevDocRepository.findByItemAndRevisaoId(item, 1L);
         assertThat(updated.isApproved()).isTrue();
         assertThat(updated.getComment()).isEqualTo("Revisão Aprovada");
     }
 
     @Test
     void testItemRevDelete() {
-        ItemRevDoc itemRev = new ItemRevDoc();
+        ItemRevDocElement itemRev = new ItemRevDocElement();
         itemRev.setItem(item);
         itemRev.setRevisaoId(1L);
         itemRev.setApproved(false);
@@ -87,20 +86,20 @@ class ItemRevDocTest {
         itemRevDocRepository.save(itemRev);
 
         itemRevDocRepository.delete(itemRev);
-        ItemRevDoc found = itemRevDocRepository.findByItemAndRevisaoId(item, 1L);
+        ItemRevDocElement found = itemRevDocRepository.findByItemAndRevisaoId(item, 1L);
         assertThat(found).isNull();
     }
 
     @Test
     void testDuplicateItemRevThrows() {
-        ItemRevDoc rev1 = new ItemRevDoc();
+        ItemRevDocElement rev1 = new ItemRevDocElement();
         rev1.setItem(item);
         rev1.setRevisaoId(1L);
         rev1.setApproved(true);
         rev1.setComment("First revision");
         itemRevDocRepository.save(rev1);
 
-        ItemRevDoc rev2 = new ItemRevDoc();
+        ItemRevDocElement rev2 = new ItemRevDocElement();
         rev2.setItem(item);
         rev2.setRevisaoId(1L);
         rev2.setApproved(false);

@@ -1,7 +1,7 @@
 package com.squad13.apimonolito.models.revision.mongo;
 
-import com.squad13.apimonolito.models.editor.mongo.MaterialDoc;
-import com.squad13.apimonolito.models.revision.structures.ElementRevDoc;
+import com.squad13.apimonolito.models.editor.mongo.MaterialDocElement;
+import com.squad13.apimonolito.models.revision.structures.RevDocElement;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,12 +15,12 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 @Document(collection = "material_rev")
 @CompoundIndex(name = "catalog_name_unique", def = "{'revisaoId' : 1, 'material': 1}", unique = true)
-public class MaterialRevDoc extends ElementRevDoc {
+public class MaterialRevDocElement extends RevDocElement {
 
     @DBRef
     @NotNull
-    private MaterialDoc material;
+    private MaterialDocElement material;
 
     @DBRef
-    private List<MarcaRevDoc> marcaRevList;
+    private List<MarcaRevDocElement> marcaRevList;
 }

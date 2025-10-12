@@ -1,13 +1,13 @@
 package com.squad13.apimonolito.editor.especificacoes;
 
-import com.squad13.apimonolito.models.editor.mongo.AmbienteDoc;
+import com.squad13.apimonolito.models.editor.mongo.AmbienteDocElement;
 import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
-import com.squad13.apimonolito.models.editor.mongo.ItemDoc;
-import com.squad13.apimonolito.models.editor.mongo.LocalDoc;
-import com.squad13.apimonolito.mongo.editor.AmbienteDocRepository;
+import com.squad13.apimonolito.models.editor.mongo.ItemDocElement;
+import com.squad13.apimonolito.models.editor.mongo.LocalDocElement;
+import com.squad13.apimonolito.mongo.editor.AmbienteDocElementRepository;
 import com.squad13.apimonolito.mongo.editor.EspecificacaoDocRepository;
-import com.squad13.apimonolito.mongo.editor.ItemDocRepository;
-import com.squad13.apimonolito.mongo.editor.LocalDocRepository;
+import com.squad13.apimonolito.mongo.editor.ItemDocElementRepository;
+import com.squad13.apimonolito.mongo.editor.LocalDocElementRepository;
 import com.squad13.apimonolito.util.enums.LocalEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,13 +22,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 class LocalDocTest {
 
     @Autowired
-    private ItemDocRepository itemDocRepository;
+    private ItemDocElementRepository itemDocRepository;
 
     @Autowired
-    private AmbienteDocRepository ambienteDocRepository;
+    private AmbienteDocElementRepository ambienteDocRepository;
 
     @Autowired
-    private LocalDocRepository localDocRepository;
+    private LocalDocElementRepository localDocRepository;
 
     @Autowired
     private EspecificacaoDocRepository empDocRepository;
@@ -52,7 +52,7 @@ class LocalDocTest {
 
     @Test
     void testLocalPersistence() {
-        ItemDoc item = new ItemDoc();
+        ItemDocElement item = new ItemDocElement();
         item.setName("Item");
         item.setCatalogId(1L);
         item.setEspecificacaoDoc(empDoc);
@@ -60,7 +60,7 @@ class LocalDocTest {
         item.setDesc("Desc");
         itemDocRepository.save(item);
 
-        AmbienteDoc ambiente = new AmbienteDoc();
+        AmbienteDocElement ambiente = new AmbienteDocElement();
         ambiente.setName("Ambiente");
         ambiente.setCatalogId(1L);
         ambiente.setEspecificacaoDoc(empDoc);
@@ -68,7 +68,7 @@ class LocalDocTest {
         ambiente.setItemDocList(List.of(item));
         ambienteDocRepository.save(ambiente);
 
-        LocalDoc local = new LocalDoc();
+        LocalDocElement local = new LocalDocElement();
         local.setName("Local");
         local.setCatalogId(1L);
         local.setEspecificacaoDoc(empDoc);
@@ -77,8 +77,8 @@ class LocalDocTest {
         local.setAmbienteDocList(List.of(ambiente));
         localDocRepository.save(local);
 
-        List<LocalDoc> foundLocals = localDocRepository.findByLocal(LocalEnum.UNIDADES_PRIVATIVAS);
-        LocalDoc foundLocal = localDocRepository.findById(local.getId())
+        List<LocalDocElement> foundLocals = localDocRepository.findByLocal(LocalEnum.UNIDADES_PRIVATIVAS);
+        LocalDocElement foundLocal = localDocRepository.findById(local.getId())
                 .orElseThrow(() -> new RuntimeException("Local não encontrado"));
 
         assertThat(foundLocals).isNotEmpty();
@@ -92,7 +92,7 @@ class LocalDocTest {
 
     @Test
     void testLocalUpdate() {
-        LocalDoc local = new LocalDoc();
+        LocalDocElement local = new LocalDocElement();
         local.setName("Local");
         local.setCatalogId(1L);
         local.setEspecificacaoDoc(empDoc);
@@ -100,12 +100,12 @@ class LocalDocTest {
         local.setInSync(true);
         localDocRepository.save(local);
 
-        LocalDoc foundLocal = localDocRepository.findById(local.getId())
+        LocalDocElement foundLocal = localDocRepository.findById(local.getId())
                 .orElseThrow(() -> new RuntimeException("Local não encontrado"));
         foundLocal.setLocal(LocalEnum.AREA_COMUM);
         localDocRepository.save(foundLocal);
 
-        LocalDoc updated = localDocRepository.findById(local.getId())
+        LocalDocElement updated = localDocRepository.findById(local.getId())
                 .orElseThrow(() -> new RuntimeException("Local não encontrado após update"));
 
         assertThat(updated).isNotNull();
@@ -115,7 +115,7 @@ class LocalDocTest {
 
     @Test
     void testLocalDelete() {
-        LocalDoc local = new LocalDoc();
+        LocalDocElement local = new LocalDocElement();
         local.setName("Local");
         local.setCatalogId(1L);
         local.setEspecificacaoDoc(empDoc);

@@ -28,6 +28,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.*;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -141,7 +142,7 @@ public class EmpreendimentoService {
                 .toList();
     }
 
-    public ResEmpDTO create(EmpDTO dto) {
+    public ResEmpDTO create(EmpDTO dto, LoadDocumentParamsDTO loadDTO) {
         empRepository.findByName(dto.name())
                 .ifPresent(emp -> {
                     throw new ResourceAlreadyExistsException(
@@ -173,7 +174,7 @@ public class EmpreendimentoService {
         emp.getUsuarioList().add(userEmp);
 
         Empreendimento saved = empRepository.save(emp);
-        return mappingHelper(saved, LoadDocumentParamsDTO.allTrue());
+        return mappingHelper(saved, loadDTO);
     }
 
     private void ensureUniqueName(Empreendimento emp, EditEmpDTO dto) {
@@ -186,7 +187,7 @@ public class EmpreendimentoService {
                 });
     }
 
-    public ResEmpDTO update(Long id, EditEmpDTO dto) {
+    public ResEmpDTO update(Long id, EditEmpDTO dto, LoadDocumentParamsDTO loadDTO) {
         Empreendimento emp = findByIdOrThrow(id);
 
         if (dto.name() != null && !dto.name().isBlank()) {
@@ -212,7 +213,7 @@ public class EmpreendimentoService {
         }
 
         Empreendimento updated = empRepository.save(emp);
-        return mappingHelper(updated, LoadDocumentParamsDTO.allTrue());
+        return mappingHelper(updated, loadDTO);
     }
 
     public void delete(Long id) {
@@ -220,7 +221,7 @@ public class EmpreendimentoService {
         empRepository.delete(emp);
     }
 
-    public ResEmpDTO deactivate(Long id) {
+    public ResEmpDTO deactivate(Long id, LoadDocumentParamsDTO loadDTO) {
         Empreendimento existing = findByIdOrThrow(id);
         existing.setStatus(EmpStatusEnum.CANCELADO);
         return mappingHelper(existing, LoadDocumentParamsDTO.allTrue());

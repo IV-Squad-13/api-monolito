@@ -43,13 +43,17 @@ public class EmpreendimentoController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<ResEmpDTO> create(@RequestBody @Valid EmpDTO dto) {
-        return ResponseEntity.ok(empService.create(dto));
+    public ResponseEntity<ResEmpDTO> create(@RequestBody @Valid EmpDTO dto, @ModelAttribute LoadDocumentParamsDTO loadDTO) {
+        return ResponseEntity.ok(empService.create(dto, loadDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResEmpDTO> edit(@PathVariable Long id, @RequestBody @Valid EditEmpDTO dto) {
-        return ResponseEntity.ok(empService.update(id, dto));
+    public ResponseEntity<ResEmpDTO> edit(
+            @PathVariable Long id,
+            @RequestBody @Valid EditEmpDTO dto,
+            @ModelAttribute LoadDocumentParamsDTO loadDTO
+    ) {
+        return ResponseEntity.ok(empService.update(id, dto, loadDTO));
     }
 
     @DeleteMapping("/{id}")
@@ -59,7 +63,7 @@ public class EmpreendimentoController {
     }
 
     @DeleteMapping("/{id}/deactivate")
-    public ResponseEntity<ResEmpDTO> deactivate(@PathVariable Long id) {
-        return ResponseEntity.ok(empService.deactivate(id));
+    public ResponseEntity<ResEmpDTO> deactivate(@PathVariable Long id, @ModelAttribute LoadDocumentParamsDTO loadDTO) {
+        return ResponseEntity.ok(empService.deactivate(id, loadDTO));
     }
 }

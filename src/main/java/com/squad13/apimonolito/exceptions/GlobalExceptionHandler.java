@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidAttributeException.class)
     public ResponseEntity<ErrorResponse> handleInvalidAttribute(InvalidAttributeException ex, WebRequest request) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorResponse(ex.getMessage(), request.getDescription(false), HttpStatus.NOT_FOUND.value()));
     }
 
@@ -48,7 +48,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidTokenException.class)
     public ResponseEntity<ErrorResponse> handleInvalidToken(InvalidCompositorException ex, WebRequest request) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(new ErrorResponse(ex.getMessage(), request.getDescription(false), HttpStatus.NOT_FOUND.value()));
     }
 

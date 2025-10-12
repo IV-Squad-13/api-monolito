@@ -1,11 +1,11 @@
 package com.squad13.apimonolito.editor.especificacoes;
 
-import com.squad13.apimonolito.models.editor.mongo.AmbienteDoc;
+import com.squad13.apimonolito.models.editor.mongo.AmbienteDocElement;
 import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
-import com.squad13.apimonolito.models.editor.mongo.ItemDoc;
-import com.squad13.apimonolito.mongo.editor.AmbienteDocRepository;
+import com.squad13.apimonolito.models.editor.mongo.ItemDocElement;
+import com.squad13.apimonolito.mongo.editor.AmbienteDocElementRepository;
 import com.squad13.apimonolito.mongo.editor.EspecificacaoDocRepository;
-import com.squad13.apimonolito.mongo.editor.ItemDocRepository;
+import com.squad13.apimonolito.mongo.editor.ItemDocElementRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +19,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class AmbienteDocTest {
 
     @Autowired
-    private ItemDocRepository itemDocRepository;
+    private ItemDocElementRepository itemDocRepository;
 
     @Autowired
-    private AmbienteDocRepository ambienteDocRepository;
+    private AmbienteDocElementRepository ambienteDocRepository;
 
     @Autowired
     private EspecificacaoDocRepository empDocRepository;
@@ -45,7 +45,7 @@ class AmbienteDocTest {
 
     @Test
     void testAmbientePersistence() {
-        ItemDoc item = new ItemDoc();
+        ItemDocElement item = new ItemDocElement();
         item.setName("Item");
         item.setCatalogId(1L);
         item.setEspecificacaoDoc(empDoc);
@@ -53,7 +53,7 @@ class AmbienteDocTest {
         item.setDesc("Desc");
         itemDocRepository.save(item);
 
-        AmbienteDoc ambiente = new AmbienteDoc();
+        AmbienteDocElement ambiente = new AmbienteDocElement();
         ambiente.setName("Ambiente");
         ambiente.setCatalogId(1L);
         ambiente.setEspecificacaoDoc(empDoc);
@@ -66,7 +66,7 @@ class AmbienteDocTest {
         assertThat(ambiente.getName()).isEqualTo("Ambiente");
         assertThat(ambiente.getEspecificacaoDoc()).isEqualTo(empDoc);
 
-        AmbienteDoc foundAmbiente = ambienteDocRepository.findByName("Ambiente");
+        AmbienteDocElement foundAmbiente = ambienteDocRepository.findByName("Ambiente");
         assertThat(foundAmbiente).isNotNull();
         assertThat(foundAmbiente.getId()).isEqualTo(ambiente.getId());
         assertThat(foundAmbiente.getItemDocList().getFirst().getName()).isEqualTo("Item");
@@ -75,7 +75,7 @@ class AmbienteDocTest {
 
     @Test
     void testAmbienteUpdate() {
-        ItemDoc item = new ItemDoc();
+        ItemDocElement item = new ItemDocElement();
         item.setName("Item");
         item.setCatalogId(1L);
         item.setEspecificacaoDoc(empDoc);
@@ -83,7 +83,7 @@ class AmbienteDocTest {
         item.setDesc("Desc");
         itemDocRepository.save(item);
 
-        AmbienteDoc ambiente = new AmbienteDoc();
+        AmbienteDocElement ambiente = new AmbienteDocElement();
         ambiente.setName("Ambiente");
         ambiente.setCatalogId(1L);
         ambiente.setEspecificacaoDoc(empDoc);
@@ -91,11 +91,11 @@ class AmbienteDocTest {
         ambiente.setItemDocList(List.of(item));
         ambienteDocRepository.save(ambiente);
 
-        AmbienteDoc foundAmbiente = ambienteDocRepository.findByName("Ambiente");
+        AmbienteDocElement foundAmbiente = ambienteDocRepository.findByName("Ambiente");
         foundAmbiente.setName("Ambiente2");
         ambienteDocRepository.save(foundAmbiente);
 
-        AmbienteDoc updated = ambienteDocRepository.findByName("Ambiente2");
+        AmbienteDocElement updated = ambienteDocRepository.findByName("Ambiente2");
         assertThat(updated).isNotNull();
         assertThat(updated.getName()).isEqualTo("Ambiente2");
     }
@@ -103,7 +103,7 @@ class AmbienteDocTest {
     @Test
     void testAmbienteDelete() {
         ambienteDocRepository.deleteAllByName("Ambiente");
-        AmbienteDoc foundAmbiente = ambienteDocRepository.findByName("Ambiente");
+        AmbienteDocElement foundAmbiente = ambienteDocRepository.findByName("Ambiente");
 
         assertThat(foundAmbiente).isNull();
     }

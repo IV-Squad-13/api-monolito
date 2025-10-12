@@ -1,9 +1,9 @@
 package com.squad13.apimonolito.editor.especificacoes;
 
 import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
-import com.squad13.apimonolito.models.editor.mongo.ItemDoc;
+import com.squad13.apimonolito.models.editor.mongo.ItemDocElement;
 import com.squad13.apimonolito.mongo.editor.EspecificacaoDocRepository;
-import com.squad13.apimonolito.mongo.editor.ItemDocRepository;
+import com.squad13.apimonolito.mongo.editor.ItemDocElementRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ItemDocTest {
 
     @Autowired
-    private ItemDocRepository itemDocRepository;
+    private ItemDocElementRepository itemDocRepository;
 
     @Autowired
     private EspecificacaoDocRepository empDocRepository;
@@ -37,7 +37,7 @@ class ItemDocTest {
 
     @Test
     void testItemPersistence() {
-        ItemDoc item = new ItemDoc();
+        ItemDocElement item = new ItemDocElement();
         item.setName("Item");
         item.setCatalogId(1L);
         item.setEspecificacaoDoc(empDoc);
@@ -50,14 +50,14 @@ class ItemDocTest {
         assertThat(item.getId()).isNotNull();
         assertThat(item.getName()).isEqualTo("Item");
 
-        ItemDoc foundItem = itemDocRepository.findByName("Item");
+        ItemDocElement foundItem = itemDocRepository.findByName("Item");
         assertThat(foundItem).isNotNull();
         assertThat(foundItem.getId()).isEqualTo(item.getId());
     }
 
     @Test
     void testItemUpdate() {
-        ItemDoc item = new ItemDoc();
+        ItemDocElement item = new ItemDocElement();
         item.setName("Item");
         item.setCatalogId(1L);
         item.setEspecificacaoDoc(empDoc);
@@ -68,7 +68,7 @@ class ItemDocTest {
         item.setName("Item1");
         itemDocRepository.save(item);
 
-        ItemDoc foundItem = itemDocRepository.findByName("Item1");
+        ItemDocElement foundItem = itemDocRepository.findByName("Item1");
 
         assertThat(foundItem).isNotNull();
         assertThat(foundItem.getUpdated()).isNotNull();
@@ -78,7 +78,7 @@ class ItemDocTest {
     @Test
     void testItemDelete() {
         itemDocRepository.deleteAllByName("Item");
-        ItemDoc foundItem = itemDocRepository.findByName("Item");
+        ItemDocElement foundItem = itemDocRepository.findByName("Item");
 
         assertThat(foundItem).isNull();
     }

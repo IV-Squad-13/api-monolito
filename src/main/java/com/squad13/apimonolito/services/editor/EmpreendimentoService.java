@@ -10,12 +10,12 @@ import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.catalog.Padrao;
 import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
 import com.squad13.apimonolito.models.editor.relational.Empreendimento;
-import com.squad13.apimonolito.models.revision.mongo.EspecificacaoRevDoc;
+import com.squad13.apimonolito.models.revision.mongo.EspecificacaoRevDocElement;
 import com.squad13.apimonolito.models.revision.relational.Revisao;
 import com.squad13.apimonolito.models.user.Usuario;
 import com.squad13.apimonolito.models.user.associative.UsuarioEmpreendimento;
 import com.squad13.apimonolito.mongo.editor.EspecificacaoDocRepository;
-import com.squad13.apimonolito.mongo.revision.EspecificacaoRevDocRepository;
+import com.squad13.apimonolito.mongo.revision.EspecificacaoRevDocElementRepository;
 import com.squad13.apimonolito.repository.catalog.PadraoRepository;
 import com.squad13.apimonolito.repository.editor.EmpreendimentoRepository;
 import com.squad13.apimonolito.repository.revision.RevisaoRepository;
@@ -28,7 +28,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.*;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +48,7 @@ public class EmpreendimentoService {
     private final EmpreendimentoRepository empRepository;
 
     private final EspecificacaoDocRepository specDocRepository;
-    private final EspecificacaoRevDocRepository specRevDocRepository;
+    private final EspecificacaoRevDocElementRepository specRevDocRepository;
 
     private final UsuarioRepository userRepository;
     private final UsuarioEmpreendimentoRepository userEmpRepository;
@@ -61,7 +60,7 @@ public class EmpreendimentoService {
                 ? specDocRepository.findByEmpreendimentoId(emp.getId())
                 : null;
 
-        List<EspecificacaoRevDoc> revDocs = List.of();
+        List<EspecificacaoRevDocElement> revDocs = List.of();
 
         if (loadDTO.isLoadRevision()) {
             List<Revisao> revs = revisaoRepository.findByEmpreendimento(emp);

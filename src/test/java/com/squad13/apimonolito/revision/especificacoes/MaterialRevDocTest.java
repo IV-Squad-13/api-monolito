@@ -1,14 +1,13 @@
 package com.squad13.apimonolito.revision.especificacoes;
 
-import com.mongodb.DuplicateKeyException;
-import com.squad13.apimonolito.models.editor.mongo.MaterialDoc;
-import com.squad13.apimonolito.models.editor.mongo.MarcaDoc;
-import com.squad13.apimonolito.models.revision.mongo.MaterialRevDoc;
-import com.squad13.apimonolito.models.revision.mongo.MarcaRevDoc;
-import com.squad13.apimonolito.mongo.editor.MaterialDocRepository;
-import com.squad13.apimonolito.mongo.editor.MarcaDocRepository;
-import com.squad13.apimonolito.mongo.revision.MaterialRevDocRepository;
-import com.squad13.apimonolito.mongo.revision.MarcaRevDocRepository;
+import com.squad13.apimonolito.models.editor.mongo.MaterialDocElement;
+import com.squad13.apimonolito.models.editor.mongo.MarcaDocElement;
+import com.squad13.apimonolito.models.revision.mongo.MaterialRevDocElement;
+import com.squad13.apimonolito.models.revision.mongo.MarcaRevDocElement;
+import com.squad13.apimonolito.mongo.editor.MaterialDocElementRepository;
+import com.squad13.apimonolito.mongo.editor.MarcaDocElementRepository;
+import com.squad13.apimonolito.mongo.revision.MaterialRevDocElementRepository;
+import com.squad13.apimonolito.mongo.revision.MarcaRevDocElementRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,19 +23,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class MaterialRevDocTest {
 
     @Autowired
-    private MarcaDocRepository marcaDocRepository;
+    private MarcaDocElementRepository marcaDocRepository;
 
     @Autowired
-    private MarcaRevDocRepository marcaRevDocRepository;
+    private MarcaRevDocElementRepository marcaRevDocRepository;
 
     @Autowired
-    private MaterialDocRepository materialDocRepository;
+    private MaterialDocElementRepository materialDocRepository;
 
     @Autowired
-    private MaterialRevDocRepository materialRevDocRepository;
+    private MaterialRevDocElementRepository materialRevDocRepository;
 
-    private MarcaDoc marca;
-    private MaterialDoc material;
+    private MarcaDocElement marca;
+    private MaterialDocElement material;
 
     @BeforeEach
     void cleanDatabase() {
@@ -45,13 +44,13 @@ class MaterialRevDocTest {
         materialDocRepository.deleteAll();
         marcaDocRepository.deleteAll();
 
-        marca = new MarcaDoc();
+        marca = new MarcaDocElement();
         marca.setName("Marca");
         marca.setCatalogId(1L);
         marca.setInSync(true);
         marcaDocRepository.save(marca);
 
-        material = new MaterialDoc();
+        material = new MaterialDocElement();
         material.setName("Material");
         material.setCatalogId(1L);
         material.setInSync(true);
@@ -61,20 +60,20 @@ class MaterialRevDocTest {
 
     @Test
     void testMaterialRevPersistence() {
-        MarcaRevDoc marcaRev = new MarcaRevDoc();
+        MarcaRevDocElement marcaRev = new MarcaRevDocElement();
         marcaRev.setMarca(marca);
         marcaRev.setRevisaoId(1L);
         marcaRev.setApproved(true);
         marcaRev.setComment("First revision");
         marcaRevDocRepository.save(marcaRev);
 
-        MaterialRevDoc materialRev = new MaterialRevDoc();
+        MaterialRevDocElement materialRev = new MaterialRevDocElement();
         materialRev.setMaterial(material);
         materialRev.setRevisaoId(1L);
         materialRev.setMarcaRevList(List.of(marcaRev));
         materialRevDocRepository.save(materialRev);
 
-        MaterialRevDoc foundRev = materialRevDocRepository.findByMaterialAndRevisaoId(material, 1L);
+        MaterialRevDocElement foundRev = materialRevDocRepository.findByMaterialAndRevisaoId(material, 1L);
         assertThat(foundRev).isNotNull();
         assertThat(foundRev.getId()).isNotNull();
         assertThat(foundRev.getMarcaRevList()).hasSize(1);
@@ -83,42 +82,42 @@ class MaterialRevDocTest {
 
     @Test
     void testMaterialRevUpdate() {
-        MaterialRevDoc materialRev = new MaterialRevDoc();
+        MaterialRevDocElement materialRev = new MaterialRevDocElement();
         materialRev.setMaterial(material);
         materialRev.setRevisaoId(1L);
         materialRev.setMarcaRevList(List.of());
         materialRevDocRepository.save(materialRev);
 
-        MaterialRevDoc found = materialRevDocRepository.findByMaterialAndRevisaoId(material, 1L);
+        MaterialRevDocElement found = materialRevDocRepository.findByMaterialAndRevisaoId(material, 1L);
         found.setMarcaRevList(List.of());
         materialRevDocRepository.save(found);
 
-        MaterialRevDoc updated = materialRevDocRepository.findByMaterialAndRevisaoId(material, 1L);
+        MaterialRevDocElement updated = materialRevDocRepository.findByMaterialAndRevisaoId(material, 1L);
         assertThat(updated).isNotNull();
         assertThat(updated.getRevisaoId()).isEqualTo(1L);
     }
 
     @Test
     void testMaterialRevDelete() {
-        MaterialRevDoc materialRev = new MaterialRevDoc();
+        MaterialRevDocElement materialRev = new MaterialRevDocElement();
         materialRev.setMaterial(material);
         materialRev.setRevisaoId(1L);
         materialRevDocRepository.save(materialRev);
 
         materialRevDocRepository.deleteByMaterialAndRevisaoId(material, 1L);
-        MaterialRevDoc found = materialRevDocRepository.findByMaterialAndRevisaoId(material, 1L);
+        MaterialRevDocElement found = materialRevDocRepository.findByMaterialAndRevisaoId(material, 1L);
         assertThat(found).isNull();
     }
 
     @Test
     void testMaterialRevDuplicateThrows() {
-        MaterialRevDoc rev1 = new MaterialRevDoc();
+        MaterialRevDocElement rev1 = new MaterialRevDocElement();
         rev1.setMaterial(material);
         rev1.setRevisaoId(1L);
         rev1.setMarcaRevList(List.of());
         materialRevDocRepository.save(rev1);
 
-        MaterialRevDoc rev2 = new MaterialRevDoc();
+        MaterialRevDocElement rev2 = new MaterialRevDocElement();
         rev2.setMaterial(material);
         rev2.setRevisaoId(1L);
         rev2.setMarcaRevList(List.of());

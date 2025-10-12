@@ -1,5 +1,11 @@
 package com.squad13.apimonolito.models.editor.mongo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,14 +18,18 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Document(collection = "empreendimentos")
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@Document(collection = "especificacoes")
 @CompoundIndex(name = "catalog_name_unique", def = "{'empreendimentoId' : 1, 'name': 1}", unique = true)
 public class EspecificacaoDoc {
 
     @Id
+    @JsonProperty("id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private String id;
 
     @NotNull
@@ -35,15 +45,18 @@ public class EspecificacaoDoc {
     @Size(max = 160)
     private String obs;
 
-    @DBRef
-    private List<LocalDoc> locais;
+    @DBRef(lazy = true)
+    @JsonManagedReference
+    private List<LocalDocElement> locais = new ArrayList<>();
 
-    @DBRef
-    private List<MaterialDoc> materiais;
+    @DBRef(lazy = true)
+    private List<MaterialDocElement> materiais = new ArrayList<>();
 
     @CreatedDate
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "America/Aracaju")
     private Instant created;
 
     @LastModifiedDate
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "America/Aracaju")
     private Instant updated;
 }

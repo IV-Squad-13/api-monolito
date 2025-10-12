@@ -1,11 +1,11 @@
 package com.squad13.apimonolito.editor.especificacoes;
 
 import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
-import com.squad13.apimonolito.models.editor.mongo.MaterialDoc;
-import com.squad13.apimonolito.models.editor.mongo.MarcaDoc;
+import com.squad13.apimonolito.models.editor.mongo.MaterialDocElement;
+import com.squad13.apimonolito.models.editor.mongo.MarcaDocElement;
 import com.squad13.apimonolito.mongo.editor.EspecificacaoDocRepository;
-import com.squad13.apimonolito.mongo.editor.MaterialDocRepository;
-import com.squad13.apimonolito.mongo.editor.MarcaDocRepository;
+import com.squad13.apimonolito.mongo.editor.MaterialDocElementRepository;
+import com.squad13.apimonolito.mongo.editor.MarcaDocElementRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +19,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MaterialDocTest {
 
     @Autowired
-    private MarcaDocRepository marcaDocRepository;
+    private MarcaDocElementRepository marcaDocRepository;
 
     @Autowired
-    private MaterialDocRepository materialDocRepository;
+    private MaterialDocElementRepository materialDocRepository;
 
     @Autowired
     private EspecificacaoDocRepository empDocRepository;
@@ -46,14 +46,14 @@ class MaterialDocTest {
 
     @Test
     void testMaterialPersistence() {
-        MarcaDoc marca = new MarcaDoc();
+        MarcaDocElement marca = new MarcaDocElement();
         marca.setName("Marca");
         marca.setCatalogId(1L);
         marca.setEspecificacaoDoc(empDoc);
         marca.setInSync(true);
         marcaDocRepository.save(marca);
 
-        MaterialDoc material = new MaterialDoc();
+        MaterialDocElement material = new MaterialDocElement();
         material.setName("Material");
         material.setCatalogId(1L);
         material.setEspecificacaoDoc(empDoc);
@@ -65,7 +65,7 @@ class MaterialDocTest {
         assertThat(material.getId()).isNotNull();
         assertThat(material.getName()).isEqualTo("Material");
 
-        MaterialDoc foundMaterial = materialDocRepository.findByName("Material");
+        MaterialDocElement foundMaterial = materialDocRepository.findByName("Material");
         assertThat(foundMaterial).isNotNull();
         assertThat(foundMaterial.getId()).isEqualTo(material.getId());
         assertThat(foundMaterial.getMarcaDocList().getFirst().getName()).isEqualTo("Marca");
@@ -73,14 +73,14 @@ class MaterialDocTest {
 
     @Test
     void testMaterialUpdate() {
-        MarcaDoc marca = new MarcaDoc();
+        MarcaDocElement marca = new MarcaDocElement();
         marca.setName("Marca");
         marca.setCatalogId(1L);
         marca.setEspecificacaoDoc(empDoc);
         marca.setInSync(true);
         marcaDocRepository.save(marca);
 
-        MaterialDoc material = new MaterialDoc();
+        MaterialDocElement material = new MaterialDocElement();
         material.setName("Material");
         material.setCatalogId(1L);
         material.setEspecificacaoDoc(empDoc);
@@ -88,11 +88,11 @@ class MaterialDocTest {
         material.setMarcaDocList(List.of(marca));
         materialDocRepository.save(material);
 
-        MaterialDoc foundMaterial = materialDocRepository.findByName("Material");
+        MaterialDocElement foundMaterial = materialDocRepository.findByName("Material");
         foundMaterial.setName("Material2");
         materialDocRepository.save(foundMaterial);
 
-        MaterialDoc updated = materialDocRepository.findByName("Material2");
+        MaterialDocElement updated = materialDocRepository.findByName("Material2");
         assertThat(updated).isNotNull();
         assertThat(updated.getName()).isEqualTo("Material2");
     }
@@ -100,7 +100,7 @@ class MaterialDocTest {
     @Test
     void testMaterialDelete() {
         materialDocRepository.deleteAllByName("Material");
-        MaterialDoc foundMaterial = materialDocRepository.findByName("Material");
+        MaterialDocElement foundMaterial = materialDocRepository.findByName("Material");
 
         assertThat(foundMaterial).isNull();
     }

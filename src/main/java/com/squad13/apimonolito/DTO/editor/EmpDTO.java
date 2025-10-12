@@ -1,5 +1,6 @@
 package com.squad13.apimonolito.DTO.editor;
 
+import com.squad13.apimonolito.util.enums.DocInitializationEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -13,5 +14,7 @@ public record EmpDTO(
         Long padraoId,
 
         @NotNull(message = "É necessário informar o criador")
-        Long creatorId
+        Long creatorId,
+
+        DocInitializationEnum init
 ) { }

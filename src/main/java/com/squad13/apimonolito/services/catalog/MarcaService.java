@@ -1,6 +1,6 @@
 package com.squad13.apimonolito.services.catalog;
 
-import com.squad13.apimonolito.DTO.catalog.LoadParametersDTO;
+import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
 import com.squad13.apimonolito.DTO.catalog.edit.EditMarcaDTO;
 import com.squad13.apimonolito.DTO.catalog.MarcaDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResMarcaDTO;
@@ -9,7 +9,7 @@ import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.catalog.Marca;
 import com.squad13.apimonolito.repository.catalog.MarcaRepository;
-import com.squad13.apimonolito.util.Mapper;
+import com.squad13.apimonolito.util.mappers.CatalogMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -30,15 +30,15 @@ public class MarcaService {
 
     private final MarcaRepository marcaRepository;
 
-    private final Mapper mapper;
+    private final CatalogMapper catalogMapper;
 
     @PersistenceContext
     private EntityManager em;
 
-    public List<ResMarcaDTO> findAll(LoadParametersDTO loadDTO) {
+    public List<ResMarcaDTO> findAll(LoadCatalogParamsDTO loadDTO) {
         return marcaRepository.findAll()
                 .stream()
-                .map(marca -> mapper.toResponse(marca, loadDTO))
+                .map(marca -> catalogMapper.toResponse(marca, loadDTO))
                 .toList();
     }
 
@@ -47,13 +47,13 @@ public class MarcaService {
                 .orElseThrow(() -> new ResourceNotFoundException("Marca com ID: " + id + " não encontrado."));
     }
 
-    public ResMarcaDTO findById(Long id, LoadParametersDTO loadDTO) {
+    public ResMarcaDTO findById(Long id, LoadCatalogParamsDTO loadDTO) {
         return marcaRepository.findById(id)
-                .map(marca -> mapper.toResponse(marca, loadDTO))
+                .map(marca -> catalogMapper.toResponse(marca, loadDTO))
                 .orElseThrow(() -> new ResourceNotFoundException("Marca com ID: " + id + " não encontrado."));
     }
 
-    public List<ResMarcaDTO> findByAttribute(String attribute, String value, LoadParametersDTO loadDTO) {
+    public List<ResMarcaDTO> findByAttribute(String attribute, String value, LoadCatalogParamsDTO loadDTO) {
         boolean attributeExists = Arrays.stream(Marca.class.getDeclaredFields())
                 .anyMatch(f -> f.getName().equals(attribute));
 
@@ -70,7 +70,7 @@ public class MarcaService {
 
         return em.createQuery(cq).getResultList()
                 .stream()
-                .map(m -> mapper.toResponse(m, loadDTO))
+                .map(m -> catalogMapper.toResponse(m, loadDTO))
                 .toList();
     }
 
@@ -87,7 +87,7 @@ public class MarcaService {
         marca.setIsActive(dto.getIsActive());
 
         Marca saved = marcaRepository.save(marca);
-        return mapper.toResponse(saved, LoadParametersDTO.allTrue());
+        return catalogMapper.toResponse(saved, LoadCatalogParamsDTO.allTrue());
     }
 
     public ResMarcaDTO updateMarca(Long id, EditMarcaDTO dto) {
@@ -109,7 +109,7 @@ public class MarcaService {
         }
 
         Marca updated = marcaRepository.save(marca);
-        return mapper.toResponse(updated, LoadParametersDTO.allTrue());
+        return catalogMapper.toResponse(updated, LoadCatalogParamsDTO.allTrue());
     }
 
     public void deleteMarca(Long id) {
@@ -120,6 +120,6 @@ public class MarcaService {
     public ResMarcaDTO deactivateMarca(Long id) {
         Marca existing = findByIdOrThrow(id);
         existing.setIsActive(false);
-        return mapper.toResponse(marcaRepository.save(existing), LoadParametersDTO.allTrue());
+        return catalogMapper.toResponse(marcaRepository.save(existing), LoadCatalogParamsDTO.allTrue());
     }
 }

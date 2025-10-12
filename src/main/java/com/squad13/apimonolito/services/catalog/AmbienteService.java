@@ -1,7 +1,7 @@
 package com.squad13.apimonolito.services.catalog;
 
 import com.squad13.apimonolito.DTO.catalog.AmbienteDTO;
-import com.squad13.apimonolito.DTO.catalog.LoadParametersDTO;
+import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
 import com.squad13.apimonolito.DTO.catalog.edit.EditAmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResAmbienteDTO;
 import com.squad13.apimonolito.exceptions.InvalidAttributeException;
@@ -9,7 +9,7 @@ import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.catalog.Ambiente;
 import com.squad13.apimonolito.repository.catalog.AmbienteRepository;
-import com.squad13.apimonolito.util.Mapper;
+import com.squad13.apimonolito.util.mappers.CatalogMapper;
 import com.squad13.apimonolito.util.enums.LocalEnum;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -34,12 +34,12 @@ public class AmbienteService {
 
     private final AmbienteRepository ambienteRepository;
 
-    private final Mapper mapper;
+    private final CatalogMapper catalogMapper;
 
-    public List<ResAmbienteDTO> findAll(LoadParametersDTO loadDTO) {
+    public List<ResAmbienteDTO> findAll(LoadCatalogParamsDTO loadDTO) {
         return ambienteRepository.findAll()
                 .stream()
-                .map(ambiente -> mapper.toResponse(ambiente, loadDTO))
+                .map(ambiente -> catalogMapper.toResponse(ambiente, loadDTO))
                 .toList();
     }
 
@@ -48,13 +48,13 @@ public class AmbienteService {
                 .orElseThrow(() -> new ResourceNotFoundException("Ambiente com ID: " + id + " não encontrado."));
     }
 
-    public ResAmbienteDTO findById(Long id, LoadParametersDTO loadDTO) {
+    public ResAmbienteDTO findById(Long id, LoadCatalogParamsDTO loadDTO) {
         return ambienteRepository.findById(id)
-                .map(ambiente -> mapper.toResponse(ambiente, loadDTO))
+                .map(ambiente -> catalogMapper.toResponse(ambiente, loadDTO))
                 .orElseThrow(() -> new ResourceNotFoundException("Ambiente com ID: " + id + " não encontrado."));
     }
 
-    public List<ResAmbienteDTO> findByAttribute(String attribute, String value, LoadParametersDTO loadDTO) {
+    public List<ResAmbienteDTO> findByAttribute(String attribute, String value, LoadCatalogParamsDTO loadDTO) {
         boolean attributeExists = Arrays.stream(Ambiente.class.getDeclaredFields())
                 .anyMatch(f -> f.getName().equals(attribute));
 
@@ -70,7 +70,7 @@ public class AmbienteService {
         cq.select(root).where(pAttributeMatch);
         return em.createQuery(cq).getResultList()
                 .stream()
-                .map(ambiente -> mapper.toResponse(ambiente, loadDTO))
+                .map(ambiente -> catalogMapper.toResponse(ambiente, loadDTO))
                 .toList();
     }
 
@@ -87,7 +87,7 @@ public class AmbienteService {
         ambiente.setLocal(dto.getLocal());
         ambiente.setIsActive(dto.getIsActive());
 
-        return mapper.toResponse(ambienteRepository.save(ambiente),  LoadParametersDTO.allTrue());
+        return catalogMapper.toResponse(ambienteRepository.save(ambiente),  LoadCatalogParamsDTO.allTrue());
     }
 
     private void ensureUniqueNameAndLocal(Ambiente ambiente, EditAmbienteDTO dto) {
@@ -124,7 +124,7 @@ public class AmbienteService {
             ambiente.setIsActive(dto.getIsActive());
         }
 
-        return mapper.toResponse(ambienteRepository.save(ambiente), LoadParametersDTO.allTrue());
+        return catalogMapper.toResponse(ambienteRepository.save(ambiente), LoadCatalogParamsDTO.allTrue());
     }
 
     public void deleteAmbiente(Long id) {
@@ -135,7 +135,7 @@ public class AmbienteService {
     public ResAmbienteDTO deactivateAmbiente(Long id) {
         Ambiente existing = findByIdOrThrow(id);
         existing.setIsActive(false);
-        return mapper.toResponse(ambienteRepository.save(existing), LoadParametersDTO.allTrue());
+        return catalogMapper.toResponse(ambienteRepository.save(existing), LoadCatalogParamsDTO.allTrue());
     }
 
 }

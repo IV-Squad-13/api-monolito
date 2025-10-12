@@ -1,6 +1,6 @@
 package com.squad13.apimonolito.controllers.catalog;
 
-import com.squad13.apimonolito.DTO.catalog.LoadParametersDTO;
+import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
 import com.squad13.apimonolito.DTO.catalog.edit.EditMaterialDTO;
 import com.squad13.apimonolito.DTO.catalog.MaterialDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResMarcaDTO;
@@ -25,12 +25,12 @@ public class MaterialController {
     private final MarcaMaterialService marcaMaterialService;
 
     @GetMapping()
-    public List<ResMaterialDTO> getAll(@ModelAttribute LoadParametersDTO loadDTO) {
+    public List<ResMaterialDTO> getAll(@ModelAttribute LoadCatalogParamsDTO loadDTO) {
         return materialService.findAll(loadDTO);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResMaterialDTO> getById(@PathVariable Long id, @ModelAttribute("loadAll") LoadParametersDTO loadDTO) {
+    public ResponseEntity<ResMaterialDTO> getById(@PathVariable Long id, @ModelAttribute("loadAll") LoadCatalogParamsDTO loadDTO) {
         return ResponseEntity.ok(materialService.findById(id, loadDTO));
     }
 
@@ -38,7 +38,7 @@ public class MaterialController {
     public ResponseEntity<List<ResMaterialDTO>> getByAttribute(
             @RequestParam String attribute,
             @RequestParam String value,
-            @ModelAttribute LoadParametersDTO loadDTO
+            @ModelAttribute LoadCatalogParamsDTO loadDTO
     ) {
         return ResponseEntity.ok(materialService.findByAttribute(attribute, value, loadDTO));
     }

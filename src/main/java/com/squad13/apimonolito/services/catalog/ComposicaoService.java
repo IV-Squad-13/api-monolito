@@ -1,6 +1,6 @@
 package com.squad13.apimonolito.services.catalog;
 
-import com.squad13.apimonolito.DTO.catalog.LoadParametersDTO;
+import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResComposicaoDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResItemAmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResMarcaMaterialDTO;
@@ -13,7 +13,7 @@ import com.squad13.apimonolito.models.catalog.associative.ComposicaoMaterial;
 import com.squad13.apimonolito.models.catalog.associative.ItemAmbiente;
 import com.squad13.apimonolito.models.catalog.associative.MarcaMaterial;
 import com.squad13.apimonolito.repository.catalog.*;
-import com.squad13.apimonolito.util.Mapper;
+import com.squad13.apimonolito.util.mappers.CatalogMapper;
 import com.squad13.apimonolito.util.enums.CompositorEnum;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -34,7 +34,7 @@ public class ComposicaoService {
     private final ItemAmbieteRepository itemAmbienteRepository;
     private final MarcaMaterialRepository marcaMaterialRepository;
 
-    private final Mapper mapper;
+    private final CatalogMapper catalogMapper;
     
     @PersistenceContext
     private final EntityManager em;
@@ -64,7 +64,7 @@ public class ComposicaoService {
         return compAmbienteRepository.findByCompositor_Ambiente_Id(id)
                 .stream()
                 .map(ComposicaoAmbiente::getPadrao)
-                .map(p -> mapper.toResponse(p, LoadParametersDTO.allFalse()))
+                .map(p -> catalogMapper.toResponse(p, LoadCatalogParamsDTO.allFalse()))
                 .toList();
     }
 
@@ -72,7 +72,7 @@ public class ComposicaoService {
         return compMaterialRepository.findByCompositor_Material_Id(id)
                 .stream()
                 .map(ComposicaoMaterial::getPadrao)
-                .map(p -> mapper.toResponse(p, LoadParametersDTO.allFalse()))
+                .map(p -> catalogMapper.toResponse(p, LoadCatalogParamsDTO.allFalse()))
                 .toList();
     }
 
@@ -85,7 +85,7 @@ public class ComposicaoService {
         comp.setCompositor(itemAmbiente);
 
         compAmbienteRepository.save(comp);
-        return mapper.toCompDTO(comp);
+        return catalogMapper.toCompDTO(comp);
     }
 
     private ResComposicaoDTO addMaterialRelToPadrao(Long padraoId, Long marcaMaterialId) {
@@ -97,7 +97,7 @@ public class ComposicaoService {
         comp.setCompositor(marcaMaterial);
 
         compMaterialRepository.save(comp);
-        return mapper.toCompDTO(comp);
+        return catalogMapper.toCompDTO(comp);
     }
 
     private List<ResComposicaoDTO> addAllAmbienteRelToPadrao(Long padraoId, Long ambienteId) {
@@ -116,7 +116,7 @@ public class ComposicaoService {
         }).toList();
 
         compAmbienteRepository.saveAll(comps);
-        return comps.stream().map(mapper::toCompDTO).toList();
+        return comps.stream().map(catalogMapper::toCompDTO).toList();
     }
 
     private List<ResComposicaoDTO> addAllMaterialRelToPadrao(Long padraoId, Long materialId) {
@@ -135,7 +135,7 @@ public class ComposicaoService {
         }).toList();
 
         compMaterialRepository.saveAll(comps);
-        return comps.stream().map(mapper::toCompDTO).toList();
+        return comps.stream().map(catalogMapper::toCompDTO).toList();
     }
 
     private void removeAllAmbienteAssociationsFromPadrao(Long padraoId, Long ambienteId) {
@@ -169,7 +169,7 @@ public class ComposicaoService {
         return compAmbienteRepository.findByPadrao_Id(id)
                 .stream()
                 .map(ComposicaoAmbiente::getCompositor)
-                .map(mapper::toResponse)
+                .map(catalogMapper::toResponse)
                 .toList();
     }
 
@@ -177,7 +177,7 @@ public class ComposicaoService {
         return compMaterialRepository.findByPadrao_Id(id)
                 .stream()
                 .map(ComposicaoMaterial::getCompositor)
-                .map(mapper::toResponse)
+                .map(catalogMapper::toResponse)
                 .toList();
     }
 

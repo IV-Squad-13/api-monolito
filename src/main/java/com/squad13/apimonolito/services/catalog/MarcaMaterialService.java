@@ -1,6 +1,6 @@
 package com.squad13.apimonolito.services.catalog;
 
-import com.squad13.apimonolito.DTO.catalog.LoadParametersDTO;
+import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResMarcaDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResMarcaMaterialDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResMaterialDTO;
@@ -10,7 +10,7 @@ import com.squad13.apimonolito.models.catalog.Marca;
 import com.squad13.apimonolito.models.catalog.Material;
 import com.squad13.apimonolito.models.catalog.associative.MarcaMaterial;
 import com.squad13.apimonolito.repository.catalog.*;
-import com.squad13.apimonolito.util.Mapper;
+import com.squad13.apimonolito.util.mappers.CatalogMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,13 +26,13 @@ public class MarcaMaterialService {
     private final MaterialRepository materialRepository;
     private final MarcaRepository marcaRepository;
 
-    private final Mapper mapper;
+    private final CatalogMapper catalogMapper;
 
     public List<ResMarcaDTO> findMaterialMarcas(Long materialId) {
         return marcaMaterialRepository.findByMaterial_Id(materialId)
                 .stream()
                 .map(MarcaMaterial::getMarca)
-                .map(marca -> mapper.toResponse(marca, LoadParametersDTO.allFalse()))
+                .map(marca -> catalogMapper.toResponse(marca, LoadCatalogParamsDTO.allFalse()))
                 .toList();
     }
 
@@ -40,7 +40,7 @@ public class MarcaMaterialService {
         return marcaMaterialRepository.findByMarca_Id(marcaId)
                 .stream()
                 .map(MarcaMaterial::getMaterial)
-                .map(material -> mapper.toResponse(material, LoadParametersDTO.allFalse()))
+                .map(material -> catalogMapper.toResponse(material, LoadCatalogParamsDTO.allFalse()))
                 .toList();
     }
 
@@ -73,7 +73,7 @@ public class MarcaMaterialService {
         material.getMarcaSet().add(marcaMaterial);
         materialRepository.save(material);
 
-        return mapper.toResponse(marcaMaterial);
+        return catalogMapper.toResponse(marcaMaterial);
     }
 
     public void deleteMarcaAndMaterialAssociation(Long marcaId, Long materialId) {

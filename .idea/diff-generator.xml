@@ -4,7 +4,7 @@
     <option name="snapshotDb" value="false" />
     <option name="snapshotDbValue" value="70c3e1ae-6575-448c-95b3-4ada85d9a928" />
     <option name="snapshotModelValue" value="api-monolito:api-monolito" />
-    <option name="sourceModelValue" value="api-monolito:api-monolito" />
+    <option name="sourceModelValue" value="api-monolito:entityManagerFactory" />
     <option name="targetDbValue" value="000c45dd-9f0a-497e-bf91-e8d6a4741c5b" />
   </component>
 </project>

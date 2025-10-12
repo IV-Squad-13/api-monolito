@@ -2,16 +2,13 @@ package com.squad13.apimonolito.services.catalog;
 
 import com.squad13.apimonolito.DTO.catalog.edit.EditItemTypeDTO;
 import com.squad13.apimonolito.DTO.catalog.ItemTypeDTO;
-import com.squad13.apimonolito.DTO.catalog.res.ResItemAmbienteDTO;
-import com.squad13.apimonolito.DTO.catalog.res.ResItemDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResItemTypeDTO;
 import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.catalog.ItemType;
 import com.squad13.apimonolito.repository.catalog.ItemTypeRepository;
-import com.squad13.apimonolito.util.Mapper;
+import com.squad13.apimonolito.util.mappers.CatalogMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,12 +19,12 @@ public class ItemTypeService {
 
     private final ItemTypeRepository itemTypeRepository;
 
-    private final Mapper mapper;
+    private final CatalogMapper catalogMapper;
 
     public List<ResItemTypeDTO> findAll() {
         return itemTypeRepository.findAll()
                 .stream()
-                .map(mapper::toResponse)
+                .map(catalogMapper::toResponse)
                 .toList();
     }
 
@@ -38,13 +35,13 @@ public class ItemTypeService {
 
     public ResItemTypeDTO findById(Long id) {
         return itemTypeRepository.findById(id)
-                .map(mapper::toResponse)
+                .map(catalogMapper::toResponse)
                 .orElseThrow(() -> new ResourceNotFoundException("Item com ID: " + id + " não encontrado."));
     }
 
     public ResItemTypeDTO findByNameOrThrow(String name) {
         return itemTypeRepository.findByName(name)
-                .map(mapper::toResponse)
+                .map(catalogMapper::toResponse)
                 .orElseThrow(() -> new ResourceNotFoundException("Tipo de item com nome " + name + " não encontrado."));
     }
 
@@ -58,7 +55,7 @@ public class ItemTypeService {
         itemType.setName(dto.getName());
         itemType.setIsActive(true);
 
-        return mapper.toResponse(itemTypeRepository.save(itemType));
+        return catalogMapper.toResponse(itemTypeRepository.save(itemType));
     }
 
     public ResItemTypeDTO updateItemType(Long id, EditItemTypeDTO dto) {
@@ -77,7 +74,7 @@ public class ItemTypeService {
             existing.setIsActive(dto.getIsActive());
         }
 
-        return mapper.toResponse(itemTypeRepository.save(existing));
+        return catalogMapper.toResponse(itemTypeRepository.save(existing));
     }
 
     public void deleteItemType(Long id) {
@@ -88,6 +85,6 @@ public class ItemTypeService {
     public ResItemTypeDTO deactivateItemType(Long id) {
         ItemType existing = findByIdOrThrow(id);
         existing.setIsActive(false);
-        return mapper.toResponse(itemTypeRepository.save(existing));
+        return catalogMapper.toResponse(itemTypeRepository.save(existing));
     }
 }

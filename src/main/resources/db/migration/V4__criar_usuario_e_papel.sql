@@ -46,6 +46,6 @@ INSERT INTO tb_usuario (nm_usuario, ds_email, ds_senha, fk_papel)
 VALUES (
     'admin',
     'admin@empresa.com',
-    '$2a$10$wR6f1r6T1qG0u8z1v2w3x4y5z6a7b8c9d0e1f2g3h4i5j6k7l8m9n0o1p2q3r4s5t', -- Hash para '123456'
+    '$2a$10$tdMmaawF8ysX6noQLlnO.OBabkT3VgofjRE.oWnU3VnVcTnu4zVzm', -- Hash para '123456'
     (SELECT id_papel FROM tb_papel WHERE nm_papel = 'ADMIN')
 );

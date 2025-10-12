@@ -47,7 +47,7 @@ public class Padrao {
     private Set<Empreendimento> empreendimentoSet;
 
     @PreRemove
-    private void setEmpreendimentoNull() {
+    private void setEspecificacaoNull() {
         empreendimentoSet.forEach(itemDesc -> {
             itemDesc.setPadrao(null);
         });

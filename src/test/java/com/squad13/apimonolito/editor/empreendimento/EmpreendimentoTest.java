@@ -1,12 +1,12 @@
 package com.squad13.apimonolito.editor.empreendimento;
 
-import com.squad13.apimonolito.models.editor.mongo.EmpreendimentoDoc;
+import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
 import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import com.squad13.apimonolito.models.revision.relational.Revisao;
-import com.squad13.apimonolito.mongo.editor.EmpreendimentoDocRepository;
+import com.squad13.apimonolito.mongo.editor.EspecificacaoDocRepository;
 import com.squad13.apimonolito.repository.editor.EmpreendimentoRepository;
 import com.squad13.apimonolito.repository.revision.RevisaoRepository;
-import com.squad13.apimonolito.util.enums.EmpreendimentoStatusEnum;
+import com.squad13.apimonolito.util.enums.EmpStatusEnum;
 import com.squad13.apimonolito.util.enums.RevisaoStatusEnum;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,20 +29,20 @@ class EmpreendimentoTest {
     private RevisaoRepository revisaoRepository;
 
     @Autowired
-    private EmpreendimentoDocRepository empreendimentoDocRepository;
+    private EspecificacaoDocRepository especificacaoDocRepository;
 
     @BeforeEach
     void cleanDatabase() {
         revisaoRepository.deleteAll();
         empreendimentoRepository.deleteAll();
-        empreendimentoDocRepository.deleteAll();
+        especificacaoDocRepository.deleteAll();
     }
 
     @Test
     void testJpaPersistenceWithRevisao() {
         Empreendimento empreendimento = new Empreendimento();
         empreendimento.setName("Empreendimento A");
-        empreendimento.setStatusEnum(EmpreendimentoStatusEnum.INICIADO);
+        empreendimento.setStatus(EmpStatusEnum.INICIADO);
 
         Empreendimento savedEmp = empreendimentoRepository.save(empreendimento);
         assertThat(savedEmp.getId()).isNotNull();
@@ -66,21 +66,21 @@ class EmpreendimentoTest {
     void testMongoPersistenceReferencingJpaEntity() {
         Empreendimento jpaEntity = new Empreendimento();
         jpaEntity.setName("Empreendimento B");
-        jpaEntity.setStatusEnum(EmpreendimentoStatusEnum.FINALIZADO);
+        jpaEntity.setStatus(EmpStatusEnum.FINALIZADO);
 
         Empreendimento savedEntity = empreendimentoRepository.save(jpaEntity);
         assertThat(savedEntity.getId()).isNotNull();
 
-        EmpreendimentoDoc doc = new EmpreendimentoDoc();
+        EspecificacaoDoc doc = new EspecificacaoDoc();
         doc.setName("Doc Empreendimento B");
         doc.setEmpreendimentoId(savedEntity.getId());
         doc.setDesc("Descricao B");
         doc.setObs("Observacao B");
 
-        EmpreendimentoDoc savedDoc = empreendimentoDocRepository.save(doc);
+        EspecificacaoDoc savedDoc = especificacaoDocRepository.save(doc);
         assertThat(savedDoc.getId()).isNotNull();
 
-        EmpreendimentoDoc foundDoc = empreendimentoDocRepository.findById(savedDoc.getId()).orElseThrow();
+        EspecificacaoDoc foundDoc = especificacaoDocRepository.findById(savedDoc.getId()).orElseThrow();
 
         assertThat(foundDoc.getName()).isEqualTo("Doc Empreendimento B");
         assertThat(foundDoc.getEmpreendimentoId()).isEqualTo(savedEntity.getId());
@@ -92,15 +92,15 @@ class EmpreendimentoTest {
     void testConsistencyBetweenJpaAndMongo() {
         Empreendimento e = new Empreendimento();
         e.setName("Empreendimento C");
-        e.setStatusEnum(EmpreendimentoStatusEnum.INICIADO);
+        e.setStatus(EmpStatusEnum.INICIADO);
 
         Empreendimento savedEntity = empreendimentoRepository.save(e);
 
-        EmpreendimentoDoc doc = new EmpreendimentoDoc();
+        EspecificacaoDoc doc = new EspecificacaoDoc();
         doc.setName("Doc Empreendimento C");
         doc.setEmpreendimentoId(savedEntity.getId());
 
-        EmpreendimentoDoc savedDoc = empreendimentoDocRepository.save(doc);
+        EspecificacaoDoc savedDoc = especificacaoDocRepository.save(doc);
 
         assertThat(savedDoc.getEmpreendimentoId()).isEqualTo(savedEntity.getId());
 

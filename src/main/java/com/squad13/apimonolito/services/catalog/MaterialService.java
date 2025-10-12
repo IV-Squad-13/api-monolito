@@ -1,19 +1,15 @@
 package com.squad13.apimonolito.services.catalog;
 
-import com.squad13.apimonolito.DTO.catalog.LoadParametersDTO;
+import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
 import com.squad13.apimonolito.DTO.catalog.edit.EditMaterialDTO;
 import com.squad13.apimonolito.DTO.catalog.MaterialDTO;
-import com.squad13.apimonolito.DTO.catalog.res.ResAmbienteDTO;
-import com.squad13.apimonolito.DTO.catalog.res.ResItemDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResMaterialDTO;
 import com.squad13.apimonolito.exceptions.InvalidAttributeException;
 import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
-import com.squad13.apimonolito.models.catalog.Ambiente;
-import com.squad13.apimonolito.models.catalog.ItemDesc;
 import com.squad13.apimonolito.models.catalog.Material;
 import com.squad13.apimonolito.repository.catalog.MaterialRepository;
-import com.squad13.apimonolito.util.Mapper;
+import com.squad13.apimonolito.util.mappers.CatalogMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -22,12 +18,10 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Transactional
 @Service
@@ -39,12 +33,12 @@ public class MaterialService {
 
     private final MaterialRepository materialRepository;
 
-    private final Mapper mapper;
+    private final CatalogMapper catalogMapper;
 
-    public List<ResMaterialDTO> findAll(LoadParametersDTO loadDTO) {
+    public List<ResMaterialDTO> findAll(LoadCatalogParamsDTO loadDTO) {
         return materialRepository.findAll()
                 .stream()
-                .map(material -> mapper.toResponse(material, loadDTO))
+                .map(material -> catalogMapper.toResponse(material, loadDTO))
                 .toList();
     }
 
@@ -53,13 +47,13 @@ public class MaterialService {
                 .orElseThrow(() -> new ResourceNotFoundException("Material com ID: " + id + " não encontrado."));
     }
 
-    public ResMaterialDTO findById(Long id, LoadParametersDTO loadDTO) {
+    public ResMaterialDTO findById(Long id, LoadCatalogParamsDTO loadDTO) {
         return materialRepository.findById(id)
-                .map(material -> mapper.toResponse(material, loadDTO))
+                .map(material -> catalogMapper.toResponse(material, loadDTO))
                 .orElseThrow(() -> new ResourceNotFoundException("Material com ID: " + id + " não encontrado."));
     }
 
-    public List<ResMaterialDTO> findByAttribute(String attribute, String value, LoadParametersDTO loadDTO) {
+    public List<ResMaterialDTO> findByAttribute(String attribute, String value, LoadCatalogParamsDTO loadDTO) {
         boolean attributeExists = Arrays.stream(Material.class.getDeclaredFields())
                 .anyMatch(f -> f.getName().equals(attribute));
 
@@ -75,7 +69,7 @@ public class MaterialService {
         cq.select(root).where(pAttributeMatch);
         return em.createQuery(cq).getResultList()
                 .stream()
-                .map(material -> mapper.toResponse(material, loadDTO))
+                .map(material -> catalogMapper.toResponse(material, loadDTO))
                 .toList();
     }
 
@@ -91,7 +85,7 @@ public class MaterialService {
         material.setName(dto.getName());
         material.setIsActive(dto.getIsActive());
 
-        return mapper.toResponse(materialRepository.save(material), LoadParametersDTO.allTrue());
+        return catalogMapper.toResponse(materialRepository.save(material), LoadCatalogParamsDTO.allTrue());
     }
 
     public ResMaterialDTO updateMaterial(Long id, EditMaterialDTO dto) {
@@ -113,7 +107,7 @@ public class MaterialService {
             material.setIsActive(dto.getIsActive());
         }
 
-        return mapper.toResponse(materialRepository.save(material), LoadParametersDTO.allTrue());
+        return catalogMapper.toResponse(materialRepository.save(material), LoadCatalogParamsDTO.allTrue());
     }
 
     public void deleteMaterial(Long id) {
@@ -124,6 +118,6 @@ public class MaterialService {
     public ResMaterialDTO deactivateMaterial(Long id) {
         Material existing = findByIdOrThrow(id);
         existing.setIsActive(false);
-        return mapper.toResponse(materialRepository.save(existing), LoadParametersDTO.allTrue());
+        return catalogMapper.toResponse(materialRepository.save(existing), LoadCatalogParamsDTO.allTrue());
     }
 }

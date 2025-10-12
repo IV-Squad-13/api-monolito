@@ -1,6 +1,6 @@
 package com.squad13.apimonolito.services.catalog;
 
-import com.squad13.apimonolito.DTO.catalog.LoadParametersDTO;
+import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
 import com.squad13.apimonolito.DTO.catalog.edit.EditItemDTO;
 import com.squad13.apimonolito.DTO.catalog.ItemDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResItemDTO;
@@ -11,7 +11,7 @@ import com.squad13.apimonolito.models.catalog.ItemDesc;
 import com.squad13.apimonolito.models.catalog.ItemType;
 import com.squad13.apimonolito.repository.catalog.ItemRepository;
 import com.squad13.apimonolito.repository.catalog.ItemTypeRepository;
-import com.squad13.apimonolito.util.Mapper;
+import com.squad13.apimonolito.util.mappers.CatalogMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.*;
@@ -30,16 +30,16 @@ public class ItemService {
     @PersistenceContext
     private final EntityManager em;
 
-    private final Mapper mapper;
+    private final CatalogMapper catalogMapper;
 
     private final ItemRepository itemRepository;
 
     private final ItemTypeRepository itemTypeRepository;
 
-    public List<ResItemDTO> findAll(LoadParametersDTO loadDTO) {
+    public List<ResItemDTO> findAll(LoadCatalogParamsDTO loadDTO) {
         return itemRepository.findAll()
                 .stream()
-                .map(item -> mapper.toResponse(item, loadDTO))
+                .map(item -> catalogMapper.toResponse(item, loadDTO))
                 .toList();
     }
 
@@ -48,13 +48,13 @@ public class ItemService {
                 .orElseThrow(() -> new ResourceNotFoundException("Item com ID: " + id + " não encontrado."));
     }
 
-    public ResItemDTO findById(Long id, LoadParametersDTO loadDTO) {
+    public ResItemDTO findById(Long id, LoadCatalogParamsDTO loadDTO) {
         return itemRepository.findById(id)
-                .map(item -> mapper.toResponse(item, loadDTO))
+                .map(item -> catalogMapper.toResponse(item, loadDTO))
                 .orElseThrow(() -> new ResourceNotFoundException("Item com ID: " + id + " não encontrado."));
     }
 
-    public List<ResItemDTO> findByAttribute(String attribute, String value, LoadParametersDTO loadDTO) {
+    public List<ResItemDTO> findByAttribute(String attribute, String value, LoadCatalogParamsDTO loadDTO) {
         boolean attributeExists = Arrays.stream(ItemDesc.class.getDeclaredFields())
                 .anyMatch(f -> f.getName().equals(attribute));
 
@@ -68,7 +68,7 @@ public class ItemService {
         Predicate predicate;
 
         if (attribute.equals("type")) {
-            Join<ItemDesc, ItemType> itemType = root.join("type", JoinType.LEFT);
+            Join<ItemDesc, ItemType> itemType = root.join("type", JoinType.INNER);
 
             if (value == null) {
                 predicate = cb.isNull(itemType.get("name"));
@@ -87,7 +87,7 @@ public class ItemService {
         cq.select(root).where(predicate);
         return em.createQuery(cq).getResultList()
                 .stream()
-                .map(item -> mapper.toResponse(item, loadDTO))
+                .map(item -> catalogMapper.toResponse(item, loadDTO))
                 .toList();
     }
 
@@ -109,7 +109,7 @@ public class ItemService {
         item.setType(type);
 
         ItemDesc saved = itemRepository.save(item);
-        return mapper.toResponse(saved, LoadParametersDTO.allTrue());
+        return catalogMapper.toResponse(saved, LoadCatalogParamsDTO.allTrue());
     }
 
     public ResItemDTO updateItem(Long id, EditItemDTO dto) {
@@ -130,7 +130,7 @@ public class ItemService {
         }
 
         ItemDesc updated = itemRepository.save(item);
-        return mapper.toResponse(updated, LoadParametersDTO.allTrue());
+        return catalogMapper.toResponse(updated, LoadCatalogParamsDTO.allTrue());
     }
 
     public void deleteItem(Long id) {
@@ -141,6 +141,6 @@ public class ItemService {
     public ResItemDTO deactivateItem(Long id) {
         ItemDesc existing = findByIdOrThrow(id);
         existing.setIsActive(false);
-        return mapper.toResponse(itemRepository.save(existing), LoadParametersDTO.allTrue());
+        return catalogMapper.toResponse(itemRepository.save(existing), LoadCatalogParamsDTO.allTrue());
     }
 }

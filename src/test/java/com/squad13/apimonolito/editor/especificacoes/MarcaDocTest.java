@@ -1,8 +1,8 @@
 package com.squad13.apimonolito.editor.especificacoes;
 
-import com.squad13.apimonolito.models.editor.mongo.EmpreendimentoDoc;
+import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
 import com.squad13.apimonolito.models.editor.mongo.MarcaDoc;
-import com.squad13.apimonolito.mongo.editor.EmpreendimentoDocRepository;
+import com.squad13.apimonolito.mongo.editor.EspecificacaoDocRepository;
 import com.squad13.apimonolito.mongo.editor.MarcaDocRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,16 +18,16 @@ class MarcaDocTest {
     private MarcaDocRepository marcaDocRepository;
 
     @Autowired
-    private EmpreendimentoDocRepository empDocRepository;
+    private EspecificacaoDocRepository empDocRepository;
 
-    private EmpreendimentoDoc empDoc;
+    private EspecificacaoDoc empDoc;
 
     @BeforeEach
     void cleanDatabase() {
         marcaDocRepository.deleteAll();
         empDocRepository.deleteAll();
 
-        empDoc = new EmpreendimentoDoc();
+        empDoc = new EspecificacaoDoc();
         empDoc.setName("Doc Empreendimento B");
         empDoc.setEmpreendimentoId(1L);
         empDoc.setDesc("Descricao B");
@@ -40,7 +40,7 @@ class MarcaDocTest {
         MarcaDoc marca = new MarcaDoc();
         marca.setName("Marca");
         marca.setCatalogId(1L);
-        marca.setEmpreendimentoDoc(empDoc);
+        marca.setEspecificacaoDoc(empDoc);
         marca.setInSync(true);
 
         marcaDocRepository.save(marca);
@@ -59,7 +59,7 @@ class MarcaDocTest {
         MarcaDoc marca = new MarcaDoc();
         marca.setName("Marca");
         marca.setCatalogId(1L);
-        marca.setEmpreendimentoDoc(empDoc);
+        marca.setEspecificacaoDoc(empDoc);
         marca.setInSync(true);
         marcaDocRepository.save(marca);
 

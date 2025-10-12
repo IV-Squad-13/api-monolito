@@ -1,14 +1,11 @@
 package com.squad13.apimonolito.controllers.catalog;
 
-import com.squad13.apimonolito.DTO.catalog.LoadParametersDTO;
+import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
 import com.squad13.apimonolito.DTO.catalog.edit.EditItemDTO;
 import com.squad13.apimonolito.DTO.catalog.ItemDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResAmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResItemAmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResItemDTO;
-import com.squad13.apimonolito.models.catalog.Ambiente;
-import com.squad13.apimonolito.models.catalog.ItemDesc;
-import com.squad13.apimonolito.models.catalog.associative.ItemAmbiente;
 import com.squad13.apimonolito.services.catalog.ItemAmbienteService;
 import com.squad13.apimonolito.services.catalog.ItemService;
 import jakarta.validation.Valid;
@@ -28,12 +25,12 @@ public class ItemController {
     private final ItemAmbienteService itemAmbienteService;
 
     @GetMapping
-    public ResponseEntity<List<ResItemDTO>> getAll(@ModelAttribute LoadParametersDTO loadDTO) {
+    public ResponseEntity<List<ResItemDTO>> getAll(@ModelAttribute LoadCatalogParamsDTO loadDTO) {
         return ResponseEntity.ok(itemService.findAll(loadDTO));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResItemDTO> getById(@PathVariable Long id, @ModelAttribute("loadAll") LoadParametersDTO loadDTO) {
+    public ResponseEntity<ResItemDTO> getById(@PathVariable Long id, @ModelAttribute("loadAll") LoadCatalogParamsDTO loadDTO) {
         return ResponseEntity.ok(itemService.findById(id, loadDTO));
     }
 
@@ -41,7 +38,7 @@ public class ItemController {
     public ResponseEntity<List<ResItemDTO>> getByAttribute(
             @RequestParam String attribute,
             @RequestParam(required = false) String value,
-            @ModelAttribute LoadParametersDTO loadDTO
+            @ModelAttribute LoadCatalogParamsDTO loadDTO
     ) {
         return ResponseEntity.ok(itemService.findByAttribute(attribute, value, loadDTO));
     }

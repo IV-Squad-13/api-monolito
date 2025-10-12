@@ -1,4 +1,4 @@
-package com.squad13.apimonolito.DTO.login;
+package com.squad13.apimonolito.DTO.auth.login;
 
 public record LoginRequestDTO(
         String username,

@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Document(collection = "items_rev")
-@CompoundIndex(name = "catalog_name_unique", def = "{'revisaoId' : 1, 'item': 1}", unique = true)
+@CompoundIndex(name = "item_rev_unique", def = "{'revisaoId' : 1, 'item': 1}", unique = true)
 public class ItemRevDocElement extends RevDocElement {
 
     @DBRef

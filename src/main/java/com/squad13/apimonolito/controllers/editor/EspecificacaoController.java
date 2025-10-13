@@ -1,12 +1,10 @@
 package com.squad13.apimonolito.controllers.editor;
 
-import com.squad13.apimonolito.DTO.editor.DocElementDTO;
+import com.squad13.apimonolito.DTO.editor.CatalogRelationDTO;
+import com.squad13.apimonolito.DTO.editor.LocalDocDTO;
 import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
-import com.squad13.apimonolito.models.editor.relational.Empreendimento;
-import com.squad13.apimonolito.models.editor.structures.DocElement;
 import com.squad13.apimonolito.services.editor.EspecificacaoService;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,8 +27,8 @@ public class EspecificacaoController {
         return ResponseEntity.ok(especService.create(empId));
     }
 
-    @PostMapping("/add-element")
-    public ResponseEntity<EspecificacaoDoc> createElement(@RequestBody DocElementDTO dto) {
-        return ResponseEntity.ok(especService.addElement(dto));
+    @PostMapping("/{id}/add-element-from-catalog")
+    public ResponseEntity<EspecificacaoDoc> createElementFromCatalog(@PathVariable String id, @RequestBody CatalogRelationDTO dto) {
+        return ResponseEntity.ok(especService.addElementFromCatalog(id, dto));
     }
 }

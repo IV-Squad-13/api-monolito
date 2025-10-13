@@ -7,32 +7,26 @@ import com.squad13.apimonolito.models.catalog.Material;
 import com.squad13.apimonolito.models.editor.mongo.*;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import lombok.Getter;
+import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 
-import java.util.Arrays;
 import java.util.function.Supplier;
 
 @Getter
 public enum DocElementEnum {
+    AMBIENTE(Ambiente::new),
+    MARCA(Marca::new),
+    MATERIAL(Material::new),
+    ITEM(ItemDesc::new),
+    LOCAL(null);
 
-    AMBIENTE(AmbienteDocElement::new, Ambiente.class),
-    MARCA(MarcaDocElement::new, Marca.class),
-    MATERIAL(MaterialDocElement::new, Material.class),
-    ITEM(ItemDocElement::new, ItemDesc.class),
-    LOCAL(LocalDocElement::new, null);
+    private final Supplier<?> factory;
 
-    private final Supplier<? extends DocElement> factory;
-    private final Class<?> catalogClass;
-
-    DocElementEnum(Supplier<? extends DocElement> factory, Class<?> catalogClass) {
+    DocElementEnum(Supplier<?> factory) {
         this.factory = factory;
-        this.catalogClass = catalogClass;
     }
 
-    public DocElement newInstance() {
+    public Object newInstance() {
+        if (factory == null) return null;
         return factory.get();
-    }
-
-    public boolean hasCatalog() {
-        return catalogClass != null;
     }
 }

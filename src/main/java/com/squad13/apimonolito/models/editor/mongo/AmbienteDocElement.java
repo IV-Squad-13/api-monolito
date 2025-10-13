@@ -2,6 +2,7 @@ package com.squad13.apimonolito.models.editor.mongo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
+import com.squad13.apimonolito.util.enums.LocalEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
@@ -16,8 +17,10 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @Document(collection = "ambientes")
-@CompoundIndex(name = "catalog_name_unique", def = "{'catalogId' : 1, 'name': 1, 'empreendimento': 1}", unique = true)
+@CompoundIndex(name = "ambiente_unique", def = "{'catalogId' : 1, 'name': 1, 'empreendimento': 1}", unique = true)
 public class AmbienteDocElement extends DocElement {
+
+    private LocalEnum local;
 
     @DBRef(lazy = true)
     @Field("items")

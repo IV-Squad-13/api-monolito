@@ -16,8 +16,11 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @Document(collection = "items")
-@CompoundIndex(name = "catalog_name_unique", def = "{'catalogId' : 1, 'name': 1, 'empreendimento': 1}", unique = true)
+@CompoundIndex(name = "item_unique", def = "{'catalogId' : 1, 'name': 1, 'desc': 1, 'empreendimento': 1}", unique = true)
 public class ItemDocElement extends DocElement {
+
+    @NotBlank
+    private String type;
 
     @NotBlank
     private String desc;

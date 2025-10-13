@@ -3,9 +3,14 @@ package com.squad13.apimonolito.util.mappers;
 import com.squad13.apimonolito.DTO.auth.res.ResUserDTO;
 import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResPadraoDTO;
+import com.squad13.apimonolito.DTO.editor.ItemDocDTO;
 import com.squad13.apimonolito.DTO.editor.LoadDocumentParamsDTO;
 import com.squad13.apimonolito.DTO.editor.res.ResEmpDTO;
-import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
+import com.squad13.apimonolito.models.catalog.Ambiente;
+import com.squad13.apimonolito.models.catalog.ItemDesc;
+import com.squad13.apimonolito.models.catalog.Marca;
+import com.squad13.apimonolito.models.catalog.Material;
+import com.squad13.apimonolito.models.editor.mongo.*;
 import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import com.squad13.apimonolito.models.revision.mongo.EspecificacaoRevDocElement;
 import lombok.RequiredArgsConstructor;
@@ -47,4 +52,46 @@ public class EditorMapper {
         );
     }
 
+    public AmbienteDocElement fromCatalog(EspecificacaoDoc espec, Ambiente catalogAmbiente) {
+        AmbienteDocElement ambiente = new AmbienteDocElement();
+        ambiente.setName(catalogAmbiente.getName());
+        ambiente.setLocal(catalogAmbiente.getLocal());
+        ambiente.setInSync(true);
+        ambiente.setEspecificacaoDoc(espec);
+        ambiente.setCatalogId(catalogAmbiente.getId());
+
+        return ambiente;
+    }
+
+    public ItemDocElement fromCatalog(EspecificacaoDoc espec, ItemDesc catalogItem) {
+        ItemDocElement item = new ItemDocElement();
+        item.setName(catalogItem.getName());
+        item.setType(catalogItem.getType().getName());
+        item.setDesc(catalogItem.getDesc());
+        item.setCatalogId(catalogItem.getId());
+        item.setEspecificacaoDoc(espec);
+        item.setInSync(true);
+
+        return item;
+    }
+
+    public MarcaDocElement fromCatalog(EspecificacaoDoc espec, Marca catalogMarca) {
+        MarcaDocElement marca = new MarcaDocElement();
+        marca.setName(catalogMarca.getName());
+        marca.setInSync(true);
+        marca.setEspecificacaoDoc(espec);
+        marca.setCatalogId(catalogMarca.getId());
+
+        return marca;
+    }
+
+    public MaterialDocElement fromCatalog(EspecificacaoDoc espec, Material catalogMaterial) {
+        MaterialDocElement material = new MaterialDocElement();
+        material.setName(catalogMaterial.getName());
+        material.setInSync(true);
+        material.setEspecificacaoDoc(espec);
+        material.setCatalogId(catalogMaterial.getId());
+
+        return material;
+    }
 }

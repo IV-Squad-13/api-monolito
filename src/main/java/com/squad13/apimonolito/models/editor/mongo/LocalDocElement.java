@@ -21,7 +21,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @Document(collection = "locais")
-@CompoundIndex(name = "catalog_name_unique", def = "{'local': 1, 'empreendimento': 1}", unique = true)
+@CompoundIndex(name = "local_unique", def = "{'local': 1, 'empreendimento': 1}", unique = true)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class LocalDocElement extends DocElement {
 

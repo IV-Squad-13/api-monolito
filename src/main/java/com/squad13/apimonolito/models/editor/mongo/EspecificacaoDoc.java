@@ -24,7 +24,7 @@ import java.util.List;
 @Data
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @Document(collection = "especificacoes")
-@CompoundIndex(name = "catalog_name_unique", def = "{'empreendimentoId' : 1, 'name': 1}", unique = true)
+@CompoundIndex(name = "especificacao_unique", def = "{'empreendimentoId' : 1, 'name': 1}", unique = true)
 public class EspecificacaoDoc {
 
     @Id
@@ -50,6 +50,7 @@ public class EspecificacaoDoc {
     private List<LocalDocElement> locais = new ArrayList<>();
 
     @DBRef(lazy = true)
+    @JsonManagedReference
     private List<MaterialDocElement> materiais = new ArrayList<>();
 
     @CreatedDate

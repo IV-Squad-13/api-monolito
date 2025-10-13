@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Document(collection = "ambiente_rev")
-@CompoundIndex(name = "catalog_name_unique", def = "{'revisaoId' : 1, 'ambiente': 1}", unique = true)
+@CompoundIndex(name = "ambiente_rev_unique", def = "{'revisaoId' : 1, 'ambiente': 1}", unique = true)
 public class AmbienteRevDocElement extends RevDocElement {
 
     @DBRef

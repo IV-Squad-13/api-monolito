@@ -3,12 +3,10 @@ package com.squad13.apimonolito.DTO.editor;
 import com.squad13.apimonolito.util.enums.DocElementEnum;
 import com.squad13.apimonolito.util.enums.LocalEnum;
 
-public record DocElementDTO(
+public record ItemDocDTO(
         Long catalogId,
-        String especId,
         String name,
-        LocalEnum local,
         String desc,
-
+        String itemType,
         DocElementEnum type
 ) { }

@@ -15,7 +15,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @Document(collection = "marcas")
-@CompoundIndex(name = "catalog_name_unique", def = "{'catalogId' : 1, 'name': 1, 'empreendimento': 1}", unique = true)
+@CompoundIndex(name = "marca_unique", def = "{'catalogId' : 1, 'name': 1, 'empreendimento': 1}", unique = true)
 public class MarcaDocElement extends DocElement {
 
     @Transient

@@ -50,7 +50,7 @@ class ItemDocTest {
         assertThat(item.getId()).isNotNull();
         assertThat(item.getName()).isEqualTo("Item");
 
-        ItemDocElement foundItem = itemDocRepository.findByName("Item");
+        ItemDocElement foundItem = itemDocRepository.findByName("Item").orElse(null);
         assertThat(foundItem).isNotNull();
         assertThat(foundItem.getId()).isEqualTo(item.getId());
     }
@@ -68,7 +68,7 @@ class ItemDocTest {
         item.setName("Item1");
         itemDocRepository.save(item);
 
-        ItemDocElement foundItem = itemDocRepository.findByName("Item1");
+        ItemDocElement foundItem = itemDocRepository.findByName("Item1").orElse(null);;
 
         assertThat(foundItem).isNotNull();
         assertThat(foundItem.getUpdated()).isNotNull();
@@ -78,7 +78,7 @@ class ItemDocTest {
     @Test
     void testItemDelete() {
         itemDocRepository.deleteAllByName("Item");
-        ItemDocElement foundItem = itemDocRepository.findByName("Item");
+        ItemDocElement foundItem = itemDocRepository.findByName("Item").orElse(null);;
 
         assertThat(foundItem).isNull();
     }

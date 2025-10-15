@@ -1,16 +1,10 @@
 package com.squad13.apimonolito.util;
 
-import com.squad13.apimonolito.DTO.editor.CatalogRelationDTO;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
-import com.squad13.apimonolito.models.catalog.*;
-import com.squad13.apimonolito.repository.catalog.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import com.squad13.apimonolito.models.catalog.*;
-import com.squad13.apimonolito.repository.catalog.*;
 
 @Component
 @RequiredArgsConstructor

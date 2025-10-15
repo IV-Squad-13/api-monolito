@@ -16,14 +16,14 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @Document(collection = "marcas")
-@CompoundIndex(name = "marca_unique", def = "{'catalogId' : 1, 'name': 1, 'empreendimento': 1}", unique = true)
+@CompoundIndex(name = "marca_unique", def = "{'catalogId' : 1, 'name': 1, 'especificacaoDoc': 1}", unique = true)
 public class MarcaDocElement extends DocElement {
 
     @Transient
     @JsonProperty
     private List<DocElement> docElementList;
 
-    public static MarcaDocElement fromDto(DocElementDTO dto) {
-        return DocElement.genericFromDto(dto, null, MarcaDocElement.class);
+    public static MarcaDocElement fromDto(EspecificacaoDoc espec, DocElementDTO dto) {
+        return DocElement.genericFromDto(dto, espec, MarcaDocElement.class);
     }
 }

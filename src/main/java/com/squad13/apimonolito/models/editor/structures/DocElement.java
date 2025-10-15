@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.time.Instant;
@@ -29,6 +30,9 @@ public abstract class DocElement {
 
     @NotNull
     private Long catalogId;
+
+    @Transient
+    private String prevId;
 
     @NotNull
     @DBRef(lazy = true)
@@ -53,8 +57,8 @@ public abstract class DocElement {
             T instance = clazz.getDeclaredConstructor().newInstance();
             instance.setName(dto.getName());
             instance.setCatalogId(dto.getCatalogId());
+            instance.setPrevId(dto.getPrevId());
             instance.setEspecificacaoDoc(espec);
-            instance.setInSync(false);
             return instance;
         } catch (Exception e) {
             throw new RuntimeException("Erro ao criar instância de " + clazz.getSimpleName(), e);

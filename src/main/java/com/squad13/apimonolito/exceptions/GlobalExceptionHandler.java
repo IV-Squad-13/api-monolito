@@ -11,61 +11,61 @@ import org.springframework.web.context.request.WebRequest;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceAlreadyExistsException.class)
-    public ResponseEntity<ErrorResponse> handleConflict(ResourceAlreadyExistsException ex, WebRequest request) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(new ErrorResponse(ex.getMessage(), request.getDescription(false), HttpStatus.CONFLICT.value()));
+    public ResponseEntity<ErrorResponse> handleResourceAlreadyExists(ResourceAlreadyExistsException ex, WebRequest request) {
+        return buildResponse(ex, request, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(AssociationAlreadyExistsException.class)
-    public ResponseEntity<ErrorResponse> handleAssociationConflict(AssociationAlreadyExistsException ex, WebRequest request) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(new ErrorResponse(ex.getMessage(), request.getDescription(false), HttpStatus.CONFLICT.value()));
+    public ResponseEntity<ErrorResponse> handleAssociationAlreadyExists(AssociationAlreadyExistsException ex, WebRequest request) {
+        return buildResponse(ex, request, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFound(ResourceNotFoundException ex, WebRequest request) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ErrorResponse(ex.getMessage(), request.getDescription(false), HttpStatus.NOT_FOUND.value()));
+    public ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException ex, WebRequest request) {
+        return buildResponse(ex, request, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(InvalidAttributeException.class)
     public ResponseEntity<ErrorResponse> handleInvalidAttribute(InvalidAttributeException ex, WebRequest request) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResponse(ex.getMessage(), request.getDescription(false), HttpStatus.NOT_FOUND.value()));
+        return buildResponse(ex, request, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(InvalidDocumentTypeException.class)
     public ResponseEntity<ErrorResponse> handleInvalidDocumentType(InvalidDocumentTypeException ex, WebRequest request) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResponse(ex.getMessage(), request.getDescription(false), HttpStatus.NOT_FOUND.value()));
+        return buildResponse(ex, request, HttpStatus.BAD_REQUEST);
     }
-
 
     @ExceptionHandler(InvalidCompositorException.class)
     public ResponseEntity<ErrorResponse> handleInvalidCompositor(InvalidCompositorException ex, WebRequest request) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ErrorResponse(ex.getMessage(), request.getDescription(false), HttpStatus.NOT_FOUND.value()));
+        return buildResponse(ex, request, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(IdentifierNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleIdentifierNotFound(InvalidCompositorException ex, WebRequest request) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ErrorResponse(ex.getMessage(), request.getDescription(false), HttpStatus.NOT_FOUND.value()));
+    public ResponseEntity<ErrorResponse> handleIdentifierNotFound(IdentifierNotFoundException ex, WebRequest request) {
+        return buildResponse(ex, request, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(InvalidTokenException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidToken(InvalidCompositorException ex, WebRequest request) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body(new ErrorResponse(ex.getMessage(), request.getDescription(false), HttpStatus.NOT_FOUND.value()));
+    public ResponseEntity<ErrorResponse> handleInvalidToken(InvalidTokenException ex, WebRequest request) {
+        return buildResponse(ex, request, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(InvalidInitException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidInitException(Exception ex, WebRequest request) {
+        return buildResponse(ex, request, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> exception(Exception ex, WebRequest request) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResponse(
-                        ex.getMessage(),
-                        request.getDescription(false),
-                        HttpStatus.INTERNAL_SERVER_ERROR.value()
-                ));
+    public ResponseEntity<ErrorResponse> handleGenericException(Exception ex, WebRequest request) {
+        return buildResponse(ex, request, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    private ResponseEntity<ErrorResponse> buildResponse(Exception ex, WebRequest request, HttpStatus status) {
+        ErrorResponse error = new ErrorResponse(
+                ex.getMessage(),
+                request.getDescription(false),
+                status.value()
+        );
+        return ResponseEntity.status(status).body(error);
     }
 }

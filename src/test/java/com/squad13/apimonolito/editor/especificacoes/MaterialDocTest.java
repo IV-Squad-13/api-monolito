@@ -65,7 +65,7 @@ class MaterialDocTest {
         assertThat(material.getId()).isNotNull();
         assertThat(material.getName()).isEqualTo("Material");
 
-        MaterialDocElement foundMaterial = materialDocRepository.findByName("Material").orElse(null);
+        MaterialDocElement foundMaterial = materialDocRepository.findByName("Material").orElse(null);;
         assertThat(foundMaterial).isNotNull();
         assertThat(foundMaterial.getId()).isEqualTo(material.getId());
         assertThat(foundMaterial.getMarcaDocList().getFirst().getName()).isEqualTo("Marca");
@@ -88,11 +88,11 @@ class MaterialDocTest {
         material.setMarcaDocList(List.of(marca));
         materialDocRepository.save(material);
 
-        MaterialDocElement foundMaterial = materialDocRepository.findByName("Material").orElse(null);
+        MaterialDocElement foundMaterial = materialDocRepository.findByName("Material").orElse(null);;
         foundMaterial.setName("Material2");
         materialDocRepository.save(foundMaterial);
 
-        MaterialDocElement updated = materialDocRepository.findByName("Material2").orElse(null);
+        MaterialDocElement updated = materialDocRepository.findByName("Material2").orElse(null);;
         assertThat(updated).isNotNull();
         assertThat(updated.getName()).isEqualTo("Material2");
     }
@@ -100,7 +100,7 @@ class MaterialDocTest {
     @Test
     void testMaterialDelete() {
         materialDocRepository.deleteAllByName("Material");
-        MaterialDocElement foundMaterial = materialDocRepository.findByName("Material").orElse(null);
+        MaterialDocElement foundMaterial = materialDocRepository.findByName("Material").orElse(null);;
 
         assertThat(foundMaterial).isNull();
     }

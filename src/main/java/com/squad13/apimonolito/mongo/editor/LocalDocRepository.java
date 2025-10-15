@@ -14,4 +14,6 @@ public interface LocalDocRepository extends MongoRepository<LocalDoc, String> {
     List<LocalDoc> findByLocal(LocalEnum localEnum);
 
     Optional<LocalDoc> findByEspecificacaoDocAndLocal(EspecificacaoDoc especificacaoDoc, LocalEnum local);
+
+    void deleteAllByEspecificacaoDoc(EspecificacaoDoc espec);
 }

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -16,6 +17,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -47,6 +49,7 @@ public class EspecificacaoDoc {
 
     @DBRef(lazy = true)
     @JsonManagedReference
+
     private List<LocalDoc> locais = new ArrayList<>();
 
     @DBRef(lazy = true)

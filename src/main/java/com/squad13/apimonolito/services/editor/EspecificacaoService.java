@@ -1,12 +1,16 @@
 package com.squad13.apimonolito.services.editor;
 
+import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
+import com.squad13.apimonolito.DTO.catalog.res.ResAmbienteDTO;
 import com.squad13.apimonolito.DTO.editor.DocElementCatalogCreationDTO;
 import com.squad13.apimonolito.DTO.editor.DocElementDTO;
 import com.squad13.apimonolito.DTO.editor.EspecificacaoDocDTO;
+import com.squad13.apimonolito.DTO.editor.edit.EditEspecificacaoDocDTO;
 import com.squad13.apimonolito.exceptions.AssociationAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.InvalidDocumentTypeException;
 import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
+import com.squad13.apimonolito.models.catalog.Ambiente;
 import com.squad13.apimonolito.models.editor.mongo.*;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import com.squad13.apimonolito.mongo.editor.*;
@@ -241,5 +245,39 @@ public class EspecificacaoService {
                 .filter(Objects::nonNull)
                 .anyMatch(m -> m.getName().equalsIgnoreCase(material.getName()));
         if (exists) throw new ResourceAlreadyExistsException("Material duplicado: " + material.getName());
+    }
+
+    public EspecificacaoDoc update(String id, EditEspecificacaoDocDTO dto) {
+        EspecificacaoDoc espec = getById(id);
+
+        if (dto.name() != null && !dto.name().isEmpty()) {
+            espec.setName(dto.name());
+        }
+
+        if (dto.desc() != null) {
+            espec.setDesc(dto.desc());
+        }
+
+        if (dto.obs() != null) {
+            espec.setObs(dto.obs());
+        }
+
+        if (dto.empId() != null) {
+            espec.setEmpreendimentoId(dto.empId());
+        }
+
+        return especRepository.save(espec);
+    }
+
+    public void delete(String id) {
+        EspecificacaoDoc espec = getById(id);
+
+        itemDocRepository.deleteAllByEspecificacaoDoc(espec);
+        ambienteDocRepository.deleteAllByEspecificacaoDoc(espec);
+        localDocRepository.deleteAllByEspecificacaoDoc(espec);
+        marcaDocRepository.deleteAllByEspecificacaoDoc(espec);
+        materialDocRepository.deleteAllByEspecificacaoDoc(espec);
+
+        especRepository.delete(espec);
     }
 }

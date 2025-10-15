@@ -137,5 +137,4 @@ public class AmbienteService {
         existing.setIsActive(false);
         return catalogMapper.toResponse(ambienteRepository.save(existing), LoadCatalogParamsDTO.allTrue());
     }
-
 }

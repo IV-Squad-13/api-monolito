@@ -1,11 +1,13 @@
 package com.squad13.apimonolito.controllers.editor;
 
 import com.squad13.apimonolito.DTO.editor.*;
+import com.squad13.apimonolito.DTO.editor.edit.EditEspecificacaoDocDTO;
 import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import com.squad13.apimonolito.services.editor.EspecificacaoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,5 +38,16 @@ public class EspecificacaoController {
     @PostMapping("/{id}/raw")
     public ResponseEntity<DocElement> createRawElement(@PathVariable String id, @Valid @RequestBody DocElementDTO dto) {
         return ResponseEntity.ok(especService.createRawElement(id, dto));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<EspecificacaoDoc> update(@PathVariable String id, @Valid @RequestBody EditEspecificacaoDocDTO dto) {
+        return ResponseEntity.ok(especService.update(id, dto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable String id) {
+        especService.delete(id);
+        return ResponseEntity.ok("Especificação deletada com sucesso");
     }
 }

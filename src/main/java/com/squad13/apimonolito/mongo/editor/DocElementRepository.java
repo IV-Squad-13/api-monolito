@@ -13,4 +13,6 @@ public interface DocElementRepository<T extends DocElement> extends MongoReposit
     Optional<T> findByName(String name);
     Optional<T> findByNameAndEspecificacaoDoc(String name, EspecificacaoDoc especDoc);
     void deleteAllByName(@NotBlank String name);
+
+    void deleteAllByEspecificacaoDoc(EspecificacaoDoc espec);
 }

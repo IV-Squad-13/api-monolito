@@ -1,4 +1,4 @@
-package com.squad13.apimonolito.controllers.auth;
+package com.squad13.apimonolito.controllers.user;
 
 import com.squad13.apimonolito.DTO.auth.login.LoginRequestDTO;
 import com.squad13.apimonolito.DTO.auth.register.RegisterDto;
@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/auth")
+@RequestMapping("api/user")
 public class AutenticacaoController {
 
     @Autowired
@@ -30,12 +30,12 @@ public class AutenticacaoController {
     @Autowired
     private TokenService tokenService;
 
-    @GetMapping("/me")
+    @GetMapping("/auth/me")
     public ResponseEntity<Usuario> me(@RequestHeader("Authorization") String authHeader){
         return ResponseEntity.ok(authService.findMe(authHeader));
     }
 
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public ResponseEntity<String> login(@RequestBody LoginRequestDTO data) {
         if (data.email() == null && data.username() == null) return ResponseEntity.badRequest().build();
         var identifier = data.username() == null ? data.email() : data.username();
@@ -49,7 +49,7 @@ public class AutenticacaoController {
         return ResponseEntity.ok(token);
     }
 
-    @PostMapping("/register")
+    @PostMapping("/auth/register")
     public ResponseEntity<Object> registrarUsuario(@Valid @RequestBody RegisterDto dto) {
         try {
             Usuario usuario = authService.registerUser(dto);
@@ -67,28 +67,5 @@ public class AutenticacaoController {
             error.put("erro", e.getMessage());
             return ResponseEntity.badRequest().body(error);
         }
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Object> updateUsuario(@PathVariable Long id, @Valid @RequestBody RegisterDto dto) {
-        try {
-            Usuario usuarioAtualizado = authService.updateUser(id, dto);
-            return ResponseEntity.ok(usuarioAtualizado.getNome());
-        }  catch (UsernameNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deletarUsuario(@PathVariable Long id) {
-        try {
-            authService.deleteUser(id);
-            return ResponseEntity.noContent().build();
-        } catch (UsernameNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
-
     }
 }

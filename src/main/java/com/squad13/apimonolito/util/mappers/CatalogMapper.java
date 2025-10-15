@@ -95,7 +95,7 @@ public class CatalogMapper {
         if (material == null) return null;
 
         Set<ResMinDTO> padroes = loadDTO.isLoadPadroes() ? getMaterialMinPadraoDTO(material.getMarcaSet()) : Collections.emptySet();
-        Set<ResMinDTO> marcas = loadDTO.isLoadMarcas() ? getMinMaterialDTO(material.getMarcaSet()) : Collections.emptySet();
+        Set<ResMinDTO> marcas = loadDTO.isLoadMarcas() ? getMinMarcaDTO(material.getMarcaSet()) : Collections.emptySet();
 
         return new ResMaterialDTO(
                 material.getId(),
@@ -160,9 +160,7 @@ public class CatalogMapper {
                         type.getId(),
                         type.getName(),
                         type.getIsActive(),
-                        type.getItemDescSet().stream()
-                                .map(this::toMinDTO)
-                                .collect(Collectors.toSet())
+                        Set.of()
                 ))
                 .orElse(null);
     }

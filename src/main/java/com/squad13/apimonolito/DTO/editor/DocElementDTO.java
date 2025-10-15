@@ -19,8 +19,8 @@ import lombok.Setter;
 @JsonSubTypes({
         @JsonSubTypes.Type(value = AmbienteDocDTO.class, name = "AMBIENTE"),
         @JsonSubTypes.Type(value = ItemDocDTO.class, name = "ITEM"),
-        @JsonSubTypes.Type(value = DocElementDTO.class, name = "MATERIAL"),
-        @JsonSubTypes.Type(value = DocElementDTO.class, name = "MARCA")
+        @JsonSubTypes.Type(value = MaterialElementDTO.class, name = "MATERIAL"),
+        @JsonSubTypes.Type(value = MarcaElementDTO.class, name = "MARCA")
 })
 public abstract class DocElementDTO {
 

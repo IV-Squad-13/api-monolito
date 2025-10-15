@@ -19,4 +19,13 @@ public record ResUserDTO(
                 user.getPapel().getNome()
         );
     }
+
+    public static ResUserDTO from(Usuario user) {
+        return new ResUserDTO(
+                user.getId(),
+                user.getNome(),
+                user.getEmail(),
+                user.getPapel().getNome()
+        );
+    }
 }

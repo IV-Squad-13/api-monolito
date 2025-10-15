@@ -20,7 +20,6 @@ import com.squad13.apimonolito.repository.catalog.PadraoRepository;
 import com.squad13.apimonolito.repository.editor.EmpreendimentoRepository;
 import com.squad13.apimonolito.repository.revision.RevisaoRepository;
 import com.squad13.apimonolito.repository.user.UsuarioRepository;
-import com.squad13.apimonolito.repository.user.associative.UsuarioEmpreendimentoRepository;
 import com.squad13.apimonolito.util.enums.AccessLevelEnum;
 import com.squad13.apimonolito.util.enums.EmpStatusEnum;
 import com.squad13.apimonolito.util.mappers.EditorMapper;
@@ -51,7 +50,6 @@ public class EmpreendimentoService {
     private final EspecificacaoRevDocElementRepository specRevDocRepository;
 
     private final UsuarioRepository userRepository;
-    private final UsuarioEmpreendimentoRepository userEmpRepository;
 
     private final EditorMapper mapper;
 

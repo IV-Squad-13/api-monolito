@@ -7,11 +7,13 @@ import com.squad13.apimonolito.mongo.editor.MarcaDocElementRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@DataMongoTest
 class MarcaDocTest {
 
     @Autowired

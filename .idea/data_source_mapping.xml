@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourcePerFileMappings">
-    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/eecd1f22-9b12-42dc-a27c-4ff03455e265/console.js" value="eecd1f22-9b12-42dc-a27c-4ff03455e265" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V2__popular_catalogo.sql" value="000c45dd-9f0a-497e-bf91-e8d6a4741c5b" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V3__popular_associassoes_do_catalogo.sql" value="000c45dd-9f0a-497e-bf91-e8d6a4741c5b" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V4__criar_usuario_e_papel.sql" value="000c45dd-9f0a-497e-bf91-e8d6a4741c5b" />

@@ -1,6 +1,7 @@
 package com.squad13.apimonolito.DTO.editor;
 
 import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springdoc.core.annotations.ParameterObject;
@@ -9,24 +10,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 @Getter
 @Setter
 @ParameterObject
+@AllArgsConstructor
 public class LoadDocumentParamsDTO{
 
     private boolean loadDocument;
     private boolean loadPadrao;
     private boolean loadRevision;
     private boolean loadUsers;
-
-    public LoadDocumentParamsDTO(
-            boolean loadDocument,
-            boolean loadCatalog,
-            boolean loadRevision,
-            boolean loadUsers
-    ) {
-        this.loadDocument = loadDocument;
-        this.loadPadrao = loadCatalog;
-        this.loadRevision = loadRevision;
-        this.loadUsers = loadUsers;
-    }
 
     public LoadDocumentParamsDTO() {
         this(false, false, false, false);

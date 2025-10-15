@@ -19,7 +19,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @Document(collection = "materiais")
-@CompoundIndex(name = "material_unique", def = "{'catalogId' : 1, 'name': 1, 'empreendimento': 1}", unique = true)
+@CompoundIndex(name = "material_unique", def = "{'catalogId' : 1, 'name': 1, 'especificacaoDoc': 1}", unique = true)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class MaterialDocElement extends DocElement {
 

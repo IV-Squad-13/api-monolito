@@ -57,6 +57,15 @@ public class EditorMapper {
         );
     }
 
+    public DocElement fromCatalog(EspecificacaoDoc espec, Object entity, DocElementEnum type) {
+        return switch (type) {
+            case AMBIENTE -> fromCatalog(espec, (Ambiente) entity);
+            case ITEM -> fromCatalog(espec, (ItemDesc) entity);
+            case MATERIAL -> fromCatalog(espec, (Material) entity);
+            case MARCA -> fromCatalog(espec, (Marca) entity);
+        };
+    }
+
     public AmbienteDocElement fromCatalog(EspecificacaoDoc espec, Ambiente catalogAmbiente) {
         AmbienteDocElement ambiente = new AmbienteDocElement();
         ambiente.setName(catalogAmbiente.getName());

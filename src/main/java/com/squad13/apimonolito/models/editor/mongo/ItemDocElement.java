@@ -2,6 +2,8 @@ package com.squad13.apimonolito.models.editor.mongo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.squad13.apimonolito.DTO.editor.ItemDocDTO;
+import com.squad13.apimonolito.models.catalog.ItemType;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -20,12 +22,21 @@ import java.util.List;
 public class ItemDocElement extends DocElement {
 
     @NotBlank
+    private String desc;
+
     private String type;
 
-    @NotBlank
-    private String desc;
+    private Long typeId;
 
     @Transient
     @JsonProperty
     private List<DocElement> docElementList;
+
+    public static ItemDocElement fromDto(ItemDocDTO dto, EspecificacaoDoc espec, ItemType type) {
+        ItemDocElement item = DocElement.genericFromDto(dto, espec, ItemDocElement.class);
+        item.setDesc(dto.getDesc());
+        item.setTypeId(type.getId());
+        item.setType(type.getName());
+        return item;
+    }
 }

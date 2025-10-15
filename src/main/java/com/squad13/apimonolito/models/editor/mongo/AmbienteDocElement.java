@@ -1,6 +1,8 @@
 package com.squad13.apimonolito.models.editor.mongo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.squad13.apimonolito.DTO.editor.AmbienteDocDTO;
+import com.squad13.apimonolito.DTO.editor.DocElementDTO;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import com.squad13.apimonolito.util.enums.LocalEnum;
 import lombok.Data;
@@ -25,4 +27,10 @@ public class AmbienteDocElement extends DocElement {
     @DBRef(lazy = true)
     @Field("items")
     private List<ItemDocElement> itemDocList = new ArrayList<>();
+
+    public static AmbienteDocElement fromDto(AmbienteDocDTO dto, EspecificacaoDoc espec) {
+        AmbienteDocElement ambiente = DocElement.genericFromDto(dto, espec, AmbienteDocElement.class);
+        ambiente.setLocal(dto.getLocal());
+        return ambiente;
+    }
 }

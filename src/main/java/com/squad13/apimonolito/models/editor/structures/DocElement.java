@@ -3,6 +3,7 @@ package com.squad13.apimonolito.models.editor.structures;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.squad13.apimonolito.DTO.editor.DocElementDTO;
 import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
@@ -46,4 +47,17 @@ public abstract class DocElement {
     @LastModifiedDate
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "America/Brasilia")
     private Instant updated;
+
+    public static <D extends DocElementDTO, T extends DocElement> T genericFromDto(D dto, EspecificacaoDoc espec, Class<T> clazz) {
+        try {
+            T instance = clazz.getDeclaredConstructor().newInstance();
+            instance.setName(dto.getName());
+            instance.setCatalogId(dto.getCatalogId());
+            instance.setEspecificacaoDoc(espec);
+            instance.setInSync(false);
+            return instance;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao criar instância de " + clazz.getSimpleName(), e);
+        }
+    }
 }

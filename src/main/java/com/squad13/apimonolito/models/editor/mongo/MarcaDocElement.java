@@ -2,6 +2,7 @@ package com.squad13.apimonolito.models.editor.mongo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.squad13.apimonolito.DTO.editor.DocElementDTO;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,4 +22,8 @@ public class MarcaDocElement extends DocElement {
     @Transient
     @JsonProperty
     private List<DocElement> docElementList;
+
+    public static MarcaDocElement fromDto(DocElementDTO dto) {
+        return DocElement.genericFromDto(dto, null, MarcaDocElement.class);
+    }
 }

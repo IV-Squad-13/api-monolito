@@ -1,6 +1,6 @@
 package com.squad13.apimonolito.models.revision.mongo;
 
-import com.squad13.apimonolito.models.editor.mongo.LocalDocElement;
+import com.squad13.apimonolito.models.editor.mongo.LocalDoc;
 import com.squad13.apimonolito.models.revision.structures.RevDocElement;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -19,7 +19,7 @@ public class LocalRevDocElement extends RevDocElement {
 
     @DBRef
     @NotNull
-    private LocalDocElement local;
+    private LocalDoc local;
 
     @DBRef
     private List<AmbienteRevDocElement> ambienteRevList;

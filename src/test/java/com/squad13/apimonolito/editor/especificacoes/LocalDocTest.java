@@ -3,11 +3,11 @@ package com.squad13.apimonolito.editor.especificacoes;
 import com.squad13.apimonolito.models.editor.mongo.AmbienteDocElement;
 import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
 import com.squad13.apimonolito.models.editor.mongo.ItemDocElement;
-import com.squad13.apimonolito.models.editor.mongo.LocalDocElement;
+import com.squad13.apimonolito.models.editor.mongo.LocalDoc;
 import com.squad13.apimonolito.mongo.editor.AmbienteDocElementRepository;
 import com.squad13.apimonolito.mongo.editor.EspecificacaoDocRepository;
 import com.squad13.apimonolito.mongo.editor.ItemDocElementRepository;
-import com.squad13.apimonolito.mongo.editor.LocalDocElementRepository;
+import com.squad13.apimonolito.mongo.editor.LocalDocRepository;
 import com.squad13.apimonolito.util.enums.LocalEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ class LocalDocTest {
     private AmbienteDocElementRepository ambienteDocRepository;
 
     @Autowired
-    private LocalDocElementRepository localDocRepository;
+    private LocalDocRepository localDocRepository;
 
     @Autowired
     private EspecificacaoDocRepository empDocRepository;
@@ -68,59 +68,48 @@ class LocalDocTest {
         ambiente.setItemDocList(List.of(item));
         ambienteDocRepository.save(ambiente);
 
-        LocalDocElement local = new LocalDocElement();
-        local.setName("Local");
-        local.setCatalogId(1L);
+        LocalDoc local = new LocalDoc();
         local.setEspecificacaoDoc(empDoc);
         local.setLocal(LocalEnum.UNIDADES_PRIVATIVAS);
-        local.setInSync(true);
         local.setAmbienteDocList(List.of(ambiente));
         localDocRepository.save(local);
 
-        List<LocalDocElement> foundLocals = localDocRepository.findByLocal(LocalEnum.UNIDADES_PRIVATIVAS);
-        LocalDocElement foundLocal = localDocRepository.findById(local.getId())
+        List<LocalDoc> foundLocals = localDocRepository.findByLocal(LocalEnum.UNIDADES_PRIVATIVAS);
+        LocalDoc foundLocal = localDocRepository.findById(local.getId())
                 .orElseThrow(() -> new RuntimeException("Local não encontrado"));
 
         assertThat(foundLocals).isNotEmpty();
         assertThat(foundLocals).contains(foundLocal);
         assertThat(foundLocal.getId()).isEqualTo(local.getId());
-        assertThat(foundLocal.getName()).isNull();
-        assertThat(foundLocal.getCatalogId()).isNull();
+        assertThat(foundLocal.getLocal()).isNull();
         assertThat(foundLocal.getAmbienteDocList()).hasSize(1);
         assertThat(foundLocal.getAmbienteDocList().getFirst().getName()).isEqualTo("Ambiente");
     }
 
     @Test
     void testLocalUpdate() {
-        LocalDocElement local = new LocalDocElement();
-        local.setName("Local");
-        local.setCatalogId(1L);
+        LocalDoc local = new LocalDoc();
         local.setEspecificacaoDoc(empDoc);
         local.setLocal(LocalEnum.UNIDADES_PRIVATIVAS);
-        local.setInSync(true);
         localDocRepository.save(local);
 
-        LocalDocElement foundLocal = localDocRepository.findById(local.getId())
+        LocalDoc foundLocal = localDocRepository.findById(local.getId())
                 .orElseThrow(() -> new RuntimeException("Local não encontrado"));
         foundLocal.setLocal(LocalEnum.AREA_COMUM);
         localDocRepository.save(foundLocal);
 
-        LocalDocElement updated = localDocRepository.findById(local.getId())
+        LocalDoc updated = localDocRepository.findById(local.getId())
                 .orElseThrow(() -> new RuntimeException("Local não encontrado após update"));
 
         assertThat(updated).isNotNull();
-        assertThat(updated.getName()).isNull();
         assertThat(updated.getLocal()).isEqualTo(LocalEnum.AREA_COMUM);
     }
 
     @Test
     void testLocalDelete() {
-        LocalDocElement local = new LocalDocElement();
-        local.setName("Local");
-        local.setCatalogId(1L);
+        LocalDoc local = new LocalDoc();
         local.setEspecificacaoDoc(empDoc);
         local.setLocal(LocalEnum.UNIDADES_PRIVATIVAS);
-        local.setInSync(true);
         localDocRepository.save(local);
 
         localDocRepository.delete(local);

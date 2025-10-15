@@ -1,11 +1,11 @@
 package com.squad13.apimonolito.models.editor.mongo;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.squad13.apimonolito.models.editor.structures.DocElement;
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.squad13.apimonolito.util.enums.LocalEnum;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.Transient;
@@ -23,19 +23,17 @@ import java.util.List;
 @Document(collection = "locais")
 @CompoundIndex(name = "local_unique", def = "{'local': 1, 'empreendimento': 1}", unique = true)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class LocalDocElement extends DocElement {
+public class LocalDoc {
 
-    @Transient
-    @JsonProperty
-    private Long catalogId;
+    @Id
+    @JsonProperty("id")
+    @JsonSerialize(using = ToStringSerializer.class)
+    private String id;
 
-    @Transient
-    @JsonProperty
-    private String name;
-
-    @Transient
-    @JsonProperty
-    private boolean inSync;
+    @NotNull
+    @DBRef(lazy = true)
+    @JsonIgnore
+    private EspecificacaoDoc especificacaoDoc;
 
     private LocalEnum local;
 

@@ -2,13 +2,13 @@ package com.squad13.apimonolito.revision.especificacoes;
 
 import com.squad13.apimonolito.models.editor.mongo.AmbienteDocElement;
 import com.squad13.apimonolito.models.editor.mongo.ItemDocElement;
-import com.squad13.apimonolito.models.editor.mongo.LocalDocElement;
+import com.squad13.apimonolito.models.editor.mongo.LocalDoc;
 import com.squad13.apimonolito.models.revision.mongo.AmbienteRevDocElement;
 import com.squad13.apimonolito.models.revision.mongo.ItemRevDocElement;
 import com.squad13.apimonolito.models.revision.mongo.LocalRevDocElement;
 import com.squad13.apimonolito.mongo.editor.AmbienteDocElementRepository;
 import com.squad13.apimonolito.mongo.editor.ItemDocElementRepository;
-import com.squad13.apimonolito.mongo.editor.LocalDocElementRepository;
+import com.squad13.apimonolito.mongo.editor.LocalDocRepository;
 import com.squad13.apimonolito.mongo.revision.AmbienteRevDocElementRepository;
 import com.squad13.apimonolito.mongo.revision.ItemRevDocElementRepository;
 import com.squad13.apimonolito.mongo.revision.LocalRevDocElementRepository;
@@ -40,14 +40,14 @@ class LocalRevDocTest {
     private AmbienteRevDocElementRepository ambienteRevDocRepository;
 
     @Autowired
-    private LocalDocElementRepository localDocRepository;
+    private LocalDocRepository localDocRepository;
 
     @Autowired
     private LocalRevDocElementRepository localRevDocRepository;
 
     private ItemDocElement item;
     private AmbienteDocElement ambiente;
-    private LocalDocElement local;
+    private LocalDoc local;
 
     @BeforeEach
     void cleanDatabase() {
@@ -72,11 +72,8 @@ class LocalRevDocTest {
         ambiente.setItemDocList(List.of(item));
         ambienteDocRepository.save(ambiente);
 
-        local = new LocalDocElement();
+        local = new LocalDoc();
         local.setLocal(LocalEnum.AREA_COMUM);
-        local.setCatalogId(1L);
-        local.setInSync(true);
-        local.setName("Local Test");
         local.setAmbienteDocList(List.of(ambiente));
         localDocRepository.save(local);
     }
@@ -106,7 +103,7 @@ class LocalRevDocTest {
         assertThat(foundRev).isNotNull();
         assertThat(foundRev.getId()).isNotNull();
         assertThat(foundRev.getAmbienteRevList()).hasSize(1);
-        assertThat(foundRev.getAmbienteRevList().get(0).getItemRevList().getFirst().getItem().getName())
+        assertThat(foundRev.getAmbienteRevList().getFirst().getItemRevList().getFirst().getItem().getName())
                 .isEqualTo("Item");
     }
 

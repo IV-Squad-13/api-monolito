@@ -3,6 +3,7 @@ package com.squad13.apimonolito.models.editor.mongo;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.squad13.apimonolito.DTO.editor.DocElementDTO;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,4 +26,8 @@ public class MaterialDocElement extends DocElement {
     @DBRef(lazy = true)
     @Field("marcas")
     private List<MarcaDocElement> marcaDocList = new ArrayList<>();
+
+    public static MaterialDocElement fromDto(DocElementDTO dto, EspecificacaoDoc espec) {
+        return DocElement.genericFromDto(dto, espec, MaterialDocElement.class);
+    }
 }

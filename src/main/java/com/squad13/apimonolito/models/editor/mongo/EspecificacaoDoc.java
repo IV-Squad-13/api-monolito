@@ -47,7 +47,7 @@ public class EspecificacaoDoc {
 
     @DBRef(lazy = true)
     @JsonManagedReference
-    private List<LocalDocElement> locais = new ArrayList<>();
+    private List<LocalDoc> locais = new ArrayList<>();
 
     @DBRef(lazy = true)
     @JsonManagedReference

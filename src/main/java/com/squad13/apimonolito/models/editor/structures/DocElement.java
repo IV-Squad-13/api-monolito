@@ -12,7 +12,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.time.Instant;
@@ -31,7 +30,6 @@ public abstract class DocElement {
     @NotNull
     private Long catalogId;
 
-    @Transient
     private String prevId;
 
     @NotNull

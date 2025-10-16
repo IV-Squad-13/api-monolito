@@ -5,4 +5,6 @@ import com.squad13.apimonolito.models.editor.mongo.ItemDocElement;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ItemDocElementRepository extends DocElementRepository<ItemDocElement> { }
+public interface ItemDocElementRepository extends DocElementRepository<ItemDocElement> {
+    boolean existsByNameAndPrevIdAndEspecificacaoDoc(String name, String prevId, EspecificacaoDoc especificacaoDoc);
+}

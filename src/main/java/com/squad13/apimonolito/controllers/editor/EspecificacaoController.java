@@ -18,36 +18,26 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EspecificacaoController {
 
-    private final EspecificacaoService especService;
+    private final EspecificacaoService especificacaoService;
 
     @GetMapping()
     public ResponseEntity<List<EspecificacaoDoc>> findAll() {
-        return ResponseEntity.ok(especService.getAll());
+        return ResponseEntity.ok(especificacaoService.getAll());
     }
 
     @PostMapping("/new")
     public ResponseEntity<EspecificacaoDoc> create(@RequestBody EspecificacaoDocDTO dto){
-        return ResponseEntity.ok(especService.create(dto));
-    }
-
-    @PostMapping("/{id}/catalog")
-    public ResponseEntity<DocElement> createElement(@PathVariable String id, @Valid @RequestBody DocElementCatalogCreationDTO dto) {
-        return ResponseEntity.ok(especService.createElement(id, dto));
-    }
-
-    @PostMapping("/{id}/raw")
-    public ResponseEntity<DocElement> createRawElement(@PathVariable String id, @Valid @RequestBody DocElementDTO dto) {
-        return ResponseEntity.ok(especService.createRawElement(id, dto));
+        return ResponseEntity.ok(especificacaoService.create(dto));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<EspecificacaoDoc> update(@PathVariable String id, @Valid @RequestBody EditEspecificacaoDocDTO dto) {
-        return ResponseEntity.ok(especService.update(id, dto));
+        return ResponseEntity.ok(especificacaoService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable String id) {
-        especService.delete(id);
+        especificacaoService.delete(id);
         return ResponseEntity.ok("Especificação deletada com sucesso");
     }
 }

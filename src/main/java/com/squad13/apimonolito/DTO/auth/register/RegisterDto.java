@@ -1,7 +1,9 @@
 package com.squad13.apimonolito.DTO.auth.register;
 
+import com.squad13.apimonolito.util.enums.PapelEnum;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -19,6 +21,6 @@ public class RegisterDto {
     @Email(message = "Email deve ser válido")
     private String email;
 
-    @NotBlank(message = "Papel é obrigatório")
-    private String papel;
+    @NotNull(message = "Papel é obrigatório")
+    private PapelEnum papel;
 }

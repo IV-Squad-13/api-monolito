@@ -28,8 +28,7 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateUsuario(@PathVariable Long id, @Valid @RequestBody RegisterDto dto) {
         try {
-            Usuario usuarioAtualizado = userService.updateUser(id, dto);
-            return ResponseEntity.ok(usuarioAtualizado.getNome());
+            return ResponseEntity.ok(userService.updateUser(id, dto));
         }  catch (UsernameNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (IllegalArgumentException e) {

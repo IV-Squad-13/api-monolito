@@ -6,6 +6,7 @@ import com.squad13.apimonolito.models.user.Papel;
 import com.squad13.apimonolito.models.user.Usuario;
 import com.squad13.apimonolito.repository.user.PapelRepository;
 import com.squad13.apimonolito.repository.user.UsuarioRepository;
+import com.squad13.apimonolito.util.enums.PapelEnum;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,12 +67,7 @@ public class AutenticacaoService implements UserDetailsService {
     @Transactional
     public Usuario registerUser(RegisterDto dto) {
 
-        List<String> papeisValidos = Arrays.asList("ADMIN", "REVISOR", "RELATOR");
-        String papelInformado = dto.getPapel().toUpperCase().trim();
-
-        if (!papeisValidos.contains(papelInformado)) {
-            throw new IllegalArgumentException("Papel inválido. Deve ser ADMIN, REVISOR ou RELATOR");
-        }
+        PapelEnum papelInformado = dto.getPapel();
 
         if (usuarioRepository.existsByNome(dto.getNome())) {
             throw new IllegalArgumentException("Nome de usuário já existe");

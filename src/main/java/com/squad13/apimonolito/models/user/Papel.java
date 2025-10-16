@@ -1,5 +1,6 @@
 package com.squad13.apimonolito.models.user;
 
+import com.squad13.apimonolito.util.enums.PapelEnum;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -14,5 +15,6 @@ public class Papel {
     private Long id;
 
     @Column(name = "nm_papel",  nullable = false, length = 50, unique = true)
-    private String nome;
+    @Enumerated(EnumType.STRING)
+    private PapelEnum nome;
 }

@@ -1,6 +1,7 @@
 package com.squad13.apimonolito.util.mappers;
 
 import com.squad13.apimonolito.DTO.auth.res.ResUserDTO;
+import com.squad13.apimonolito.models.user.Usuario;
 import com.squad13.apimonolito.models.user.associative.UsuarioEmpreendimento;
 import com.squad13.apimonolito.repository.user.associative.UsuarioEmpreendimentoRepository;
 import com.squad13.apimonolito.repository.user.UsuarioRepository;

@@ -4,6 +4,7 @@ import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResAmbienteDTO;
 import com.squad13.apimonolito.DTO.editor.DocElementCatalogCreationDTO;
 import com.squad13.apimonolito.DTO.editor.DocElementDTO;
+import com.squad13.apimonolito.DTO.editor.DocElementParams;
 import com.squad13.apimonolito.DTO.editor.EspecificacaoDocDTO;
 import com.squad13.apimonolito.DTO.editor.edit.EditEspecificacaoDocDTO;
 import com.squad13.apimonolito.exceptions.AssociationAlreadyExistsException;
@@ -25,6 +26,7 @@ import com.squad13.apimonolito.util.mappers.EditorMapper;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.mongodb.core.ReadPreferenceAware;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -36,23 +38,29 @@ import java.util.Objects;
 @Transactional
 public class EspecificacaoService {
 
-    private final DocElementFactory docElementFactory;
-
     private final EmpreendimentoRepository empRepository;
+
     private final EspecificacaoDocRepository especRepository;
 
-    private final LocalDocRepository localDocRepository;
-    private final CatalogMapper catalogMapper;
     private final EditorMapper editorMapper;
+
+    private final DocElementFactory docElementFactory;
     private final CatalogSearch catalogSearch;
     private final DocumentSearch documentSearch;
+
+    private final LocalDocRepository localDocRepository;
     private final AmbienteDocElementRepository ambienteDocRepository;
+    private final ItemDocElementRepository itemDocRepository;
     private final MaterialDocElementRepository materialDocRepository;
     private final MarcaDocElementRepository marcaDocRepository;
-    private final ItemDocElementRepository itemDocRepository;
+    private final ReadPreferenceAware readPreferenceAware;
 
     public List<EspecificacaoDoc> getAll() {
         return especRepository.findAll();
+    }
+
+    public List<? extends DocElement> getAll(DocElementParams params) {
+        return documentSearch.findDocuments(params.getType().getDocElement());
     }
 
     public EspecificacaoDoc getById(String id) {

@@ -6,6 +6,7 @@ import com.squad13.apimonolito.models.user.Papel;
 import com.squad13.apimonolito.models.user.Usuario;
 import com.squad13.apimonolito.repository.user.PapelRepository;
 import com.squad13.apimonolito.repository.user.UsuarioRepository;
+import com.squad13.apimonolito.util.enums.PapelEnum;
 import com.squad13.apimonolito.util.mappers.UserMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,8 @@ import java.util.List;
 @Transactional
 public class UserService {
 
+    private final UserMapper userMapper;
+
     private final PapelRepository papelRepository;
     private final UsuarioRepository usuarioRepository;
 
@@ -32,13 +35,14 @@ public class UserService {
                 .toList();
     }
 
-    @Transactional
-    public Usuario updateUser(Long id, RegisterDto dto) {
-        Usuario usuario = usuarioRepository.findById(id)
+    private Usuario findById(Long id) {
+        return usuarioRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário com id " + id + " não encontrado."));
+    }
 
-        List<String> papeisValidos = Arrays.asList("ADMIN", "REVISOR", "RELATOR");
-
+    @Transactional
+    public ResUserDTO updateUser(Long id, RegisterDto dto) {
+        Usuario usuario = findById(id);
 
         if (dto.getNome() != null && !dto.getNome().isEmpty() && !dto.getNome().equals(usuario.getNome())) {
             if (usuarioRepository.existsByNome(dto.getNome())) {
@@ -58,12 +62,8 @@ public class UserService {
             usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
         }
 
-        if (dto.getPapel() != null && !dto.getPapel().isEmpty()) {
-            String papelInformado = dto.getPapel().toUpperCase().trim();
-
-            if (!papeisValidos.contains(papelInformado)) {
-                throw new IllegalArgumentException("Papél inválido. Deve ser ADMIN, REVISOR ou RELATOR");
-            }
+        if (dto.getPapel() != null) {
+            PapelEnum papelInformado = dto.getPapel();
 
             if (!papelInformado.equals(usuario.getPapel().getNome())) {
                 Papel papel = papelRepository.findByNome(papelInformado)
@@ -72,9 +72,7 @@ public class UserService {
             }
         }
 
-        return usuarioRepository.save(usuario);
-
-
+        return ResUserDTO.from(usuarioRepository.save(usuario));
     }
 
     @Transactional

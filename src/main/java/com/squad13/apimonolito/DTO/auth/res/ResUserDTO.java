@@ -2,12 +2,13 @@ package com.squad13.apimonolito.DTO.auth.res;
 
 import com.squad13.apimonolito.models.user.Usuario;
 import com.squad13.apimonolito.models.user.associative.UsuarioEmpreendimento;
+import com.squad13.apimonolito.util.enums.PapelEnum;
 
 public record ResUserDTO(
         Long id,
         String name,
         String email,
-        String role
+        PapelEnum role
 ) {
 
     public static ResUserDTO from(UsuarioEmpreendimento userEmp) {

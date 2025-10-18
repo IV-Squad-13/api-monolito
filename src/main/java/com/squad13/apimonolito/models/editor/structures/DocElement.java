@@ -30,7 +30,7 @@ public abstract class DocElement {
     @NotNull
     private Long catalogId;
 
-    private String prevId;
+    private String parentId;
 
     @NotNull
     @DBRef(lazy = true)
@@ -55,7 +55,7 @@ public abstract class DocElement {
             T instance = clazz.getDeclaredConstructor().newInstance();
             instance.setName(dto.getName());
             instance.setCatalogId(dto.getCatalogId());
-            instance.setPrevId(dto.getPrevId());
+            instance.setParentId(dto.getParentId());
             instance.setEspecificacaoDoc(espec);
             return instance;
         } catch (Exception e) {

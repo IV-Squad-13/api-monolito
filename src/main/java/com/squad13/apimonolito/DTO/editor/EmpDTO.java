@@ -16,5 +16,6 @@ public record EmpDTO(
         @NotNull(message = "É necessário informar o criador")
         Long creatorId,
 
+        // Eventualment, a criação de especificação vai acontecer junto da criação de empreendimento
         DocInitializationEnum init
 ) { }

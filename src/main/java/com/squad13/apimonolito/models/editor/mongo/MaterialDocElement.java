@@ -30,4 +30,6 @@ public class MaterialDocElement extends DocElement {
     public static MaterialDocElement fromDto(DocElementDTO dto, EspecificacaoDoc espec) {
         return DocElement.genericFromDto(dto, espec, MaterialDocElement.class);
     }
+
+
 }

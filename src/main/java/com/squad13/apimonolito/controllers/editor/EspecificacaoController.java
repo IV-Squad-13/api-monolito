@@ -25,6 +25,11 @@ public class EspecificacaoController {
         return ResponseEntity.ok(especificacaoService.getAll());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<EspecificacaoDoc> findById(@PathVariable String id) {
+        return ResponseEntity.ok(especificacaoService.getById(id));
+    }
+
     @PostMapping("/new")
     public ResponseEntity<EspecificacaoDoc> create(@RequestBody EspecificacaoDocDTO dto){
         return ResponseEntity.ok(especificacaoService.create(dto));

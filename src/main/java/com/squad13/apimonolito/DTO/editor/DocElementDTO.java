@@ -29,7 +29,7 @@ public abstract class DocElementDTO {
 
     private Long catalogId;
 
-    private String prevId;
+    private String parentId;
 
     private DocElementEnum docType;
 }

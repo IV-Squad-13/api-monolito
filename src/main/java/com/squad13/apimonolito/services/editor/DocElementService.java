@@ -94,14 +94,14 @@ public class DocElementService {
                 .filter(l -> l.getLocal().equals(ambiente.getLocal()))
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("Local não encontrado: " + ambiente.getLocal()));
-        ambiente.setPrevId(local.getId());
+        ambiente.setParentId(local.getId());
         local.getAmbienteDocList().add(ambiente);
         localDocRepository.save(local);
     }
 
     private void saveItem(ItemDocElement item) {
-        if (item.getPrevId() != null) {
-            AmbienteDocElement ambiente = documentSearch.findInDocument(item.getPrevId(), AmbienteDocElement.class);
+        if (item.getParentId() != null) {
+            AmbienteDocElement ambiente = documentSearch.findInDocument(item.getParentId(), AmbienteDocElement.class);
             associateItemToAmbiente(ambiente, item);
         } else {
             itemDocRepository.save(item);
@@ -116,8 +116,8 @@ public class DocElementService {
     }
 
     private void saveMarca(MarcaDocElement marca) {
-        if (marca.getPrevId() != null) {
-            MaterialDocElement material = documentSearch.findInDocument(marca.getPrevId(), MaterialDocElement.class);
+        if (marca.getParentId() != null) {
+            MaterialDocElement material = documentSearch.findInDocument(marca.getParentId(), MaterialDocElement.class);
             associateMarcaToMaterial(material, marca);
         } else {
             marcaDocRepository.save(marca);
@@ -190,9 +190,9 @@ public class DocElementService {
     }
 
     private void checkDuplicateAmbiente(AmbienteDocElement ambiente) {
-        boolean exists = ambienteDocRepository.existsByNameAndPrevId(
+        boolean exists = ambienteDocRepository.existsByNameAndParentId(
                 ambiente.getName(),
-                ambiente.getPrevId()
+                ambiente.getParentId()
         );
 
         if (exists) {
@@ -201,7 +201,7 @@ public class DocElementService {
     }
 
     private void checkDuplicateItem(AmbienteDocElement ambiente, ItemDocElement item) {
-        boolean exists = itemDocRepository.existsByNameAndPrevIdAndEspecificacaoDoc(
+        boolean exists = itemDocRepository.existsByNameAndParentIdAndEspecificacaoDoc(
                 item.getName(),
                 ambiente.getId(),
                 item.getEspecificacaoDoc()
@@ -224,7 +224,7 @@ public class DocElementService {
     }
 
     private void checkDuplicateMarca(MaterialDocElement material, MarcaDocElement marca) {
-        boolean exists = marcaDocRepository.existsByNameAndPrevIdAndEspecificacaoDoc(
+        boolean exists = marcaDocRepository.existsByNameAndParentIdAndEspecificacaoDoc(
                 marca.getName(),
                 material.getId(),
                 marca.getEspecificacaoDoc()
@@ -258,18 +258,18 @@ public class DocElementService {
         if (dto.getLocal() != null) {
             ambiente.setLocal(dto.getLocal());
 
-            if (dto.getPrevId() != null) {
-                LocalDoc local = localDocRepository.findById(dto.getPrevId())
+            if (dto.getParentId() != null) {
+                LocalDoc local = localDocRepository.findById(dto.getParentId())
                         .orElseThrow(() ->
-                                new ResourceNotFoundException("Local não encontrado com o id informado: " + dto.getPrevId())
+                                new ResourceNotFoundException("Local não encontrado com o id informado: " + dto.getParentId())
                         );
 
-                if (ambiente.getPrevId() == null) {
-                    ambiente.setPrevId(dto.getPrevId());
+                if (ambiente.getParentId() == null) {
+                    ambiente.setParentId(dto.getParentId());
                 } else {
-                    LocalDoc prevLocal = localDocRepository.findById(ambiente.getPrevId())
+                    LocalDoc prevLocal = localDocRepository.findById(ambiente.getParentId())
                             .orElseThrow(() ->
-                                    new ResourceNotFoundException("Local anterior não encontrado: " + ambiente.getPrevId())
+                                    new ResourceNotFoundException("Local anterior não encontrado: " + ambiente.getParentId())
                             );
                     prevLocal.getAmbienteDocList().remove(ambiente);
                 }
@@ -288,7 +288,7 @@ public class DocElementService {
                                 new ResourceNotFoundException("Local não encontrado: " + ambiente.getLocal())
                         );
 
-                ambiente.setPrevId(local.getId());
+                ambiente.setParentId(local.getId());
                 local.getAmbienteDocList().add(ambiente);
             }
         }
@@ -307,23 +307,23 @@ public class DocElementService {
             item.setName(dto.getName());
         }
 
-        if (dto.getPrevId() != null) {
-            AmbienteDocElement newAmbiente = ambienteDocRepository.findById(dto.getPrevId())
+        if (dto.getParentId() != null) {
+            AmbienteDocElement newAmbiente = ambienteDocRepository.findById(dto.getParentId())
                     .orElseThrow(() ->
-                            new ResourceNotFoundException("Ambiente não encontrado com o id informado: " + dto.getPrevId())
+                            new ResourceNotFoundException("Ambiente não encontrado com o id informado: " + dto.getParentId())
                     );
 
-            if (item.getPrevId() != null && !item.getPrevId().equals(dto.getPrevId())) {
-                AmbienteDocElement oldAmbiente = ambienteDocRepository.findById(item.getPrevId())
+            if (item.getParentId() != null && !item.getParentId().equals(dto.getParentId())) {
+                AmbienteDocElement oldAmbiente = ambienteDocRepository.findById(item.getParentId())
                         .orElseThrow(() ->
-                                new ResourceNotFoundException("Ambiente anterior não encontrado: " + item.getPrevId())
+                                new ResourceNotFoundException("Ambiente anterior não encontrado: " + item.getParentId())
                         );
                 oldAmbiente.getItemDocList().remove(item);
                 ambienteDocRepository.save(oldAmbiente);
             }
 
             checkDuplicateItem(newAmbiente, item);
-            item.setPrevId(newAmbiente.getId());
+            item.setParentId(newAmbiente.getId());
             newAmbiente.getItemDocList().add(item);
             ambienteDocRepository.save(newAmbiente);
         }
@@ -363,23 +363,23 @@ public class DocElementService {
             marca.setName(dto.getName());
         }
 
-        if (dto.getPrevId() != null) {
-            MaterialDocElement newMaterial = materialDocRepository.findById(dto.getPrevId())
+        if (dto.getParentId() != null) {
+            MaterialDocElement newMaterial = materialDocRepository.findById(dto.getParentId())
                     .orElseThrow(() ->
-                            new ResourceNotFoundException("Material não encontrado com o id informado: " + dto.getPrevId())
+                            new ResourceNotFoundException("Material não encontrado com o id informado: " + dto.getParentId())
                     );
 
-            if (marca.getPrevId() != null && !marca.getPrevId().equals(dto.getPrevId())) {
-                MaterialDocElement oldMaterial = materialDocRepository.findById(marca.getPrevId())
+            if (marca.getParentId() != null && !marca.getParentId().equals(dto.getParentId())) {
+                MaterialDocElement oldMaterial = materialDocRepository.findById(marca.getParentId())
                         .orElseThrow(() ->
-                                new ResourceNotFoundException("Material anterior não encontrado: " + marca.getPrevId())
+                                new ResourceNotFoundException("Material anterior não encontrado: " + marca.getParentId())
                         );
                 oldMaterial.getMarcaDocList().remove(marca);
                 materialDocRepository.save(oldMaterial);
             }
 
             checkDuplicateMarca(newMaterial, marca);
-            marca.setPrevId(newMaterial.getId());
+            marca.setParentId(newMaterial.getId());
             newMaterial.getMarcaDocList().add(marca);
             materialDocRepository.save(newMaterial);
         }

@@ -11,22 +11,22 @@ import com.squad13.apimonolito.services.editor.SynchronizationService;
 import com.squad13.apimonolito.util.enums.DocElementEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @Component
 @RequiredArgsConstructor
 public class DocElementFactory {
 
     private final CatalogSearch catalogSearch;
-    private final DocumentSearch docSearch;
     private final SynchronizationService syncService;
 
+    @ExceptionHandler(InvalidDocumentTypeException.class)
     public DocElement create(EspecificacaoDoc espec, DocElementDTO dto) {
         return switch (dto.getDocType()) {
             case AMBIENTE -> buildAmbiente(espec, (AmbienteDocDTO) dto);
             case ITEM -> buildItem(espec, (ItemDocDTO) dto);
             case MATERIAL -> buildMaterial(espec, dto);
             case MARCA -> buildMarca(espec, dto);
-            default -> throw new InvalidDocumentTypeException("Tipo de elemento não suportado: " + dto.getDocType());
         };
     }
 

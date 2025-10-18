@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MarcaDocElementRepository extends DocElementRepository<MarcaDocElement> {
-    boolean existsByNameAndPrevIdAndEspecificacaoDoc(String name, String prevId, EspecificacaoDoc especificacaoDoc);
+    boolean existsByNameAndParentIdAndEspecificacaoDoc(String name, String parentId, EspecificacaoDoc especificacaoDoc);
 }

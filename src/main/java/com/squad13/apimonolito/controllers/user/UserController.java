@@ -37,10 +37,10 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deletarUsuario(@PathVariable Long id) {
+    public ResponseEntity<?> deletarUsuario(@PathVariable Long id) {
         try {
             userService.deleteUser(id);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok("Usuário deletado com sucesso.");
         } catch (UsernameNotFoundException e) {
             return ResponseEntity.notFound().build();
         }

@@ -7,7 +7,10 @@ import com.squad13.apimonolito.DTO.editor.DocElementDTO;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -16,20 +19,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @Document(collection = "materiais")
-@CompoundIndex(name = "material_unique", def = "{'catalogId' : 1, 'name': 1, 'especificacaoDoc': 1}", unique = true)
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@CompoundIndex(
+        name = "material_unique",
+        def = "{'catalogId' : 1, 'name': 1, 'especificacaoId': 1}",
+        unique = true
+)
 public class MaterialDocElement extends DocElement {
 
-    @DBRef(lazy = true)
-    @Field("marcas")
-    private List<MarcaDocElement> marcaDocList = new ArrayList<>();
+    @Transient
+    private String parentId;
 
-    public static MaterialDocElement fromDto(DocElementDTO dto, EspecificacaoDoc espec) {
-        return DocElement.genericFromDto(dto, espec, MaterialDocElement.class);
+    @Indexed
+    private List<String> marcaIds = new ArrayList<>();
+
+    public static MaterialDocElement fromDto(DocElementDTO dto, String especId) {
+        return DocElement.genericFromDto(dto, especId, MaterialDocElement.class);
     }
-
-
 }

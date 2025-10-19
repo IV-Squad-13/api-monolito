@@ -42,7 +42,7 @@ class MarcaDocTest {
         MarcaDocElement marca = new MarcaDocElement();
         marca.setName("Marca");
         marca.setCatalogId(1L);
-        marca.setEspecificacaoDoc(empDoc);
+        marca.setEspecificacaoId(empDoc.getId());
         marca.setInSync(true);
 
         marcaDocRepository.save(marca);
@@ -61,7 +61,7 @@ class MarcaDocTest {
         MarcaDocElement marca = new MarcaDocElement();
         marca.setName("Marca");
         marca.setCatalogId(1L);
-        marca.setEspecificacaoDoc(empDoc);
+        marca.setEspecificacaoId(empDoc.getId());
         marca.setInSync(true);
         marcaDocRepository.save(marca);
 

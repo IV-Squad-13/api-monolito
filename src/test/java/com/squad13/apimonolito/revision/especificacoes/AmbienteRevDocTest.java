@@ -55,7 +55,7 @@ class AmbienteRevDocTest {
         ambiente.setName("Ambiente");
         ambiente.setCatalogId(1L);
         ambiente.setInSync(true);
-        ambiente.setItemDocList(List.of(item));
+        ambiente.setItemIds(List.of(item.getId()));
         ambienteDocRepository.save(ambiente);
     }
 

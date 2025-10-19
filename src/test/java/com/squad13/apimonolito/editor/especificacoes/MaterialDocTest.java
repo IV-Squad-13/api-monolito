@@ -6,6 +6,7 @@ import com.squad13.apimonolito.models.editor.mongo.MarcaDocElement;
 import com.squad13.apimonolito.mongo.editor.EspecificacaoDocRepository;
 import com.squad13.apimonolito.mongo.editor.MaterialDocElementRepository;
 import com.squad13.apimonolito.mongo.editor.MarcaDocElementRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,16 +52,16 @@ class MaterialDocTest {
         MarcaDocElement marca = new MarcaDocElement();
         marca.setName("Marca");
         marca.setCatalogId(1L);
-        marca.setEspecificacaoDoc(empDoc);
+        marca.setEspecificacaoId(empDoc.getId());
         marca.setInSync(true);
         marcaDocRepository.save(marca);
 
         MaterialDocElement material = new MaterialDocElement();
         material.setName("Material");
         material.setCatalogId(1L);
-        material.setEspecificacaoDoc(empDoc);
+        material.setEspecificacaoId(empDoc.getId());
         material.setInSync(true);
-        material.setMarcaDocList(List.of(marca));
+        material.setMarcaIds(List.of(marca.getId()));
         materialDocRepository.save(material);
 
         assertThat(material).isNotNull();
@@ -70,7 +71,7 @@ class MaterialDocTest {
         MaterialDocElement foundMaterial = materialDocRepository.findByName("Material").orElse(null);;
         assertThat(foundMaterial).isNotNull();
         assertThat(foundMaterial.getId()).isEqualTo(material.getId());
-        assertThat(foundMaterial.getMarcaDocList().getFirst().getName()).isEqualTo("Marca");
+        assertThat(foundMaterial.getMarcaIds().getFirst()).isEqualTo(marca.getId());
     }
 
     @Test
@@ -78,19 +79,20 @@ class MaterialDocTest {
         MarcaDocElement marca = new MarcaDocElement();
         marca.setName("Marca");
         marca.setCatalogId(1L);
-        marca.setEspecificacaoDoc(empDoc);
+        marca.setEspecificacaoId(empDoc.getId());
         marca.setInSync(true);
         marcaDocRepository.save(marca);
 
         MaterialDocElement material = new MaterialDocElement();
         material.setName("Material");
         material.setCatalogId(1L);
-        material.setEspecificacaoDoc(empDoc);
+        material.setEspecificacaoId(empDoc.getId());
         material.setInSync(true);
-        material.setMarcaDocList(List.of(marca));
+        material.setMarcaIds(List.of(marca.getId()));
         materialDocRepository.save(material);
 
         MaterialDocElement foundMaterial = materialDocRepository.findByName("Material").orElse(null);;
+        Assertions.assertNotNull(foundMaterial);
         foundMaterial.setName("Material2");
         materialDocRepository.save(foundMaterial);
 

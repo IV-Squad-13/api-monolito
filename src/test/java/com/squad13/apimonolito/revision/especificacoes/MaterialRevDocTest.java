@@ -54,7 +54,7 @@ class MaterialRevDocTest {
         material.setName("Material");
         material.setCatalogId(1L);
         material.setInSync(true);
-        material.setMarcaDocList(List.of(marca));
+        material.setMarcaIds(List.of(marca.getId()));
         materialDocRepository.save(material);
     }
 

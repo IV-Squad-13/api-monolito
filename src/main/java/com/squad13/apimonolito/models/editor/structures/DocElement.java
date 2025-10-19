@@ -6,57 +6,66 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.squad13.apimonolito.DTO.editor.DocElementDTO;
 import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
 import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.time.Instant;
 
-@Getter
-@Setter
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@Data
+@MappedSuperclass
 public abstract class DocElement {
 
-    @Id
-    @JsonProperty("id")
-    @JsonSerialize(using = ToStringSerializer.class)
+    @MongoId(FieldType.OBJECT_ID)
     private String id;
 
     @NotNull
+    @Indexed
     private Long catalogId;
 
+    @NotNull
+    @Indexed
+    private String especificacaoId;
+
+    @Indexed
     private String parentId;
 
-    @NotNull
-    @DBRef(lazy = true)
-    @JsonIgnore
-    private EspecificacaoDoc especificacaoDoc;
-
     @NotBlank
+    @Size(max = 100)
     private String name;
 
     private boolean inSync;
 
     @CreatedDate
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "America/Brasilia")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
     private Instant created;
 
     @LastModifiedDate
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "America/Brasilia")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
     private Instant updated;
 
-    public static <D extends DocElementDTO, T extends DocElement> T genericFromDto(D dto, EspecificacaoDoc espec, Class<T> clazz) {
+    public static <D extends DocElementDTO, T extends DocElement>
+    T genericFromDto(D dto, String especificacaoId, Class<T> clazz) {
         try {
             T instance = clazz.getDeclaredConstructor().newInstance();
+            instance.setId(ObjectId.get().toHexString());
             instance.setName(dto.getName());
             instance.setCatalogId(dto.getCatalogId());
             instance.setParentId(dto.getParentId());
-            instance.setEspecificacaoDoc(espec);
+            instance.setEspecificacaoId(especificacaoId);
             return instance;
         } catch (Exception e) {
             throw new RuntimeException("Erro ao criar instância de " + clazz.getSimpleName(), e);

@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MaterialDocElementRepository extends DocElementRepository<MaterialDocElement> {
-    boolean existsByNameAndEspecificacaoDoc(String name, EspecificacaoDoc especificacaoDoc);
+    boolean existsByNameAndEspecificacaoId(String name, String especificacaoId);
 }

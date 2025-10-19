@@ -165,19 +165,17 @@ public class ComposicaoService {
         throw new InvalidCompositorException("Tipo de compositor inválido: " + compType);
     }
 
-    public List<ResItemAmbienteDTO> findItensAmbienteByPadrao(Long id) {
+    public List<ItemAmbiente> findItensAmbienteByPadrao(Long id) {
         return compAmbienteRepository.findByPadrao_Id(id)
                 .stream()
                 .map(ComposicaoAmbiente::getCompositor)
-                .map(catalogMapper::toResponse)
                 .toList();
     }
 
-    public List<ResMarcaMaterialDTO> findMarcasMaterialByPadrao(Long id) {
+    public List<MarcaMaterial> findMarcasMaterialByPadrao(Long id) {
         return compMaterialRepository.findByPadrao_Id(id)
                 .stream()
                 .map(ComposicaoMaterial::getCompositor)
-                .map(catalogMapper::toResponse)
                 .toList();
     }
 

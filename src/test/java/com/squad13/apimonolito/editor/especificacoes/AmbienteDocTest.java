@@ -51,7 +51,7 @@ class AmbienteDocTest {
         ItemDocElement item = new ItemDocElement();
         item.setName("Item");
         item.setCatalogId(1L);
-        item.setEspecificacaoDoc(empDoc);
+        item.setEspecificacaoId(empDoc.getId());
         item.setInSync(true);
         item.setDesc("Desc");
         itemDocRepository.save(item);
@@ -59,21 +59,21 @@ class AmbienteDocTest {
         AmbienteDocElement ambiente = new AmbienteDocElement();
         ambiente.setName("Ambiente");
         ambiente.setCatalogId(1L);
-        ambiente.setEspecificacaoDoc(empDoc);
+        ambiente.setEspecificacaoId(empDoc.getId());
         ambiente.setInSync(true);
-        ambiente.setItemDocList(List.of(item));
+        ambiente.setItemIds(List.of(item.getId()));
         ambienteDocRepository.save(ambiente);
 
         assertThat(ambiente).isNotNull();
         assertThat(ambiente.getId()).isNotNull();
         assertThat(ambiente.getName()).isEqualTo("Ambiente");
-        assertThat(ambiente.getEspecificacaoDoc()).isEqualTo(empDoc);
+        assertThat(ambiente.getEspecificacaoId()).isEqualTo(empDoc.getId());
 
         AmbienteDocElement foundAmbiente = ambienteDocRepository.findByName("Ambiente").orElse(null);;
         assertThat(foundAmbiente).isNotNull();
         assertThat(foundAmbiente.getId()).isEqualTo(ambiente.getId());
-        assertThat(foundAmbiente.getItemDocList().getFirst().getName()).isEqualTo("Item");
-        assertThat(foundAmbiente.getEspecificacaoDoc().getId()).isEqualTo(empDoc.getId());
+        assertThat(foundAmbiente.getItemIds().getFirst()).isEqualTo(item.getId());
+        assertThat(foundAmbiente.getEspecificacaoId()).isEqualTo(empDoc.getId());
     }
 
     @Test
@@ -81,7 +81,7 @@ class AmbienteDocTest {
         ItemDocElement item = new ItemDocElement();
         item.setName("Item");
         item.setCatalogId(1L);
-        item.setEspecificacaoDoc(empDoc);
+        item.setEspecificacaoId(empDoc.getId());
         item.setInSync(true);
         item.setDesc("Desc");
         itemDocRepository.save(item);
@@ -89,9 +89,9 @@ class AmbienteDocTest {
         AmbienteDocElement ambiente = new AmbienteDocElement();
         ambiente.setName("Ambiente");
         ambiente.setCatalogId(1L);
-        ambiente.setEspecificacaoDoc(empDoc);
+        ambiente.setEspecificacaoId(empDoc.getId());
         ambiente.setInSync(true);
-        ambiente.setItemDocList(List.of(item));
+        ambiente.setItemIds(List.of(item.getId()));
         ambienteDocRepository.save(ambiente);
 
         AmbienteDocElement foundAmbiente = ambienteDocRepository.findByName("Ambiente").orElse(null);;

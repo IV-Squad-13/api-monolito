@@ -42,7 +42,7 @@ class ItemDocTest {
         ItemDocElement item = new ItemDocElement();
         item.setName("Item");
         item.setCatalogId(1L);
-        item.setEspecificacaoDoc(empDoc);
+        item.setEspecificacaoId(empDoc.getId());
         item.setInSync(true);
         item.setDesc("Desc");
 
@@ -62,7 +62,7 @@ class ItemDocTest {
         ItemDocElement item = new ItemDocElement();
         item.setName("Item");
         item.setCatalogId(1L);
-        item.setEspecificacaoDoc(empDoc);
+        item.setEspecificacaoId(empDoc.getId());
         item.setInSync(true);
         item.setDesc("Desc");
         itemDocRepository.save(item);

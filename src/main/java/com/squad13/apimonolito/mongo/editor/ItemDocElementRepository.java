@@ -4,9 +4,10 @@ import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
 import com.squad13.apimonolito.models.editor.mongo.ItemDocElement;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ItemDocElementRepository extends DocElementRepository<ItemDocElement> {
-    boolean existsByNameAndDescAndTypeAndParentId(@NotBlank @Size(max = 100) String name, @NotBlank String desc, String type, String parentId);
+    boolean existsByNameAndDescAndTypeAndParentId(String name, String desc, String type, ObjectId parentId);
 }

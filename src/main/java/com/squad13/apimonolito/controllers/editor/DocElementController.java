@@ -9,6 +9,7 @@ import com.squad13.apimonolito.services.editor.EspecificacaoService;
 import com.squad13.apimonolito.util.enums.DocElementEnum;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,22 +28,22 @@ public class DocElementController {
     }
 
     @PostMapping("/{especificacaoId}/catalog")
-    public ResponseEntity<DocElement> create(@PathVariable String especificacaoId, @Valid @RequestBody DocElementCatalogCreationDTO dto) {
+    public ResponseEntity<DocElement> create(@PathVariable ObjectId especificacaoId, @Valid @RequestBody DocElementCatalogCreationDTO dto) {
         return ResponseEntity.ok(docElementService.createElement(especificacaoId, dto));
     }
 
     @PostMapping("/{especificacaoId}/raw")
-    public ResponseEntity<DocElement> createRawElement(@PathVariable String especificacaoId, @Valid @RequestBody DocElementDTO dto) {
+    public ResponseEntity<DocElement> createRawElement(@PathVariable ObjectId especificacaoId, @Valid @RequestBody DocElementDTO dto) {
         return ResponseEntity.ok(docElementService.createRawElement(especificacaoId, dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DocElement> update(@PathVariable String id, @Valid @RequestBody DocElementDTO dto) {
+    public ResponseEntity<DocElement> update(@PathVariable ObjectId id, @Valid @RequestBody DocElementDTO dto) {
         return ResponseEntity.ok(docElementService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable String id, @RequestParam DocElementEnum type) {
+    public ResponseEntity<?> delete(@PathVariable ObjectId id, @RequestParam DocElementEnum type) {
         docElementService.delete(id, type);
         return ResponseEntity.ok(type.getDocElement() + "deletado com sucesso");
     }

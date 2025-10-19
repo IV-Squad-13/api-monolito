@@ -30,12 +30,12 @@ import java.util.List;
 public class MaterialDocElement extends DocElement {
 
     @Transient
-    private String parentId;
+    private ObjectId parentId;
 
     @Indexed
-    private List<String> marcaIds = new ArrayList<>();
+    private List<ObjectId> marcaIds = new ArrayList<>();
 
-    public static MaterialDocElement fromDto(DocElementDTO dto, String especId) {
+    public static MaterialDocElement fromDto(DocElementDTO dto, ObjectId especId) {
         return DocElement.genericFromDto(dto, especId, MaterialDocElement.class);
     }
 }

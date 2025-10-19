@@ -33,7 +33,7 @@ import java.util.List;
 public class EspecificacaoDoc {
 
     @MongoId(FieldType.OBJECT_ID)
-    private String id;
+    private ObjectId id;
 
     @NotNull
     @Indexed
@@ -51,11 +51,11 @@ public class EspecificacaoDoc {
 
     @Field("locaisIds")
     @JsonProperty("locais")
-    private List<String> locaisIds = new ArrayList<>();
+    private List<ObjectId> locaisIds = new ArrayList<>();
 
     @Field("materiaisIds")
     @JsonProperty("materiais")
-    private List<String> materiaisIds = new ArrayList<>();
+    private List<ObjectId> materiaisIds = new ArrayList<>();
 
     @CreatedDate
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")

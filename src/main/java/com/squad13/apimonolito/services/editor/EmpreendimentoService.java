@@ -54,7 +54,7 @@ public class EmpreendimentoService {
     private final EditorMapper mapper;
 
     private ResEmpDTO mappingHelper(Empreendimento emp, LoadDocumentParamsDTO loadDTO) {
-        List<EspecificacaoDoc> docs = loadDTO.isLoadDocument()
+        List<EspecificacaoDoc> docs = loadDTO.isLoadEspecificacao()
                 ? specDocRepository.findByEmpreendimentoId(emp.getId())
                 : null;
 

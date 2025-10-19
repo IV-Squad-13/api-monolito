@@ -10,6 +10,7 @@ import com.squad13.apimonolito.models.editor.structures.DocElement;
 import com.squad13.apimonolito.services.editor.SynchronizationService;
 import com.squad13.apimonolito.util.enums.DocElementEnum;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -21,7 +22,7 @@ public class DocElementFactory {
     private final SynchronizationService syncService;
 
     @ExceptionHandler(InvalidDocumentTypeException.class)
-    public DocElement create(String specId, DocElementDTO dto) {
+    public DocElement create(ObjectId specId, DocElementDTO dto) {
         return switch (dto.getDocType()) {
             case AMBIENTE -> buildAmbiente(specId, (AmbienteDocDTO) dto);
             case ITEM -> buildItem(specId, (ItemDocDTO) dto);
@@ -30,26 +31,26 @@ public class DocElementFactory {
         };
     }
 
-    private AmbienteDocElement buildAmbiente(String specId, AmbienteDocDTO dto) {
+    private AmbienteDocElement buildAmbiente(ObjectId specId, AmbienteDocDTO dto) {
         AmbienteDocElement ambiente = AmbienteDocElement.fromDto(dto, specId);
         setSyncStatus(ambiente, dto.getDocType());
         return ambiente;
     }
 
-    private ItemDocElement buildItem(String specId, ItemDocDTO dto) {
+    private ItemDocElement buildItem(ObjectId specId, ItemDocDTO dto) {
         ItemType type = catalogSearch.findInCatalog(dto.getTypeId(), ItemType.class);
         ItemDocElement item = ItemDocElement.fromDto(dto, specId, type);
         setSyncStatus(item, dto.getDocType());
         return item;
     }
 
-    private MaterialDocElement buildMaterial(String specId, DocElementDTO dto) {
+    private MaterialDocElement buildMaterial(ObjectId specId, DocElementDTO dto) {
         MaterialDocElement material = MaterialDocElement.fromDto(dto, specId);
         setSyncStatus(material, dto.getDocType());
         return material;
     }
 
-    private MarcaDocElement buildMarca(String specId, DocElementDTO dto) {
+    private MarcaDocElement buildMarca(ObjectId specId, DocElementDTO dto) {
         MarcaDocElement marca = MarcaDocElement.fromDto(specId, dto);
         setSyncStatus(marca, dto.getDocType());
         return marca;

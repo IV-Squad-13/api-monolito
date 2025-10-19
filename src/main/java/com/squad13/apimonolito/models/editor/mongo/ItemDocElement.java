@@ -36,7 +36,7 @@ public class ItemDocElement extends DocElement {
     @Indexed
     private Long typeId;
 
-    public static ItemDocElement fromDto(ItemDocDTO dto, String especId, ItemType type) {
+    public static ItemDocElement fromDto(ItemDocDTO dto, ObjectId especId, ItemType type) {
         ItemDocElement item = DocElement.genericFromDto(dto, especId, ItemDocElement.class);
         item.setDesc(dto.getDesc());
         item.setTypeId(type.getId());

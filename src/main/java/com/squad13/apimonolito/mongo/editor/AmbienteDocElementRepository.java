@@ -3,13 +3,12 @@ package com.squad13.apimonolito.mongo.editor;
 import com.squad13.apimonolito.models.editor.mongo.AmbienteDocElement;
 import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
 import com.squad13.apimonolito.util.enums.LocalEnum;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
 public interface AmbienteDocElementRepository extends DocElementRepository<AmbienteDocElement> {
-    boolean existsByNameAndParentId(String name, String parentId);
-
-    boolean existsByNameAndLocalAndEspecificacaoId(String name, LocalEnum local, String especificacaoId);
+    boolean existsByNameAndParentId(String name, ObjectId parentId);
 }

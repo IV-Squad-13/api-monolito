@@ -31,9 +31,9 @@ public class AmbienteDocElement extends DocElement {
     private LocalEnum local;
 
     @Indexed
-    private List<String> itemIds = new ArrayList<>();
+    private List<ObjectId> itemIds = new ArrayList<>();
 
-    public static AmbienteDocElement fromDto(AmbienteDocDTO dto, String especificacaoId) {
+    public static AmbienteDocElement fromDto(AmbienteDocDTO dto, ObjectId especificacaoId) {
         AmbienteDocElement ambiente = DocElement.genericFromDto(dto, especificacaoId, AmbienteDocElement.class);
         ambiente.setLocal(dto.getLocal());
         return ambiente;

@@ -28,14 +28,14 @@ import java.util.List;
 public class LocalDoc {
 
     @MongoId(FieldType.OBJECT_ID)
-    private String id;
+    private ObjectId id;
 
     @NotNull
     @Indexed
-    private String especificacaoId;
+    private ObjectId especificacaoId;
 
     private LocalEnum local;
 
     @Indexed
-    private List<String> ambienteIds = new ArrayList<>();
+    private List<ObjectId> ambienteIds = new ArrayList<>();
 }

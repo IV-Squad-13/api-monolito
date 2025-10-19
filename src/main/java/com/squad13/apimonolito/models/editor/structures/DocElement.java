@@ -30,7 +30,7 @@ import java.time.Instant;
 public abstract class DocElement {
 
     @MongoId(FieldType.OBJECT_ID)
-    private String id;
+    private ObjectId id;
 
     @NotNull
     @Indexed
@@ -38,10 +38,10 @@ public abstract class DocElement {
 
     @NotNull
     @Indexed
-    private String especificacaoId;
+    private ObjectId especificacaoId;
 
     @Indexed
-    private String parentId;
+    private ObjectId parentId;
 
     @NotBlank
     @Size(max = 100)
@@ -58,10 +58,10 @@ public abstract class DocElement {
     private Instant updated;
 
     public static <D extends DocElementDTO, T extends DocElement>
-    T genericFromDto(D dto, String especificacaoId, Class<T> clazz) {
+    T genericFromDto(D dto, ObjectId especificacaoId, Class<T> clazz) {
         try {
             T instance = clazz.getDeclaredConstructor().newInstance();
-            instance.setId(ObjectId.get().toHexString());
+            instance.setId(ObjectId.get());
             instance.setName(dto.getName());
             instance.setCatalogId(dto.getCatalogId());
             instance.setParentId(dto.getParentId());

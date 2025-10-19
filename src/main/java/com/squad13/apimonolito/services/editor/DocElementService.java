@@ -15,6 +15,7 @@ import com.squad13.apimonolito.util.enums.DocElementEnum;
 import com.squad13.apimonolito.util.mappers.EditorMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,12 +46,12 @@ public class DocElementService {
         return documentSearch.findDocuments(params.getType().getDocElement());
     }
 
-    private EspecificacaoDoc getSpecById(String id) {
+    private EspecificacaoDoc getSpecById(ObjectId id) {
         return especificacaoDocRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Especificação não encontrada para o ID: " + id));
     }
 
-    public DocElement createElement(String especId, DocElementCatalogCreationDTO dto) {
+    public DocElement createElement(ObjectId especId, DocElementCatalogCreationDTO dto) {
         EspecificacaoDoc especificacaoDoc = getSpecById(especId);
 
         Object catalogEntity = catalogSearch.findInCatalog(dto.elementId(), dto.type().getCatalogEntity());
@@ -66,7 +67,7 @@ public class DocElementService {
         return newElement;
     }
 
-    public DocElement createRawElement(String specId, DocElementDTO dto) {
+    public DocElement createRawElement(ObjectId specId, DocElementDTO dto) {
         EspecificacaoDoc spec = getSpecById(specId);
 
         DocElement newElement = docElementFactory.create(specId, dto);
@@ -138,7 +139,7 @@ public class DocElementService {
             );
         };
 
-        DocElement associated = documentSearch.findInDocument(dto.associatedId(), assocType.getDocElement());
+        DocElement associated = documentSearch.findInDocument(new ObjectId(dto.associatedId()), assocType.getDocElement());
         if (associated == null) {
             throw new ResourceNotFoundException("Elemento associado não encontrado: " + dto.associatedId());
         }
@@ -219,7 +220,7 @@ public class DocElementService {
         }
     }
 
-    public DocElement update(String id, DocElementDTO dto) {
+    public DocElement update(ObjectId id, DocElementDTO dto) {
         return switch (dto.getDocType()) {
             case AMBIENTE -> updateAmbiente(id, (AmbienteDocDTO) dto);
             case ITEM -> updateItem(id, (ItemDocDTO) dto);
@@ -228,7 +229,7 @@ public class DocElementService {
         };
     }
 
-    private AmbienteDocElement updateAmbiente(String id, AmbienteDocDTO dto) {
+    private AmbienteDocElement updateAmbiente(ObjectId id, AmbienteDocDTO dto) {
         AmbienteDocElement ambiente = ambienteDocRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Ambiente não encontrado com o id informado: " + id)
@@ -277,7 +278,7 @@ public class DocElementService {
         return ambienteDocRepository.save(ambiente);
     }
 
-    private ItemDocElement updateItem(String id, ItemDocDTO dto) {
+    private ItemDocElement updateItem(ObjectId id, ItemDocDTO dto) {
         ItemDocElement item = itemDocRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Item não encontrado com o id informado: " + id)
@@ -312,7 +313,7 @@ public class DocElementService {
         return itemDocRepository.save(item);
     }
 
-    private MaterialDocElement updateMaterial(String id, MaterialElementDTO dto) {
+    private MaterialDocElement updateMaterial(ObjectId id, MaterialElementDTO dto) {
         MaterialDocElement material = materialDocRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Material não encontrado com o id informado: " + id)
@@ -322,7 +323,7 @@ public class DocElementService {
             material.setName(dto.getName());
         }
 
-        String spec = material.getEspecificacaoId();
+        ObjectId spec = material.getEspecificacaoId();
         if (spec == null) {
             throw new ResourceNotFoundException("Especificação não associada ao material: " + id);
         }
@@ -333,7 +334,7 @@ public class DocElementService {
         return materialDocRepository.save(material);
     }
 
-    private MarcaDocElement updateMarca(String id, MarcaElementDTO dto) {
+    private MarcaDocElement updateMarca(ObjectId id, MarcaElementDTO dto) {
         MarcaDocElement marca = marcaDocRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Marca não encontrada com o id informado: " + id)
@@ -368,7 +369,7 @@ public class DocElementService {
         return marcaDocRepository.save(marca);
     }
 
-    public void delete(String id, DocElementEnum type) {
+    public void delete(ObjectId id, DocElementEnum type) {
         documentSearch.deleteWithReferences(id, type.getDocElement());
     }
 }

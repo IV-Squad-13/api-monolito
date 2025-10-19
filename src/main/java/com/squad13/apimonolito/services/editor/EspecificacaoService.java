@@ -3,6 +3,7 @@ package com.squad13.apimonolito.services.editor;
 import com.squad13.apimonolito.DTO.catalog.res.*;
 import com.squad13.apimonolito.DTO.editor.EspecificacaoDocDTO;
 import com.squad13.apimonolito.DTO.editor.edit.EditEspecificacaoDocDTO;
+import com.squad13.apimonolito.DTO.editor.res.ResSpecDTO;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.catalog.Ambiente;
 import com.squad13.apimonolito.models.catalog.ItemDesc;
@@ -17,10 +18,13 @@ import com.squad13.apimonolito.repository.editor.EmpreendimentoRepository;
 import com.squad13.apimonolito.services.catalog.ComposicaoService;
 import com.squad13.apimonolito.util.DocumentSearch;
 import com.squad13.apimonolito.util.enums.LocalEnum;
+import com.squad13.apimonolito.util.mappers.CatalogMapper;
 import com.squad13.apimonolito.util.mappers.EditorMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -37,19 +41,20 @@ public class EspecificacaoService {
 
     private final EspecificacaoDocRepository specRepository;
 
-    private final LocalDocRepository localDocRepository;
-    private final AmbienteDocElementRepository ambienteDocRepository;
-    private final ItemDocElementRepository itemDocRepository;
-    private final MaterialDocElementRepository materialDocRepository;
-    private final MarcaDocElementRepository marcaDocRepository;
     private final EditorMapper editorMapper;
     private final DocumentSearch documentSearch;
+    private final CatalogMapper catalogMapper;
 
-    public List<EspecificacaoDoc> getAll() {
-        return specRepository.findAll();
+    public List<ResSpecDTO> findAll() {
+        return documentSearch.findWithAggregation(
+                "especificacoes",
+                ResSpecDTO.class,
+                Aggregation.lookup("locais", "locaisIds", "_id", "locais"),
+                Aggregation.lookup("materiais", "materiaisIds", "_id", "materiais")
+        );
     }
 
-    public EspecificacaoDoc getById(String id) {
+    public EspecificacaoDoc findById(ObjectId id) {
         return specRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Especificação não encontrada para o ID: " + id));
     }
@@ -68,10 +73,6 @@ public class EspecificacaoService {
         };
     }
 
-    private String generateSpecId() {
-        return ObjectId.get().toHexString();
-    }
-
     private EspecificacaoDoc createEspecificacaoAvulso(EspecificacaoDocDTO dto) {
         EspecificacaoDoc spec = new EspecificacaoDoc();
         spec.setName(dto.name());
@@ -79,10 +80,10 @@ public class EspecificacaoService {
         spec.setDesc(dto.desc());
         spec.setObs(dto.obs());
 
-        spec.setId(generateSpecId());
+        spec.setId(newId());
 
         List<LocalDoc> locais = generateLocais(spec.getId());
-        localDocRepository.saveAll(locais);
+        documentSearch.bulkSave(LocalDoc.class, locais);
 
         spec.setLocaisIds(
                 locais.stream().map(LocalDoc::getId).collect(Collectors.toList())
@@ -91,7 +92,7 @@ public class EspecificacaoService {
         return specRepository.save(spec);
     }
 
-    private List<LocalDoc> generateLocais(String specId) {
+    private List<LocalDoc> generateLocais(ObjectId specId) {
         return Arrays.stream(LocalEnum.values())
                 .map(localEnum -> {
                     LocalDoc local = new LocalDoc();
@@ -116,7 +117,7 @@ public class EspecificacaoService {
 
         List<ItemAmbiente> itemAmbientes = compService.findItensAmbienteByPadrao(emp.getPadrao().getId());
         Map<Ambiente, List<ItemDesc>> groupedAmbientes =
-                groupBy(itemAmbientes, ItemAmbiente::getAmbiente, ItemAmbiente::getItemDesc);
+                catalogMapper.groupBy(itemAmbientes, ItemAmbiente::getAmbiente, ItemAmbiente::getItemDesc);
 
         List<AmbienteDocElement> ambientesToSave = new ArrayList<>();
         List<ItemDocElement> itemsToSave = new ArrayList<>();
@@ -142,12 +143,12 @@ public class EspecificacaoService {
 
         documentSearch.bulkSave(ItemDocElement.class, itemsToSave);
 
-        Map<String, List<String>> itemIdsByAmbiente = itemsToSave.stream()
+        Map<ObjectId, List<ObjectId>> itemIdsByAmbiente = itemsToSave.stream()
                 .collect(Collectors.groupingBy(ItemDocElement::getParentId,
                         Collectors.mapping(ItemDocElement::getId, Collectors.toList())));
 
         ambientesToSave.forEach(ambiente -> {
-            List<String> itemIds = itemIdsByAmbiente.getOrDefault(ambiente.getId(), Collections.emptyList());
+            List<ObjectId> itemIds = itemIdsByAmbiente.getOrDefault(ambiente.getId(), Collections.emptyList());
             ambiente.setItemIds(itemIds);
         });
 
@@ -161,7 +162,7 @@ public class EspecificacaoService {
 
         List<MarcaMaterial> marcaMateriais = compService.findMarcasMaterialByPadrao(emp.getPadrao().getId());
         Map<Material, List<Marca>> groupedMateriais =
-                groupBy(marcaMateriais, MarcaMaterial::getMaterial, MarcaMaterial::getMarca);
+                catalogMapper.groupBy(marcaMateriais, MarcaMaterial::getMaterial, MarcaMaterial::getMarca);
 
         List<MaterialDocElement> materialsToSave = new ArrayList<>();
         List<MarcaDocElement> marcasToSave = new ArrayList<>();
@@ -191,21 +192,8 @@ public class EspecificacaoService {
         return spec;
     }
 
-    private static String newId() {
-        return new ObjectId().toHexString();
-    }
-
-    private <T, K, V> Map<K, List<V>> groupBy(
-            List<T> items,
-            Function<? super T, ? extends K> keyMapper,
-            Function<? super T, ? extends V> valueMapper
-    ) {
-        return items.stream()
-                .filter(Objects::nonNull)
-                .collect(Collectors.groupingBy(
-                        keyMapper,
-                        Collectors.mapping(valueMapper, Collectors.toList())
-                ));
+    private static ObjectId newId() {
+        return new ObjectId();
     }
 
     private EspecificacaoDoc createFromImport(EspecificacaoDocDTO dto) {
@@ -213,8 +201,8 @@ public class EspecificacaoService {
         throw new UnsupportedOperationException("Inicialização por IMPORT ainda não implementada");
     }
 
-    public EspecificacaoDoc update(String id, EditEspecificacaoDocDTO dto) {
-        EspecificacaoDoc especificacacaoDoc = getById(id);
+    public EspecificacaoDoc update(ObjectId id, EditEspecificacaoDocDTO dto) {
+        EspecificacaoDoc especificacacaoDoc = findById(id);
 
         if (dto.name() != null && !dto.name().isEmpty()) {
             especificacacaoDoc.setName(dto.name());
@@ -235,13 +223,7 @@ public class EspecificacaoService {
         return specRepository.save(especificacacaoDoc);
     }
 
-    public void delete(String id) {
-        itemDocRepository.deleteAllByEspecificacaoId(id);
-        ambienteDocRepository.deleteAllByEspecificacaoId(id);
-        localDocRepository.deleteAllByEspecificacaoId(id);
-        marcaDocRepository.deleteAllByEspecificacaoId(id);
-        materialDocRepository.deleteAllByEspecificacaoId(id);
-
-        specRepository.deleteById(id);
+    public void delete(ObjectId id) {
+        documentSearch.deleteWithReferences(id, EspecificacaoDoc.class);
     }
 }

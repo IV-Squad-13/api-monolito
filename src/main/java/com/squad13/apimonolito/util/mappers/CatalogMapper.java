@@ -10,9 +10,8 @@ import com.squad13.apimonolito.models.catalog.associative.ItemAmbiente;
 import com.squad13.apimonolito.models.catalog.associative.MarcaMaterial;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
@@ -119,38 +118,32 @@ public class CatalogMapper {
     public ResPadraoDTO toResponse(Padrao padrao, LoadCatalogParamsDTO loadDTO) {
         if (padrao == null) return null;
 
-        Set<ResMinDTO> items = loadDTO.isLoadItems()
-                ? padrao.getAmbienteSet().stream()
-                .map(comp -> toMinDTO(comp.getCompositor().getItemDesc()))
-                .collect(Collectors.toSet())
-                : Set.of();
+        Map<ResAmbienteDTO, List<ResItemDTO>> groupedAmbientes = Map.of();
+        if (loadDTO.isLoadAmbientes()) {
+            List<ResItemAmbienteDTO> itemAmbientes = padrao.getAmbienteSet().stream()
+                    .map(comp -> toResponse(comp.getCompositor()))
+                    .toList();
 
-        Set<ResMinDTO> ambientes = loadDTO.isLoadAmbientes()
-                ? padrao.getAmbienteSet().stream()
-                .map(comp -> toMinDTO(comp.getCompositor().getAmbiente()))
-                .collect(Collectors.toSet())
-                : Set.of();
+            groupedAmbientes =
+                    groupBy(itemAmbientes, ResItemAmbienteDTO::ambiente, ResItemAmbienteDTO::item);
+        }
 
-        Set<ResMinDTO> marcas = loadDTO.isLoadMarcas()
-                ? padrao.getMaterialSet().stream()
-                .map(comp -> toMinDTO(comp.getCompositor().getMarca()))
-                .collect(Collectors.toSet())
-                : Set.of();
+        Map<ResMaterialDTO, List<ResMarcaDTO>> groupedMateriais = Map.of();
+        if (loadDTO.isLoadMateriais()) {
+            List<ResMarcaMaterialDTO> marcaMateriais = padrao.getMaterialSet().stream()
+                    .map(comp -> toResponse(comp.getCompositor()))
+                    .toList();
 
-        Set<ResMinDTO> materiais = loadDTO.isLoadMateriais()
-                ? padrao.getMaterialSet().stream()
-                .map(comp -> toMinDTO(comp.getCompositor().getMaterial()))
-                .collect(Collectors.toSet())
-                : Set.of();
+            groupedMateriais =
+                    groupBy(marcaMateriais, ResMarcaMaterialDTO::material, ResMarcaMaterialDTO::marca);
+        }
 
         return new ResPadraoDTO(
                 padrao.getId(),
                 padrao.getName(),
                 padrao.getIsActive(),
-                items,
-                ambientes,
-                marcas,
-                materiais
+                groupedAmbientes,
+                groupedMateriais
         );
     }
 
@@ -185,7 +178,7 @@ public class CatalogMapper {
 
     private Set<ResMinDTO> getMinMarcaDTO(Set<MarcaMaterial> marcaMaterialSet) {
         return marcaMaterialSet.stream()
-                .map(rel -> toMinDTO(rel.getMaterial()))
+                .map(rel -> toMinDTO(rel.getMarca()))
                 .collect(Collectors.toSet());
     }
 
@@ -227,6 +220,19 @@ public class CatalogMapper {
 
     private ResMinDTO toMinDTO(Padrao p) {
         return new ResMinDTO(p.getId(), p.getName(), p.getIsActive());
+    }
+
+    public <T, K, V> Map<K, List<V>> groupBy(
+            List<T> items,
+            Function<? super T, ? extends K> keyMapper,
+            Function<? super T, ? extends V> valueMapper
+    ) {
+        return items.stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.groupingBy(
+                        keyMapper,
+                        Collectors.mapping(valueMapper, Collectors.toList())
+                ));
     }
 
     // COMPOSIÇÂO

@@ -25,7 +25,7 @@ import java.util.List;
 )
 public class MarcaDocElement extends DocElement {
 
-    public static MarcaDocElement fromDto(String especId, DocElementDTO dto) {
+    public static MarcaDocElement fromDto(ObjectId especId, DocElementDTO dto) {
         return DocElement.genericFromDto(dto, especId, MarcaDocElement.class);
     }
 }

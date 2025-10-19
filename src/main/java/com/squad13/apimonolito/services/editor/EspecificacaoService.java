@@ -15,6 +15,7 @@ import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import com.squad13.apimonolito.mongo.editor.*;
 import com.squad13.apimonolito.repository.editor.EmpreendimentoRepository;
 import com.squad13.apimonolito.services.catalog.ComposicaoService;
+import com.squad13.apimonolito.util.DocumentSearch;
 import com.squad13.apimonolito.util.enums.LocalEnum;
 import com.squad13.apimonolito.util.mappers.EditorMapper;
 import jakarta.transaction.Transactional;
@@ -42,6 +43,7 @@ public class EspecificacaoService {
     private final MaterialDocElementRepository materialDocRepository;
     private final MarcaDocElementRepository marcaDocRepository;
     private final EditorMapper editorMapper;
+    private final DocumentSearch documentSearch;
 
     public List<EspecificacaoDoc> getAll() {
         return specRepository.findAll();
@@ -110,61 +112,56 @@ public class EspecificacaoService {
         spec.setObs(dto.obs());
 
         List<LocalDoc> locais = generateLocais(spec.getId());
-        spec.setLocaisIds(
-                locais.stream().map(LocalDoc::getId).collect(Collectors.toList())
-        );
+        spec.setLocaisIds(locais.stream().map(LocalDoc::getId).toList());
 
         List<ItemAmbiente> itemAmbientes = compService.findItensAmbienteByPadrao(emp.getPadrao().getId());
-        Map<Ambiente, List<ItemDesc>> groupedAmbientes = groupBy(itemAmbientes, ItemAmbiente::getAmbiente, ItemAmbiente::getItemDesc);
+        Map<Ambiente, List<ItemDesc>> groupedAmbientes =
+                groupBy(itemAmbientes, ItemAmbiente::getAmbiente, ItemAmbiente::getItemDesc);
 
         List<AmbienteDocElement> ambientesToSave = new ArrayList<>();
         List<ItemDocElement> itemsToSave = new ArrayList<>();
 
         groupedAmbientes.forEach((catalogAmb, catalogItems) -> {
             AmbienteDocElement ambiente = editorMapper.fromCatalog(spec.getId(), catalogAmb);
-            String ambienteId = newId();
-            ambiente.setId(ambienteId);
+            ambiente.setId(newId());
 
             locais.stream()
                     .filter(l -> l.getLocal().equals(ambiente.getLocal()))
-                    .map(LocalDoc::getId)
-                    .forEach(ambiente::setId);
+                    .findFirst()
+                    .ifPresent(l -> ambiente.setParentId(l.getId()));
 
             catalogItems.forEach(catalogItem -> {
                 ItemDocElement item = editorMapper.fromCatalog(spec.getId(), catalogItem);
                 item.setId(newId());
-                item.setParentId(ambienteId);
+                item.setParentId(ambiente.getId());
                 itemsToSave.add(item);
             });
 
             ambientesToSave.add(ambiente);
         });
 
-        List<ItemDocElement> savedItems = itemDocRepository.saveAll(itemsToSave);
-        Map<String, List<String>> itemIdsByAmbiente =
-                savedItems.stream()
-                        .collect(Collectors.groupingBy(ItemDocElement::getParentId,
-                                Collectors.mapping(ItemDocElement::getId, Collectors.toList())));
+        documentSearch.bulkSave(ItemDocElement.class, itemsToSave);
+
+        Map<String, List<String>> itemIdsByAmbiente = itemsToSave.stream()
+                .collect(Collectors.groupingBy(ItemDocElement::getParentId,
+                        Collectors.mapping(ItemDocElement::getId, Collectors.toList())));
 
         ambientesToSave.forEach(ambiente -> {
             List<String> itemIds = itemIdsByAmbiente.getOrDefault(ambiente.getId(), Collections.emptyList());
             ambiente.setItemIds(itemIds);
         });
 
-        List<AmbienteDocElement> savedAmbientes = ambienteDocRepository.saveAll(ambientesToSave);
+        documentSearch.bulkSave(AmbienteDocElement.class, ambientesToSave);
 
-        savedAmbientes.forEach(ambiente -> {
-            locais.forEach(l -> {
-                if (l.getId().equals(ambiente.getId())) {
-                    l.getAmbienteIds().add(ambiente.getId());
-                }
-            });
-        });
+        ambientesToSave.forEach(amb -> locais.stream()
+                .filter(l -> l.getLocal().equals(amb.getLocal()))
+                .forEach(l -> l.getAmbienteIds().add(amb.getId())));
 
-        localDocRepository.saveAll(locais);
+        documentSearch.bulkSave(LocalDoc.class, locais);
 
         List<MarcaMaterial> marcaMateriais = compService.findMarcasMaterialByPadrao(emp.getPadrao().getId());
-        Map<Material, List<Marca>> groupedMateriais = groupBy(marcaMateriais, MarcaMaterial::getMaterial, MarcaMaterial::getMarca);
+        Map<Material, List<Marca>> groupedMateriais =
+                groupBy(marcaMateriais, MarcaMaterial::getMaterial, MarcaMaterial::getMarca);
 
         List<MaterialDocElement> materialsToSave = new ArrayList<>();
         List<MarcaDocElement> marcasToSave = new ArrayList<>();
@@ -184,12 +181,14 @@ public class EspecificacaoService {
             materialsToSave.add(material);
         });
 
-        marcaDocRepository.saveAll(marcasToSave);
-        List<MaterialDocElement> savedMaterials = materialDocRepository.saveAll(materialsToSave);
+        documentSearch.bulkSave(MarcaDocElement.class, marcasToSave);
+        documentSearch.bulkSave(MaterialDocElement.class, materialsToSave);
 
-        spec.setMateriaisIds(savedMaterials.stream().map(MaterialDocElement::getId).toList());
+        spec.setMateriaisIds(materialsToSave.stream().map(MaterialDocElement::getId).toList());
 
-        return specRepository.save(spec);
+        documentSearch.bulkSave(EspecificacaoDoc.class, List.of(spec));
+
+        return spec;
     }
 
     private static String newId() {

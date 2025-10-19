@@ -1,14 +1,18 @@
 package com.squad13.apimonolito.util;
 
+import com.mongodb.bulk.BulkWriteResult;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.mongodb.core.BulkOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +31,16 @@ public class DocumentSearch {
 
     public <T extends DocElement> List<T> findDocuments(Class<T> clazz) {
         return mongoTemplate.findAll(clazz);
+    }
+
+    public <T> List<T> bulkSave(Class<T> clazz, List<T> docs) {
+        if (docs == null || docs.isEmpty()) return Collections.emptyList();
+
+        mongoTemplate.bulkOps(BulkOperations.BulkMode.UNORDERED, clazz)
+                .insert(docs)
+                .execute();
+
+        return docs;
     }
 
     @SuppressWarnings("unchecked")

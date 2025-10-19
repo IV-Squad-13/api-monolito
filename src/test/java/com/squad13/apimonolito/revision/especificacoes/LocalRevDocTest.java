@@ -69,12 +69,12 @@ class LocalRevDocTest {
         ambiente.setName("Ambiente");
         ambiente.setCatalogId(1L);
         ambiente.setInSync(true);
-        ambiente.setItemDocList(List.of(item));
+        ambiente.setItemIds(List.of(item.getId()));
         ambienteDocRepository.save(ambiente);
 
         local = new LocalDoc();
         local.setLocal(LocalEnum.AREA_COMUM);
-        local.setAmbienteDocList(List.of(ambiente));
+        local.setAmbienteIds(List.of(ambiente.getId()));
         localDocRepository.save(local);
     }
 

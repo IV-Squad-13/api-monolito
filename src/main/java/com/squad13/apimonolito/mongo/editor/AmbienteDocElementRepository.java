@@ -9,9 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface AmbienteDocElementRepository extends DocElementRepository<AmbienteDocElement> {
-    Optional<AmbienteDocElement> findByNameAndLocalAndEspecificacaoDoc(String name, LocalEnum local, EspecificacaoDoc especificacaoDoc);
-
     boolean existsByNameAndParentId(String name, String parentId);
 
-    boolean existsByNameAndLocalAndEspecificacaoDoc(String name, LocalEnum local, EspecificacaoDoc especificacaoDoc);
+    boolean existsByNameAndLocalAndEspecificacaoId(String name, LocalEnum local, String especificacaoId);
 }

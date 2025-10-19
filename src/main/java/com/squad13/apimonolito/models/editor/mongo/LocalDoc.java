@@ -8,36 +8,34 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @Document(collection = "locais")
-@CompoundIndex(name = "local_unique", def = "{'local': 1, 'especificacaoDoc': 1}", unique = true)
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@CompoundIndex(
+        name = "local_unique",
+        def = "{'local': 1, 'especificacaoId': 1}",
+        unique = true
+)
 public class LocalDoc {
 
-    @Id
-    @JsonProperty("id")
-    @JsonSerialize(using = ToStringSerializer.class)
+    @MongoId(FieldType.OBJECT_ID)
     private String id;
 
     @NotNull
-    @DBRef(lazy = true)
-    @JsonIgnore
-    private EspecificacaoDoc especificacaoDoc;
+    @Indexed
+    private String especificacaoId;
 
     private LocalEnum local;
 
-    @DBRef(lazy = true)
-    @Field("ambientes")
-    private List<AmbienteDocElement> ambienteDocList = new ArrayList<>();
+    @Indexed
+    private List<String> ambienteIds = new ArrayList<>();
 }

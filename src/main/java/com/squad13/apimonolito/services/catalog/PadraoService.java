@@ -3,6 +3,8 @@ package com.squad13.apimonolito.services.catalog;
 import com.squad13.apimonolito.DTO.catalog.EditPadraoDTO;
 import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
 import com.squad13.apimonolito.DTO.catalog.PadraoDTO;
+import com.squad13.apimonolito.DTO.catalog.res.ResItemAmbienteDTO;
+import com.squad13.apimonolito.DTO.catalog.res.ResMarcaMaterialDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResPadraoDTO;
 import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
@@ -21,6 +23,7 @@ public class PadraoService {
     private final PadraoRepository padraoRepository;
 
     private final CatalogMapper catalogMapper;
+    private final ComposicaoService composicaoService;
 
     public List<ResPadraoDTO> findAll(LoadCatalogParamsDTO loadDTO) {
         return padraoRepository.findAll()
@@ -44,6 +47,18 @@ public class PadraoService {
         return padraoRepository.findByName(name)
                 .map(padrao -> catalogMapper.toResponse(padrao, loadDTO))
                 .orElseThrow(() -> new ResourceNotFoundException("Padrão com nome " + name + " não encontrado."));
+    }
+
+    public List<ResItemAmbienteDTO> findItensAmbienteByPadrao(Long id) {
+        return composicaoService.findItensAmbienteByPadrao(id).stream()
+                .map(catalogMapper::toResponse)
+                .toList();
+    }
+
+    public List<ResMarcaMaterialDTO> findMarcasMaterialByPadrao(Long id) {
+        return composicaoService.findMarcasMaterialByPadrao(id).stream()
+                .map(catalogMapper::toResponse)
+                .toList();
     }
 
     public ResPadraoDTO createPadrao(PadraoDTO dto) {

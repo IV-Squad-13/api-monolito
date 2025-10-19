@@ -57,7 +57,7 @@ class LocalDocTest {
         ItemDocElement item = new ItemDocElement();
         item.setName("Item");
         item.setCatalogId(1L);
-        item.setEspecificacaoDoc(empDoc);
+        item.setEspecificacaoId(empDoc.getId());
         item.setInSync(true);
         item.setDesc("Desc");
         itemDocRepository.save(item);
@@ -65,15 +65,15 @@ class LocalDocTest {
         AmbienteDocElement ambiente = new AmbienteDocElement();
         ambiente.setName("Ambiente");
         ambiente.setCatalogId(1L);
-        ambiente.setEspecificacaoDoc(empDoc);
+        ambiente.setEspecificacaoId(empDoc.getId());
         ambiente.setInSync(true);
-        ambiente.setItemDocList(List.of(item));
+        ambiente.setItemIds(List.of(item.getId()));
         ambienteDocRepository.save(ambiente);
 
         LocalDoc local = new LocalDoc();
-        local.setEspecificacaoDoc(empDoc);
+        local.setEspecificacaoId(empDoc.getId());
         local.setLocal(LocalEnum.UNIDADES_PRIVATIVAS);
-        local.setAmbienteDocList(List.of(ambiente));
+        local.setAmbienteIds(List.of(ambiente.getId()));
         localDocRepository.save(local);
 
         List<LocalDoc> foundLocals = localDocRepository.findByLocal(LocalEnum.UNIDADES_PRIVATIVAS);
@@ -84,14 +84,14 @@ class LocalDocTest {
         assertThat(foundLocals).contains(foundLocal);
         assertThat(foundLocal.getId()).isEqualTo(local.getId());
         assertThat(foundLocal.getLocal()).isNull();
-        assertThat(foundLocal.getAmbienteDocList()).hasSize(1);
-        assertThat(foundLocal.getAmbienteDocList().getFirst().getName()).isEqualTo("Ambiente");
+        assertThat(foundLocal.getAmbienteIds()).hasSize(1);
+        assertThat(foundLocal.getAmbienteIds().getFirst()).isEqualTo(ambiente.getId());
     }
 
     @Test
     void testLocalUpdate() {
         LocalDoc local = new LocalDoc();
-        local.setEspecificacaoDoc(empDoc);
+        local.setEspecificacaoId(empDoc.getId());
         local.setLocal(LocalEnum.UNIDADES_PRIVATIVAS);
         localDocRepository.save(local);
 
@@ -110,7 +110,7 @@ class LocalDocTest {
     @Test
     void testLocalDelete() {
         LocalDoc local = new LocalDoc();
-        local.setEspecificacaoDoc(empDoc);
+        local.setEspecificacaoId(empDoc.getId());
         local.setLocal(LocalEnum.UNIDADES_PRIVATIVAS);
         localDocRepository.save(local);
 

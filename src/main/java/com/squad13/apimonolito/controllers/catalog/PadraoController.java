@@ -48,12 +48,12 @@ public class PadraoController {
 
     @GetMapping("/{id}/ambiente")
     public ResponseEntity<List<ResItemAmbienteDTO>> getItemAmbienteByPadrao(@PathVariable Long id) {
-        return ResponseEntity.ok(composicaoService.findItensAmbienteByPadrao(id));
+        return ResponseEntity.ok(padraoService.findItensAmbienteByPadrao(id));
     }
 
     @GetMapping("/{id}/material")
     public ResponseEntity<List<ResMarcaMaterialDTO>> getMarcaMaterialByPadrao(@PathVariable Long id) {
-        return ResponseEntity.ok(composicaoService.findMarcasMaterialByPadrao(id));
+        return ResponseEntity.ok(padraoService.findMarcasMaterialByPadrao(id));
     }
 
     @PostMapping("/new")

@@ -56,38 +56,27 @@ public class EditorMapper {
         );
     }
 
-    public DocElement fromCatalog(EspecificacaoDoc espec, Object entity, DocElementEnum type) {
+    public DocElement fromCatalog(String specId, Object entity, DocElementEnum type) {
         return switch (type) {
-            case AMBIENTE -> fromCatalog(espec, (Ambiente) entity);
-            case ITEM -> fromCatalog(espec, (ItemDesc) entity);
-            case MATERIAL -> fromCatalog(espec, (Material) entity);
-            case MARCA -> fromCatalog(espec, (Marca) entity);
+            case AMBIENTE -> fromCatalog(specId, (Ambiente) entity);
+            case ITEM -> fromCatalog(specId, (ItemDesc) entity);
+            case MATERIAL -> fromCatalog(specId, (Material) entity);
+            case MARCA -> fromCatalog(specId, (Marca) entity);
         };
     }
 
-    public AmbienteDocElement fromCatalog(EspecificacaoDoc espec, Ambiente catalogAmbiente) {
+    public AmbienteDocElement fromCatalog(String specId, Ambiente catalogAmbiente) {
         AmbienteDocElement ambiente = new AmbienteDocElement();
         ambiente.setName(catalogAmbiente.getName());
         ambiente.setLocal(catalogAmbiente.getLocal());
         ambiente.setInSync(true);
-        ambiente.setEspecificacaoDoc(espec);
+        ambiente.setEspecificacaoId(specId);
         ambiente.setCatalogId(catalogAmbiente.getId());
 
         return ambiente;
     }
 
-    public AmbienteDocElement fromResponse(EspecificacaoDoc e, ResAmbienteDTO resAmbienteDTO) {
-        AmbienteDocElement ambiente = new AmbienteDocElement();
-        ambiente.setName(resAmbienteDTO.name());
-        ambiente.setLocal(resAmbienteDTO.local());
-        ambiente.setEspecificacaoDoc(e);
-        ambiente.setCatalogId(resAmbienteDTO.id());
-        ambiente.setInSync(true);
-
-        return ambiente;
-    }
-
-    public ItemDocElement fromCatalog(EspecificacaoDoc espec, ItemDesc catalogItem) {
+    public ItemDocElement fromCatalog(String specId, ItemDesc catalogItem) {
         ItemDocElement item = new ItemDocElement();
         item.setName(catalogItem.getName());
 
@@ -98,85 +87,29 @@ public class EditorMapper {
 
         item.setDesc(catalogItem.getDesc());
         item.setCatalogId(catalogItem.getId());
-        item.setEspecificacaoDoc(espec);
+        item.setEspecificacaoId(specId);
         item.setInSync(true);
 
         return item;
     }
 
-    public ItemDocElement fromResponse(EspecificacaoDoc e, ResItemDTO resItemDTO) {
-        ItemDocElement item = new ItemDocElement();
-        item.setName(resItemDTO.name());
-        item.setDesc(resItemDTO.desc());
-
-        if (resItemDTO.type() != null) {
-            item.setTypeId(resItemDTO.type().id());
-            item.setType(resItemDTO.type().name());
-        }
-
-        item.setEspecificacaoDoc(e);
-        item.setCatalogId(resItemDTO.id());
-        item.setInSync(true);
-
-        return item;
-    }
-
-    public MaterialDocElement fromCatalog(EspecificacaoDoc espec, Material catalogMaterial) {
+    public MaterialDocElement fromCatalog(String specId, Material catalogMaterial) {
         MaterialDocElement material = new MaterialDocElement();
         material.setName(catalogMaterial.getName());
         material.setInSync(true);
-        material.setEspecificacaoDoc(espec);
+        material.setEspecificacaoId(specId);
         material.setCatalogId(catalogMaterial.getId());
 
         return material;
     }
 
-    public MaterialDocElement fromResponse(EspecificacaoDoc e, ResMaterialDTO resMaterialDTO) {
-        MaterialDocElement material = new MaterialDocElement();
-        material.setName(resMaterialDTO.name());
-        material.setEspecificacaoDoc(e);
-        material.setCatalogId(resMaterialDTO.id());
-        material.setInSync(true);
-
-        return material;
-    }
-
-    public MarcaDocElement fromCatalog(EspecificacaoDoc espec, Marca catalogMarca) {
+    public MarcaDocElement fromCatalog(String specId, Marca catalogMarca) {
         MarcaDocElement marca = new MarcaDocElement();
         marca.setName(catalogMarca.getName());
         marca.setInSync(true);
-        marca.setEspecificacaoDoc(espec);
+        marca.setEspecificacaoId(specId);
         marca.setCatalogId(catalogMarca.getId());
 
         return marca;
-    }
-
-    public MarcaDocElement fromResponse(EspecificacaoDoc e, ResMarcaDTO resMarcaDTO) {
-        MarcaDocElement marca = new MarcaDocElement();
-        marca.setName(resMarcaDTO.name());
-        marca.setEspecificacaoDoc(e);
-        marca.setCatalogId(resMarcaDTO.id());
-        marca.setInSync(true);
-
-        return marca;
-    }
-
-    public <K, V, P, C> List<P> structure(
-            EspecificacaoDoc espec,
-            Map<K, List<V>> grouped,
-            BiFunction<EspecificacaoDoc, K, P> parentMapper,
-            BiFunction<EspecificacaoDoc, V, C> childMapper,
-            BiConsumer<P, List<C>> childSetter
-    ) {
-        return grouped.entrySet().stream()
-                .map(entry -> {
-                    P parent = parentMapper.apply(espec, entry.getKey());
-                    List<C> children = entry.getValue().stream()
-                            .map(v -> childMapper.apply(espec, v))
-                            .toList();
-                    childSetter.accept(parent, children);
-                    return parent;
-                })
-                .toList();
     }
 }

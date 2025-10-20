@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 @Getter
 @Setter
 @ParameterObject
-@AllArgsConstructor
-public class LoadDocumentParamsDTO{
+public class LoadDocumentParamsDTO {
 
     private boolean loadEspecificacao;
     private boolean loadMateriais;
@@ -23,17 +22,35 @@ public class LoadDocumentParamsDTO{
     private boolean loadRevision;
     private boolean loadUsers;
 
-    public LoadDocumentParamsDTO() {
-        this(false, false, false, false, false, false, false, false, false);
+    public LoadDocumentParamsDTO(
+            boolean loadEspecificacao,
+            boolean loadMateriais,
+            boolean loadMarcas,
+            boolean loadLocais,
+            boolean loadAmbientes,
+            boolean loadItems,
+            boolean loadPadrao,
+            boolean loadRevision,
+            boolean loadUsers
+    ) {
+        this.loadEspecificacao = loadEspecificacao;
+        this.loadMateriais = loadMateriais;
+        this.loadMarcas = loadMarcas;
+        this.loadLocais = loadLocais;
+        this.loadAmbientes = loadAmbientes;
+        this.loadItems = loadItems;
+        this.loadPadrao = loadPadrao;
+        this.loadRevision = loadRevision;
+        this.loadUsers = loadUsers;
     }
 
     public static LoadDocumentParamsDTO allFalse() {
         return new LoadDocumentParamsDTO(false, false, false, false, false, false, false, false, false);
     }
 
-    @ModelAttribute("loadAll")
     public static LoadDocumentParamsDTO allTrue() {
-        return new LoadDocumentParamsDTO(true, true, true, true, true, true, true, true, true);
+        return new LoadDocumentParamsDTO(
+                true, true, true, true, true, true, true, true, true
+        );
     }
-
 }

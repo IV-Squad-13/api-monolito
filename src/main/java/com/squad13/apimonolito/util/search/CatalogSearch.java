@@ -1,4 +1,4 @@
-package com.squad13.apimonolito.util;
+package com.squad13.apimonolito.util.search;
 
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityManager;

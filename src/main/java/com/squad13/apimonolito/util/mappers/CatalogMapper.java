@@ -75,6 +75,19 @@ public class CatalogMapper {
         );
     }
 
+    public ResAmbienteDTO toResponse(LoadCatalogParamsDTO params, ItemAmbiente association) {
+        if (association == null) return null;
+
+        List<ResItemDTO> items = params.isLoadItems()
+                ? association.getItemDesc()
+
+        return new ResItemAmbienteDTO(
+                association.getId(),
+                toResponse(association.getItemDesc(), LoadCatalogParamsDTO.allFalse()),
+                toResponse(association.getAmbiente(), LoadCatalogParamsDTO.allFalse())
+        );
+    }
+
     public ResMarcaDTO toResponse(Marca marca, LoadCatalogParamsDTO loadDTO) {
         if (marca == null) return null;
 
@@ -115,27 +128,29 @@ public class CatalogMapper {
         );
     }
 
-    public ResPadraoDTO toResponse(Padrao padrao, LoadCatalogParamsDTO loadDTO) {
+    public ResPadraoDTO toResponse(Padrao padrao, LoadCatalogParamsDTO params) {
         if (padrao == null) return null;
 
-        Map<ResAmbienteDTO, List<ResItemDTO>> groupedAmbientes = Map.of();
-        if (loadDTO.isLoadAmbientes()) {
-            List<ResItemAmbienteDTO> itemAmbientes = padrao.getAmbienteSet().stream()
-                    .map(comp -> toResponse(comp.getCompositor()))
-                    .toList();
+        List<ResAmbienteDTO> ambientes = List.of();
+        if (params.isLoadAmbientes()) {
+            LoadCatalogParamsDTO nestedParams = new LoadCatalogParamsDTO(
+                    false, false, params.isLoadItems(), false, false
+            );
 
-            groupedAmbientes =
-                    groupBy(itemAmbientes, ResItemAmbienteDTO::ambiente, ResItemAmbienteDTO::item);
+            ambientes = padrao.getAmbienteSet().stream()
+                    .map(c -> toResponse(c.getCompositor(), nestedParams))
+                    .toList();
         }
 
-        Map<ResMaterialDTO, List<ResMarcaDTO>> groupedMateriais = Map.of();
-        if (loadDTO.isLoadMateriais()) {
-            List<ResMarcaMaterialDTO> marcaMateriais = padrao.getMaterialSet().stream()
-                    .map(comp -> toResponse(comp.getCompositor()))
-                    .toList();
+        List<ResMaterialDTO> materiais = List.of();
+        if (params.isLoadMateriais()) {
+            LoadCatalogParamsDTO nestedParams = new LoadCatalogParamsDTO(
+                    false, false, false, false, params.isLoadMarcas()
+            );
 
-            groupedMateriais =
-                    groupBy(marcaMateriais, ResMarcaMaterialDTO::material, ResMarcaMaterialDTO::marca);
+            materiais = padrao.getMaterialSet().stream()
+                    .map(m -> toResponse(m, nestedParams))
+                    .toList();
         }
 
         return new ResPadraoDTO(
@@ -143,7 +158,7 @@ public class CatalogMapper {
                 padrao.getName(),
                 padrao.getIsActive(),
                 groupedAmbientes,
-                groupedMateriais
+                materiais
         );
     }
 

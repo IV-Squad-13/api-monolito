@@ -33,6 +33,7 @@ import java.util.List;
 public class EspecificacaoDoc {
 
     @MongoId(FieldType.OBJECT_ID)
+    @JsonSerialize(using = ToStringSerializer.class)
     private ObjectId id;
 
     @NotNull

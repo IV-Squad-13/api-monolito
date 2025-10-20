@@ -30,6 +30,7 @@ import java.time.Instant;
 public abstract class DocElement {
 
     @MongoId(FieldType.OBJECT_ID)
+    @JsonSerialize(using = ToStringSerializer.class)
     private ObjectId id;
 
     @NotNull
@@ -38,9 +39,11 @@ public abstract class DocElement {
 
     @NotNull
     @Indexed
+    @JsonSerialize(using = ToStringSerializer.class)
     private ObjectId especificacaoId;
 
     @Indexed
+    @JsonSerialize(using = ToStringSerializer.class)
     private ObjectId parentId;
 
     @NotBlank

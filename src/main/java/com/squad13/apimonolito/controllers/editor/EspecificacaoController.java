@@ -24,16 +24,19 @@ public class EspecificacaoController {
 
     @GetMapping()
     public ResponseEntity<List<ResSpecDTO>> getAll(@ModelAttribute LoadDocumentParamsDTO params) {
-        return ResponseEntity.ok(especificacaoService.findAll());
+        return ResponseEntity.ok(especificacaoService.findAll(params));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EspecificacaoDoc> getById(@PathVariable ObjectId id) {
-        return ResponseEntity.ok(especificacaoService.findById(id));
+    public ResponseEntity<ResSpecDTO> getById(
+            @ModelAttribute LoadDocumentParamsDTO params,
+            @PathVariable ObjectId id
+    ) {
+        return ResponseEntity.ok(especificacaoService.findById(params, id));
     }
 
     @PostMapping("/new")
-    public ResponseEntity<EspecificacaoDoc> create(@RequestBody EspecificacaoDocDTO dto){
+    public ResponseEntity<EspecificacaoDoc> create(@RequestBody EspecificacaoDocDTO dto) {
         return ResponseEntity.ok(especificacaoService.create(dto));
     }
 

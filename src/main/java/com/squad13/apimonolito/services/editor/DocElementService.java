@@ -8,9 +8,9 @@ import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.editor.mongo.*;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import com.squad13.apimonolito.mongo.editor.*;
-import com.squad13.apimonolito.util.CatalogSearch;
-import com.squad13.apimonolito.util.DocElementFactory;
-import com.squad13.apimonolito.util.DocumentSearch;
+import com.squad13.apimonolito.util.search.CatalogSearch;
+import com.squad13.apimonolito.util.factory.DocElementFactory;
+import com.squad13.apimonolito.util.search.DocumentSearch;
 import com.squad13.apimonolito.util.enums.DocElementEnum;
 import com.squad13.apimonolito.util.mappers.EditorMapper;
 import jakarta.transaction.Transactional;
@@ -19,7 +19,6 @@ import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor

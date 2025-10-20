@@ -1,14 +1,24 @@
 package com.squad13.apimonolito.DTO.editor.res;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.ArrayList;
 import java.util.List;
 
-public record ResSpecDTO(
-        String id,
-        Long empId,
-        String name,
-        String desc,
-        String obs,
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class ResSpecDTO {
+    private String id;
+    private Long empreendimentoId;
+    private String name;
+    private String desc;
+    private String obs;
 
-        List<ResLocalDocDTO> locais,
-        List<ResMatDocDTO> materiais
-) { }
+    private List<ResLocalDocDTO> locais = new ArrayList<>();
+    private List<ResMatDocDTO> materiais = new ArrayList<>();
+}

@@ -1,4 +1,4 @@
-package com.squad13.apimonolito.util;
+package com.squad13.apimonolito.util.factory;
 
 import com.squad13.apimonolito.DTO.editor.AmbienteDocDTO;
 import com.squad13.apimonolito.DTO.editor.DocElementDTO;
@@ -7,12 +7,17 @@ import com.squad13.apimonolito.exceptions.InvalidDocumentTypeException;
 import com.squad13.apimonolito.models.catalog.ItemType;
 import com.squad13.apimonolito.models.editor.mongo.*;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
+import com.squad13.apimonolito.mongo.editor.LocalDocRepository;
 import com.squad13.apimonolito.services.editor.SynchronizationService;
+import com.squad13.apimonolito.util.search.CatalogSearch;
 import com.squad13.apimonolito.util.enums.DocElementEnum;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.util.Map;
+import java.util.function.BiFunction;
 
 @Component
 @RequiredArgsConstructor

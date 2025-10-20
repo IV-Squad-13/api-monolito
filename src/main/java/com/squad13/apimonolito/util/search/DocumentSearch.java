@@ -32,16 +32,8 @@ public class DocumentSearch {
         return mongoTemplate.findAll(clazz);
     }
 
-    public <T> List<T> findWithAggregation(String collectionName, Class<T> resultClass, AggregationOperation... operations) {
-        Aggregation aggregation = Aggregation.newAggregation(operations);
-
-        return mongoTemplate.aggregate(aggregation, collectionName, resultClass)
-                .getMappedResults();
-    }
-
-    public <T> T findOneWithAggregation(String collectionName, Class<T> resultClass, AggregationOperation... operations) {
-        List<T> results = findWithAggregation(collectionName, resultClass, operations);
-        return results.isEmpty() ? null : results.getFirst();
+    public <T> List<T> findWithAggregation(String collection, Class<T> resultType, Aggregation agg) {
+        return mongoTemplate.aggregate(agg, collection, resultType).getMappedResults();
     }
 
     public <T> void bulkSave(Class<T> clazz, List<T> docs) {

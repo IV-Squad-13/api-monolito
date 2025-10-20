@@ -38,5 +38,5 @@ jobs:
       - name: Push Docker image
         run: |
           IMAGE_NAME="yuri/monolito_api:latest"
-          docker tag docker_monolito_api:latest $IMAGE_NAME
+          docker tag docker-monolito_api:latest $IMAGE_NAME
           docker push $IMAGE_NAME

@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout current repository
+      - name: Checkout monolito_api repository
         uses: actions/checkout@v4
 
       - name: Checkout docker repository
@@ -22,4 +22,5 @@ jobs:
       - name: Build & run using Docker Compose
         run: |
           cd docker
-          docker compose -f docker-compose.yml up monolito_api --build -d
+          # Make sure Docker Compose uses the monolito_api source from the parent folder
+          docker compose -f docker-compose.yml up --build -d monolito_api

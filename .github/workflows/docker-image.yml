@@ -12,7 +12,7 @@ jobs:
       - name: Checkout current repository
         uses: actions/checkout@v4
 
-      - name: Checkout infra repository
+      - name: Checkout docker repository
         uses: actions/checkout@v4
         with:
           repository: iv-squad-13/docker

@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout monolito_api repository
         uses: actions/checkout@v4
+        with:
+          path: services/api-monolito
 
       - name: Checkout docker repository
         uses: actions/checkout@v4
@@ -19,8 +21,10 @@ jobs:
           token: ${{ secrets.ORG_ACCESS_TOKEN }}
           path: docker
 
+      - name: Verify structure
+        run: ls -R .
+
       - name: Build & run using Docker Compose
         run: |
           cd docker
-          # Make sure Docker Compose uses the monolito_api source from the parent folder
           docker compose -f docker-compose.yml up --build -d monolito_api

@@ -3,7 +3,6 @@ package com.squad13.apimonolito.util.mappers;
 import com.squad13.apimonolito.DTO.auth.res.ResUserDTO;
 import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
 import com.squad13.apimonolito.DTO.catalog.res.*;
-import com.squad13.apimonolito.DTO.editor.ItemDocDTO;
 import com.squad13.apimonolito.DTO.editor.LoadDocumentParamsDTO;
 import com.squad13.apimonolito.DTO.editor.res.*;
 import com.squad13.apimonolito.models.catalog.*;
@@ -11,16 +10,13 @@ import com.squad13.apimonolito.models.editor.mongo.*;
 import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import com.squad13.apimonolito.models.revision.mongo.EspecificacaoRevDocElement;
-import com.squad13.apimonolito.util.DocumentSearch;
+import com.squad13.apimonolito.util.search.DocumentSearch;
 import com.squad13.apimonolito.util.enums.DocElementEnum;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 
 @Component
 @RequiredArgsConstructor

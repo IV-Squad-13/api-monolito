@@ -1,7 +1,7 @@
 package com.squad13.apimonolito.services.editor;
 
-import com.squad13.apimonolito.DTO.catalog.res.*;
 import com.squad13.apimonolito.DTO.editor.EspecificacaoDocDTO;
+import com.squad13.apimonolito.DTO.editor.LoadDocumentParamsDTO;
 import com.squad13.apimonolito.DTO.editor.edit.EditEspecificacaoDocDTO;
 import com.squad13.apimonolito.DTO.editor.res.ResSpecDTO;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
@@ -16,19 +16,20 @@ import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import com.squad13.apimonolito.mongo.editor.*;
 import com.squad13.apimonolito.repository.editor.EmpreendimentoRepository;
 import com.squad13.apimonolito.services.catalog.ComposicaoService;
-import com.squad13.apimonolito.util.DocumentSearch;
+import com.squad13.apimonolito.util.factory.ResponseDocFactory;
+import com.squad13.apimonolito.util.search.DocumentSearch;
 import com.squad13.apimonolito.util.enums.LocalEnum;
 import com.squad13.apimonolito.util.mappers.CatalogMapper;
 import com.squad13.apimonolito.util.mappers.EditorMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.bson.Document;
 import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,19 +43,50 @@ public class EspecificacaoService {
     private final EspecificacaoDocRepository specRepository;
 
     private final EditorMapper editorMapper;
-    private final DocumentSearch documentSearch;
     private final CatalogMapper catalogMapper;
 
-    public List<ResSpecDTO> findAll() {
-        return documentSearch.findWithAggregation(
-                "especificacoes",
-                ResSpecDTO.class,
-                Aggregation.lookup("locais", "locaisIds", "_id", "locais"),
-                Aggregation.lookup("materiais", "materiaisIds", "_id", "materiais")
-        );
+    private final ResponseDocFactory resDocFactory;
+
+    private final DocumentSearch documentSearch;
+
+    public List<ResSpecDTO> findAll(LoadDocumentParamsDTO params) {
+        List<AggregationOperation> operations = new ArrayList<>();
+
+        if (params.isLoadLocais()) {
+            operations.add(resDocFactory.lookupLocaisWithNestedAmbientes(params));
+        }
+
+        if (params.isLoadMateriais()) {
+            operations.add(resDocFactory.lookupMateriaisWithMarcas(params));
+        }
+
+        Aggregation aggregation = Aggregation.newAggregation(operations);
+
+        return documentSearch.findWithAggregation("especificacoes", ResSpecDTO.class, aggregation);
     }
 
-    public EspecificacaoDoc findById(ObjectId id) {
+    public ResSpecDTO findById(LoadDocumentParamsDTO params, ObjectId id) {
+        List<AggregationOperation> operations = new ArrayList<>();
+
+        operations.add(Aggregation.match(Criteria.where("_id").is(id)));
+
+        if (params.isLoadLocais()) {
+            operations.add(resDocFactory.lookupLocaisWithNestedAmbientes(params));
+        }
+
+        if (params.isLoadMateriais()) {
+            operations.add(resDocFactory.lookupMateriaisWithMarcas(params));
+        }
+
+        Aggregation aggregation = Aggregation.newAggregation(operations);
+
+        return documentSearch.findWithAggregation("especificacoes", ResSpecDTO.class, aggregation)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Especificação não encontrada para o ID: " + id));
+    }
+
+    private EspecificacaoDoc findById(ObjectId id) {
         return specRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Especificação não encontrada para o ID: " + id));
     }

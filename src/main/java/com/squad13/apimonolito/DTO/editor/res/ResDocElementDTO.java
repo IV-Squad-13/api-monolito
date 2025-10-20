@@ -9,16 +9,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class ResDocElementDTO {
+public class ResDocElementDTO {
     private String id;
     private Long catalogId;
     private String name;
     private boolean inSync;
-
-    protected ResDocElementDTO(ResDocElementDTO source) {
-        this.id = source.getId();
-        this.catalogId = source.getCatalogId();
-        this.name = source.getName();
-        this.inSync = source.isInSync();
-    }
 }

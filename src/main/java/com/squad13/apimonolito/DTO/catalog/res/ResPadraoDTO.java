@@ -8,6 +8,6 @@ public record ResPadraoDTO(
         String name,
         Boolean isActive,
 
-        Map<ResAmbienteDTO, List<ResItemDTO>> ambienteSet,
-        Map<ResMaterialDTO, List<ResMarcaDTO>> materialSet
+        List<ResAmbienteDTO> ambienteList,
+        List<ResMaterialDTO> materialList
 ) { }

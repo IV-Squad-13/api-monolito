@@ -9,7 +9,7 @@ import com.squad13.apimonolito.models.editor.mongo.ItemDocElement;
 import com.squad13.apimonolito.models.editor.mongo.MarcaDocElement;
 import com.squad13.apimonolito.models.editor.mongo.MaterialDocElement;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
-import com.squad13.apimonolito.util.CatalogSearch;
+import com.squad13.apimonolito.util.search.CatalogSearch;
 import com.squad13.apimonolito.util.enums.DocElementEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

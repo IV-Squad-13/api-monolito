@@ -1,4 +1,4 @@
-package com.squad13.apimonolito.util;
+package com.squad13.apimonolito.util.search;
 
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
@@ -7,7 +7,6 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.BulkOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
@@ -32,8 +31,8 @@ public class DocumentSearch {
         return mongoTemplate.findAll(clazz);
     }
 
-    public <T> List<T> findWithAggregation(String collection, Class<T> resultType, Aggregation agg) {
-        return mongoTemplate.aggregate(agg, collection, resultType).getMappedResults();
+    public <T> List<T> findWithAggregation(String collection, Class<T> resultType, Aggregation aggregation) {
+        return mongoTemplate.aggregate(aggregation, collection, resultType).getMappedResults();
     }
 
     public <T> void bulkSave(Class<T> clazz, List<T> docs) {

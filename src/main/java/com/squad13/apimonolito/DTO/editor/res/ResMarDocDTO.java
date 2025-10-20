@@ -5,9 +5,4 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ResMarDocDTO extends ResDocElementDTO {
-
-    public ResMarDocDTO(ResMarDocDTO base) {
-        super(base);
-    }
-}
+public class ResMarDocDTO extends ResDocElementDTO { }

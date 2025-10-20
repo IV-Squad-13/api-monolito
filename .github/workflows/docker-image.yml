@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout monolito_api repository
+      - name: Checkout monolito_api
         uses: actions/checkout@v4
         with:
           path: services/api-monolito
@@ -24,7 +24,19 @@ jobs:
       - name: Verify structure
         run: ls -R .
 
-      - name: Build & run using Docker Compose
+      - name: Build & run monolito_api
         run: |
           cd docker
-          docker compose -f docker-compose.yml up --build -d monolito_api
+          docker compose -f docker-compose.yml build monolito_api
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push Docker image
+        run: |
+          IMAGE_NAME="yuri/monolito_api:latest"
+          docker tag docker_monolito_api:latest $IMAGE_NAME
+          docker push $IMAGE_NAME

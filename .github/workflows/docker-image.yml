@@ -1,18 +1,25 @@
-name: Docker Image CI
+name: Cross-Repo Docker Compose CI
 
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      - name: Checkout current repository
+        uses: actions/checkout@v4
+
+      - name: Checkout infra repository
+        uses: actions/checkout@v4
+        with:
+          repository: iv-squad-13/docker
+          token: ${{ secrets.ORG_ACCESS_TOKEN }}
+          path: docker
+
+      - name: Build & run using Docker Compose
+        run: |
+          cd docker
+          docker compose -f docker-compose.yml up monolito_api --build -d

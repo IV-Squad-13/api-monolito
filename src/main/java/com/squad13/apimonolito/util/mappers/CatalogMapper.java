@@ -121,25 +121,25 @@ public class CatalogMapper {
 
         List<ResMinDTO> items = params.isLoadItems()
                 ? padrao.getAmbienteSet().stream()
-                    .map(comp -> toMinDTO(comp.getCompositor().getItemDesc(), params.isLoadAmbientes()))
+                    .map(comp -> toMinDTO(comp.getCompositor().getItemDesc(), params.isLoadNested()))
                     .toList()
                 : List.of();
 
         List<ResMinDTO> ambientes = params.isLoadAmbientes()
                 ? padrao.getAmbienteSet().stream()
-                    .map(comp -> toMinDTO(comp.getCompositor().getAmbiente(), params.isLoadItems()))
+                    .map(comp -> toMinDTO(comp.getCompositor().getAmbiente(), params.isLoadNested()))
                     .toList()
                 : List.of();
 
         List<ResMinDTO> marcas = params.isLoadMarcas()
                 ? padrao.getMaterialSet().stream()
-                    .map(comp -> toMinDTO(comp.getCompositor().getMarca(), params.isLoadMateriais()))
+                    .map(comp -> toMinDTO(comp.getCompositor().getMarca(), params.isLoadNested()))
                     .toList()
                 : List.of();
 
         List<ResMinDTO> materiais = params.isLoadMateriais()
                 ? padrao.getMaterialSet().stream()
-                    .map(comp -> toMinDTO(comp.getCompositor().getMaterial(), params.isLoadMarcas()))
+                    .map(comp -> toMinDTO(comp.getCompositor().getMaterial(), params.isLoadNested()))
                     .toList()
                 : List.of();
 

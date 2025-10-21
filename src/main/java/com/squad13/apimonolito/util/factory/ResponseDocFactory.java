@@ -13,23 +13,29 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ResponseDocFactory {
 
-    public AggregationOperation lookupLocaisWithNestedAmbientes(LoadDocumentParamsDTO params) {
+    public AggregationOperation lookupLocais(LoadDocumentParamsDTO params) {
         Document itemsLookup = params.isLoadItems()
                 ? buildLookup("items", "itemIds", "_id", "items", null)
                 : new Document();
 
         Document ambientesLookup = params.isLoadAmbientes()
-                ? buildLookup("ambientes", "ambienteIds", "_id", "ambientes", List.of(itemsLookup))
+                ? buildLookup("ambientes", "ambienteIds", "_id", "ambientes",
+                    itemsLookup != null ? List.of(itemsLookup) : null)
                 : new Document();
 
         Document locaisLookup = params.isLoadLocais()
-                ? buildLookup("locais", "locaisIds", "_id", "locais", List.of(ambientesLookup))
-                : new Document();
+                ? buildLookup("locais", "locaisIds", "_id", "locais",
+                    ambientesLookup != null ? List.of(ambientesLookup) : null)
+                : new Document()
+                    .append("from", "locais")
+                    .append("let", new Document("locaisIds", "$locaisIds"))
+                    .append("pipeline", List.of())
+                    .append("as", "locais");
 
         return context -> new Document("$lookup", locaisLookup);
     }
 
-    public AggregationOperation lookupMateriaisWithMarcas(LoadDocumentParamsDTO params) {
+    public AggregationOperation lookupMateriais(LoadDocumentParamsDTO params) {
         Document marcasLookup = params.isLoadMarcas()
                 ? buildLookup("marcas", "marcaIds", "_id", "marcas", null)
                 : new Document();

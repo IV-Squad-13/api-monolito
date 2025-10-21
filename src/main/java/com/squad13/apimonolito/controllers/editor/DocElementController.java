@@ -3,6 +3,7 @@ package com.squad13.apimonolito.controllers.editor;
 import com.squad13.apimonolito.DTO.editor.DocElementCatalogCreationDTO;
 import com.squad13.apimonolito.DTO.editor.DocElementDTO;
 import com.squad13.apimonolito.DTO.editor.DocElementParams;
+import com.squad13.apimonolito.DTO.editor.res.ResDocElementDTO;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import com.squad13.apimonolito.services.editor.DocElementService;
 import com.squad13.apimonolito.services.editor.EspecificacaoService;

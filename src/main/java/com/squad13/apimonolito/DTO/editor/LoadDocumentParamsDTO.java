@@ -18,6 +18,7 @@ public class LoadDocumentParamsDTO {
     private boolean loadLocais;
     private boolean loadAmbientes;
     private boolean loadItems;
+    private boolean loadNested;
     private boolean loadPadrao;
     private boolean loadRevision;
     private boolean loadUsers;
@@ -29,6 +30,7 @@ public class LoadDocumentParamsDTO {
             boolean loadLocais,
             boolean loadAmbientes,
             boolean loadItems,
+            boolean loadNested,
             boolean loadPadrao,
             boolean loadRevision,
             boolean loadUsers
@@ -39,21 +41,22 @@ public class LoadDocumentParamsDTO {
         this.loadLocais = loadLocais;
         this.loadAmbientes = loadAmbientes;
         this.loadItems = loadItems;
+        this.loadNested = loadNested;
         this.loadPadrao = loadPadrao;
         this.loadRevision = loadRevision;
         this.loadUsers = loadUsers;
     }
 
     public LoadDocumentParamsDTO() {
-        this(false, false, false, false, false, false, false, false, false);
+        this(false, false, false, false, false, false, false, false, false, false);
     }
 
     public static LoadDocumentParamsDTO allFalse() {
-        return new LoadDocumentParamsDTO(false, false, false, false, false, false, false, false, false);
+        return new LoadDocumentParamsDTO(false, false, false, false, false, false, false, false, false, false);
     }
 
     @ModelAttribute("loadAll")
     public static LoadDocumentParamsDTO allTrue() {
-        return new LoadDocumentParamsDTO(true, true, true, true, true, true, true, true, true);
+        return new LoadDocumentParamsDTO(true, true, true, true, true, true, true, true, true, true);
     }
 }

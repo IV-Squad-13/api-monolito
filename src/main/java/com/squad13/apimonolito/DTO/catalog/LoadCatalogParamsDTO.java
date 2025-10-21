@@ -15,31 +15,34 @@ public class LoadCatalogParamsDTO {
     private boolean loadItems;
     private boolean loadMateriais;
     private boolean loadMarcas;
+    private boolean loadNested; // PERIGO!!!!!
 
     public LoadCatalogParamsDTO(
             boolean loadPadroes,
             boolean loadAmbientes,
             boolean loadItems,
             boolean loadMateriais,
-            boolean loadMarcas
+            boolean loadMarcas,
+            boolean loadNested
     ) {
         this.loadPadroes = loadPadroes;
         this.loadAmbientes = loadAmbientes;
         this.loadItems = loadItems;
         this.loadMateriais = loadMateriais;
         this.loadMarcas = loadMarcas;
+        this.loadNested = loadNested;
     }
 
     public LoadCatalogParamsDTO() {
-        this(false, false, false, false, false);
+        this(false, false, false, false, false, false);
     }
 
     public static LoadCatalogParamsDTO allFalse() {
-        return new LoadCatalogParamsDTO(false, false, false, false, false);
+        return new LoadCatalogParamsDTO(false, false, false, false, false, false);
     }
 
     @ModelAttribute("loadAll")
     public static LoadCatalogParamsDTO allTrue() {
-        return new LoadCatalogParamsDTO(true, true, true, true, true);
+        return new LoadCatalogParamsDTO(true, true, true, true, true, true);
     }
 }

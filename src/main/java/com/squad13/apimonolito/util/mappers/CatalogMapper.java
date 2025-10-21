@@ -8,6 +8,7 @@ import com.squad13.apimonolito.models.catalog.associative.ComposicaoAmbiente;
 import com.squad13.apimonolito.models.catalog.associative.ComposicaoMaterial;
 import com.squad13.apimonolito.models.catalog.associative.ItemAmbiente;
 import com.squad13.apimonolito.models.catalog.associative.MarcaMaterial;
+import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -75,19 +76,6 @@ public class CatalogMapper {
         );
     }
 
-    public ResAmbienteDTO toResponse(LoadCatalogParamsDTO params, ItemAmbiente association) {
-        if (association == null) return null;
-
-        List<ResItemDTO> items = params.isLoadItems()
-                ? association.getItemDesc()
-
-        return new ResItemAmbienteDTO(
-                association.getId(),
-                toResponse(association.getItemDesc(), LoadCatalogParamsDTO.allFalse()),
-                toResponse(association.getAmbiente(), LoadCatalogParamsDTO.allFalse())
-        );
-    }
-
     public ResMarcaDTO toResponse(Marca marca, LoadCatalogParamsDTO loadDTO) {
         if (marca == null) return null;
 
@@ -131,34 +119,38 @@ public class CatalogMapper {
     public ResPadraoDTO toResponse(Padrao padrao, LoadCatalogParamsDTO params) {
         if (padrao == null) return null;
 
-        List<ResAmbienteDTO> ambientes = List.of();
-        if (params.isLoadAmbientes()) {
-            LoadCatalogParamsDTO nestedParams = new LoadCatalogParamsDTO(
-                    false, false, params.isLoadItems(), false, false
-            );
+        List<ResMinDTO> items = params.isLoadItems()
+                ? padrao.getAmbienteSet().stream()
+                    .map(comp -> toMinDTO(comp.getCompositor().getItemDesc(), params.isLoadAmbientes()))
+                    .toList()
+                : List.of();
 
-            ambientes = padrao.getAmbienteSet().stream()
-                    .map(c -> toResponse(c.getCompositor(), nestedParams))
-                    .toList();
-        }
+        List<ResMinDTO> ambientes = params.isLoadAmbientes()
+                ? padrao.getAmbienteSet().stream()
+                    .map(comp -> toMinDTO(comp.getCompositor().getAmbiente(), params.isLoadItems()))
+                    .toList()
+                : List.of();
 
-        List<ResMaterialDTO> materiais = List.of();
-        if (params.isLoadMateriais()) {
-            LoadCatalogParamsDTO nestedParams = new LoadCatalogParamsDTO(
-                    false, false, false, false, params.isLoadMarcas()
-            );
+        List<ResMinDTO> marcas = params.isLoadMarcas()
+                ? padrao.getMaterialSet().stream()
+                    .map(comp -> toMinDTO(comp.getCompositor().getMarca(), params.isLoadMateriais()))
+                    .toList()
+                : List.of();
 
-            materiais = padrao.getMaterialSet().stream()
-                    .map(m -> toResponse(m, nestedParams))
-                    .toList();
-        }
+        List<ResMinDTO> materiais = params.isLoadMateriais()
+                ? padrao.getMaterialSet().stream()
+                    .map(comp -> toMinDTO(comp.getCompositor().getMaterial(), params.isLoadMarcas()))
+                    .toList()
+                : List.of();
 
         return new ResPadraoDTO(
                 padrao.getId(),
                 padrao.getName(),
                 padrao.getIsActive(),
-                groupedAmbientes,
-                materiais
+                ambientes,
+                items,
+                materiais,
+                marcas
         );
     }
 
@@ -175,66 +167,86 @@ public class CatalogMapper {
 
     private Set<ResMinDTO> getMinAmbienteDTO(Set<ItemAmbiente> itemAmbienteSet) {
         return itemAmbienteSet.stream()
-                .map(rel -> toMinDTO(rel.getAmbiente()))
+                .map(rel -> toMinDTO(rel.getAmbiente(), false))
                 .collect(Collectors.toSet());
     }
 
     private Set<ResMinDTO> getMinItemDTO(Set<ItemAmbiente> itemAmbienteSet) {
         return itemAmbienteSet.stream()
-                .map(rel -> toMinDTO(rel.getItemDesc()))
+                .map(rel -> toMinDTO(rel.getItemDesc(), false))
                 .collect(Collectors.toSet());
     }
 
     private Set<ResMinDTO> getMinMaterialDTO(Set<MarcaMaterial> marcaMaterialSet) {
         return marcaMaterialSet.stream()
-                .map(rel -> toMinDTO(rel.getMaterial()))
+                .map(rel -> toMinDTO(rel.getMaterial(), false))
                 .collect(Collectors.toSet());
     }
 
     private Set<ResMinDTO> getMinMarcaDTO(Set<MarcaMaterial> marcaMaterialSet) {
         return marcaMaterialSet.stream()
-                .map(rel -> toMinDTO(rel.getMarca()))
+                .map(rel -> toMinDTO(rel.getMarca(), false))
                 .collect(Collectors.toSet());
     }
 
     private Set<ResMinDTO> getMinItemDTOByEntity(Set<ItemDesc> itemDescSet) {
         return itemDescSet.stream()
-                .map(this::toMinDTO)
+                .map(it -> toMinDTO(it, false))
                 .collect(Collectors.toSet());
     }
 
     private Set<ResMinDTO> getAmbienteMinPadraoDTO(Set<ItemAmbiente> relSet) {
         return relSet.stream()
                 .flatMap(rel -> rel.getCompSet().stream()
-                        .map(comp -> toMinDTO(comp.getPadrao()))
+                        .map(comp -> toMinDTO(comp.getPadrao(), false))
                 ).collect(Collectors.toSet());
     }
 
     private Set<ResMinDTO> getMaterialMinPadraoDTO(Set<MarcaMaterial> relSet) {
         return relSet.stream()
                 .flatMap(rel -> rel.getCompSet().stream()
-                        .map(comp -> toMinDTO(comp.getPadrao()))
+                        .map(comp -> toMinDTO(comp.getPadrao(), false))
                 ).collect(Collectors.toSet());
     }
 
-    private ResMinDTO toMinDTO(ItemDesc it) {
-        return new ResMinDTO(it.getId(), it.getDesc(), it.getIsActive());
+    private ResMinDTO toMinDTO(ItemDesc it, boolean loadAmbientes) {
+        List<Long> associatedIds = loadAmbientes
+                ? it.getAmbienteSet().stream().map(ia -> ia.getAmbiente().getId()).toList()
+                : List.of();
+
+        return new ResMinDTO(it.getId(), it.getDesc(), it.getIsActive(), associatedIds);
     }
 
-    private ResMinDTO toMinDTO(Ambiente am) {
-        return new ResMinDTO(am.getId(), am.getName(), am.getIsActive());
+    private ResMinDTO toMinDTO(Ambiente am, boolean loadItems) {
+        List<Long> associatedIds = loadItems
+                ? am.getItemSet().stream().map(ia -> ia.getAmbiente().getId()).toList()
+                : List.of();
+
+        return new ResMinDTO(am.getId(), am.getName(), am.getIsActive(), associatedIds);
     }
 
-    private ResMinDTO toMinDTO(Marca mr) {
-        return new ResMinDTO(mr.getId(), mr.getName(), mr.getIsActive());
+    private ResMinDTO toMinDTO(Marca mr, boolean loadMateriais) {
+        List<Long> associatedIds = loadMateriais
+                ? mr.getMaterialSet().stream().map(mm -> mm.getMaterial().getId()).toList()
+                : List.of();
+
+        return new ResMinDTO(mr.getId(), mr.getName(), mr.getIsActive(), associatedIds);
     }
 
-    private ResMinDTO toMinDTO(Material mt) {
-        return new ResMinDTO(mt.getId(), mt.getName(), mt.getIsActive());
+    private ResMinDTO toMinDTO(Material mt, boolean loadMarcas) {
+        List<Long> associatedIds = loadMarcas
+                ? mt.getMarcaSet().stream().map(mm -> mm.getMarca().getId()).toList()
+                : List.of();
+
+        return new ResMinDTO(mt.getId(), mt.getName(), mt.getIsActive(), associatedIds);
     }
 
-    private ResMinDTO toMinDTO(Padrao p) {
-        return new ResMinDTO(p.getId(), p.getName(), p.getIsActive());
+    private ResMinDTO toMinDTO(Padrao p, boolean loadEmps) {
+        List<Long> associatedIds = loadEmps
+                ? p.getEmpreendimentoSet().stream().map(Empreendimento::getId).toList()
+                : List.of();
+
+        return new ResMinDTO(p.getId(), p.getName(), p.getIsActive(), associatedIds);
     }
 
     public <T, K, V> Map<K, List<V>> groupBy(

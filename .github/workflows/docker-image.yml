@@ -55,3 +55,4 @@ jobs:
 
           docker push $IMAGE_BASE:latest
           docker push $IMAGE_BASE:$VERSION_TAG
+

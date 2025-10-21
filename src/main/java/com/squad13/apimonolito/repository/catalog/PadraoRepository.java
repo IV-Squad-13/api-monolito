@@ -11,7 +11,11 @@ import java.util.Optional;
 
 @Repository
 public interface PadraoRepository extends JpaRepository<Padrao, Long> {
-    @EntityGraph(attributePaths = {"materialSet", "ambienteSet", "empreendimentoSet"})
+    @EntityGraph(attributePaths = {
+            "materialSet", "ambienteSet", "empreendimentoSet",
+            "ambienteSet.compositor", "ambienteSet.compositor.ambiente", "ambienteSet.compositor.itemDesc", "ambienteSet.compositor.itemDesc.type",
+            "materialSet.compositor", "materialSet.compositor.material", "materialSet.compositor.marca"
+    })
     List<Padrao> findAll();
 
     Optional<Padrao> findByName(String name);

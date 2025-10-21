@@ -35,9 +35,23 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Push Docker image
+      - name: Tag previous image (if exists)
+        continue-on-error: true
         run: |
+          IMAGE_BASE="${{ secrets.DOCKERHUB_USERNAME }}/monolito_api"
+          docker pull $IMAGE_BASE:latest || exit 0
+          docker tag $IMAGE_BASE:latest $IMAGE_BASE:previous
+          docker push $IMAGE_BASE:previous
+
+      - name: Tag & Push new images
+        run: |
+          IMAGE_BASE="${{ secrets.DOCKERHUB_USERNAME }}/monolito_api"
+          VERSION_TAG=$(date +'%Y%m%d%H%M%S')
+          
           docker images
-          IMAGE_NAME="${{ secrets.DOCKERHUB_USERNAME }}/monolito_api:latest"
-          docker tag s13_monolito_api:latest $IMAGE_NAME
-          docker push $IMAGE_NAME
+
+          docker tag s13-monolito_api:latest $IMAGE_BASE:latest
+          docker tag s13-monolito_api:latest $IMAGE_BASE:$VERSION_TAG
+
+          docker push $IMAGE_BASE:latest
+          docker push $IMAGE_BASE:$VERSION_TAG

@@ -27,7 +27,7 @@ jobs:
       - name: Build & run monolito_api
         run: |
           cd docker
-          docker compose -p S13 -f docker-compose.yml build monolito_api
+          docker compose -p s13 -f docker-compose.yml build monolito_api
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -39,5 +39,5 @@ jobs:
         run: |
           docker ps -a
           IMAGE_NAME="${{ secrets.DOCKERHUB_USERNAME }}/monolito_api:latest"
-          docker tag S13_monolito_api:latest $IMAGE_NAME
+          docker tag s13_monolito_api:latest $IMAGE_NAME
           docker push $IMAGE_NAME

@@ -37,6 +37,7 @@ jobs:
 
       - name: Push Docker image
         run: |
+          docker ps -a
           IMAGE_NAME="${{ secrets.DOCKERHUB_USERNAME }}/monolito_api:latest"
           docker tag docker-monolito_api:latest $IMAGE_NAME
           docker push $IMAGE_NAME

@@ -23,7 +23,6 @@ import com.squad13.apimonolito.util.mappers.CatalogMapper;
 import com.squad13.apimonolito.util.mappers.EditorMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -49,37 +48,34 @@ public class EspecificacaoService {
 
     private final DocumentSearch documentSearch;
 
-    public List<ResSpecDTO> findAll(LoadDocumentParamsDTO params) {
+    private Aggregation buildAggregation(LoadDocumentParamsDTO params) {
+        if (params == null)
+            return Aggregation.newAggregation(Aggregation.match(new Criteria()));
+
         List<AggregationOperation> operations = new ArrayList<>();
 
         if (params.isLoadLocais()) {
-            operations.add(resDocFactory.lookupLocaisWithNestedAmbientes(params));
+            operations.add(resDocFactory.lookupLocais(params));
         }
 
         if (params.isLoadMateriais()) {
-            operations.add(resDocFactory.lookupMateriaisWithMarcas(params));
+            operations.add(resDocFactory.lookupMateriais(params));
         }
 
-        Aggregation aggregation = Aggregation.newAggregation(operations);
+        if (operations.isEmpty()) {
+            operations.add(Aggregation.match(new Criteria()));
+        }
 
+        return Aggregation.newAggregation(operations);
+    }
+
+    public List<ResSpecDTO> findAll(LoadDocumentParamsDTO params) {
+        Aggregation aggregation = buildAggregation(params);
         return documentSearch.findWithAggregation("especificacoes", ResSpecDTO.class, aggregation);
     }
 
     public ResSpecDTO findById(LoadDocumentParamsDTO params, ObjectId id) {
-        List<AggregationOperation> operations = new ArrayList<>();
-
-        operations.add(Aggregation.match(Criteria.where("_id").is(id)));
-
-        if (params.isLoadLocais()) {
-            operations.add(resDocFactory.lookupLocaisWithNestedAmbientes(params));
-        }
-
-        if (params.isLoadMateriais()) {
-            operations.add(resDocFactory.lookupMateriaisWithMarcas(params));
-        }
-
-        Aggregation aggregation = Aggregation.newAggregation(operations);
-
+        Aggregation aggregation = buildAggregation(params);
         return documentSearch.findWithAggregation("especificacoes", ResSpecDTO.class, aggregation)
                 .stream()
                 .findFirst()

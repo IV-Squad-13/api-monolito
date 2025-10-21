@@ -44,13 +44,16 @@ public class LoadDocumentParamsDTO {
         this.loadUsers = loadUsers;
     }
 
+    public LoadDocumentParamsDTO() {
+        this(false, false, false, false, false, false, false, false, false);
+    }
+
     public static LoadDocumentParamsDTO allFalse() {
         return new LoadDocumentParamsDTO(false, false, false, false, false, false, false, false, false);
     }
 
+    @ModelAttribute("loadAll")
     public static LoadDocumentParamsDTO allTrue() {
-        return new LoadDocumentParamsDTO(
-                true, true, true, true, true, true, true, true, true
-        );
+        return new LoadDocumentParamsDTO(true, true, true, true, true, true, true, true, true);
     }
 }

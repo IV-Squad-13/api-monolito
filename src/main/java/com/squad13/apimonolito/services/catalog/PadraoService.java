@@ -25,10 +25,10 @@ public class PadraoService {
     private final CatalogMapper catalogMapper;
     private final ComposicaoService composicaoService;
 
-    public List<ResPadraoDTO> findAll(LoadCatalogParamsDTO loadDTO) {
+    public List<ResPadraoDTO> findAll(LoadCatalogParamsDTO params) {
         return padraoRepository.findAll()
                 .stream()
-                .map(padrao -> catalogMapper.toResponse(padrao, loadDTO))
+                .map(padrao -> catalogMapper.toResponse(padrao, params))
                 .toList();
     }
 
@@ -37,15 +37,15 @@ public class PadraoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Padrão com id " + id + " não encontrado."));
     }
 
-    public ResPadraoDTO findById(Long id, LoadCatalogParamsDTO loadDTO) {
+    public ResPadraoDTO findById(Long id, LoadCatalogParamsDTO params) {
         return padraoRepository.findById(id)
-                .map(padrao -> catalogMapper.toResponse(padrao, loadDTO))
+                .map(padrao -> catalogMapper.toResponse(padrao, params))
                 .orElseThrow(() -> new ResourceNotFoundException("Padrão com id " + id + " não encontrado."));
     }
 
-    public ResPadraoDTO findByNameOrThrow(String name, LoadCatalogParamsDTO loadDTO) {
+    public ResPadraoDTO findByNameOrThrow(String name, LoadCatalogParamsDTO params) {
         return padraoRepository.findByName(name)
-                .map(padrao -> catalogMapper.toResponse(padrao, loadDTO))
+                .map(padrao -> catalogMapper.toResponse(padrao, params))
                 .orElseThrow(() -> new ResourceNotFoundException("Padrão com nome " + name + " não encontrado."));
     }
 

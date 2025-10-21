@@ -27,18 +27,18 @@ public class PadraoController {
     private final ComposicaoService composicaoService;
 
     @GetMapping()
-    public ResponseEntity<List<ResPadraoDTO>> getAll(@ModelAttribute LoadCatalogParamsDTO loadDTO) {
-        return ResponseEntity.ok(padraoService.findAll(loadDTO));
+    public ResponseEntity<List<ResPadraoDTO>> getAll(@ModelAttribute LoadCatalogParamsDTO params) {
+        return ResponseEntity.ok(padraoService.findAll(params));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResPadraoDTO> getById(@PathVariable Long id, @ModelAttribute LoadCatalogParamsDTO loadDTO) {
-        return ResponseEntity.ok(padraoService.findById(id, loadDTO));
+    public ResponseEntity<ResPadraoDTO> getById(@PathVariable Long id, @ModelAttribute LoadCatalogParamsDTO params) {
+        return ResponseEntity.ok(padraoService.findById(id, params));
     }
 
     @GetMapping("/name/{name}")
-    public ResponseEntity<ResPadraoDTO> getByName(@PathVariable String name, @ModelAttribute LoadCatalogParamsDTO loadDTO) {
-        return ResponseEntity.ok(padraoService.findByNameOrThrow(name, loadDTO));
+    public ResponseEntity<ResPadraoDTO> getByName(@PathVariable String name, @ModelAttribute LoadCatalogParamsDTO params) {
+        return ResponseEntity.ok(padraoService.findByNameOrThrow(name, params));
     }
 
     @GetMapping("/composition/catalogo")

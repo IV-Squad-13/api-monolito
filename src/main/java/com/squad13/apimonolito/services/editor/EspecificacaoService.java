@@ -74,6 +74,7 @@ public class EspecificacaoService {
         return documentSearch.findWithAggregation("especificacoes", ResSpecDTO.class, aggregation);
     }
 
+    // TODO: Implementar busca por id com agregação
     public ResSpecDTO findById(LoadDocumentParamsDTO params, ObjectId id) {
         Aggregation aggregation = buildAggregation(params);
         return documentSearch.findWithAggregation("especificacoes", ResSpecDTO.class, aggregation)

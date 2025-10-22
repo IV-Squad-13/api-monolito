@@ -24,22 +24,30 @@ public class DocElementController {
     private final DocElementService docElementService;
 
     @GetMapping
-    public ResponseEntity<List<? extends DocElement>> getAll(@ModelAttribute DocElementParams params) {
+    public ResponseEntity<List<? extends ResDocElementDTO>> getAll(@ModelAttribute DocElementParams params) {
         return ResponseEntity.ok(docElementService.getAll(params));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ResDocElementDTO> getById(
+            @PathVariable ObjectId id,
+            @ModelAttribute DocElementParams params
+    ) {
+        return ResponseEntity.ok(docElementService.getById(id, params));
+    }
+
     @PostMapping("/{especificacaoId}/catalog")
-    public ResponseEntity<DocElement> create(@PathVariable ObjectId especificacaoId, @Valid @RequestBody DocElementCatalogCreationDTO dto) {
+    public ResponseEntity<ResDocElementDTO> create(@PathVariable ObjectId especificacaoId, @Valid @RequestBody DocElementCatalogCreationDTO dto) {
         return ResponseEntity.ok(docElementService.createElement(especificacaoId, dto));
     }
 
     @PostMapping("/{especificacaoId}/raw")
-    public ResponseEntity<DocElement> createRawElement(@PathVariable ObjectId especificacaoId, @Valid @RequestBody DocElementDTO dto) {
+    public ResponseEntity<ResDocElementDTO> createRawElement(@PathVariable ObjectId especificacaoId, @Valid @RequestBody DocElementDTO dto) {
         return ResponseEntity.ok(docElementService.createRawElement(especificacaoId, dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DocElement> update(@PathVariable ObjectId id, @Valid @RequestBody DocElementDTO dto) {
+    public ResponseEntity<ResDocElementDTO> update(@PathVariable ObjectId id, @Valid @RequestBody DocElementDTO dto) {
         return ResponseEntity.ok(docElementService.update(id, dto));
     }
 

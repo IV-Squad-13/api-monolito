@@ -16,5 +16,5 @@ import java.util.List;
 public class ResLocalDocDTO {
         private String id;
         private LocalEnum local;
-        private List<ResAmbDocDTO> ambientes = new ArrayList<>();
+        private List<Long> ambientes = new ArrayList<>();
 }

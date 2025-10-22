@@ -1,6 +1,7 @@
 package com.squad13.apimonolito.services.editor;
 
 import com.squad13.apimonolito.DTO.editor.*;
+import com.squad13.apimonolito.DTO.editor.res.*;
 import com.squad13.apimonolito.exceptions.AssociationAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.InvalidDocumentTypeException;
 import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
@@ -16,8 +17,13 @@ import com.squad13.apimonolito.util.mappers.EditorMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -41,8 +47,21 @@ public class DocElementService {
     private final MaterialDocElementRepository materialDocRepository;
     private final MarcaDocElementRepository marcaDocRepository;
 
-    public List<? extends DocElement> getAll(DocElementParams params) {
-        return documentSearch.findDocuments(params.getType().getDocElement());
+    public List<ResDocElementDTO> getAll(DocElementParams params) {
+        List<AggregationOperation> operations = new ArrayList<>();
+        operations.add(Aggregation.match(new Criteria()));
+
+        Document doc = params.getType().getDocElement().getAnnotation(Document.class);
+        String collectionName = doc != null && !doc.collection().isBlank()
+                ? doc.collection()
+                : params.getType().getDocElement().getSimpleName();
+
+        return documentSearch.findWithAggregation(collectionName, ResDocElementDTO.class, Aggregation.newAggregation(operations));
+    }
+
+    public ResDocElementDTO getById(ObjectId id, DocElementParams params) {
+        DocElement doc = documentSearch.findInDocument(id, params.getType().getDocElement());
+        return ResDocElementDTO.fromDoc(doc, params.getType().getResDoc());
     }
 
     private EspecificacaoDoc getSpecById(ObjectId id) {
@@ -50,7 +69,7 @@ public class DocElementService {
                 .orElseThrow(() -> new ResourceNotFoundException("Especificação não encontrada para o ID: " + id));
     }
 
-    public DocElement createElement(ObjectId especId, DocElementCatalogCreationDTO dto) {
+    public ResDocElementDTO createElement(ObjectId especId, DocElementCatalogCreationDTO dto) {
         EspecificacaoDoc especificacaoDoc = getSpecById(especId);
 
         Object catalogEntity = catalogSearch.findInCatalog(dto.elementId(), dto.type().getCatalogEntity());
@@ -63,16 +82,16 @@ public class DocElementService {
         if (dto.associatedId() != null)
             associateIfNeeded(dto, newElement);
 
-        return newElement;
+        return ResDocElementDTO.fromDoc(newElement, dto.type().getResDoc());
     }
 
-    public DocElement createRawElement(ObjectId specId, DocElementDTO dto) {
+    public ResDocElementDTO createRawElement(ObjectId specId, DocElementDTO dto) {
         EspecificacaoDoc spec = getSpecById(specId);
 
         DocElement newElement = docElementFactory.create(specId, dto);
         saveElement(spec, newElement, dto.getDocType());
 
-        return newElement;
+        return ResDocElementDTO.fromDoc(newElement, dto.getDocType().getResDoc());
     }
 
     private void saveElement(EspecificacaoDoc spec, DocElement element, DocElementEnum type) {
@@ -219,7 +238,7 @@ public class DocElementService {
         }
     }
 
-    public DocElement update(ObjectId id, DocElementDTO dto) {
+    public ResDocElementDTO update(ObjectId id, DocElementDTO dto) {
         return switch (dto.getDocType()) {
             case AMBIENTE -> updateAmbiente(id, (AmbienteDocDTO) dto);
             case ITEM -> updateItem(id, (ItemDocDTO) dto);
@@ -228,7 +247,7 @@ public class DocElementService {
         };
     }
 
-    private AmbienteDocElement updateAmbiente(ObjectId id, AmbienteDocDTO dto) {
+    private ResAmbDocDTO updateAmbiente(ObjectId id, AmbienteDocDTO dto) {
         AmbienteDocElement ambiente = ambienteDocRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Ambiente não encontrado com o id informado: " + id)
@@ -274,10 +293,10 @@ public class DocElementService {
         }
 
         ambiente.setInSync(syncService.inSync(ambiente, DocElementEnum.AMBIENTE));
-        return ambienteDocRepository.save(ambiente);
+        return ResAmbDocDTO.fromDoc(ambienteDocRepository.save(ambiente));
     }
 
-    private ItemDocElement updateItem(ObjectId id, ItemDocDTO dto) {
+    private ResItemDocDTO updateItem(ObjectId id, ItemDocDTO dto) {
         ItemDocElement item = itemDocRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Item não encontrado com o id informado: " + id)
@@ -309,10 +328,10 @@ public class DocElementService {
         }
 
         item.setInSync(syncService.inSync(item, DocElementEnum.ITEM));
-        return itemDocRepository.save(item);
+        return ResItemDocDTO.fromDoc(itemDocRepository.save(item));
     }
 
-    private MaterialDocElement updateMaterial(ObjectId id, MaterialElementDTO dto) {
+    private ResMatDocDTO updateMaterial(ObjectId id, MaterialElementDTO dto) {
         MaterialDocElement material = materialDocRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Material não encontrado com o id informado: " + id)
@@ -330,10 +349,10 @@ public class DocElementService {
         checkDuplicateMaterial(material);
 
         material.setInSync(syncService.inSync(material, DocElementEnum.MATERIAL));
-        return materialDocRepository.save(material);
+        return ResMatDocDTO.fromDoc(materialDocRepository.save(material));
     }
 
-    private MarcaDocElement updateMarca(ObjectId id, MarcaElementDTO dto) {
+    private ResMarDocDTO updateMarca(ObjectId id, MarcaElementDTO dto) {
         MarcaDocElement marca = marcaDocRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Marca não encontrada com o id informado: " + id)
@@ -365,7 +384,7 @@ public class DocElementService {
         }
 
         marca.setInSync(syncService.inSync(marca, DocElementEnum.MARCA));
-        return marcaDocRepository.save(marca);
+        return ResMarDocDTO.fromDoc(marcaDocRepository.save(marca));
     }
 
     public void delete(ObjectId id, DocElementEnum type) {

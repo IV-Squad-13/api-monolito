@@ -1,5 +1,7 @@
 package com.squad13.apimonolito.DTO.editor.res;
 
+import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
+import com.squad13.apimonolito.models.editor.structures.DocElement;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,4 +16,18 @@ public class ResDocElementDTO {
     private Long catalogId;
     private String name;
     private boolean inSync;
+
+    public static <D extends DocElement, T extends ResDocElementDTO>
+    T fromDoc(D doc, Class<T> clazz) {
+        try {
+            T instance = clazz.getDeclaredConstructor().newInstance();
+            instance.setId(doc.getId().toHexString());
+            instance.setCatalogId(doc.getCatalogId());
+            instance.setName(doc.getName());
+            instance.setInSync(doc.isInSync());
+            return instance;
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("Erro ao instanciar objeto: " + e.getMessage());
+        }
+    }
 }

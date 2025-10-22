@@ -22,8 +22,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EditorMapper {
 
-    private final DocumentSearch docSearch;
-
     private final CatalogMapper catalogMapper;
     private final UserMapper userMapper;
 
@@ -67,9 +65,6 @@ public class EditorMapper {
     }
 
     public ResSpecDTO toResponse(EspecificacaoDoc doc, LoadDocumentParamsDTO params) {
-
-
-
         return new ResSpecDTO(
                 doc.getId().toHexString(),
                 doc.getEmpreendimentoId(),

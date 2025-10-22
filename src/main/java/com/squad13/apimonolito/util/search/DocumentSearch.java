@@ -7,10 +7,13 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.BulkOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +37,24 @@ public class DocumentSearch {
     public <T> List<T> findWithAggregation(String collection, Class<T> resultType, Aggregation aggregation) {
         return mongoTemplate.aggregate(aggregation, collection, resultType).getMappedResults();
     }
+
+    public <T> List<T> searchWithAggregation(
+            String collection,
+            Class<T> resultType,
+            String fieldName,
+            Object fieldValue,
+            Aggregation aggregation
+    ) {
+        MatchOperation match = Aggregation.match(Criteria.where(fieldName).is(fieldValue));
+
+        List<AggregationOperation> ops = new ArrayList<>();
+        ops.add(match);
+        ops.addAll(aggregation.getPipeline().getOperations());
+
+        Aggregation newAggregation = Aggregation.newAggregation(ops);
+        return mongoTemplate.aggregate(newAggregation, collection, resultType).getMappedResults();
+    }
+
 
     public <T> void bulkSave(Class<T> clazz, List<T> docs) {
         if (docs == null || docs.isEmpty()) return;

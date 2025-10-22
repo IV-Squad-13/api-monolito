@@ -36,10 +36,10 @@ public class AmbienteService {
 
     private final CatalogMapper catalogMapper;
 
-    public List<ResAmbienteDTO> findAll(LoadCatalogParamsDTO loadDTO) {
+    public List<ResAmbienteDTO> findAll(LoadCatalogParamsDTO params) {
         return ambienteRepository.findAll()
                 .stream()
-                .map(ambiente -> catalogMapper.toResponse(ambiente, loadDTO))
+                .map(ambiente -> catalogMapper.toResponse(ambiente, params))
                 .toList();
     }
 

@@ -64,6 +64,7 @@ public class ComposicaoService {
         return compAmbienteRepository.findByCompositor_Ambiente_Id(id)
                 .stream()
                 .map(ComposicaoAmbiente::getPadrao)
+                .distinct()
                 .map(p -> catalogMapper.toResponse(p, LoadCatalogParamsDTO.allFalse()))
                 .toList();
     }
@@ -72,6 +73,7 @@ public class ComposicaoService {
         return compMaterialRepository.findByCompositor_Material_Id(id)
                 .stream()
                 .map(ComposicaoMaterial::getPadrao)
+                .distinct()
                 .map(p -> catalogMapper.toResponse(p, LoadCatalogParamsDTO.allFalse()))
                 .toList();
     }

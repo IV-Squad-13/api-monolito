@@ -27,6 +27,7 @@ import java.util.List;
 @Document(collection = "especificacoes")
 @CompoundIndex(
         name = "especificacao_unique",
+        // TODO: Restringir para apenas uma especificação por empreendimento
         def = "{'empreendimentoId' : 1, 'name': 1}",
         unique = true
 )

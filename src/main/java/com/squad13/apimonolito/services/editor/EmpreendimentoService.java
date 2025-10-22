@@ -4,6 +4,7 @@ import com.squad13.apimonolito.DTO.editor.EmpDTO;
 import com.squad13.apimonolito.DTO.editor.LoadDocumentParamsDTO;
 import com.squad13.apimonolito.DTO.editor.edit.EditEmpDTO;
 import com.squad13.apimonolito.DTO.editor.res.ResEmpDTO;
+import com.squad13.apimonolito.DTO.editor.res.ResSpecDTO;
 import com.squad13.apimonolito.exceptions.InvalidAttributeException;
 import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
@@ -39,41 +40,42 @@ import java.util.Objects;
 @Transactional
 public class EmpreendimentoService {
 
-    private final PadraoRepository padraoRepository;
-    private final RevisaoRepository revisaoRepository;
     @PersistenceContext
     private EntityManager em;
 
     private final EmpreendimentoRepository empRepository;
 
-    private final EspecificacaoDocRepository specDocRepository;
     private final EspecificacaoRevDocElementRepository specRevDocRepository;
 
     private final UsuarioRepository userRepository;
+    private final PadraoRepository padraoRepository;
+    private final RevisaoRepository revisaoRepository;
 
-    private final EditorMapper mapper;
+    private final EspecificacaoService especificacaoService;
 
-    private ResEmpDTO mappingHelper(Empreendimento emp, LoadDocumentParamsDTO loadDTO) {
-        List<EspecificacaoDoc> docs = loadDTO.isLoadEspecificacao()
-                ? specDocRepository.findByEmpreendimentoId(emp.getId())
+    private final EditorMapper editorMapper;
+
+    private ResEmpDTO mappingHelper(Empreendimento emp, LoadDocumentParamsDTO params) {
+        List<ResSpecDTO> docs = params.isLoadEspecificacao()
+                ? especificacaoService.findByEmpId(emp.getId(), params)
                 : null;
 
         List<EspecificacaoRevDocElement> revDocs = List.of();
 
-        if (loadDTO.isLoadRevision()) {
+        if (params.isLoadRevision()) {
             List<Revisao> revs = revisaoRepository.findByEmpreendimento(emp);
             revDocs = revs.stream()
                     .flatMap(r -> specRevDocRepository.findByRevisaoId(r.getId()).stream())
                     .toList();
         }
 
-        return mapper.toResponse(emp, docs, revDocs, loadDTO);
+        return editorMapper.toResponse(emp, docs, revDocs, params);
     }
 
-    public List<ResEmpDTO> findAll(LoadDocumentParamsDTO loadDTO) {
+    public List<ResEmpDTO> findAll(LoadDocumentParamsDTO params) {
         return empRepository.findAll()
                 .stream()
-                .map(emp -> mappingHelper(emp, loadDTO))
+                .map(emp -> mappingHelper(emp, params))
                 .toList();
     }
 
@@ -82,13 +84,13 @@ public class EmpreendimentoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Empreendimento com ID: " + id + " não encontrado."));
     }
 
-    public ResEmpDTO findById(Long id, LoadDocumentParamsDTO loadDTO) {
+    public ResEmpDTO findById(Long id, LoadDocumentParamsDTO params) {
         return empRepository.findById(id)
-                .map(emp -> mappingHelper(emp, loadDTO))
+                .map(emp -> mappingHelper(emp, params))
                 .orElseThrow(() -> new ResourceNotFoundException("Empreendimento com ID: " + id + " não encontrado."));
     }
 
-    public List<ResEmpDTO> findByAttribute(String attribute, String value, LoadDocumentParamsDTO loadDTO) {
+    public List<ResEmpDTO> findByAttribute(String attribute, String value, LoadDocumentParamsDTO params) {
         boolean attributeExists = Arrays.stream(Empreendimento.class.getDeclaredFields())
                 .anyMatch(f -> f.getName().equals(attribute));
 
@@ -135,7 +137,7 @@ public class EmpreendimentoService {
         List<Empreendimento> results = em.createQuery(cq).getResultList();
 
         return results.stream()
-                .map(emp -> mappingHelper(emp, loadDTO))
+                .map(emp -> mappingHelper(emp, params))
                 .toList();
     }
 

@@ -8,29 +8,28 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Component
-@RequiredArgsConstructor
 public class ResponseDocFactory {
 
     public AggregationOperation lookupLocais(LoadDocumentParamsDTO params) {
         Document itemsLookup = params.isLoadItems()
                 ? buildLookup("items", "itemIds", "_id", "items", null)
-                : new Document();
+                : null;
 
         Document ambientesLookup = params.isLoadAmbientes()
                 ? buildLookup("ambientes", "ambienteIds", "_id", "ambientes",
                     itemsLookup != null ? List.of(itemsLookup) : null)
-                : new Document();
+                : null;
 
         Document locaisLookup = params.isLoadLocais()
                 ? buildLookup("locais", "locaisIds", "_id", "locais",
                     ambientesLookup != null ? List.of(ambientesLookup) : null)
-                : new Document()
-                    .append("from", "locais")
-                    .append("let", new Document("locaisIds", "$locaisIds"))
-                    .append("pipeline", List.of())
-                    .append("as", "locais");
+                : null;
+
+        if (locaisLookup == null)
+            return context -> new Document("$match", new Document());
 
         return context -> new Document("$lookup", locaisLookup);
     }
@@ -38,11 +37,15 @@ public class ResponseDocFactory {
     public AggregationOperation lookupMateriais(LoadDocumentParamsDTO params) {
         Document marcasLookup = params.isLoadMarcas()
                 ? buildLookup("marcas", "marcaIds", "_id", "marcas", null)
-                : new Document();
+                : null;
 
         Document materiaisLookup = params.isLoadMateriais()
-                ? buildLookup("materiais", "materiaisIds", "_id", "materiais", List.of(marcasLookup))
-                : new Document();
+                ? buildLookup("materiais", "materiaisIds", "_id", "materiais",
+                    marcasLookup != null ? List.of(marcasLookup) : null)
+                : null;
+
+        if (materiaisLookup == null)
+            return context -> new Document("$match", new Document());
 
         return context -> new Document("$lookup", materiaisLookup);
     }
@@ -60,6 +63,7 @@ public class ResponseDocFactory {
         if (nestedLookups != null && !nestedLookups.isEmpty()) {
             pipeline.addAll(
                     nestedLookups.stream()
+                            .filter(Objects::nonNull)
                             .map(l -> new Document("$lookup", l))
                             .toList()
             );

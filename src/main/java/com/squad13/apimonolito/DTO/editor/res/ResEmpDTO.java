@@ -14,7 +14,7 @@ public record ResEmpDTO(
         EmpStatusEnum status,
 
         ResPadraoDTO padrao,
-        List<EspecificacaoDoc> docs,
+        List<ResSpecDTO> docs,
         List<EspecificacaoRevDocElement> revisions,
         List<ResUserDTO> users
 ) { }

@@ -36,12 +36,12 @@ public class EspecificacaoController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<EspecificacaoDoc> create(@RequestBody EspecificacaoDocDTO dto) {
+    public ResponseEntity<ResSpecDTO> create(@RequestBody EspecificacaoDocDTO dto) {
         return ResponseEntity.ok(especificacaoService.create(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EspecificacaoDoc> update(@PathVariable ObjectId id, @Valid @RequestBody EditEspecificacaoDocDTO dto) {
+    public ResponseEntity<ResSpecDTO> update(@PathVariable ObjectId id, @Valid @RequestBody EditEspecificacaoDocDTO dto) {
         return ResponseEntity.ok(especificacaoService.update(id, dto));
     }
 

@@ -50,11 +50,11 @@ public class CatalogMapper {
         );
     }
 
-    public ResAmbienteDTO toResponse(Ambiente ambiente, LoadCatalogParamsDTO loadDTO) {
+    public ResAmbienteDTO toResponse(Ambiente ambiente, LoadCatalogParamsDTO params) {
         if (ambiente == null) return null;
 
-        Set<ResMinDTO> padroes = loadDTO.isLoadPadroes() ? getAmbienteMinPadraoDTO(ambiente.getItemSet()) : Collections.emptySet();
-        Set<ResMinDTO> items = loadDTO.isLoadItems() ? getMinItemDTO(ambiente.getItemSet()) : Collections.emptySet();
+        Set<ResMinDTO> padroes = params.isLoadPadroes() ? getAmbienteMinPadraoDTO(ambiente.getItemSet()) : Collections.emptySet();
+        Set<ResMinDTO> items = params.isLoadItems() ? getMinItemDTO(ambiente.getItemSet()) : Collections.emptySet();
 
         return new ResAmbienteDTO(
                 ambiente.getId(),

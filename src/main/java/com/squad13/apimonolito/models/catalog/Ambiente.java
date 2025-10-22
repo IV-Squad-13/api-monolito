@@ -11,6 +11,25 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@NamedEntityGraph(
+        name = "Ambiente.withItemsAndPadroes",
+        attributeNodes = {
+                @NamedAttributeNode(value = "itemSet", subgraph = "items-subgraph")
+        },
+        subgraphs = {
+                @NamedSubgraph(
+                        name = "items-subgraph",
+                        attributeNodes = {
+                                @NamedAttributeNode(value = "compSet", subgraph = "comp-subgraph"),
+                                @NamedAttributeNode("itemDesc")
+                        }
+                ),
+                @NamedSubgraph(
+                        name = "comp-subgraph",
+                        attributeNodes = @NamedAttributeNode("padrao")
+                )
+        }
+)
 @Table(
         name = "tb_ambiente",
         uniqueConstraints = {

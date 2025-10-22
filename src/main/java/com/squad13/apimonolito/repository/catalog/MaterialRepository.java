@@ -12,8 +12,11 @@ import java.util.Optional;
 
 @Repository
 public interface MaterialRepository extends JpaRepository<Material,Long> {
-    @EntityGraph(attributePaths = {"marcaSet"})
+    @EntityGraph(attributePaths = {"marcaSet.marca", "marcaSet.compSet.padrao"})
     List<Material> findAll();
+
+    @EntityGraph(attributePaths = {"marcaSet.marca", "marcaSet.compSet.padrao"})
+    Optional<Material> findById(Long id);
 
     Optional<Material> findByName(String name);
 }

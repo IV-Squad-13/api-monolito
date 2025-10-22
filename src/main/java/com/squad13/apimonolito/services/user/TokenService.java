@@ -28,7 +28,7 @@ public class TokenService {
 
     public String generateToken(Usuario usuario) {
         Instant now = Instant.now();
-        Instant expiry = now.plus(1, ChronoUnit.HOURS); // Expira em uma hora
+        Instant expiry = now.plus(5, ChronoUnit.HOURS); // Expira em uma hora
 
         return Jwts.builder()
                 .issuer("api-monolito")

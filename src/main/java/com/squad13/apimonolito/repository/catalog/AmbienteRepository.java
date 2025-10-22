@@ -16,8 +16,12 @@ import java.util.Optional;
 
 @Repository
 public interface AmbienteRepository extends JpaRepository<Ambiente,Long> {
-    @EntityGraph(attributePaths = {"itemSet"})
+
+    @EntityGraph(attributePaths = {"itemSet.compSet.padrao", "itemSet.itemDesc.type"})
     List<Ambiente> findAll();
+
+    @EntityGraph(attributePaths = {"itemSet.compSet.padrao", "itemSet.itemDesc.type"})
+    Optional<Ambiente> findById(Long id);
 
     Optional<Ambiente> findByNameAndLocal(String name, LocalEnum local);
 }

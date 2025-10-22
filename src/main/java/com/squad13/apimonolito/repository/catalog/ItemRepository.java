@@ -15,9 +15,11 @@ import java.util.List;
 
 @Repository
 public interface ItemRepository extends JpaRepository<ItemDesc, Long> {
-
-    @EntityGraph(attributePaths = {"type", "ambienteSet"})
+    @EntityGraph(attributePaths = {"type", "ambienteSet.ambiente", "ambienteSet.compSet.padrao"})
     List<ItemDesc> findAll();
+
+    @EntityGraph(attributePaths = {"type", "ambienteSet.ambiente", "ambienteSet.compSet.padrao"})
+    Optional<ItemDesc> findById(Long id);
 
     Optional<ItemDesc> findByNameAndDescAndType(String name, String desc, ItemType type);
 }

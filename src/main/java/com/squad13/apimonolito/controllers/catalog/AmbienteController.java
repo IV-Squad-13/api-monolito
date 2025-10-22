@@ -27,8 +27,8 @@ public class AmbienteController {
     private final ItemAmbienteService itemAmbienteService;
 
     @GetMapping
-    public ResponseEntity<List<ResAmbienteDTO>> getAll(@ModelAttribute LoadCatalogParamsDTO loadDTO) {
-        return ResponseEntity.ok(ambienteService.findAll(loadDTO));
+    public ResponseEntity<List<ResAmbienteDTO>> getAll(@ModelAttribute LoadCatalogParamsDTO params) {
+        return ResponseEntity.ok(ambienteService.findAll(params));
     }
 
     @GetMapping("/{id}")

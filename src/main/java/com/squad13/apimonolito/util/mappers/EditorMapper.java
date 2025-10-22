@@ -29,7 +29,7 @@ public class EditorMapper {
 
     public ResEmpDTO toResponse(
             Empreendimento emp,
-            List<EspecificacaoDoc> docs,
+            List<ResSpecDTO> docs,
             List<EspecificacaoRevDocElement> revisions,
             LoadDocumentParamsDTO loadDTO
     ) {
@@ -51,6 +51,33 @@ public class EditorMapper {
                 loadDTO.isLoadEspecificacao() ? docs : null,
                 loadDTO.isLoadRevision() ? revisions : null,
                 users
+        );
+    }
+
+    public ResSpecDTO toResponse(EspecificacaoDoc doc) {
+        return new ResSpecDTO(
+                doc.getId().toHexString(),
+                doc.getEmpreendimentoId(),
+                doc.getName(),
+                doc.getDesc(),
+                doc.getObs(),
+                List.of(),
+                List.of()
+        );
+    }
+
+    public ResSpecDTO toResponse(EspecificacaoDoc doc, LoadDocumentParamsDTO params) {
+
+
+
+        return new ResSpecDTO(
+                doc.getId().toHexString(),
+                doc.getEmpreendimentoId(),
+                doc.getName(),
+                doc.getDesc(),
+                doc.getObs(),
+                List.of(),
+                List.of()
         );
     }
 

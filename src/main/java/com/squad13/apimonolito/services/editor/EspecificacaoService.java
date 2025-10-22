@@ -87,8 +87,13 @@ public class EspecificacaoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Especificação não encontrada para o ID: " + id));
     }
 
+    public List<ResSpecDTO> findByEmpId(Long id, LoadDocumentParamsDTO params) {
+        Aggregation aggregation = buildAggregation(params);
+        return documentSearch.searchWithAggregation("especificacoes", ResSpecDTO.class, "empreendimentoId", id, aggregation);
+    }
+
     @Transactional
-    public EspecificacaoDoc create(EspecificacaoDocDTO dto) {
+    public ResSpecDTO create(EspecificacaoDocDTO dto) {
         Empreendimento emp = empRepository.findById(dto.empId())
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Empreendimento não encontrado para o ID: " + dto.empId())
@@ -101,7 +106,7 @@ public class EspecificacaoService {
         };
     }
 
-    private EspecificacaoDoc createEspecificacaoAvulso(EspecificacaoDocDTO dto) {
+    private ResSpecDTO createEspecificacaoAvulso(EspecificacaoDocDTO dto) {
         EspecificacaoDoc spec = new EspecificacaoDoc();
         spec.setName(dto.name());
         spec.setEmpreendimentoId(dto.empId());
@@ -117,7 +122,7 @@ public class EspecificacaoService {
                 locais.stream().map(LocalDoc::getId).collect(Collectors.toList())
         );
 
-        return specRepository.save(spec);
+        return editorMapper.toResponse(specRepository.save(spec));
     }
 
     private List<LocalDoc> generateLocais(ObjectId specId) {
@@ -132,7 +137,7 @@ public class EspecificacaoService {
                 .toList();
     }
 
-    public EspecificacaoDoc createFromPadrao(EspecificacaoDocDTO dto, Empreendimento emp) {
+    public ResSpecDTO createFromPadrao(EspecificacaoDocDTO dto, Empreendimento emp) {
         EspecificacaoDoc spec = new EspecificacaoDoc();
         spec.setId(newId());
         spec.setName(dto.name());
@@ -217,19 +222,19 @@ public class EspecificacaoService {
 
         documentSearch.bulkSave(EspecificacaoDoc.class, List.of(spec));
 
-        return spec;
+        return editorMapper.toResponse(spec);
     }
 
     private static ObjectId newId() {
         return new ObjectId();
     }
 
-    private EspecificacaoDoc createFromImport(EspecificacaoDocDTO dto) {
+    private ResSpecDTO createFromImport(EspecificacaoDocDTO dto) {
         // TODO: implementar inicialização por importação
         throw new UnsupportedOperationException("Inicialização por IMPORT ainda não implementada");
     }
 
-    public EspecificacaoDoc update(ObjectId id, EditEspecificacaoDocDTO dto) {
+    public ResSpecDTO update(ObjectId id, EditEspecificacaoDocDTO dto) {
         EspecificacaoDoc especificacacaoDoc = findById(id);
 
         if (dto.name() != null && !dto.name().isEmpty()) {
@@ -248,7 +253,7 @@ public class EspecificacaoService {
             especificacacaoDoc.setEmpreendimentoId(dto.empId());
         }
 
-        return specRepository.save(especificacacaoDoc);
+        return editorMapper.toResponse(specRepository.save(especificacacaoDoc));
     }
 
     public void delete(ObjectId id) {

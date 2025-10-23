@@ -49,13 +49,13 @@ public class EspecificacaoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResSpecDTO> update(@PathVariable ObjectId id, @Valid @RequestBody EditEspecificacaoDocDTO dto) {
-        return ResponseEntity.ok(especificacaoService.update(id, dto));
+    public ResponseEntity<ResSpecDTO> update(@PathVariable String id, @Valid @RequestBody EditEspecificacaoDocDTO dto) {
+        return ResponseEntity.ok(especificacaoService.update(new ObjectId(id), dto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable ObjectId id) {
-        especificacaoService.delete(id);
+    public ResponseEntity<?> delete(@PathVariable String id) {
+        especificacaoService.delete(new ObjectId(id));
         return ResponseEntity.ok("Especificação deletada com sucesso");
     }
 }

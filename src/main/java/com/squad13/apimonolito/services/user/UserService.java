@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -82,4 +83,20 @@ public class UserService {
         }
         usuarioRepository.deleteById(id);
     }
+
+    // Buscar por Role
+
+    public List<ResUserDTO> getUsersByPapel(PapelEnum papel) {
+        return usuarioRepository.findByPapel_Nome(papel)
+                .stream()
+                .map(usuario -> new ResUserDTO(
+                        usuario.getId(),
+                        usuario.getNome(),
+                        usuario.getEmail(),
+                        usuario.getPapel().getNome()
+                ))
+                .collect(Collectors.toList());
+    }
+
+
 }

@@ -4,6 +4,7 @@ import com.squad13.apimonolito.DTO.auth.register.RegisterDto;
 import com.squad13.apimonolito.DTO.auth.res.ResUserDTO;
 import com.squad13.apimonolito.models.user.Usuario;
 import com.squad13.apimonolito.services.user.UserService;
+import com.squad13.apimonolito.util.enums.PapelEnum;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,19 @@ public class UserController {
     @GetMapping()
     public ResponseEntity<List<ResUserDTO>> getAll() {
         return ResponseEntity.ok(userService.getAll());
+    }
+
+    @GetMapping("/papel/{papel}")
+    public ResponseEntity<List<ResUserDTO>> buscarPorPapel(@PathVariable String papel) {
+        try {
+            PapelEnum papelEnum = PapelEnum.valueOf(papel.toUpperCase());
+            List<ResUserDTO> usuarios = userService.getUsersByPapel(papelEnum);
+            return ResponseEntity.ok(usuarios);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(
+                    "Papel inválido: " + papel + ". Use: ADMIN, REVISOR ou RELATOR"
+            );
+        }
     }
 
     @PutMapping("/{id}")

@@ -10,7 +10,7 @@ import com.squad13.apimonolito.models.editor.mongo.*;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import com.squad13.apimonolito.mongo.editor.*;
 import com.squad13.apimonolito.util.search.CatalogSearch;
-import com.squad13.apimonolito.util.factory.DocElementFactory;
+import com.squad13.apimonolito.util.builder.DocElementBuilder;
 import com.squad13.apimonolito.util.search.DocumentSearch;
 import com.squad13.apimonolito.util.enums.DocElementEnum;
 import com.squad13.apimonolito.util.mappers.EditorMapper;
@@ -18,20 +18,19 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class DocElementService {
 
-    private final DocElementFactory  docElementFactory;
+    private final DocElementBuilder docElementBuilder;
 
     private final SynchronizationService syncService;
 
@@ -47,21 +46,42 @@ public class DocElementService {
     private final MaterialDocElementRepository materialDocRepository;
     private final MarcaDocElementRepository marcaDocRepository;
 
-    public List<ResDocElementDTO> getAll(DocElementParams params) {
-        List<AggregationOperation> operations = new ArrayList<>();
-        operations.add(Aggregation.match(new Criteria()));
+    private final DocElementBuilder docBuilder;
 
-        Document doc = params.getType().getDocElement().getAnnotation(Document.class);
-        String collectionName = doc != null && !doc.collection().isBlank()
-                ? doc.collection()
-                : params.getType().getDocElement().getSimpleName();
+    private String getCollection(DocElementEnum docType) {
+        Document doc = docType.getDocElement().getAnnotation(Document.class);
+        if (doc == null || doc.collection().isBlank()) {
+            return docType.getDocElement().getSimpleName();
+        }
 
-        return documentSearch.findWithAggregation(collectionName, ResDocElementDTO.class, Aggregation.newAggregation(operations));
+        return doc.collection();
     }
 
-    public ResDocElementDTO getById(ObjectId id, DocElementParams params) {
-        DocElement doc = documentSearch.findInDocument(id, params.getType().getDocElement());
-        return ResDocElementDTO.fromDoc(doc, params.getType().getResDoc());
+    public List<? extends ResDocElementDTO> getAll(LoadDocumentParamsDTO params, DocElementEnum docType) {
+        Aggregation agg = docBuilder.buildAggregation(params);
+        return documentSearch.findWithAggregation(getCollection(docType), docType.getResDoc(), agg);
+    }
+
+    public ResDocElementDTO getById(ObjectId id, LoadDocumentParamsDTO params, DocElementEnum docType) {
+        return search(params, new DocSearchParamsDTO(docType, id)).stream()
+                .findFirst()
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(docType + " não encontrado para o ID: " + id)
+                );
+    }
+
+    public List<? extends ResDocElementDTO> search(LoadDocumentParamsDTO loadParams, DocSearchParamsDTO searchParams) {
+        DocElementEnum docType = searchParams.getDocType();
+        Map<String, Object> filters = DocSearchParamsDTO.buildFilters(searchParams);
+        List<MatchOperation> matchOperations = documentSearch.buildMatchOps(filters);
+
+        Aggregation agg = docBuilder.buildAggregation(loadParams);
+        return documentSearch.searchWithAggregation(
+                getCollection(docType),
+                docType.getResDoc(),
+                matchOperations,
+                agg
+        );
     }
 
     private EspecificacaoDoc getSpecById(ObjectId id) {
@@ -88,7 +108,7 @@ public class DocElementService {
     public ResDocElementDTO createRawElement(ObjectId specId, DocElementDTO dto) {
         EspecificacaoDoc spec = getSpecById(specId);
 
-        DocElement newElement = docElementFactory.create(specId, dto);
+        DocElement newElement = docElementBuilder.create(specId, dto);
         saveElement(spec, newElement, dto.getDocType());
 
         return ResDocElementDTO.fromDoc(newElement, dto.getDocType().getResDoc());

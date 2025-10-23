@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,5 +17,6 @@ import java.util.List;
 public class ResLocalDocDTO {
         private String id;
         private LocalEnum local;
-        private List<Long> ambientes = new ArrayList<>();
+        private List<String> ambienteIds = new ArrayList<>();
+        private List<ResAmbDocDTO> ambientes = new ArrayList<>();
 }

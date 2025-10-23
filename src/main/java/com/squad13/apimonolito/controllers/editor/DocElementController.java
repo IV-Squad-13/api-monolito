@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/document")
+@RequestMapping("/api/editor/document")
 @RequiredArgsConstructor
 public class DocElementController {
 
@@ -51,23 +51,23 @@ public class DocElementController {
     }
 
     @PostMapping("/{especificacaoId}/catalog")
-    public ResponseEntity<ResDocElementDTO> create(@PathVariable ObjectId especificacaoId, @Valid @RequestBody DocElementCatalogCreationDTO dto) {
-        return ResponseEntity.ok(docElementService.createElement(especificacaoId, dto));
+    public ResponseEntity<ResDocElementDTO> create(@PathVariable String especificacaoId, @Valid @RequestBody DocElementCatalogCreationDTO dto) {
+        return ResponseEntity.ok(docElementService.createElement(new ObjectId(especificacaoId), dto));
     }
 
     @PostMapping("/{especificacaoId}/raw")
-    public ResponseEntity<ResDocElementDTO> createRawElement(@PathVariable ObjectId especificacaoId, @Valid @RequestBody DocElementDTO dto) {
-        return ResponseEntity.ok(docElementService.createRawElement(especificacaoId, dto));
+    public ResponseEntity<ResDocElementDTO> createRawElement(@PathVariable String especificacaoId, @Valid @RequestBody DocElementDTO dto) {
+        return ResponseEntity.ok(docElementService.createRawElement(new ObjectId(especificacaoId), dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResDocElementDTO> update(@PathVariable ObjectId id, @Valid @RequestBody DocElementDTO dto) {
-        return ResponseEntity.ok(docElementService.update(id, dto));
+    public ResponseEntity<ResDocElementDTO> update(@PathVariable String id, @Valid @RequestBody DocElementDTO dto) {
+        return ResponseEntity.ok(docElementService.update(new ObjectId(id), dto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable ObjectId id, @RequestParam DocElementEnum type) {
-        docElementService.delete(id, type);
+    public ResponseEntity<?> delete(@PathVariable String id, @RequestParam DocElementEnum type) {
+        docElementService.delete(new ObjectId(id), type);
         return ResponseEntity.ok(type.getDocElement() + "deletado com sucesso");
     }
 }

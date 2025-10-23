@@ -281,7 +281,7 @@ public class DocElementService {
             ambiente.setLocal(dto.getLocal());
 
             if (dto.getParentId() != null) {
-                LocalDoc local = localDocRepository.findById(dto.getParentId())
+                LocalDoc local = localDocRepository.findById(new ObjectId(dto.getParentId()))
                         .orElseThrow(() ->
                                 new ResourceNotFoundException("Local não encontrado com o id informado: " + dto.getParentId())
                         );
@@ -327,7 +327,7 @@ public class DocElementService {
         }
 
         if (dto.getParentId() != null) {
-            AmbienteDocElement newAmbiente = ambienteDocRepository.findById(dto.getParentId())
+            AmbienteDocElement newAmbiente = ambienteDocRepository.findById(new ObjectId(dto.getParentId()))
                     .orElseThrow(() ->
                             new ResourceNotFoundException("Ambiente não encontrado com o id informado: " + dto.getParentId())
                     );
@@ -383,7 +383,7 @@ public class DocElementService {
         }
 
         if (dto.getParentId() != null) {
-            MaterialDocElement newMaterial = materialDocRepository.findById(dto.getParentId())
+            MaterialDocElement newMaterial = materialDocRepository.findById(new ObjectId(dto.getParentId()))
                     .orElseThrow(() ->
                             new ResourceNotFoundException("Material não encontrado com o id informado: " + dto.getParentId())
                     );

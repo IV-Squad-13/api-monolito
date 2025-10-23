@@ -27,7 +27,7 @@ public class DocSearchParamsDTO {
     private Long catalogId;
     private String especificacaoId;
     private String parentId;
-    private boolean inSync;
+    private Boolean inSync;
     private Instant created;
     private Instant updated;
 
@@ -62,8 +62,8 @@ public class DocSearchParamsDTO {
         if (params.getParentId() != null)
             filters.put("parentId", params.getParentId());
 
-        if (params.isInSync())
-            filters.put("inSync", true);
+        if (params.getInSync() != null)
+            filters.put("inSync", params.getInSync());
 
         if (params.getCreated() != null)
             filters.put("created", params.getCreated());

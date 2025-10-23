@@ -66,9 +66,15 @@ public abstract class DocElement {
             T instance = clazz.getDeclaredConstructor().newInstance();
             instance.setId(ObjectId.get());
             instance.setName(dto.getName());
-            instance.setCatalogId(dto.getCatalogId());
-            instance.setParentId(dto.getParentId());
             instance.setEspecificacaoId(especificacaoId);
+
+            if (dto.getCatalogId() != null) {
+                instance.setCatalogId(dto.getCatalogId());
+            }
+            if (dto.getParentId() != null) {
+                instance.setParentId(ObjectId.get());
+            }
+
             return instance;
         } catch (Exception e) {
             throw new RuntimeException("Erro ao criar instância de " + clazz.getSimpleName(), e);

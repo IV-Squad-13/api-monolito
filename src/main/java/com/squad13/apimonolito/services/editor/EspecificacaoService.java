@@ -1,6 +1,8 @@
 package com.squad13.apimonolito.services.editor;
 
+import com.squad13.apimonolito.DTO.editor.DocSearchParamsDTO;
 import com.squad13.apimonolito.DTO.editor.EspecificacaoDocDTO;
+import com.squad13.apimonolito.DTO.editor.EspecificacaoSearchParamsDTO;
 import com.squad13.apimonolito.DTO.editor.LoadDocumentParamsDTO;
 import com.squad13.apimonolito.DTO.editor.edit.EditEspecificacaoDocDTO;
 import com.squad13.apimonolito.DTO.editor.res.ResSpecDTO;
@@ -16,6 +18,7 @@ import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import com.squad13.apimonolito.mongo.editor.*;
 import com.squad13.apimonolito.repository.editor.EmpreendimentoRepository;
 import com.squad13.apimonolito.services.catalog.ComposicaoService;
+import com.squad13.apimonolito.util.builder.DocElementBuilder;
 import com.squad13.apimonolito.util.factory.ResponseDocFactory;
 import com.squad13.apimonolito.util.search.DocumentSearch;
 import com.squad13.apimonolito.util.enums.LocalEnum;
@@ -43,40 +46,19 @@ public class EspecificacaoService {
 
     private final EditorMapper editorMapper;
     private final CatalogMapper catalogMapper;
-
-    private final ResponseDocFactory resDocFactory;
-
+    
+    private final DocElementBuilder docBuilder;
+    
     private final DocumentSearch documentSearch;
 
-    private Aggregation buildAggregation(LoadDocumentParamsDTO params) {
-        if (params == null)
-            return Aggregation.newAggregation(Aggregation.match(new Criteria()));
-
-        List<AggregationOperation> operations = new ArrayList<>();
-
-        if (params.isLoadLocais()) {
-            operations.add(resDocFactory.lookupLocais(params));
-        }
-
-        if (params.isLoadMateriais()) {
-            operations.add(resDocFactory.lookupMateriais(params));
-        }
-
-        if (operations.isEmpty()) {
-            operations.add(Aggregation.match(new Criteria()));
-        }
-
-        return Aggregation.newAggregation(operations);
-    }
-
     public List<ResSpecDTO> findAll(LoadDocumentParamsDTO params) {
-        Aggregation aggregation = buildAggregation(params);
+        Aggregation aggregation = docBuilder.buildAggregation(params);
         return documentSearch.findWithAggregation("especificacoes", ResSpecDTO.class, aggregation);
     }
 
     // TODO: Implementar busca por id com agregação
-    public ResSpecDTO findById(LoadDocumentParamsDTO params, ObjectId id) {
-        Aggregation aggregation = buildAggregation(params);
+    public ResSpecDTO findById(ObjectId id, LoadDocumentParamsDTO params) {
+        Aggregation aggregation = docBuilder.buildAggregation(params);
         return documentSearch.findWithAggregation("especificacoes", ResSpecDTO.class, aggregation)
                 .stream()
                 .findFirst()
@@ -88,9 +70,21 @@ public class EspecificacaoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Especificação não encontrada para o ID: " + id));
     }
 
+    public List<ResSpecDTO> search(LoadDocumentParamsDTO loadParams, EspecificacaoSearchParamsDTO searchParams) {
+        Map<String, Object> filters = EspecificacaoSearchParamsDTO.buildFilters(searchParams);
+        List<MatchOperation> matchOperations = documentSearch.buildMatchOps(filters);
+
+        Aggregation agg = docBuilder.buildAggregation(loadParams);
+        return documentSearch.searchWithAggregation(
+                "especificacoes",
+                ResSpecDTO.class,
+                matchOperations,
+                agg
+        );
+    }
+
     public List<ResSpecDTO> findByEmpId(Long id, LoadDocumentParamsDTO params) {
-        Aggregation aggregation = buildAggregation(params);
-        return documentSearch.searchWithAggregation("especificacoes", ResSpecDTO.class, "empreendimentoId", id, aggregation);
+        return search(params, new EspecificacaoSearchParamsDTO(id));
     }
 
     @Transactional

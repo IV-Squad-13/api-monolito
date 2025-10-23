@@ -1,7 +1,6 @@
 package com.squad13.apimonolito.util.factory;
 
 import com.squad13.apimonolito.DTO.editor.LoadDocumentParamsDTO;
-import lombok.RequiredArgsConstructor;
 import org.bson.Document;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.stereotype.Component;
@@ -14,50 +13,88 @@ import java.util.Objects;
 public class ResponseDocFactory {
 
     public AggregationOperation lookupLocais(LoadDocumentParamsDTO params) {
+        Document lookup = buildConditionalLookup(
+                params.isLoadLocais(),
+                "locais", "locaisIds", "locais",
+                params.isLoadAmbientes() ? buildAmbientesLookup(params) : null
+        );
+        return toAggregationOperation(lookup);
+    }
+
+    public AggregationOperation lookupItems(LoadDocumentParamsDTO params) {
+        Document lookup = buildConditionalLookup(
+                params.isLoadItems(),
+                "items", "itemIds", "items",
+                null
+        );
+        return toAggregationOperation(lookup);
+    }
+
+    public AggregationOperation lookupMateriais(LoadDocumentParamsDTO params) {
+        Document lookup = buildConditionalLookup(
+                params.isLoadMateriais(),
+                "materiais", "materiaisIds", "materiais",
+                params.isLoadMarcas() ? buildMarcasLookup(params) : null
+        );
+        return toAggregationOperation(lookup);
+    }
+
+    public AggregationOperation lookupMarcas(LoadDocumentParamsDTO params) {
+        Document lookup = buildConditionalLookup(
+                params.isLoadMarcas(),
+                "marcas", "marcaIds", "marcas",
+                null
+        );
+        return toAggregationOperation(lookup);
+    }
+
+    private Document buildAmbientesLookup(LoadDocumentParamsDTO params) {
         Document itemsLookup = params.isLoadItems()
                 ? buildLookup("items", "itemIds", "_id", "items", null)
                 : null;
 
-        Document ambientesLookup = params.isLoadAmbientes()
-                ? buildLookup("ambientes", "ambienteIds", "_id", "ambientes",
-                    itemsLookup != null ? List.of(itemsLookup) : null)
-                : null;
-
-        Document locaisLookup = params.isLoadLocais()
-                ? buildLookup("locais", "locaisIds", "_id", "locais",
-                    ambientesLookup != null ? List.of(ambientesLookup) : null)
-                : null;
-
-        if (locaisLookup == null)
-            return context -> new Document("$match", new Document());
-
-        return context -> new Document("$lookup", locaisLookup);
+        return buildLookup("ambientes", "ambienteIds", "_id", "ambientes",
+                itemsLookup != null ? List.of(itemsLookup) : null);
     }
 
-    public AggregationOperation lookupMateriais(LoadDocumentParamsDTO params) {
-        Document marcasLookup = params.isLoadMarcas()
-                ? buildLookup("marcas", "marcaIds", "_id", "marcas", null)
-                : null;
-
-        Document materiaisLookup = params.isLoadMateriais()
-                ? buildLookup("materiais", "materiaisIds", "_id", "materiais",
-                    marcasLookup != null ? List.of(marcasLookup) : null)
-                : null;
-
-        if (materiaisLookup == null)
-            return context -> new Document("$match", new Document());
-
-        return context -> new Document("$lookup", materiaisLookup);
+    private Document buildMarcasLookup(LoadDocumentParamsDTO params) {
+        return buildLookup("marcas", "marcaIds", "_id", "marcas", null);
     }
 
-    public Document buildLookup(String from, String localFieldIds, String foreignField,
-                                 String asField, List<Document> nestedLookups) {
+    private Document buildConditionalLookup(
+            boolean condition,
+            String from,
+            String localFieldIds,
+            String asField,
+            Document nestedLookup
+    ) {
+        if (!condition) return null;
+        return buildLookup(from, localFieldIds, "_id", asField,
+                nestedLookup != null ? List.of(nestedLookup) : null);
+    }
 
+    private AggregationOperation toAggregationOperation(Document lookup) {
+        return context -> lookup == null
+                ? new Document("$match", new Document())
+                : new Document("$lookup", lookup);
+    }
+
+    public Document buildLookup(
+            String from,
+            String localFieldIds,
+            String foreignField,
+            String asField,
+            List<Document> nestedLookups
+    ) {
         List<Document> pipeline = new ArrayList<>();
 
         pipeline.add(new Document("$match",
                 new Document("$expr",
-                        new Document("$in", List.of("$_id", "$$" + localFieldIds)))
+                        new Document("$in", List.of(
+                                "$" + foreignField,
+                                new Document("$ifNull", List.of("$$" + localFieldIds, List.of()))
+                        ))
+                )
         ));
 
         if (nestedLookups != null && !nestedLookups.isEmpty()) {

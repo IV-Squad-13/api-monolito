@@ -30,9 +30,17 @@ public class EspecificacaoController {
     @GetMapping("/{id}")
     public ResponseEntity<ResSpecDTO> getById(
             @ModelAttribute LoadDocumentParamsDTO params,
-            @PathVariable ObjectId id
+            @PathVariable String id
     ) {
-        return ResponseEntity.ok(especificacaoService.findById(params, id));
+        return ResponseEntity.ok(especificacaoService.findById(new ObjectId(id), params));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ResSpecDTO>> search(
+            @ModelAttribute LoadDocumentParamsDTO loadParams,
+            @ModelAttribute EspecificacaoSearchParamsDTO searchParams
+    ) {
+        return ResponseEntity.ok(especificacaoService.search(loadParams, searchParams));
     }
 
     @PostMapping("/new")

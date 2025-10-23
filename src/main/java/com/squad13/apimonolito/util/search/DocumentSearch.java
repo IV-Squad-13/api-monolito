@@ -1,5 +1,6 @@
 package com.squad13.apimonolito.util.search;
 
+import com.squad13.apimonolito.DTO.editor.res.ResDocElementDTO;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Component
@@ -22,6 +24,21 @@ import java.util.Optional;
 public class DocumentSearch {
 
     private final MongoTemplate mongoTemplate;
+
+    public List<MatchOperation> buildMatchOps(Map<String, Object> filters) {
+        return filters.entrySet().stream()
+                .filter(e -> e.getValue() != null)
+                .map(e -> {
+                    Object value = e.getValue();
+                    Criteria criteria = (value instanceof String)
+                            ? Criteria.where(e.getKey()).regex((String) value, "i")
+                            : Criteria.where(e.getKey()).is(value);
+
+                    return Aggregation.match(criteria);
+                })
+                .toList();
+    }
+
 
     public <T> T findInDocument(ObjectId id, Class<T> clazz) {
         return Optional.ofNullable(mongoTemplate.findById(id, clazz))
@@ -41,20 +58,16 @@ public class DocumentSearch {
     public <T> List<T> searchWithAggregation(
             String collection,
             Class<T> resultType,
-            String fieldName,
-            Object fieldValue,
+            List<MatchOperation> matchOperations,
             Aggregation aggregation
     ) {
-        MatchOperation match = Aggregation.match(Criteria.where(fieldName).is(fieldValue));
+        List<AggregationOperation> operations = new ArrayList<>();
+        operations.addAll(matchOperations);
+        operations.addAll(aggregation.getPipeline().getOperations());
 
-        List<AggregationOperation> ops = new ArrayList<>();
-        ops.add(match);
-        ops.addAll(aggregation.getPipeline().getOperations());
-
-        Aggregation newAggregation = Aggregation.newAggregation(ops);
-        return mongoTemplate.aggregate(newAggregation, collection, resultType).getMappedResults();
+        Aggregation finalAggregation = Aggregation.newAggregation(operations);
+        return mongoTemplate.aggregate(finalAggregation, collection, resultType).getMappedResults();
     }
-
 
     public <T> void bulkSave(Class<T> clazz, List<T> docs) {
         if (docs == null || docs.isEmpty()) return;

@@ -2,7 +2,8 @@ package com.squad13.apimonolito.controllers.editor;
 
 import com.squad13.apimonolito.DTO.editor.DocElementCatalogCreationDTO;
 import com.squad13.apimonolito.DTO.editor.DocElementDTO;
-import com.squad13.apimonolito.DTO.editor.DocElementParams;
+import com.squad13.apimonolito.DTO.editor.DocSearchParamsDTO;
+import com.squad13.apimonolito.DTO.editor.LoadDocumentParamsDTO;
 import com.squad13.apimonolito.DTO.editor.res.ResDocElementDTO;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import com.squad13.apimonolito.services.editor.DocElementService;
@@ -10,6 +11,7 @@ import com.squad13.apimonolito.services.editor.EspecificacaoService;
 import com.squad13.apimonolito.util.enums.DocElementEnum;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.connector.Response;
 import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,16 +26,28 @@ public class DocElementController {
     private final DocElementService docElementService;
 
     @GetMapping
-    public ResponseEntity<List<? extends ResDocElementDTO>> getAll(@ModelAttribute DocElementParams params) {
-        return ResponseEntity.ok(docElementService.getAll(params));
+    public ResponseEntity<List<? extends ResDocElementDTO>> getAll(
+            @ModelAttribute LoadDocumentParamsDTO params,
+            @RequestParam DocElementEnum docType
+    ) {
+        return ResponseEntity.ok(docElementService.getAll(params, docType));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ResDocElementDTO> getById(
-            @PathVariable ObjectId id,
-            @ModelAttribute DocElementParams params
+            @PathVariable String id,
+            @ModelAttribute LoadDocumentParamsDTO params,
+            @RequestParam DocElementEnum docType
     ) {
-        return ResponseEntity.ok(docElementService.getById(id, params));
+        return ResponseEntity.ok(docElementService.getById(new ObjectId(id), params, docType));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<? extends ResDocElementDTO>> search(
+            @ModelAttribute LoadDocumentParamsDTO loadParams,
+            @ModelAttribute DocSearchParamsDTO searchParams
+    ) {
+        return ResponseEntity.ok(docElementService.search(loadParams, searchParams));
     }
 
     @PostMapping("/{especificacaoId}/catalog")

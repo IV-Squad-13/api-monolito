@@ -1,30 +1,67 @@
-package com.squad13.apimonolito.util.factory;
+package com.squad13.apimonolito.util.builder;
 
 import com.squad13.apimonolito.DTO.editor.AmbienteDocDTO;
 import com.squad13.apimonolito.DTO.editor.DocElementDTO;
 import com.squad13.apimonolito.DTO.editor.ItemDocDTO;
+import com.squad13.apimonolito.DTO.editor.LoadDocumentParamsDTO;
 import com.squad13.apimonolito.exceptions.InvalidDocumentTypeException;
 import com.squad13.apimonolito.models.catalog.ItemType;
 import com.squad13.apimonolito.models.editor.mongo.*;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
-import com.squad13.apimonolito.mongo.editor.LocalDocRepository;
 import com.squad13.apimonolito.services.editor.SynchronizationService;
+import com.squad13.apimonolito.util.factory.ResponseDocFactory;
 import com.squad13.apimonolito.util.search.CatalogSearch;
 import com.squad13.apimonolito.util.enums.DocElementEnum;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.util.Map;
-import java.util.function.BiFunction;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class DocElementFactory {
+public class DocElementBuilder {
 
     private final CatalogSearch catalogSearch;
     private final SynchronizationService syncService;
+
+    private final ResponseDocFactory resDocFactory;
+
+    public Aggregation buildAggregation(LoadDocumentParamsDTO params) {
+        if (params == null) {
+            return Aggregation.newAggregation(Aggregation.match(new Criteria()));
+        }
+
+        List<AggregationOperation> operations = new ArrayList<>();
+
+        if (params.isLoadLocais()) {
+            operations.add(resDocFactory.lookupLocais(params));
+        }
+
+        if (params.isLoadItems()) {
+            operations.add(resDocFactory.lookupItems(params));
+        }
+
+        if (params.isLoadMateriais()) {
+            operations.add(resDocFactory.lookupMateriais(params));
+        }
+
+        if (params.isLoadMarcas()) {
+            operations.add(resDocFactory.lookupMarcas(params));
+        }
+
+        if (operations.isEmpty()) {
+            operations.add(Aggregation.match(new Criteria()));
+        }
+
+        return Aggregation.newAggregation(operations);
+    }
 
     @ExceptionHandler(InvalidDocumentTypeException.class)
     public DocElement create(ObjectId specId, DocElementDTO dto) {

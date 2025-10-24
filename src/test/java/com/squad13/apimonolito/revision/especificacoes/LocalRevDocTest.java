@@ -90,21 +90,16 @@ class LocalRevDocTest {
         AmbienteRevDocElement ambienteRev = new AmbienteRevDocElement();
         ambienteRev.setAmbiente(ambiente);
         ambienteRev.setRevisaoId(1L);
-        ambienteRev.setItemRevList(List.of(itemRev));
         ambienteRevDocRepository.save(ambienteRev);
 
         LocalRevDocElement localRev = new LocalRevDocElement();
         localRev.setLocal(local);
         localRev.setRevisaoId(1L);
-        localRev.setAmbienteRevList(List.of(ambienteRev));
         localRevDocRepository.save(localRev);
 
         LocalRevDocElement foundRev = localRevDocRepository.findByLocalAndRevisaoId(local, 1L);
         assertThat(foundRev).isNotNull();
         assertThat(foundRev.getId()).isNotNull();
-        assertThat(foundRev.getAmbienteRevList()).hasSize(1);
-        assertThat(foundRev.getAmbienteRevList().getFirst().getItemRevList().getFirst().getItem().getName())
-                .isEqualTo("Item");
     }
 
     @Test
@@ -112,13 +107,11 @@ class LocalRevDocTest {
         LocalRevDocElement rev1 = new LocalRevDocElement();
         rev1.setLocal(local);
         rev1.setRevisaoId(1L);
-        rev1.setAmbienteRevList(List.of());
         localRevDocRepository.save(rev1);
 
         LocalRevDocElement rev2 = new LocalRevDocElement();
         rev2.setLocal(local);
         rev2.setRevisaoId(1L);
-        rev2.setAmbienteRevList(List.of());
 
         assertThrows(DataIntegrityViolationException.class,
                 () -> localRevDocRepository.save(rev2));
@@ -129,11 +122,9 @@ class LocalRevDocTest {
         LocalRevDocElement localRev = new LocalRevDocElement();
         localRev.setLocal(local);
         localRev.setRevisaoId(1L);
-        localRev.setAmbienteRevList(List.of());
         localRevDocRepository.save(localRev);
 
         LocalRevDocElement found = localRevDocRepository.findByLocalAndRevisaoId(local, 1L);
-        found.setAmbienteRevList(List.of());
         localRevDocRepository.save(found);
 
         LocalRevDocElement updated = localRevDocRepository.findByLocalAndRevisaoId(local, 1L);

@@ -14,20 +14,12 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Document(collection = "especificacao_rev")
-@CompoundIndex(name = "especificacao_rev_unique", def = "{'revisaoId' : 1, 'empreendimento': 1}", unique = true)
+@CompoundIndex(name = "especificacao_rev_unique", def = "{'revisaoId' : 1, 'especificacao': 1}", unique = true)
 public class EspecificacaoRevDocElement extends RevDocElement {
 
     @DBRef
     @Field("especificacao")
     private EspecificacaoDoc especificacao;
-
-    @DBRef
-    @Field("locais")
-    private List<LocalRevDocElement> localRevList;
-
-    @DBRef
-    @Field("materiais")
-    private List<MaterialRevDocElement> materialRevList;
 
     private boolean isNameApproved;
     private boolean isDescApproved;

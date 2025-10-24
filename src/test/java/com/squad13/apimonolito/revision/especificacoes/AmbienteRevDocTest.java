@@ -71,26 +71,21 @@ class AmbienteRevDocTest {
         AmbienteRevDocElement ambienteRev = new AmbienteRevDocElement();
         ambienteRev.setAmbiente(ambiente);
         ambienteRev.setRevisaoId(1L);
-        ambienteRev.setItemRevList(List.of(itemRev));
         ambienteRevDocRepository.save(ambienteRev);
 
         AmbienteRevDocElement foundRev = ambienteRevDocRepository.findByAmbienteAndRevisaoId(ambiente, 1L);
         assertThat(foundRev).isNotNull();
         assertThat(foundRev.getId()).isNotNull();
-        assertThat(foundRev.getItemRevList()).hasSize(1);
-        assertThat(foundRev.getItemRevList().get(0).getItem().getName()).isEqualTo("Item");
-    }
+   }
 
     @Test
     void testAmbienteRevUpdate() {
         AmbienteRevDocElement ambienteRev = new AmbienteRevDocElement();
         ambienteRev.setAmbiente(ambiente);
         ambienteRev.setRevisaoId(1L);
-        ambienteRev.setItemRevList(List.of());
         ambienteRevDocRepository.save(ambienteRev);
 
         AmbienteRevDocElement found = ambienteRevDocRepository.findByAmbienteAndRevisaoId(ambiente, 1L);
-        found.setItemRevList(List.of());
         ambienteRevDocRepository.save(found);
 
         AmbienteRevDocElement updated = ambienteRevDocRepository.findByAmbienteAndRevisaoId(ambiente, 1L);
@@ -115,13 +110,11 @@ class AmbienteRevDocTest {
         AmbienteRevDocElement rev1 = new AmbienteRevDocElement();
         rev1.setAmbiente(ambiente);
         rev1.setRevisaoId(1L);
-        rev1.setItemRevList(List.of());
         ambienteRevDocRepository.save(rev1);
 
         AmbienteRevDocElement rev2 = new AmbienteRevDocElement();
         rev2.setAmbiente(ambiente);
         rev2.setRevisaoId(1L);
-        rev2.setItemRevList(List.of());
 
         assertThrows(DataIntegrityViolationException.class,
                 () -> ambienteRevDocRepository.save(rev2));

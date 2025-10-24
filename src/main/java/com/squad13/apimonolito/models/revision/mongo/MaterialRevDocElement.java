@@ -20,7 +20,4 @@ public class MaterialRevDocElement extends RevDocElement {
     @DBRef
     @NotNull
     private MaterialDocElement material;
-
-    @DBRef
-    private List<MarcaRevDocElement> marcaRevList;
 }

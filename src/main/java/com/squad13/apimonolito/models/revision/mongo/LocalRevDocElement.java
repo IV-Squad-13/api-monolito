@@ -20,7 +20,4 @@ public class LocalRevDocElement extends RevDocElement {
     @DBRef
     @NotNull
     private LocalDoc local;
-
-    @DBRef
-    private List<AmbienteRevDocElement> ambienteRevList;
 }

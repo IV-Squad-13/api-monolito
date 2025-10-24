@@ -70,14 +70,11 @@ class MaterialRevDocTest {
         MaterialRevDocElement materialRev = new MaterialRevDocElement();
         materialRev.setMaterial(material);
         materialRev.setRevisaoId(1L);
-        materialRev.setMarcaRevList(List.of(marcaRev));
         materialRevDocRepository.save(materialRev);
 
         MaterialRevDocElement foundRev = materialRevDocRepository.findByMaterialAndRevisaoId(material, 1L);
         assertThat(foundRev).isNotNull();
         assertThat(foundRev.getId()).isNotNull();
-        assertThat(foundRev.getMarcaRevList()).hasSize(1);
-        assertThat(foundRev.getMarcaRevList().getFirst().getMarca().getName()).isEqualTo("Marca");
     }
 
     @Test
@@ -85,11 +82,9 @@ class MaterialRevDocTest {
         MaterialRevDocElement materialRev = new MaterialRevDocElement();
         materialRev.setMaterial(material);
         materialRev.setRevisaoId(1L);
-        materialRev.setMarcaRevList(List.of());
         materialRevDocRepository.save(materialRev);
 
         MaterialRevDocElement found = materialRevDocRepository.findByMaterialAndRevisaoId(material, 1L);
-        found.setMarcaRevList(List.of());
         materialRevDocRepository.save(found);
 
         MaterialRevDocElement updated = materialRevDocRepository.findByMaterialAndRevisaoId(material, 1L);
@@ -114,13 +109,11 @@ class MaterialRevDocTest {
         MaterialRevDocElement rev1 = new MaterialRevDocElement();
         rev1.setMaterial(material);
         rev1.setRevisaoId(1L);
-        rev1.setMarcaRevList(List.of());
         materialRevDocRepository.save(rev1);
 
         MaterialRevDocElement rev2 = new MaterialRevDocElement();
         rev2.setMaterial(material);
         rev2.setRevisaoId(1L);
-        rev2.setMarcaRevList(List.of());
 
         assertThrows(DataIntegrityViolationException.class,
                 () -> materialRevDocRepository.save(rev2));

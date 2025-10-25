@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.catalina.connector.Response;
 import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -50,22 +51,26 @@ public class DocElementController {
         return ResponseEntity.ok(docElementService.search(loadParams, searchParams));
     }
 
-    @PostMapping("/{especificacaoId}/catalog")
-    public ResponseEntity<ResDocElementDTO> create(@PathVariable String especificacaoId, @Valid @RequestBody DocElementCatalogCreationDTO dto) {
-        return ResponseEntity.ok(docElementService.createElement(new ObjectId(especificacaoId), dto));
+    @PostMapping("/{specId}/catalog")
+    @PreAuthorize("@require.editingStage(#specId)")
+    public ResponseEntity<ResDocElementDTO> create(@PathVariable String specId, @Valid @RequestBody DocElementCatalogCreationDTO dto) {
+        return ResponseEntity.ok(docElementService.createElement(new ObjectId(specId), dto));
     }
 
-    @PostMapping("/{especificacaoId}/raw")
-    public ResponseEntity<ResDocElementDTO> createRawElement(@PathVariable String especificacaoId, @Valid @RequestBody DocElementDTO dto) {
-        return ResponseEntity.ok(docElementService.createRawElement(new ObjectId(especificacaoId), dto));
+    @PostMapping("/{specId}/raw")
+    @PreAuthorize("@require.editingStage(#specId)")
+    public ResponseEntity<ResDocElementDTO> createRawElement(@PathVariable String specId, @Valid @RequestBody DocElementDTO dto) {
+        return ResponseEntity.ok(docElementService.createRawElement(new ObjectId(specId), dto));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("@require.editingStage(#id, #dto.docType)")
     public ResponseEntity<ResDocElementDTO> update(@PathVariable String id, @Valid @RequestBody DocElementDTO dto) {
         return ResponseEntity.ok(docElementService.update(new ObjectId(id), dto));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("@require.editingStage(#id, #type)")
     public ResponseEntity<?> delete(@PathVariable String id, @RequestParam DocElementEnum type) {
         docElementService.delete(new ObjectId(id), type);
         return ResponseEntity.ok(type.getDocElement() + "deletado com sucesso");

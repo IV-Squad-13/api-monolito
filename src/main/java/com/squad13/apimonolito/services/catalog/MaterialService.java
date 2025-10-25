@@ -9,7 +9,7 @@ import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.catalog.Material;
 import com.squad13.apimonolito.repository.catalog.MaterialRepository;
-import com.squad13.apimonolito.util.mappers.CatalogMapper;
+import com.squad13.apimonolito.util.mapper.CatalogMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;

@@ -15,7 +15,7 @@ import com.squad13.apimonolito.repository.catalog.AmbienteRepository;
 import com.squad13.apimonolito.repository.catalog.ItemAmbieteRepository;
 import com.squad13.apimonolito.repository.catalog.ItemRepository;
 import com.squad13.apimonolito.repository.catalog.ItemTypeRepository;
-import com.squad13.apimonolito.util.mappers.CatalogMapper;
+import com.squad13.apimonolito.util.mapper.CatalogMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

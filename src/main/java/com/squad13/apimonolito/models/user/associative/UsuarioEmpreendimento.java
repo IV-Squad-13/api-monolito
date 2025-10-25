@@ -3,7 +3,7 @@ package com.squad13.apimonolito.models.user.associative;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import com.squad13.apimonolito.models.user.Usuario;
-import com.squad13.apimonolito.util.enums.AccessLevelEnum;
+import com.squad13.apimonolito.util.enums.AccessEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,5 +35,5 @@ public class UsuarioEmpreendimento {
 
     @Column(name = "tp_access", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
-    private AccessLevelEnum accessLevel;
+    private AccessEnum accessLevel;
 }

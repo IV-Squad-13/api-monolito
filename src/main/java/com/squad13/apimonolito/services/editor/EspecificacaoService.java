@@ -1,6 +1,5 @@
 package com.squad13.apimonolito.services.editor;
 
-import com.squad13.apimonolito.DTO.editor.DocSearchParamsDTO;
 import com.squad13.apimonolito.DTO.editor.EspecificacaoDocDTO;
 import com.squad13.apimonolito.DTO.editor.EspecificacaoSearchParamsDTO;
 import com.squad13.apimonolito.DTO.editor.LoadDocumentParamsDTO;
@@ -19,16 +18,14 @@ import com.squad13.apimonolito.mongo.editor.*;
 import com.squad13.apimonolito.repository.editor.EmpreendimentoRepository;
 import com.squad13.apimonolito.services.catalog.ComposicaoService;
 import com.squad13.apimonolito.util.builder.DocElementBuilder;
-import com.squad13.apimonolito.util.factory.ResponseDocFactory;
 import com.squad13.apimonolito.util.search.DocumentSearch;
 import com.squad13.apimonolito.util.enums.LocalEnum;
-import com.squad13.apimonolito.util.mappers.CatalogMapper;
-import com.squad13.apimonolito.util.mappers.EditorMapper;
+import com.squad13.apimonolito.util.mapper.CatalogMapper;
+import com.squad13.apimonolito.util.mapper.EditorMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.aggregation.*;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

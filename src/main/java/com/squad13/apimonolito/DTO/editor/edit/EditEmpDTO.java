@@ -6,7 +6,5 @@ import java.util.List;
 
 public record EditEmpDTO(
         String name,
-        EmpStatusEnum status,
-
         Long padraoId
 ) { }

@@ -49,7 +49,7 @@ class RevisaoTest {
     void testJpaPersistenceWithRevisao() {
         Empreendimento empreendimento = new Empreendimento();
         empreendimento.setName("Empreendimento A");
-        empreendimento.setStatus(EmpStatusEnum.INICIADO);
+        empreendimento.setStatus(EmpStatusEnum.EM_ELABORACAO);
 
         Empreendimento savedEmp = empreendimentoRepository.save(empreendimento);
         assertThat(savedEmp.getId()).isNotNull();
@@ -99,7 +99,7 @@ class RevisaoTest {
     void testConsistencyBetweenJpaAndMongo() {
         Empreendimento e = new Empreendimento();
         e.setName("Empreendimento C");
-        e.setStatus(EmpStatusEnum.INICIADO);
+        e.setStatus(EmpStatusEnum.EM_ELABORACAO);
         Empreendimento savedEntity = empreendimentoRepository.save(e);
 
         EspecificacaoDoc doc = new EspecificacaoDoc();
@@ -119,7 +119,7 @@ class RevisaoTest {
     void testCreateEmpreendimentoRevisionDoc() {
         Empreendimento emp = new Empreendimento();
         emp.setName("Empreendimento D");
-        emp.setStatus(EmpStatusEnum.INICIADO);
+        emp.setStatus(EmpStatusEnum.EM_ELABORACAO);
         Empreendimento savedEmp = empreendimentoRepository.save(emp);
 
         Revisao revisao = new Revisao();

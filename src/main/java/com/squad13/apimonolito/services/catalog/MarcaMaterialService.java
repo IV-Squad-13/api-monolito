@@ -10,7 +10,7 @@ import com.squad13.apimonolito.models.catalog.Marca;
 import com.squad13.apimonolito.models.catalog.Material;
 import com.squad13.apimonolito.models.catalog.associative.MarcaMaterial;
 import com.squad13.apimonolito.repository.catalog.*;
-import com.squad13.apimonolito.util.mappers.CatalogMapper;
+import com.squad13.apimonolito.util.mapper.CatalogMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

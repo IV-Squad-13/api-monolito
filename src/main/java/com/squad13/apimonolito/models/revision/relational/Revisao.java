@@ -6,6 +6,10 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.Instant;
 
 @Getter
 @Setter
@@ -23,6 +27,15 @@ public class Revisao {
     private RevisaoStatusEnum statusEnum;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @MapsId
     @JoinColumn(name = "id_empreendimento")
     private Empreendimento empreendimento;
+
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false, nullable = false)
+    private Instant created;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private Instant updated;
 }

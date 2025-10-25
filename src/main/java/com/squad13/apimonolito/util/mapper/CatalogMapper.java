@@ -1,4 +1,4 @@
-package com.squad13.apimonolito.util.mappers;
+package com.squad13.apimonolito.util.mapper;
 
 import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
 import com.squad13.apimonolito.DTO.catalog.res.*;

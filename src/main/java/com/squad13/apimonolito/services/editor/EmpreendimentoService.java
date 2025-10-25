@@ -2,28 +2,30 @@ package com.squad13.apimonolito.services.editor;
 
 import com.squad13.apimonolito.DTO.editor.EmpDTO;
 import com.squad13.apimonolito.DTO.editor.LoadDocumentParamsDTO;
+import com.squad13.apimonolito.DTO.revision.ToRevisionDTO;
 import com.squad13.apimonolito.DTO.editor.edit.EditEmpDTO;
 import com.squad13.apimonolito.DTO.editor.res.ResEmpDTO;
 import com.squad13.apimonolito.DTO.editor.res.ResSpecDTO;
+import com.squad13.apimonolito.DTO.revision.res.ResRevDTO;
 import com.squad13.apimonolito.exceptions.InvalidAttributeException;
+import com.squad13.apimonolito.exceptions.InvalidStageException;
 import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.catalog.Padrao;
-import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
 import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import com.squad13.apimonolito.models.revision.mongo.EspecificacaoRevDocElement;
 import com.squad13.apimonolito.models.revision.relational.Revisao;
 import com.squad13.apimonolito.models.user.Usuario;
 import com.squad13.apimonolito.models.user.associative.UsuarioEmpreendimento;
-import com.squad13.apimonolito.mongo.editor.EspecificacaoDocRepository;
 import com.squad13.apimonolito.mongo.revision.EspecificacaoRevDocElementRepository;
 import com.squad13.apimonolito.repository.catalog.PadraoRepository;
 import com.squad13.apimonolito.repository.editor.EmpreendimentoRepository;
 import com.squad13.apimonolito.repository.revision.RevisaoRepository;
 import com.squad13.apimonolito.repository.user.UsuarioRepository;
-import com.squad13.apimonolito.util.enums.AccessLevelEnum;
+import com.squad13.apimonolito.util.enums.AccessEnum;
 import com.squad13.apimonolito.util.enums.EmpStatusEnum;
-import com.squad13.apimonolito.util.mappers.EditorMapper;
+import com.squad13.apimonolito.util.enums.RevisaoStatusEnum;
+import com.squad13.apimonolito.util.mapper.EditorMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.*;
@@ -70,6 +72,13 @@ public class EmpreendimentoService {
         }
 
         return editorMapper.toResponse(emp, docs, revDocs, params);
+    }
+
+    private Usuario findUser(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Usuário não encontrado com o ID: " + id
+                ));
     }
 
     public List<ResEmpDTO> findAll(LoadDocumentParamsDTO params) {
@@ -141,6 +150,39 @@ public class EmpreendimentoService {
                 .toList();
     }
 
+    private void blockEmp(Empreendimento emp) {
+        if (emp.getStatus().equals(EmpStatusEnum.EM_REVISAO)) {
+            throw new InvalidStageException("O Empreendimento " + emp.getName() + " já está em Revisão");
+        }
+
+        emp.setStatus(EmpStatusEnum.EM_REVISAO);
+        empRepository.save(emp);
+    }
+
+    private void createUserAccess(Empreendimento emp, Long userId, AccessEnum accessType) {
+        Usuario user = findUser(userId);
+
+        UsuarioEmpreendimento userEmp = new UsuarioEmpreendimento();
+        userEmp.setUsuario(user);
+        userEmp.setEmpreendimento(emp);
+        userEmp.setAccessLevel(accessType);
+        emp.getUsuarioList().add(userEmp);
+    }
+
+    public ResRevDTO sendToRevision(Long id, ToRevisionDTO dto) {
+        Empreendimento emp = findByIdOrThrow(id);
+
+        blockEmp(emp);
+        createUserAccess(emp, dto.revisorId(), AccessEnum.REVISOR);
+
+        Revisao rev = new Revisao();
+        rev.setEmpreendimento(emp);
+        rev.setStatusEnum(RevisaoStatusEnum.PENDENTE);
+
+        ResEmpDTO resEmpDTO = mappingHelper(emp, LoadDocumentParamsDTO.allFalse());
+        return ResRevDTO.toDTO(revisaoRepository.save(rev), resEmpDTO);
+    }
+
     public ResEmpDTO create(EmpDTO dto, LoadDocumentParamsDTO loadDTO) {
         empRepository.findByName(dto.name())
                 .ifPresent(emp -> {
@@ -151,7 +193,7 @@ public class EmpreendimentoService {
 
         Empreendimento emp = new Empreendimento();
         emp.setName(dto.name());
-        emp.setStatus(EmpStatusEnum.INICIADO);
+        emp.setStatus(EmpStatusEnum.EM_ELABORACAO);
 
         if (dto.padraoId() != null) {
             Padrao padrao = padraoRepository.findById(dto.padraoId())
@@ -161,16 +203,7 @@ public class EmpreendimentoService {
             emp.setPadrao(padrao);
         }
 
-        Usuario user = userRepository.findById(dto.creatorId())
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Usuário não encontrado com o ID: " + dto.creatorId()
-                ));
-
-        UsuarioEmpreendimento userEmp = new UsuarioEmpreendimento();
-        userEmp.setUsuario(user);
-        userEmp.setEmpreendimento(emp);
-        userEmp.setAccessLevel(AccessLevelEnum.CREATOR);
-        emp.getUsuarioList().add(userEmp);
+        createUserAccess(emp, dto.creatorId(), AccessEnum.CRIADOR);
 
         Empreendimento saved = empRepository.save(emp);
         return mappingHelper(saved, loadDTO);
@@ -186,16 +219,13 @@ public class EmpreendimentoService {
                 });
     }
 
+    // TODO: Atualizar usuários associados ao empreendimento
     public ResEmpDTO update(Long id, EditEmpDTO dto, LoadDocumentParamsDTO loadDTO) {
         Empreendimento emp = findByIdOrThrow(id);
 
         if (dto.name() != null && !dto.name().isBlank()) {
             ensureUniqueName(emp, dto);
             emp.setName(dto.name());
-        }
-
-        if (dto.status() != null) {
-            emp.setStatus(dto.status());
         }
 
         if (dto.padraoId() != null) {

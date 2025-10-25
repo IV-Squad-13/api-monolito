@@ -13,7 +13,7 @@ import com.squad13.apimonolito.util.search.CatalogSearch;
 import com.squad13.apimonolito.util.builder.DocElementBuilder;
 import com.squad13.apimonolito.util.search.DocumentSearch;
 import com.squad13.apimonolito.util.enums.DocElementEnum;
-import com.squad13.apimonolito.util.mappers.EditorMapper;
+import com.squad13.apimonolito.util.mapper.EditorMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;

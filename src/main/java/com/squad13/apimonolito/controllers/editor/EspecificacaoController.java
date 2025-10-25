@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.catalina.connector.Response;
 import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,11 +50,13 @@ public class EspecificacaoController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("@require.editingStage(#id)")
     public ResponseEntity<ResSpecDTO> update(@PathVariable String id, @Valid @RequestBody EditEspecificacaoDocDTO dto) {
         return ResponseEntity.ok(especificacaoService.update(new ObjectId(id), dto));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("@require.editingStage(#id)")
     public ResponseEntity<?> delete(@PathVariable String id) {
         especificacaoService.delete(new ObjectId(id));
         return ResponseEntity.ok("Especificação deletada com sucesso");

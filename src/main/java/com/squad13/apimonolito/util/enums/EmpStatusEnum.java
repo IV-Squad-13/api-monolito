@@ -5,7 +5,7 @@ import com.squad13.apimonolito.exceptions.InvalidAttributeException;
 import java.util.Arrays;
 
 public enum EmpStatusEnum {
-    INICIADO, FINALIZADO, CANCELADO;
+    EM_ELABORACAO, EM_REVISAO, FINALIZADO, CANCELADO;
 
     public static EmpStatusEnum fromString(String value) {
         return Arrays.stream(values())

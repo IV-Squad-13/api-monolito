@@ -74,8 +74,8 @@ public class AmbienteController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-            ambienteService.deleteAmbiente(id);
-            return ResponseEntity.ok("Ambiente excluído com sucesso.");
+        ambienteService.deleteAmbiente(id);
+        return ResponseEntity.ok("Ambiente excluído com sucesso.");
     }
 
     @DeleteMapping("/{id}/item")

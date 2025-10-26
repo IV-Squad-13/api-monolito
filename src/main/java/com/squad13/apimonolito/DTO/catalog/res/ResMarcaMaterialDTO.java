@@ -4,4 +4,5 @@ public record ResMarcaMaterialDTO(
         Long id,
         ResMarcaDTO marca,
         ResMaterialDTO material
-) { }
+) {
+}

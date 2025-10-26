@@ -1,13 +1,14 @@
 package com.squad13.apimonolito.mongo.revision;
 
-import com.squad13.apimonolito.models.editor.mongo.AmbienteDocElement;
 import com.squad13.apimonolito.models.revision.mongo.AmbienteRevDocElement;
-import jakarta.validation.constraints.NotNull;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 @Repository
 public interface AmbienteRevDocElementRepository extends RevDocElementRepository<AmbienteRevDocElement> {
-    AmbienteRevDocElement findByAmbienteAndRevisaoId(@NotNull AmbienteDocElement ambiente, @NotNull Long revisaoId);
+    Optional<AmbienteRevDocElement> findByAmbienteDocIdAndRevisionId(ObjectId ambienteDocId, Long revisionId);
 
-    void deleteByAmbienteAndRevisaoId(AmbienteDocElement ambiente, long l);
+    void deleteByAmbienteDocIdAndRevisionId(ObjectId ambienteDocId, Long revisionId);
 }

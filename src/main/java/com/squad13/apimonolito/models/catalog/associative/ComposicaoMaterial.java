@@ -3,7 +3,6 @@ package com.squad13.apimonolito.models.catalog.associative;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.squad13.apimonolito.models.catalog.Padrao;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

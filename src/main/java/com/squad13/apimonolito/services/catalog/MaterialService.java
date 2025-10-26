@@ -1,8 +1,8 @@
 package com.squad13.apimonolito.services.catalog;
 
 import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
-import com.squad13.apimonolito.DTO.catalog.edit.EditMaterialDTO;
 import com.squad13.apimonolito.DTO.catalog.MaterialDTO;
+import com.squad13.apimonolito.DTO.catalog.edit.EditMaterialDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResMaterialDTO;
 import com.squad13.apimonolito.exceptions.InvalidAttributeException;
 import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;

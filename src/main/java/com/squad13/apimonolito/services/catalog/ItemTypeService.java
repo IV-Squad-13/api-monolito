@@ -1,7 +1,7 @@
 package com.squad13.apimonolito.services.catalog;
 
-import com.squad13.apimonolito.DTO.catalog.edit.EditItemTypeDTO;
 import com.squad13.apimonolito.DTO.catalog.ItemTypeDTO;
+import com.squad13.apimonolito.DTO.catalog.edit.EditItemTypeDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResItemTypeDTO;
 import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;

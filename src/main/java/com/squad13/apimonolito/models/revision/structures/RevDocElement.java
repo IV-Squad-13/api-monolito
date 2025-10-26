@@ -17,7 +17,7 @@ public abstract class RevDocElement {
     private String id;
 
     @NotNull
-    private Long revisaoId;
+    private Long revisionId;
 
     private boolean isApproved;
 

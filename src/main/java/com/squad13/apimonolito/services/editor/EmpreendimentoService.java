@@ -1,17 +1,16 @@
 package com.squad13.apimonolito.services.editor;
 
 import com.squad13.apimonolito.DTO.editor.EmpDTO;
+import com.squad13.apimonolito.DTO.editor.EspecificacaoDocDTO;
 import com.squad13.apimonolito.DTO.editor.LoadDocumentParamsDTO;
-import com.squad13.apimonolito.DTO.revision.ToRevisionDTO;
 import com.squad13.apimonolito.DTO.editor.edit.EditEmpDTO;
 import com.squad13.apimonolito.DTO.editor.res.ResEmpDTO;
 import com.squad13.apimonolito.DTO.editor.res.ResSpecDTO;
+import com.squad13.apimonolito.DTO.revision.ToRevisionDTO;
 import com.squad13.apimonolito.DTO.revision.res.ResRevDTO;
-import com.squad13.apimonolito.exceptions.InvalidAttributeException;
-import com.squad13.apimonolito.exceptions.InvalidStageException;
-import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
-import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
+import com.squad13.apimonolito.exceptions.*;
 import com.squad13.apimonolito.models.catalog.Padrao;
+import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
 import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import com.squad13.apimonolito.models.revision.mongo.EspecificacaoRevDocElement;
 import com.squad13.apimonolito.models.revision.relational.Revisao;
@@ -22,9 +21,11 @@ import com.squad13.apimonolito.repository.catalog.PadraoRepository;
 import com.squad13.apimonolito.repository.editor.EmpreendimentoRepository;
 import com.squad13.apimonolito.repository.revision.RevisaoRepository;
 import com.squad13.apimonolito.repository.user.UsuarioRepository;
+import com.squad13.apimonolito.repository.user.associative.UsuarioEmpreendimentoRepository;
 import com.squad13.apimonolito.util.enums.AccessEnum;
 import com.squad13.apimonolito.util.enums.EmpStatusEnum;
 import com.squad13.apimonolito.util.enums.RevisaoStatusEnum;
+import com.squad13.apimonolito.util.enums.rule.RevisionRule;
 import com.squad13.apimonolito.util.mapper.EditorMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -52,26 +53,28 @@ public class EmpreendimentoService {
     private final UsuarioRepository userRepository;
     private final PadraoRepository padraoRepository;
     private final RevisaoRepository revisaoRepository;
+    private final UsuarioEmpreendimentoRepository userEmpRepository;
 
-    private final EspecificacaoService especificacaoService;
+    private final EspecificacaoService specService;
 
     private final EditorMapper editorMapper;
 
     private ResEmpDTO mappingHelper(Empreendimento emp, LoadDocumentParamsDTO params) {
-        List<ResSpecDTO> docs = params.isLoadEspecificacao()
-                ? especificacaoService.findByEmpId(emp.getId(), params)
+        ResSpecDTO doc = params.isLoadEspecificacao()
+                ? specService.findByEmpId(emp.getId(), params)
                 : null;
 
-        List<EspecificacaoRevDocElement> revDocs = List.of();
-
+        ResRevDTO rev = null;
         if (params.isLoadRevision()) {
-            List<Revisao> revs = revisaoRepository.findByEmpreendimento(emp);
-            revDocs = revs.stream()
-                    .flatMap(r -> specRevDocRepository.findByRevisaoId(r.getId()).stream())
-                    .toList();
+            rev = revisaoRepository.findByEmpreendimento(emp)
+                    .map(r -> {
+                        List<EspecificacaoRevDocElement> specRevDocs = specRevDocRepository.findByRevisionId(r.getId());
+                        return ResRevDTO.toDTO(r, specRevDocs, null);
+                    })
+                    .orElse(null);
         }
 
-        return editorMapper.toResponse(emp, docs, revDocs, params);
+        return editorMapper.toResponse(emp, doc, rev, params);
     }
 
     private Usuario findUser(Long id) {
@@ -162,13 +165,17 @@ public class EmpreendimentoService {
     private void createUserAccess(Empreendimento emp, Long userId, AccessEnum accessType) {
         Usuario user = findUser(userId);
 
+        if (accessType.notAllowed(user.getPapel().getNome()))
+            throw new InvalidUserException("O usuário '" + user.getNome() + "' não pode exercer a função de " + accessType);
+
         UsuarioEmpreendimento userEmp = new UsuarioEmpreendimento();
         userEmp.setUsuario(user);
         userEmp.setEmpreendimento(emp);
         userEmp.setAccessLevel(accessType);
-        emp.getUsuarioList().add(userEmp);
+        userEmpRepository.save(userEmp);
     }
 
+    // TODO: add lógica para segundo envio para revisão
     public ResRevDTO sendToRevision(Long id, ToRevisionDTO dto) {
         Empreendimento emp = findByIdOrThrow(id);
 
@@ -177,10 +184,11 @@ public class EmpreendimentoService {
 
         Revisao rev = new Revisao();
         rev.setEmpreendimento(emp);
-        rev.setStatusEnum(RevisaoStatusEnum.PENDENTE);
+        rev.setStatus(RevisaoStatusEnum.PENDENTE);
+        rev.setRule(RevisionRule.START_BY_ASSIGNED);
 
         ResEmpDTO resEmpDTO = mappingHelper(emp, LoadDocumentParamsDTO.allFalse());
-        return ResRevDTO.toDTO(revisaoRepository.save(rev), resEmpDTO);
+        return ResRevDTO.toDTO(revisaoRepository.save(rev), null, resEmpDTO);
     }
 
     public ResEmpDTO create(EmpDTO dto, LoadDocumentParamsDTO loadDTO) {
@@ -203,9 +211,18 @@ public class EmpreendimentoService {
             emp.setPadrao(padrao);
         }
 
+        Empreendimento saved = empRepository.save(emp);
         createUserAccess(emp, dto.creatorId(), AccessEnum.CRIADOR);
 
-        Empreendimento saved = empRepository.save(emp);
+        EspecificacaoDocDTO specDocDTO = new EspecificacaoDocDTO(
+                emp.getName(),
+                null,
+                null,
+                emp.getId(),
+                dto.init()
+        );
+        specService.create(specDocDTO);
+
         return mappingHelper(saved, loadDTO);
     }
 
@@ -247,6 +264,10 @@ public class EmpreendimentoService {
 
     public void delete(Long id) {
         Empreendimento emp = findByIdOrThrow(id);
+        specService.delete(emp.getId());
+        revisaoRepository.deleteByEmpreendimento_Id(id);
+        userEmpRepository.deleteByEmpreendimento_Id(id);
+
         empRepository.delete(emp);
     }
 

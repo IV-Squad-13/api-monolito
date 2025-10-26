@@ -9,11 +9,11 @@ import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.editor.mongo.*;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import com.squad13.apimonolito.mongo.editor.*;
-import com.squad13.apimonolito.util.search.CatalogSearch;
 import com.squad13.apimonolito.util.builder.DocElementBuilder;
-import com.squad13.apimonolito.util.search.DocumentSearch;
 import com.squad13.apimonolito.util.enums.DocElementEnum;
 import com.squad13.apimonolito.util.mapper.EditorMapper;
+import com.squad13.apimonolito.util.search.CatalogSearch;
+import com.squad13.apimonolito.util.search.DocumentSearch;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -332,7 +332,7 @@ public class DocElementService {
                             new ResourceNotFoundException("Ambiente não encontrado com o id informado: " + dto.getParentId())
                     );
 
-            if (item.getParentId() != null && !item.getParentId().equals(dto.getParentId())) {
+            if (item.getParentId() != null && !item.getParentId().equals(new ObjectId(dto.getParentId()))) {
                 AmbienteDocElement prevAmbiente = ambienteDocRepository.findById(item.getParentId())
                         .orElseThrow(() ->
                                 new ResourceNotFoundException("Ambiente anterior não encontrado: " + item.getParentId())
@@ -388,7 +388,7 @@ public class DocElementService {
                             new ResourceNotFoundException("Material não encontrado com o id informado: " + dto.getParentId())
                     );
 
-            if (marca.getParentId() != null && !marca.getParentId().equals(dto.getParentId())) {
+            if (marca.getParentId() != null && !marca.getParentId().equals(new ObjectId(dto.getParentId()))) {
                 MaterialDocElement oldMaterial = materialDocRepository.findById(marca.getParentId())
                         .orElseThrow(() ->
                                 new ResourceNotFoundException("Material anterior não encontrado: " + marca.getParentId())

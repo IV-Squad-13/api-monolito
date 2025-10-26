@@ -55,7 +55,7 @@ class RevisaoTest {
         assertThat(savedEmp.getId()).isNotNull();
 
         Revisao revisao = new Revisao();
-        revisao.setStatusEnum(RevisaoStatusEnum.INICIADA);
+        revisao.setStatus(RevisaoStatusEnum.INICIADA);
         revisao.setEmpreendimento(savedEmp);
 
         Revisao savedRevisao = revisaoRepository.save(revisao);
@@ -64,7 +64,7 @@ class RevisaoTest {
         assertThat(savedRevisao.getEmpreendimento().getId()).isEqualTo(savedEmp.getId());
 
         Revisao foundRev = revisaoRepository.findById(savedRevisao.getId()).orElseThrow();
-        assertThat(foundRev.getStatusEnum()).isEqualTo(RevisaoStatusEnum.INICIADA);
+        assertThat(foundRev.getStatus()).isEqualTo(RevisaoStatusEnum.INICIADA);
         assertThat(foundRev.getEmpreendimento().getName()).isEqualTo("Empreendimento A");
     }
 
@@ -124,7 +124,7 @@ class RevisaoTest {
 
         Revisao revisao = new Revisao();
         revisao.setEmpreendimento(savedEmp);
-        revisao.setStatusEnum(RevisaoStatusEnum.INICIADA);
+        revisao.setStatus(RevisaoStatusEnum.INICIADA);
         Revisao savedRevisao = revisaoRepository.save(revisao);
 
         EspecificacaoDoc doc = new EspecificacaoDoc();
@@ -133,8 +133,8 @@ class RevisaoTest {
         EspecificacaoDoc savedDoc = especificacaoDocRepository.save(doc);
 
         EspecificacaoRevDocElement revDoc = new EspecificacaoRevDocElement();
-        revDoc.setRevisaoId(savedRevisao.getId());
-        revDoc.setEspecificacao(savedDoc);
+        revDoc.setRevisionId(savedRevisao.getId());
+        revDoc.setEspecificacaoDocId(savedDoc.getId());
         revDoc.setNameApproved(true);
         revDoc.setDescApproved(false);
         revDoc.setObsApproved(false);
@@ -142,8 +142,8 @@ class RevisaoTest {
         EspecificacaoRevDocElement savedRevDoc = especificacaoRevDocRepository.save(revDoc);
 
         assertThat(savedRevDoc.getId()).isNotNull();
-        assertThat(savedRevDoc.getRevisaoId()).isEqualTo(savedRevisao.getId());
-        assertThat(savedRevDoc.getEspecificacao().getId()).isEqualTo(savedDoc.getId());
+        assertThat(savedRevDoc.getRevisionId()).isEqualTo(savedRevisao.getId());
+        assertThat(savedRevDoc.getEspecificacaoDocId()).isEqualTo(savedDoc.getId());
         assertThat(savedRevDoc.isNameApproved()).isTrue();
     }
 }

@@ -1,6 +1,5 @@
 package com.squad13.apimonolito.DTO.editor.res;
 
-import com.squad13.apimonolito.models.editor.mongo.MarcaDocElement;
 import com.squad13.apimonolito.models.editor.mongo.MaterialDocElement;
 import lombok.*;
 import org.bson.types.ObjectId;

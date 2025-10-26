@@ -1,11 +1,11 @@
 package com.squad13.apimonolito.editor.especificacoes;
 
 import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
-import com.squad13.apimonolito.models.editor.mongo.MaterialDocElement;
 import com.squad13.apimonolito.models.editor.mongo.MarcaDocElement;
+import com.squad13.apimonolito.models.editor.mongo.MaterialDocElement;
 import com.squad13.apimonolito.mongo.editor.EspecificacaoDocRepository;
-import com.squad13.apimonolito.mongo.editor.MaterialDocElementRepository;
 import com.squad13.apimonolito.mongo.editor.MarcaDocElementRepository;
+import com.squad13.apimonolito.mongo.editor.MaterialDocElementRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -68,7 +68,8 @@ class MaterialDocTest {
         assertThat(material.getId()).isNotNull();
         assertThat(material.getName()).isEqualTo("Material");
 
-        MaterialDocElement foundMaterial = materialDocRepository.findByName("Material").orElse(null);;
+        MaterialDocElement foundMaterial = materialDocRepository.findByName("Material").orElse(null);
+        ;
         assertThat(foundMaterial).isNotNull();
         assertThat(foundMaterial.getId()).isEqualTo(material.getId());
         assertThat(foundMaterial.getMarcaIds().getFirst()).isEqualTo(marca.getId());
@@ -91,12 +92,14 @@ class MaterialDocTest {
         material.setMarcaIds(List.of(marca.getId()));
         materialDocRepository.save(material);
 
-        MaterialDocElement foundMaterial = materialDocRepository.findByName("Material").orElse(null);;
+        MaterialDocElement foundMaterial = materialDocRepository.findByName("Material").orElse(null);
+        ;
         Assertions.assertNotNull(foundMaterial);
         foundMaterial.setName("Material2");
         materialDocRepository.save(foundMaterial);
 
-        MaterialDocElement updated = materialDocRepository.findByName("Material2").orElse(null);;
+        MaterialDocElement updated = materialDocRepository.findByName("Material2").orElse(null);
+        ;
         assertThat(updated).isNotNull();
         assertThat(updated.getName()).isEqualTo("Material2");
     }
@@ -104,7 +107,8 @@ class MaterialDocTest {
     @Test
     void testMaterialDelete() {
         materialDocRepository.deleteAllByName("Material");
-        MaterialDocElement foundMaterial = materialDocRepository.findByName("Material").orElse(null);;
+        MaterialDocElement foundMaterial = materialDocRepository.findByName("Material").orElse(null);
+        ;
 
         assertThat(foundMaterial).isNull();
     }

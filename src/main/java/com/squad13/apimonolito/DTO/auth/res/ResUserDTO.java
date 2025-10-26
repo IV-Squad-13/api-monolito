@@ -12,7 +12,7 @@ public record ResUserDTO(
 ) {
 
     public static ResUserDTO from(UsuarioEmpreendimento userEmp) {
-        Usuario user =  userEmp.getUsuario();
+        Usuario user = userEmp.getUsuario();
         return new ResUserDTO(
                 user.getId(),
                 user.getNome(),

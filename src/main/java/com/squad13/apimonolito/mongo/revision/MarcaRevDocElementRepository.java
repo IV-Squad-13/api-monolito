@@ -2,9 +2,12 @@ package com.squad13.apimonolito.mongo.revision;
 
 import com.squad13.apimonolito.models.editor.mongo.MarcaDocElement;
 import com.squad13.apimonolito.models.revision.mongo.MarcaRevDocElement;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 @Repository
 public interface MarcaRevDocElementRepository extends RevDocElementRepository<MarcaRevDocElement> {
-    MarcaRevDocElement findByMarcaAndRevisaoId(MarcaDocElement marca, long l);
+    Optional<MarcaRevDocElement> findByMarcaDocIdAndRevisionId(ObjectId marcaDocId, Long revisionId);
 }

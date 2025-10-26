@@ -11,8 +11,8 @@ import com.squad13.apimonolito.models.catalog.associative.ComposicaoMaterial;
 import com.squad13.apimonolito.models.catalog.associative.ItemAmbiente;
 import com.squad13.apimonolito.models.catalog.associative.MarcaMaterial;
 import com.squad13.apimonolito.repository.catalog.*;
-import com.squad13.apimonolito.util.mapper.CatalogMapper;
 import com.squad13.apimonolito.util.enums.CompositorEnum;
+import com.squad13.apimonolito.util.mapper.CatalogMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -33,7 +33,7 @@ public class ComposicaoService {
     private final MarcaMaterialRepository marcaMaterialRepository;
 
     private final CatalogMapper catalogMapper;
-    
+
     @PersistenceContext
     private final EntityManager em;
 
@@ -205,7 +205,7 @@ public class ComposicaoService {
             compAmbienteRepository.deleteById(compId);
         } else if (compType.equals(CompositorEnum.MATERIAL)) {
             compMaterialRepository.deleteById(compId);
-        } else  {
+        } else {
             throw new InvalidCompositorException("Nenhuma Composição encontrado para padrão " + compId);
         }
     }

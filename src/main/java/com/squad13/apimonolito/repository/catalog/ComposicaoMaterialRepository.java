@@ -1,6 +1,5 @@
 package com.squad13.apimonolito.repository.catalog;
 
-import com.squad13.apimonolito.models.catalog.associative.ComposicaoAmbiente;
 import com.squad13.apimonolito.models.catalog.associative.ComposicaoMaterial;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;

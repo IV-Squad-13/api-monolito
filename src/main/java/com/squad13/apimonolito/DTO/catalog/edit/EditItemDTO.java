@@ -1,6 +1,5 @@
 package com.squad13.apimonolito.DTO.catalog.edit;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data

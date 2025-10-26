@@ -14,7 +14,7 @@ public class Papel {
     @Column(name = "id_papel")
     private Long id;
 
-    @Column(name = "nm_papel",  nullable = false, length = 50, unique = true)
+    @Column(name = "nm_papel", nullable = false, length = 50, unique = true)
     @Enumerated(EnumType.STRING)
     private PapelEnum nome;
 }

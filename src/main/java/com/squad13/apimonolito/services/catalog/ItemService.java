@@ -1,8 +1,8 @@
 package com.squad13.apimonolito.services.catalog;
 
+import com.squad13.apimonolito.DTO.catalog.ItemDTO;
 import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
 import com.squad13.apimonolito.DTO.catalog.edit.EditItemDTO;
-import com.squad13.apimonolito.DTO.catalog.ItemDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResItemDTO;
 import com.squad13.apimonolito.exceptions.InvalidAttributeException;
 import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
@@ -93,7 +93,7 @@ public class ItemService {
 
     public ResItemDTO createItem(ItemDTO dto) {
         ItemType type = itemTypeRepository.findByIdOrName(dto.getTypeId(), dto.getName())
-                        .orElse(null);
+                .orElse(null);
 
         itemRepository.findByNameAndDescAndType(dto.getName(), dto.getDesc(), type)
                 .ifPresent(i -> {

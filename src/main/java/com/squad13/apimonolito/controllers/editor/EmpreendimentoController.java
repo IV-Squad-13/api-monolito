@@ -2,9 +2,9 @@ package com.squad13.apimonolito.controllers.editor;
 
 import com.squad13.apimonolito.DTO.editor.EmpDTO;
 import com.squad13.apimonolito.DTO.editor.LoadDocumentParamsDTO;
-import com.squad13.apimonolito.DTO.revision.ToRevisionDTO;
 import com.squad13.apimonolito.DTO.editor.edit.EditEmpDTO;
 import com.squad13.apimonolito.DTO.editor.res.ResEmpDTO;
+import com.squad13.apimonolito.DTO.revision.ToRevisionDTO;
 import com.squad13.apimonolito.DTO.revision.res.ResRevDTO;
 import com.squad13.apimonolito.services.editor.EmpreendimentoService;
 import jakarta.validation.Valid;

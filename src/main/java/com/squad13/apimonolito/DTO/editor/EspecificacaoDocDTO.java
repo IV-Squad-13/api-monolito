@@ -1,5 +1,6 @@
 package com.squad13.apimonolito.DTO.editor;
 
+import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import com.squad13.apimonolito.util.enums.DocInitializationEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

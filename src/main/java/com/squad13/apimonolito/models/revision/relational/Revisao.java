@@ -2,8 +2,8 @@ package com.squad13.apimonolito.models.revision.relational;
 
 import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import com.squad13.apimonolito.util.enums.RevisaoStatusEnum;
+import com.squad13.apimonolito.util.enums.rule.RevisionRule;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -24,7 +24,11 @@ public class Revisao {
 
     @Column(name = "tp_status", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
-    private RevisaoStatusEnum statusEnum;
+    private RevisaoStatusEnum status;
+
+    @Column(name = "tp_rule", nullable = false, length = 20)
+    @Enumerated(EnumType.STRING)
+    private RevisionRule rule;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @MapsId

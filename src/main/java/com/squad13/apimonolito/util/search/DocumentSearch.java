@@ -1,6 +1,5 @@
 package com.squad13.apimonolito.util.search;
 
-import com.squad13.apimonolito.DTO.editor.res.ResDocElementDTO;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import lombok.RequiredArgsConstructor;

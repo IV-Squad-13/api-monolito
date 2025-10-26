@@ -1,6 +1,5 @@
 package com.squad13.apimonolito.DTO.editor.res;
 
-import com.squad13.apimonolito.models.editor.mongo.ItemDocElement;
 import com.squad13.apimonolito.models.editor.mongo.MarcaDocElement;
 import lombok.Getter;
 import lombok.Setter;

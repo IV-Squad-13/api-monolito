@@ -5,19 +5,19 @@ import com.squad13.apimonolito.models.revision.structures.RevDocElement;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Document(collection = "material_rev")
-@CompoundIndex(name = "material_unique", def = "{'revisaoId' : 1, 'material': 1}", unique = true)
+@CompoundIndex(name = "material_unique", def = "{'revisionId' : 1, 'materialDocId': 1}", unique = true)
 public class MaterialRevDocElement extends RevDocElement {
 
-    @DBRef
+    @Indexed
     @NotNull
-    private MaterialDocElement material;
+    private ObjectId materialDocId;
 }

@@ -9,4 +9,5 @@ public record ResMaterialDTO(
 
         Set<ResMinDTO> marcaSet,
         Set<ResMinDTO> padraoSet
-) { }
+) {
+}

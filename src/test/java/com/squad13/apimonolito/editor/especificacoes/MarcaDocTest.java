@@ -51,7 +51,8 @@ class MarcaDocTest {
         assertThat(marca.getId()).isNotNull();
         assertThat(marca.getName()).isEqualTo("Marca");
 
-        MarcaDocElement foundMarca = marcaDocRepository.findByName("Marca").orElse(null);;
+        MarcaDocElement foundMarca = marcaDocRepository.findByName("Marca").orElse(null);
+        ;
         assertThat(foundMarca).isNotNull();
         assertThat(foundMarca.getId()).isEqualTo(marca.getId());
     }
@@ -68,7 +69,8 @@ class MarcaDocTest {
         marca.setName("Marca1");
         marcaDocRepository.save(marca);
 
-        MarcaDocElement foundMarca = marcaDocRepository.findByName("Marca1").orElse(null);;
+        MarcaDocElement foundMarca = marcaDocRepository.findByName("Marca1").orElse(null);
+        ;
 
         assertThat(foundMarca).isNotNull();
         assertThat(foundMarca.getUpdated()).isNotNull();
@@ -78,7 +80,8 @@ class MarcaDocTest {
     @Test
     void testMarcaDelete() {
         marcaDocRepository.deleteAllByName("Marca");
-        MarcaDocElement foundMarca = marcaDocRepository.findByName("Marca").orElse(null);;
+        MarcaDocElement foundMarca = marcaDocRepository.findByName("Marca").orElse(null);
+        ;
 
         assertThat(foundMarca).isNull();
     }

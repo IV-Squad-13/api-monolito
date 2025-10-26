@@ -9,8 +9,8 @@ import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.catalog.Ambiente;
 import com.squad13.apimonolito.repository.catalog.AmbienteRepository;
-import com.squad13.apimonolito.util.mapper.CatalogMapper;
 import com.squad13.apimonolito.util.enums.LocalEnum;
+import com.squad13.apimonolito.util.mapper.CatalogMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -87,7 +87,7 @@ public class AmbienteService {
         ambiente.setLocal(dto.getLocal());
         ambiente.setIsActive(dto.getIsActive());
 
-        return catalogMapper.toResponse(ambienteRepository.save(ambiente),  LoadCatalogParamsDTO.allTrue());
+        return catalogMapper.toResponse(ambienteRepository.save(ambiente), LoadCatalogParamsDTO.allTrue());
     }
 
     private void ensureUniqueNameAndLocal(Ambiente ambiente, EditAmbienteDTO dto) {

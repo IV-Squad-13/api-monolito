@@ -69,7 +69,8 @@ class AmbienteDocTest {
         assertThat(ambiente.getName()).isEqualTo("Ambiente");
         assertThat(ambiente.getEspecificacaoId()).isEqualTo(empDoc.getId());
 
-        AmbienteDocElement foundAmbiente = ambienteDocRepository.findByName("Ambiente").orElse(null);;
+        AmbienteDocElement foundAmbiente = ambienteDocRepository.findByName("Ambiente").orElse(null);
+        ;
         assertThat(foundAmbiente).isNotNull();
         assertThat(foundAmbiente.getId()).isEqualTo(ambiente.getId());
         assertThat(foundAmbiente.getItemIds().getFirst()).isEqualTo(item.getId());
@@ -94,12 +95,14 @@ class AmbienteDocTest {
         ambiente.setItemIds(List.of(item.getId()));
         ambienteDocRepository.save(ambiente);
 
-        AmbienteDocElement foundAmbiente = ambienteDocRepository.findByName("Ambiente").orElse(null);;
+        AmbienteDocElement foundAmbiente = ambienteDocRepository.findByName("Ambiente").orElse(null);
+        ;
         Assertions.assertNotNull(foundAmbiente);
         foundAmbiente.setName("Ambiente2");
         ambienteDocRepository.save(foundAmbiente);
 
-        AmbienteDocElement updated = ambienteDocRepository.findByName("Ambiente2").orElse(null);;
+        AmbienteDocElement updated = ambienteDocRepository.findByName("Ambiente2").orElse(null);
+        ;
         assertThat(updated).isNotNull();
         assertThat(updated.getName()).isEqualTo("Ambiente2");
     }
@@ -107,7 +110,8 @@ class AmbienteDocTest {
     @Test
     void testAmbienteDelete() {
         ambienteDocRepository.deleteAllByName("Ambiente");
-        AmbienteDocElement foundAmbiente = ambienteDocRepository.findByName("Ambiente").orElse(null);;
+        AmbienteDocElement foundAmbiente = ambienteDocRepository.findByName("Ambiente").orElse(null);
+        ;
 
         assertThat(foundAmbiente).isNull();
     }

@@ -4,4 +4,5 @@ public record ResItemAmbienteDTO(
         Long id,
         ResItemDTO item,
         ResAmbienteDTO ambiente
-) { }
+) {
+}

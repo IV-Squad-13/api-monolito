@@ -60,6 +60,11 @@ public class GlobalExceptionHandler {
         return buildResponse(ex, request, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(InvalidUserException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidUserException(InvalidUserException ex, WebRequest request) {
+        return buildResponse(ex, request, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex, WebRequest request) {
         return buildResponse(ex, request, HttpStatus.INTERNAL_SERVER_ERROR);

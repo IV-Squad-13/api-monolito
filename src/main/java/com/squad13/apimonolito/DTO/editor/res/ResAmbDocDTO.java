@@ -1,9 +1,6 @@
 package com.squad13.apimonolito.DTO.editor.res;
 
-import com.squad13.apimonolito.DTO.editor.AmbienteDocDTO;
 import com.squad13.apimonolito.models.editor.mongo.AmbienteDocElement;
-import com.squad13.apimonolito.models.editor.mongo.ItemDocElement;
-import com.squad13.apimonolito.models.editor.structures.DocElement;
 import com.squad13.apimonolito.util.enums.LocalEnum;
 import lombok.*;
 import org.bson.types.ObjectId;

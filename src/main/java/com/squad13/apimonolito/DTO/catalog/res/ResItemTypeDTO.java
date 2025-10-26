@@ -8,4 +8,5 @@ public record ResItemTypeDTO(
         Boolean isActive,
 
         Set<ResMinDTO> itemSet
-) { }
+) {
+}

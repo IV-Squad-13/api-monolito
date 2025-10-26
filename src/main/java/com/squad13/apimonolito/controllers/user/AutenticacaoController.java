@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -31,7 +30,7 @@ public class AutenticacaoController {
     private TokenService tokenService;
 
     @GetMapping("/auth/me")
-    public ResponseEntity<Usuario> me(@RequestHeader("Authorization") String authHeader){
+    public ResponseEntity<Usuario> me(@RequestHeader("Authorization") String authHeader) {
         return ResponseEntity.ok(authService.findMe(authHeader));
     }
 

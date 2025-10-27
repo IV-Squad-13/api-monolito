@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface AmbienteRevDocElementRepository extends RevDocElementRepository<AmbienteRevDocElement> {
-    Optional<AmbienteRevDocElement> findByAmbienteDocIdAndRevisionId(ObjectId ambienteDocId, Long revisionId);
+    Optional<AmbienteRevDocElement> findByRevisedDocIdAndRevisionId(ObjectId revisedDocId, Long revisionId);
 
-    void deleteByAmbienteDocIdAndRevisionId(ObjectId ambienteDocId, Long revisionId);
+    void deleteByRevisedDocIdAndRevisionId(ObjectId revisedDocId, Long revisionId);
 }

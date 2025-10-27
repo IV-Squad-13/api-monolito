@@ -32,7 +32,7 @@ public class ItemDocElement extends DocElement {
     private Long typeId;
 
     public static ItemDocElement fromDto(ItemDocDTO dto, ObjectId especId, ItemType type) {
-        ItemDocElement item = DocElement.genericFromDto(dto, especId, ItemDocElement.class);
+        ItemDocElement item = DocElement.fromDto(dto, especId, ItemDocElement::new);
         item.setDesc(dto.getDesc());
         item.setTypeId(type.getId());
         item.setType(type.getName());

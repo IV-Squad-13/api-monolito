@@ -82,23 +82,23 @@ class LocalRevDocTest {
     @Test
     void testLocalRevPersistence() {
         ItemRevDocElement itemRev = new ItemRevDocElement();
-        itemRev.setItemDocId(item.getId());
+        itemRev.setRevisedDocId(item.getId());
         itemRev.setRevisionId(1L);
-        itemRev.setApproved(true);
+        itemRev.setIsApproved(true);
         itemRev.setComment("First revision");
         itemRevDocRepository.save(itemRev);
 
         AmbienteRevDocElement ambienteRev = new AmbienteRevDocElement();
-        ambienteRev.setAmbienteDocId(ambiente.getId());
+        ambienteRev.setRevisedDocId(ambiente.getId());
         ambienteRev.setRevisionId(1L);
         ambienteRevDocRepository.save(ambienteRev);
 
         LocalRevDocElement localRev = new LocalRevDocElement();
-        localRev.setLocalDocId(local.getId());
+        localRev.setRevisedDocId(local.getId());
         localRev.setRevisionId(1L);
         localRevDocRepository.save(localRev);
 
-        LocalRevDocElement foundRev = localRevDocRepository.findByLocalDocIdAndRevisionId(local.getId(), 1L)
+        LocalRevDocElement foundRev = localRevDocRepository.findByRevisedDocIdAndRevisionId(local.getId(), 1L)
                         .orElse(null);
         assertThat(foundRev).isNotNull();
         assertThat(foundRev.getId()).isNotNull();
@@ -107,12 +107,12 @@ class LocalRevDocTest {
     @Test
     void testLocalRevDuplicateThrows() {
         LocalRevDocElement rev1 = new LocalRevDocElement();
-        rev1.setLocalDocId(local.getId());
+        rev1.setRevisedDocId(local.getId());
         rev1.setRevisionId(1L);
         localRevDocRepository.save(rev1);
 
         LocalRevDocElement rev2 = new LocalRevDocElement();
-        rev2.setLocalDocId(local.getId());
+        rev2.setRevisedDocId(local.getId());
         rev2.setRevisionId(1L);
 
         assertThrows(DataIntegrityViolationException.class,
@@ -122,16 +122,16 @@ class LocalRevDocTest {
     @Test
     void testLocalRevUpdate() {
         LocalRevDocElement localRev = new LocalRevDocElement();
-        localRev.setLocalDocId(local.getId());
+        localRev.setRevisedDocId(local.getId());
         localRev.setRevisionId(1L);
         localRevDocRepository.save(localRev);
 
-        LocalRevDocElement found = localRevDocRepository.findByLocalDocIdAndRevisionId(local.getId(), 1L)
+        LocalRevDocElement found = localRevDocRepository.findByRevisedDocIdAndRevisionId(local.getId(), 1L)
                 .orElse(null);
         Assertions.assertNotNull(found);
         localRevDocRepository.save(found);
 
-        LocalRevDocElement updated = localRevDocRepository.findByLocalDocIdAndRevisionId(local.getId(), 1L)
+        LocalRevDocElement updated = localRevDocRepository.findByRevisedDocIdAndRevisionId(local.getId(), 1L)
                 .orElse(null);
         assertThat(updated).isNotNull();
         assertThat(updated.getRevisionId()).isEqualTo(1L);
@@ -140,12 +140,12 @@ class LocalRevDocTest {
     @Test
     void testLocalRevDelete() {
         LocalRevDocElement localRev = new LocalRevDocElement();
-        localRev.setLocalDocId(local.getId());
+        localRev.setRevisedDocId(local.getId());
         localRev.setRevisionId(1L);
         localRevDocRepository.save(localRev);
 
-        localRevDocRepository.deleteByLocalDocIdAndRevisionId(local.getId(), 1L);
-        LocalRevDocElement found = localRevDocRepository.findByLocalDocIdAndRevisionId(local.getId(), 1L)
+        localRevDocRepository.deleteByRevisedDocIdAndRevisionId(local.getId(), 1L);
+        LocalRevDocElement found = localRevDocRepository.findByRevisedDocIdAndRevisionId(local.getId(), 1L)
                 .orElse(null);
         assertThat(found).isNull();
     }

@@ -12,20 +12,29 @@ import com.squad13.apimonolito.models.editor.mongo.MaterialDocElement;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import lombok.Getter;
 
+import java.util.function.Supplier;
+
 @Getter
 public enum DocElementEnum {
-    AMBIENTE(Ambiente.class, AmbienteDocElement.class, ResAmbDocDTO.class),
-    MARCA(Marca.class, MarcaDocElement.class, ResMarDocDTO.class),
-    MATERIAL(Material.class, MaterialDocElement.class, ResMatDocDTO.class),
-    ITEM(ItemDesc.class, ItemDocElement.class, ResItemDocDTO.class);
+    AMBIENTE(Ambiente.class, AmbienteDocElement.class, ResAmbDocDTO.class, ResAmbDocDTO::new),
+    ITEM(ItemDesc.class, ItemDocElement.class, ResItemDocDTO.class, ResItemDocDTO::new),
+    MATERIAL(Material.class, MaterialDocElement.class, ResMatDocDTO.class, ResMatDocDTO::new),
+    MARCA(Marca.class, MarcaDocElement.class, ResMarDocDTO.class, ResMarDocDTO::new);
 
     private final Class<?> catalogEntity;
     private final Class<? extends DocElement> docElement;
-    private final Class<? extends ResDocElementDTO> resDoc;
+    private final Class<? extends ResDocElementDTO> resDocDTO;
+    private final Supplier<? extends ResDocElementDTO> resDocSupplier;
 
-    DocElementEnum(Class<?> catalogEntity, Class<? extends DocElement> docElement, Class<? extends ResDocElementDTO> resDoc) {
+    DocElementEnum(
+            Class<?> catalogEntity,
+            Class<? extends DocElement> docElement,
+            Class<? extends ResDocElementDTO> resDocDTO,
+            Supplier<? extends ResDocElementDTO> resDocSupplier
+    ) {
         this.catalogEntity = catalogEntity;
         this.docElement = docElement;
-        this.resDoc = resDoc;
+        this.resDocDTO = resDocDTO;
+        this.resDocSupplier = resDocSupplier;
     }
 }

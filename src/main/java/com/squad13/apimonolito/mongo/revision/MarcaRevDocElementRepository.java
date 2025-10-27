@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface MarcaRevDocElementRepository extends RevDocElementRepository<MarcaRevDocElement> {
-    Optional<MarcaRevDocElement> findByMarcaDocIdAndRevisionId(ObjectId marcaDocId, Long revisionId);
+    Optional<MarcaRevDocElement> findByRevisedDocIdAndRevisionId(ObjectId revisedDocId, Long revisionId);
 }

@@ -67,18 +67,6 @@ public class EditorMapper {
         );
     }
 
-    public ResSpecDTO toResponse(EspecificacaoDoc doc, LoadDocumentParamsDTO params) {
-        return new ResSpecDTO(
-                doc.getId().toHexString(),
-                doc.getEmpreendimentoId(),
-                doc.getName(),
-                doc.getDesc(),
-                doc.getObs(),
-                List.of(),
-                List.of()
-        );
-    }
-
     public DocElement fromCatalog(ObjectId specId, Object entity, DocElementEnum type) {
         return switch (type) {
             case AMBIENTE -> fromCatalog(specId, (Ambiente) entity);

@@ -7,6 +7,7 @@ import com.squad13.apimonolito.util.enums.LocalEnum;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -38,4 +39,7 @@ public class LocalDoc {
 
     @Indexed
     private List<ObjectId> ambienteIds = new ArrayList<>();
+
+    @Transient
+    private List<AmbienteDocElement> ambientes = new ArrayList<>();
 }

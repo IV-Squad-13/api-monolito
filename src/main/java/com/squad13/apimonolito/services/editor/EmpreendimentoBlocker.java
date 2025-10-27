@@ -1,4 +1,4 @@
-package com.squad13.apimonolito.util;
+package com.squad13.apimonolito.services.editor;
 
 import com.squad13.apimonolito.exceptions.InvalidStageException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;

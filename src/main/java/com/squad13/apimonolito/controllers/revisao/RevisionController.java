@@ -1,8 +1,8 @@
 package com.squad13.apimonolito.controllers.revisao;
 
 import com.squad13.apimonolito.DTO.revision.LoadRevDocParamsDTO;
-import com.squad13.apimonolito.DTO.revision.StartRevDTO;
 import com.squad13.apimonolito.DTO.revision.res.ResRevDTO;
+import com.squad13.apimonolito.DTO.revision.res.ResSpecRevDTO;
 import com.squad13.apimonolito.services.revision.RevisionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ public class RevisionController {
 
     @GetMapping
     public ResponseEntity<List<ResRevDTO>> getAll(@ModelAttribute LoadRevDocParamsDTO params) {
-        return ResponseEntity.ok(revService.findALl(params));
+        return ResponseEntity.ok(revService.findAll(params));
     }
 
     @GetMapping("/{id}")

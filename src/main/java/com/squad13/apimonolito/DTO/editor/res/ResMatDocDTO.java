@@ -17,7 +17,7 @@ public class ResMatDocDTO extends ResDocElementDTO {
     private List<ResMarDocDTO> marcas = new ArrayList<>();
 
     public static ResMatDocDTO fromDoc(MaterialDocElement doc) {
-        ResMatDocDTO mat = ResDocElementDTO.fromDoc(doc, ResMatDocDTO.class);
+        ResMatDocDTO mat = ResDocElementDTO.fromDoc(doc, ResMatDocDTO::new);
         mat.setMarcaIds(doc.getMarcaIds().stream()
                 .map(ObjectId::toHexString)
                 .toList());

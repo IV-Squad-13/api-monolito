@@ -134,16 +134,16 @@ class RevisaoTest {
 
         EspecificacaoRevDocElement revDoc = new EspecificacaoRevDocElement();
         revDoc.setRevisionId(savedRevisao.getId());
-        revDoc.setEspecificacaoDocId(savedDoc.getId());
-        revDoc.setNameApproved(true);
-        revDoc.setDescApproved(false);
-        revDoc.setObsApproved(false);
+        revDoc.setRevisedDocId(savedDoc.getId());
+        revDoc.setIsNameApproved(true);
+        revDoc.setIsDescApproved(false);
+        revDoc.setIsObsApproved(false);
 
         EspecificacaoRevDocElement savedRevDoc = especificacaoRevDocRepository.save(revDoc);
 
         assertThat(savedRevDoc.getId()).isNotNull();
         assertThat(savedRevDoc.getRevisionId()).isEqualTo(savedRevisao.getId());
-        assertThat(savedRevDoc.getEspecificacaoDocId()).isEqualTo(savedDoc.getId());
-        assertThat(savedRevDoc.isNameApproved()).isTrue();
+        assertThat(savedRevDoc.getRevisedDocId()).isEqualTo(savedDoc.getId());
+        assertThat(savedRevDoc.getIsNameApproved()).isTrue();
     }
 }

@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface LocalRevDocElementRepository extends RevDocElementRepository<LocalRevDocElement> {
-    Optional<LocalRevDocElement> findByLocalDocIdAndRevisionId(ObjectId localDocId, Long revisionId);
+    Optional<LocalRevDocElement> findByRevisedDocIdAndRevisionId(ObjectId revisedDocId, Long revisionId);
 
-    void deleteByLocalDocIdAndRevisionId(ObjectId localDocId, Long revisionId);
+    void deleteByRevisedDocIdAndRevisionId(ObjectId revisedDocId, Long revisionId);
 }

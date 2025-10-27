@@ -63,18 +63,18 @@ class AmbienteRevDocTest {
     @Test
     void testAmbienteRevPersistence() {
         ItemRevDocElement itemRev = new ItemRevDocElement();
-        itemRev.setItemDocId(item.getId());
+        itemRev.setRevisedDocId(item.getId());
         itemRev.setRevisionId(1L);
-        itemRev.setApproved(true);
+        itemRev.setIsApproved(true);
         itemRev.setComment("First revision");
         itemRevDocRepository.save(itemRev);
 
         AmbienteRevDocElement ambienteRev = new AmbienteRevDocElement();
-        ambienteRev.setAmbienteDocId(ambiente.getId());
+        ambienteRev.setRevisedDocId(ambiente.getId());
         ambienteRev.setRevisionId(1L);
         ambienteRevDocRepository.save(ambienteRev);
 
-        AmbienteRevDocElement foundRev = ambienteRevDocRepository.findByAmbienteDocIdAndRevisionId(ambiente.getId(), 1L)
+        AmbienteRevDocElement foundRev = ambienteRevDocRepository.findByRevisedDocIdAndRevisionId(ambiente.getId(), 1L)
                 .orElse(null);
         assertThat(foundRev).isNotNull();
         assertThat(foundRev.getId()).isNotNull();
@@ -83,16 +83,16 @@ class AmbienteRevDocTest {
     @Test
     void testAmbienteRevUpdate() {
         AmbienteRevDocElement ambienteRev = new AmbienteRevDocElement();
-        ambienteRev.setAmbienteDocId(ambiente.getId());
+        ambienteRev.setRevisedDocId(ambiente.getId());
         ambienteRev.setRevisionId(1L);
         ambienteRevDocRepository.save(ambienteRev);
 
-        AmbienteRevDocElement found = ambienteRevDocRepository.findByAmbienteDocIdAndRevisionId(ambiente.getId(), 1L)
+        AmbienteRevDocElement found = ambienteRevDocRepository.findByRevisedDocIdAndRevisionId(ambiente.getId(), 1L)
                         .orElse(null);
         Assertions.assertNotNull(found);
         ambienteRevDocRepository.save(found);
 
-        AmbienteRevDocElement updated = ambienteRevDocRepository.findByAmbienteDocIdAndRevisionId(ambiente.getId(), 1L)
+        AmbienteRevDocElement updated = ambienteRevDocRepository.findByRevisedDocIdAndRevisionId(ambiente.getId(), 1L)
                 .orElse(null);
         assertThat(updated).isNotNull();
         assertThat(updated.getRevisionId()).isEqualTo(1L);
@@ -101,12 +101,12 @@ class AmbienteRevDocTest {
     @Test
     void testAmbienteRevDelete() {
         AmbienteRevDocElement ambienteRev = new AmbienteRevDocElement();
-        ambienteRev.setAmbienteDocId(ambiente.getId());
+        ambienteRev.setRevisedDocId(ambiente.getId());
         ambienteRev.setRevisionId(1L);
         ambienteRevDocRepository.save(ambienteRev);
 
-        ambienteRevDocRepository.deleteByAmbienteDocIdAndRevisionId(ambiente.getId(), 1L);
-        AmbienteRevDocElement found = ambienteRevDocRepository.findByAmbienteDocIdAndRevisionId(ambiente.getId(), 1L)
+        ambienteRevDocRepository.deleteByRevisedDocIdAndRevisionId(ambiente.getId(), 1L);
+        AmbienteRevDocElement found = ambienteRevDocRepository.findByRevisedDocIdAndRevisionId(ambiente.getId(), 1L)
                 .orElse(null);
         assertThat(found).isNull();
     }
@@ -114,12 +114,12 @@ class AmbienteRevDocTest {
     @Test
     void testAmbienteRevDuplicateThrows() {
         AmbienteRevDocElement rev1 = new AmbienteRevDocElement();
-        rev1.setAmbienteDocId(ambiente.getId());
+        rev1.setRevisedDocId(ambiente.getId());
         rev1.setRevisionId(1L);
         ambienteRevDocRepository.save(rev1);
 
         AmbienteRevDocElement rev2 = new AmbienteRevDocElement();
-        rev2.setAmbienteDocId(ambiente.getId());
+        rev2.setRevisedDocId(ambiente.getId());
         rev2.setRevisionId(1L);
 
         assertThrows(DataIntegrityViolationException.class,

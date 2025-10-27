@@ -21,6 +21,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class MarcaDocElement extends DocElement {
 
     public static MarcaDocElement fromDto(ObjectId especId, DocElementDTO dto) {
-        return DocElement.genericFromDto(dto, especId, MarcaDocElement.class);
+        return DocElement.fromDto(dto, especId, MarcaDocElement::new);
     }
 }

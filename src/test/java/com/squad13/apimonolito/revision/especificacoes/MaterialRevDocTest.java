@@ -62,18 +62,18 @@ class MaterialRevDocTest {
     @Test
     void testMaterialRevPersistence() {
         MarcaRevDocElement marcaRev = new MarcaRevDocElement();
-        marcaRev.setMarcaDocId(marca.getId());
+        marcaRev.setRevisedDocId(marca.getId());
         marcaRev.setRevisionId(1L);
-        marcaRev.setApproved(true);
+        marcaRev.setIsApproved(true);
         marcaRev.setComment("First revision");
         marcaRevDocRepository.save(marcaRev);
 
         MaterialRevDocElement materialRev = new MaterialRevDocElement();
-        materialRev.setMaterialDocId(material.getId());
+        materialRev.setRevisedDocId(material.getId());
         materialRev.setRevisionId(1L);
         materialRevDocRepository.save(materialRev);
 
-        MaterialRevDocElement foundRev = materialRevDocRepository.findByMaterialDocIdAndRevisionId(material.getId(), 1L)
+        MaterialRevDocElement foundRev = materialRevDocRepository.findByRevisedDocIdAndRevisionId(material.getId(), 1L)
                 .orElse(null);
         assertThat(foundRev).isNotNull();
         assertThat(foundRev.getId()).isNotNull();
@@ -82,16 +82,16 @@ class MaterialRevDocTest {
     @Test
     void testMaterialRevUpdate() {
         MaterialRevDocElement materialRev = new MaterialRevDocElement();
-        materialRev.setMaterialDocId(material.getId());
+        materialRev.setRevisedDocId(material.getId());
         materialRev.setRevisionId(1L);
         materialRevDocRepository.save(materialRev);
 
-        MaterialRevDocElement found = materialRevDocRepository.findByMaterialDocIdAndRevisionId(material.getId(), 1L)
+        MaterialRevDocElement found = materialRevDocRepository.findByRevisedDocIdAndRevisionId(material.getId(), 1L)
                 .orElse(null);
         Assertions.assertNotNull(found);
         materialRevDocRepository.save(found);
 
-        MaterialRevDocElement updated = materialRevDocRepository.findByMaterialDocIdAndRevisionId(material.getId(), 1L)
+        MaterialRevDocElement updated = materialRevDocRepository.findByRevisedDocIdAndRevisionId(material.getId(), 1L)
                 .orElse(null);
         assertThat(updated).isNotNull();
         assertThat(updated.getRevisionId()).isEqualTo(1L);
@@ -100,12 +100,12 @@ class MaterialRevDocTest {
     @Test
     void testMaterialRevDelete() {
         MaterialRevDocElement materialRev = new MaterialRevDocElement();
-        materialRev.setMaterialDocId(material.getId());
+        materialRev.setRevisedDocId(material.getId());
         materialRev.setRevisionId(1L);
         materialRevDocRepository.save(materialRev);
 
-        materialRevDocRepository.deleteByMaterialDocIdAndRevisionId(material.getId(), 1L);
-        MaterialRevDocElement found = materialRevDocRepository.findByMaterialDocIdAndRevisionId(material.getId(), 1L)
+        materialRevDocRepository.deleteByRevisedDocIdAndRevisionId(material.getId(), 1L);
+        MaterialRevDocElement found = materialRevDocRepository.findByRevisedDocIdAndRevisionId(material.getId(), 1L)
                 .orElse(null);
         assertThat(found).isNull();
     }
@@ -113,12 +113,12 @@ class MaterialRevDocTest {
     @Test
     void testMaterialRevDuplicateThrows() {
         MaterialRevDocElement rev1 = new MaterialRevDocElement();
-        rev1.setMaterialDocId(material.getId());
+        rev1.setRevisedDocId(material.getId());
         rev1.setRevisionId(1L);
         materialRevDocRepository.save(rev1);
 
         MaterialRevDocElement rev2 = new MaterialRevDocElement();
-        rev2.setMaterialDocId(material.getId());
+        rev2.setRevisedDocId(material.getId());
         rev2.setRevisionId(1L);
 
         assertThrows(DataIntegrityViolationException.class,

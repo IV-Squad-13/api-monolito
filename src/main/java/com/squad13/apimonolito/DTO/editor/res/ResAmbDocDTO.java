@@ -20,7 +20,7 @@ public class ResAmbDocDTO extends ResDocElementDTO {
     private List<ResItemDocDTO> items = new ArrayList<>();
 
     public static ResAmbDocDTO fromDoc(AmbienteDocElement doc) {
-        ResAmbDocDTO ambiente = ResDocElementDTO.fromDoc(doc, ResAmbDocDTO.class);
+        ResAmbDocDTO ambiente = ResDocElementDTO.fromDoc(doc, ResAmbDocDTO::new);
         ambiente.setLocal(doc.getLocal());
         ambiente.setItemIds(doc.getItemIds().stream()
                 .map(ObjectId::toHexString)

@@ -117,6 +117,11 @@ public class RevisionService {
                 .toList();
     }
 
+    public List<ResSpecRevDTO> findAllDocs(LoadRevDocParamsDTO params) {
+        Aggregation aggregation = docBuilder.buildAggregation(params);
+        return documentSearch.findWithAggregation("especificacao_rev", ResSpecRevDTO.class, aggregation);
+    }
+
     public ResRevDTO findById(Long id, LoadRevDocParamsDTO params) {
         return revRepository.findById(id)
                 .map(rev -> mappingHelper(rev, params))

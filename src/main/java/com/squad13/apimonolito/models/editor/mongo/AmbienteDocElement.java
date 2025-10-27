@@ -35,7 +35,7 @@ public class AmbienteDocElement extends DocElement {
     private List<ItemDocElement> items = new ArrayList<>();
 
     public static AmbienteDocElement fromDto(AmbienteDocDTO dto, ObjectId especificacaoId) {
-        AmbienteDocElement ambiente = DocElement.genericFromDto(dto, especificacaoId, AmbienteDocElement.class);
+        AmbienteDocElement ambiente = DocElement.fromDto(dto, especificacaoId, AmbienteDocElement::new);
         ambiente.setLocal(dto.getLocal());
         return ambiente;
     }

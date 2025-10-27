@@ -17,6 +17,7 @@ import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.time.Instant;
+import java.util.function.Supplier;
 
 @Data
 @MappedSuperclass
@@ -54,23 +55,20 @@ public abstract class DocElement {
     private Instant updated;
 
     public static <D extends DocElementDTO, T extends DocElement>
-    T genericFromDto(D dto, ObjectId especificacaoId, Class<T> clazz) {
-        try {
-            T instance = clazz.getDeclaredConstructor().newInstance();
-            instance.setId(ObjectId.get());
-            instance.setName(dto.getName());
-            instance.setEspecificacaoId(especificacaoId);
+    T fromDto(D dto, ObjectId especificacaoId, Supplier<T> factory) {
+        T instance = factory.get();
 
-            if (dto.getCatalogId() != null) {
-                instance.setCatalogId(dto.getCatalogId());
-            }
-            if (dto.getParentId() != null) {
-                instance.setParentId(ObjectId.get());
-            }
+        instance.setId(ObjectId.get());
+        instance.setName(dto.getName());
+        instance.setEspecificacaoId(especificacaoId);
 
-            return instance;
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao criar instância de " + clazz.getSimpleName(), e);
+        if (dto.getCatalogId() != null) {
+            instance.setCatalogId(dto.getCatalogId());
         }
+        if (dto.getParentId() != null) {
+            instance.setParentId(ObjectId.get());
+        }
+
+        return instance;
     }
 }

@@ -13,18 +13,19 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 public class LoadRevDocParamsDTO {
 
     private boolean loadRevDocuments;
+    private boolean loadSpecDocuments;
     private boolean loadEmpreendimento;
 
     public LoadRevDocParamsDTO() {
-        this(false, false);
+        this(false, false, false);
     }
 
     public static LoadRevDocParamsDTO allFalse() {
-        return new LoadRevDocParamsDTO(false, false);
+        return new LoadRevDocParamsDTO(false, false, false);
     }
 
     @ModelAttribute("loadAll")
     public static LoadRevDocParamsDTO allTrue() {
-        return new LoadRevDocParamsDTO(true, true);
+        return new LoadRevDocParamsDTO(true, true, true);
     }
 }

@@ -35,6 +35,6 @@ public class MaterialDocElement extends DocElement {
     private List<MarcaDocElement> marcas = new ArrayList<>();
 
     public static MaterialDocElement fromDto(DocElementDTO dto, ObjectId especId) {
-        return DocElement.genericFromDto(dto, especId, MaterialDocElement.class);
+        return DocElement.fromDto(dto, especId, MaterialDocElement::new);
     }
 }

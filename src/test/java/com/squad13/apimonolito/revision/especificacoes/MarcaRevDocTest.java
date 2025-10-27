@@ -42,56 +42,56 @@ class MarcaRevDocTest {
     @Test
     void testMarcaRevPersistence() {
         MarcaRevDocElement marcaRev = new MarcaRevDocElement();
-        marcaRev.setMarcaDocId(marca.getId());
+        marcaRev.setRevisedDocId(marca.getId());
         marcaRev.setRevisionId(1L);
-        marcaRev.setApproved(true);
+        marcaRev.setIsApproved(true);
         marcaRev.setComment("Revisão do marca");
 
         marcaRevDocRepository.save(marcaRev);
 
-        MarcaRevDocElement foundMarcaRev = marcaRevDocRepository.findByMarcaDocIdAndRevisionId(marca.getId(), 1L)
+        MarcaRevDocElement foundMarcaRev = marcaRevDocRepository.findByRevisedDocIdAndRevisionId(marca.getId(), 1L)
                 .orElse(null);
         assertThat(foundMarcaRev).isNotNull();
         assertThat(foundMarcaRev.getId()).isEqualTo(marcaRev.getId());
         assertThat(foundMarcaRev.getComment()).isEqualTo(marcaRev.getComment());
-        assertThat(foundMarcaRev.getMarcaDocId()).isEqualTo(marca.getId());
-        assertThat(foundMarcaRev.isApproved()).isTrue();
+        assertThat(foundMarcaRev.getRevisedDocId()).isEqualTo(marca.getId());
+        assertThat(foundMarcaRev.getIsApproved()).isTrue();
     }
 
     @Test
     void testMarcaRevUpdate() {
         MarcaRevDocElement marcaRev = new MarcaRevDocElement();
-        marcaRev.setMarcaDocId(marca.getId());
+        marcaRev.setRevisedDocId(marca.getId());
         marcaRev.setRevisionId(1L);
-        marcaRev.setApproved(false);
+        marcaRev.setIsApproved(false);
         marcaRev.setComment("Revisão do marca");
         marcaRevDocRepository.save(marcaRev);
 
-        MarcaRevDocElement found = marcaRevDocRepository.findByMarcaDocIdAndRevisionId(marca.getId(), 1L)
+        MarcaRevDocElement found = marcaRevDocRepository.findByRevisedDocIdAndRevisionId(marca.getId(), 1L)
                 .orElse(null);
         Assertions.assertNotNull(found);
-        found.setApproved(true);
+        found.setIsApproved(true);
         found.setComment("Revisão Aprovada");
         marcaRevDocRepository.save(found);
 
-        MarcaRevDocElement updated = marcaRevDocRepository.findByMarcaDocIdAndRevisionId(marca.getId(), 1L)
+        MarcaRevDocElement updated = marcaRevDocRepository.findByRevisedDocIdAndRevisionId(marca.getId(), 1L)
                 .orElse(null);
         Assertions.assertNotNull(updated);
-        assertThat(updated.isApproved()).isTrue();
+        assertThat(updated.getIsApproved()).isTrue();
         assertThat(updated.getComment()).isEqualTo("Revisão Aprovada");
     }
 
     @Test
     void testMarcaRevDelete() {
         MarcaRevDocElement marcaRev = new MarcaRevDocElement();
-        marcaRev.setMarcaDocId(marca.getId());
+        marcaRev.setRevisedDocId(marca.getId());
         marcaRev.setRevisionId(1L);
-        marcaRev.setApproved(false);
+        marcaRev.setIsApproved(false);
         marcaRev.setComment("O marca deve ser removido");
         marcaRevDocRepository.save(marcaRev);
 
         marcaRevDocRepository.delete(marcaRev);
-        MarcaRevDocElement found = marcaRevDocRepository.findByMarcaDocIdAndRevisionId(marca.getId(), 1L)
+        MarcaRevDocElement found = marcaRevDocRepository.findByRevisedDocIdAndRevisionId(marca.getId(), 1L)
                 .orElse(null);
         assertThat(found).isNull();
     }
@@ -99,16 +99,16 @@ class MarcaRevDocTest {
     @Test
     void testDuplicateMarcaRevThrows() {
         MarcaRevDocElement rev1 = new MarcaRevDocElement();
-        rev1.setMarcaDocId(marca.getId());
+        rev1.setRevisedDocId(marca.getId());
         rev1.setRevisionId(1L);
-        rev1.setApproved(true);
+        rev1.setIsApproved(true);
         rev1.setComment("First revision");
         marcaRevDocRepository.save(rev1);
 
         MarcaRevDocElement rev2 = new MarcaRevDocElement();
-        rev2.setMarcaDocId(marca.getId());
+        rev2.setRevisedDocId(marca.getId());
         rev2.setRevisionId(1L);
-        rev2.setApproved(false);
+        rev2.setIsApproved(false);
         rev2.setComment("Duplicate revision");
 
         assertThrows(DataIntegrityViolationException.class,

@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface MaterialRevDocElementRepository extends RevDocElementRepository<MaterialRevDocElement> {
-    Optional<MaterialRevDocElement> findByMaterialDocIdAndRevisionId(ObjectId materialDocId, Long revisionId);
+    Optional<MaterialRevDocElement> findByRevisedDocIdAndRevisionId(ObjectId revisedDocId, Long revisionId);
 
-    void deleteByMaterialDocIdAndRevisionId(ObjectId materialDocId, Long revisionId);
+    void deleteByRevisedDocIdAndRevisionId(ObjectId revisedDocId, Long revisionId);
 }

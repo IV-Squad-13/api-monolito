@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface ItemRevDocElementRepository extends RevDocElementRepository<ItemRevDocElement> {
-    Optional<ItemRevDocElement> findByItemDocIdAndRevisionId(ObjectId itemDocId, Long revisionId);
+    Optional<ItemRevDocElement> findByRevisedDocIdAndRevisionId(ObjectId revisedDocId, Long revisionId);
 }

@@ -15,7 +15,7 @@ public class ResItemDocDTO extends ResDocElementDTO {
     private Long typeId;
 
     public static ResItemDocDTO fromDoc(ItemDocElement doc) {
-        ResItemDocDTO item = ResDocElementDTO.fromDoc(doc, ResItemDocDTO.class);
+        ResItemDocDTO item = ResDocElementDTO.fromDoc(doc, ResItemDocDTO::new);
         item.setDesc(doc.getDesc());
         item.setType(doc.getType());
         item.setTypeId(doc.getTypeId());

@@ -59,7 +59,7 @@ public class DocElementService {
 
     public List<? extends ResDocElementDTO> getAll(LoadDocumentParamsDTO params, DocElementEnum docType) {
         Aggregation agg = docBuilder.buildAggregation(params);
-        return documentSearch.findWithAggregation(getCollection(docType), docType.getResDoc(), agg);
+        return documentSearch.findWithAggregation(getCollection(docType), docType.getResDocDTO(), agg);
     }
 
     public ResDocElementDTO getById(ObjectId id, LoadDocumentParamsDTO params, DocElementEnum docType) {
@@ -78,7 +78,7 @@ public class DocElementService {
         Aggregation agg = docBuilder.buildAggregation(loadParams);
         return documentSearch.searchWithAggregation(
                 getCollection(docType),
-                docType.getResDoc(),
+                docType.getResDocDTO(),
                 matchOperations,
                 agg
         );
@@ -102,7 +102,7 @@ public class DocElementService {
         if (dto.associatedId() != null)
             associateIfNeeded(dto, newElement);
 
-        return ResDocElementDTO.fromDoc(newElement, dto.type().getResDoc());
+        return ResDocElementDTO.fromDoc(newElement, dto.type().getResDocSupplier());
     }
 
     public ResDocElementDTO createRawElement(ObjectId specId, DocElementDTO dto) {
@@ -111,7 +111,7 @@ public class DocElementService {
         DocElement newElement = docElementBuilder.create(specId, dto);
         saveElement(spec, newElement, dto.getDocType());
 
-        return ResDocElementDTO.fromDoc(newElement, dto.getDocType().getResDoc());
+        return ResDocElementDTO.fromDoc(newElement, dto.getDocType().getResDocSupplier());
     }
 
     private void saveElement(EspecificacaoDoc spec, DocElement element, DocElementEnum type) {

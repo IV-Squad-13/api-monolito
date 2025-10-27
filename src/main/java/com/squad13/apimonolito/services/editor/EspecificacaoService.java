@@ -57,13 +57,15 @@ public class EspecificacaoService {
     // TODO: Implementar busca por id com agregação
     public ResSpecDTO findById(ObjectId id, LoadDocumentParamsDTO params) {
         Aggregation aggregation = docBuilder.buildAggregation(params);
+
         return documentSearch.findWithAggregation("especificacoes", ResSpecDTO.class, aggregation)
                 .stream()
+                .filter(spec -> new ObjectId(spec.getId()).equals(id))
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("Especificação não encontrada para o ID: " + id));
     }
 
-    private EspecificacaoDoc findById(ObjectId id) {
+    public EspecificacaoDoc findById(ObjectId id) {
         return specRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Especificação não encontrada para o ID: " + id));
     }

@@ -11,6 +11,7 @@ import lombok.Data;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -26,7 +27,6 @@ import java.util.List;
 @Document(collection = "especificacoes")
 @CompoundIndex(
         name = "especificacao_unique",
-        // TODO: Restringir para apenas uma especificação por empreendimento
         def = "{'empreendimentoId' : 1}",
         unique = true
 )
@@ -54,9 +54,15 @@ public class EspecificacaoDoc {
     @JsonProperty("locais")
     private List<ObjectId> locaisIds = new ArrayList<>();
 
+    @Transient
+    private List<LocalDoc> locais = new ArrayList<>();
+
     @Field("materiaisIds")
     @JsonProperty("materiais")
     private List<ObjectId> materiaisIds = new ArrayList<>();
+
+    @Transient
+    private List<MaterialDocElement> materiais = new ArrayList<>();
 
     @CreatedDate
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")

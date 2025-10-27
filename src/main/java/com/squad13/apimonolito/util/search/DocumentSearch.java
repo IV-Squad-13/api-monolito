@@ -74,7 +74,6 @@ public class DocumentSearch {
         mongoTemplate.bulkOps(BulkOperations.BulkMode.UNORDERED, clazz)
                 .insert(docs)
                 .execute();
-
     }
 
     @SuppressWarnings("unchecked")

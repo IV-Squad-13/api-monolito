@@ -8,11 +8,10 @@ import com.squad13.apimonolito.DTO.editor.res.ResEmpDTO;
 import com.squad13.apimonolito.DTO.editor.res.ResSpecDTO;
 import com.squad13.apimonolito.DTO.revision.ToRevisionDTO;
 import com.squad13.apimonolito.DTO.revision.res.ResRevDTO;
+import com.squad13.apimonolito.DTO.revision.res.ResSpecRevDTO;
 import com.squad13.apimonolito.exceptions.*;
 import com.squad13.apimonolito.models.catalog.Padrao;
-import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
 import com.squad13.apimonolito.models.editor.relational.Empreendimento;
-import com.squad13.apimonolito.models.revision.mongo.EspecificacaoRevDocElement;
 import com.squad13.apimonolito.models.revision.relational.Revisao;
 import com.squad13.apimonolito.models.user.Usuario;
 import com.squad13.apimonolito.models.user.associative.UsuarioEmpreendimento;
@@ -68,8 +67,11 @@ public class EmpreendimentoService {
         if (params.isLoadRevision()) {
             rev = revisaoRepository.findByEmpreendimento(emp)
                     .map(r -> {
-                        List<EspecificacaoRevDocElement> specRevDocs = specRevDocRepository.findByRevisionId(r.getId());
-                        return ResRevDTO.toDTO(r, specRevDocs, null);
+                        List<ResSpecRevDTO> resSpecRevs = specRevDocRepository.findByRevisionId(r.getId()).stream()
+                                .map(specRev -> ResSpecRevDTO.fromDoc(specRev, editorMapper.toResponse(specRev.getRevisedDoc())))
+                                .toList();
+
+                        return ResRevDTO.from(r, resSpecRevs, null);
                     })
                     .orElse(null);
         }
@@ -188,7 +190,7 @@ public class EmpreendimentoService {
         rev.setRule(RevisionRule.START_BY_ASSIGNED);
 
         ResEmpDTO resEmpDTO = mappingHelper(emp, LoadDocumentParamsDTO.allFalse());
-        return ResRevDTO.toDTO(revisaoRepository.save(rev), null, resEmpDTO);
+        return ResRevDTO.from(revisaoRepository.save(rev), null, resEmpDTO);
     }
 
     public ResEmpDTO create(EmpDTO dto, LoadDocumentParamsDTO loadDTO) {

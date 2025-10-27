@@ -22,6 +22,11 @@ public class RevisionController {
         return ResponseEntity.ok(revService.findAll(params));
     }
 
+    @GetMapping("/doc")
+    public ResponseEntity<List<ResSpecRevDTO>> getAllDocs(@ModelAttribute LoadRevDocParamsDTO params) {
+        return ResponseEntity.ok(revService.findAllDocs(params));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ResRevDTO> getById(@PathVariable Long id, LoadRevDocParamsDTO params) {
         return ResponseEntity.ok(revService.findById(id, params));

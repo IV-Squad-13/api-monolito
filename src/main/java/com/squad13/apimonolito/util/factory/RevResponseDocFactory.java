@@ -1,6 +1,8 @@
 package com.squad13.apimonolito.util.factory;
 
 import com.squad13.apimonolito.DTO.editor.LoadDocumentParamsDTO;
+import com.squad13.apimonolito.DTO.revision.LoadRevDocParamsDTO;
+import com.squad13.apimonolito.models.revision.mongo.LocalRevDocElement;
 import org.bson.Document;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.stereotype.Component;
@@ -10,66 +12,66 @@ import java.util.List;
 import java.util.Objects;
 
 @Component
-public class ResponseDocFactory {
+public class RevResponseDocFactory {
 
-    public AggregationOperation lookupLocais(LoadDocumentParamsDTO params) {
+    public AggregationOperation lookupLocais(LoadRevDocParamsDTO params) {
         Document lookup = buildConditionalLookup(
-                params.isLoadLocais(),
-                "locais", "locaisIds", "locais",
-                params.isLoadAmbientes() ? buildAmbientesLookup(params) : null
+                params.isLoadRevDocuments(),
+                "local_rev", "localRevIds", "localRevs",
+                params.isLoadRevDocuments() ? buildAmbientesLookup(params) : null
         );
         return toAggregationOperation(lookup);
     }
 
-    public AggregationOperation lookupAmbientes(LoadDocumentParamsDTO params) {
+    public AggregationOperation lookupAmbientes(LoadRevDocParamsDTO params) {
         Document lookup = buildConditionalLookup(
-                params.isLoadAmbientes(),
-                "ambientes", "ambienteIds", "ambientes",
-                params.isLoadItems() ? buildItemsLookup(params) : null
+                params.isLoadRevDocuments(),
+                "ambiente_rev", "ambienteRevIds", "ambienteRevs",
+                params.isLoadRevDocuments() ? buildItemsLookup(params) : null
         );
         return toAggregationOperation(lookup);
     }
 
-    public AggregationOperation lookupItems(LoadDocumentParamsDTO params) {
+    public AggregationOperation lookupItems(LoadRevDocParamsDTO params) {
         Document lookup = buildConditionalLookup(
-                params.isLoadItems(),
-                "items", "itemIds", "items",
+                params.isLoadRevDocuments(),
+                "items_rev", "itemRevIds", "item_rev",
                 null
         );
         return toAggregationOperation(lookup);
     }
 
-    public AggregationOperation lookupMateriais(LoadDocumentParamsDTO params) {
+    public AggregationOperation lookupMateriais(LoadRevDocParamsDTO params) {
         Document lookup = buildConditionalLookup(
-                params.isLoadMateriais(),
-                "materiais", "materiaisIds", "materiais",
-                params.isLoadMarcas() ? buildMarcasLookup(params) : null
+                params.isLoadRevDocuments(),
+                "material_rev", "materialRevIds", "materialRevs",
+                params.isLoadRevDocuments() ? buildMarcasLookup(params) : null
         );
         return toAggregationOperation(lookup);
     }
 
-    public AggregationOperation lookupMarcas(LoadDocumentParamsDTO params) {
+    public AggregationOperation lookupMarcas(LoadRevDocParamsDTO params) {
         Document lookup = buildConditionalLookup(
-                params.isLoadMarcas(),
-                "marcas", "marcaIds", "marcas",
+                params.isLoadRevDocuments(),
+                "marcas_rev", "marcaRevIds", "marcaRevs",
                 null
         );
         return toAggregationOperation(lookup);
     }
 
-    private Document buildAmbientesLookup(LoadDocumentParamsDTO params) {
-        Document itemsLookup = params.isLoadItems()
+    private Document buildAmbientesLookup(LoadRevDocParamsDTO params) {
+        Document itemsLookup = params.isLoadRevDocuments()
                 ? buildItemsLookup(params)
                 : null;
 
         return buildLookup("ambientes", "ambienteIds", "_id", "ambientes",
                 itemsLookup != null ? List.of(itemsLookup) : null);
     }
-    private Document buildItemsLookup(LoadDocumentParamsDTO params) {
+    private Document buildItemsLookup(LoadRevDocParamsDTO params) {
         return buildLookup("items", "itemIds", "_id", "items", null);
     }
 
-    private Document buildMarcasLookup(LoadDocumentParamsDTO params) {
+    private Document buildMarcasLookup(LoadRevDocParamsDTO params) {
         return buildLookup("marcas", "marcaIds", "_id", "marcas", null);
     }
 

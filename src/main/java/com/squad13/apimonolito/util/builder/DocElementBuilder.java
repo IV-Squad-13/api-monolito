@@ -81,8 +81,6 @@ public class DocElementBuilder {
 
         if (params.isLoadRevDocuments()) {
             operations.add(revResDocFactory.lookupLocais(params));
-            operations.add(revResDocFactory.lookupAmbientes(params));
-            operations.add(revResDocFactory.lookupItems(params));
             operations.add(revResDocFactory.lookupMateriais(params));
             operations.add(revResDocFactory.lookupMarcas(params));
         }

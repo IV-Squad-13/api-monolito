@@ -23,29 +23,11 @@ public class RevResponseDocFactory {
         return toAggregationOperation(lookup);
     }
 
-    public AggregationOperation lookupAmbientes(LoadRevDocParamsDTO params) {
-        Document lookup = buildConditionalLookup(
-                params.isLoadRevDocuments(),
-                "ambiente_rev", "ambienteRevIds", "ambienteRevs",
-                params.isLoadRevDocuments() ? buildItemsLookup(params) : null
-        );
-        return toAggregationOperation(lookup);
-    }
-
-    public AggregationOperation lookupItems(LoadRevDocParamsDTO params) {
-        Document lookup = buildConditionalLookup(
-                params.isLoadRevDocuments(),
-                "items_rev", "itemRevIds", "item_rev",
-                null
-        );
-        return toAggregationOperation(lookup);
-    }
-
     public AggregationOperation lookupMateriais(LoadRevDocParamsDTO params) {
         Document lookup = buildConditionalLookup(
                 params.isLoadRevDocuments(),
                 "material_rev", "materialRevIds", "materialRevs",
-                params.isLoadRevDocuments() ? buildMarcasLookup(params) : null
+                params.isLoadRevDocuments() ? buildMarcasLookup() : null
         );
         return toAggregationOperation(lookup);
     }
@@ -61,18 +43,18 @@ public class RevResponseDocFactory {
 
     private Document buildAmbientesLookup(LoadRevDocParamsDTO params) {
         Document itemsLookup = params.isLoadRevDocuments()
-                ? buildItemsLookup(params)
+                ? buildItemsLookup()
                 : null;
 
-        return buildLookup("ambientes", "ambienteIds", "_id", "ambientes",
+        return buildLookup("ambiente_rev", "ambienteRevIds", "_id", "ambienteRevs",
                 itemsLookup != null ? List.of(itemsLookup) : null);
     }
-    private Document buildItemsLookup(LoadRevDocParamsDTO params) {
-        return buildLookup("items", "itemIds", "_id", "items", null);
+    private Document buildItemsLookup() {
+        return buildLookup("items_rev", "itemRevIds", "_id", "itemRevs", null);
     }
 
-    private Document buildMarcasLookup(LoadRevDocParamsDTO params) {
-        return buildLookup("marcas", "marcaIds", "_id", "marcas", null);
+    private Document buildMarcasLookup() {
+        return buildLookup("marcas_rev", "marcaRevIds", "_id", "marcaRevs", null);
     }
 
     private Document buildConditionalLookup(

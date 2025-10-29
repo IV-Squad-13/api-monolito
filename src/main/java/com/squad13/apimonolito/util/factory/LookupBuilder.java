@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public interface PipelineBuilder {
+public interface LookupBuilder {
 
     static Document getDocument(String from, String localFieldIds, String foreignField, String asField, List<Document> nestedLookups) {
         List<Document> pipeline = new ArrayList<>();

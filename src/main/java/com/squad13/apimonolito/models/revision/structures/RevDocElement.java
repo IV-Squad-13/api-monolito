@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.squad13.apimonolito.DTO.editor.DocElementDTO;
 import com.squad13.apimonolito.DTO.editor.res.ResDocElementDTO;
+import com.squad13.apimonolito.DTO.revision.res.ResRevDocDTO;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;

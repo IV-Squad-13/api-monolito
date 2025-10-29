@@ -10,10 +10,10 @@ import java.util.List;
 public record ResRevDTO(
         Long id,
         RevisaoStatusEnum status,
-        List<ResSpecRevDTO> revDocs,
+        List<? extends ResRevDocDTO> revDocs,
         ResEmpDTO empreendimento
 ) {
-    public static ResRevDTO from(Revisao rev, List<ResSpecRevDTO> revDocs, ResEmpDTO emp) {
+    public static ResRevDTO from(Revisao rev, List<? extends ResRevDocDTO> revDocs, ResEmpDTO emp) {
         return new ResRevDTO(
                 rev.getId(),
                 rev.getStatus(),

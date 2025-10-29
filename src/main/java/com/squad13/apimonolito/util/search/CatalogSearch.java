@@ -6,6 +6,9 @@ import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Map;
+
 @Component
 @RequiredArgsConstructor
 public class CatalogSearch {
@@ -50,5 +53,19 @@ public class CatalogSearch {
                         new ResourceNotFoundException(associativeClass.getSimpleName() +
                                 " not found for (" + sourceAttr + "=" + sourceId +
                                 ", " + targetAttr + "=" + targetId + ")"));
+    }
+
+    public <T> List<T> findByCriteria(Map<String, Object> filters, Class<T> clazz) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<T> query = cb.createQuery(clazz);
+        Root<T> root = query.from(clazz);
+
+        Predicate[] predicates = filters.entrySet().stream()
+                .map(entry -> cb.equal(root.get(entry.getKey()), entry.getValue()))
+                .toArray(Predicate[]::new);
+
+        query.select(root).where(predicates);
+
+        return em.createQuery(query).getResultList();
     }
 }

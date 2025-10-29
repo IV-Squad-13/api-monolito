@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bson.types.ObjectId;
 
 import java.util.function.Supplier;
 
@@ -31,5 +32,9 @@ public class ResRevDocDTO {
         instance.setIsApproved(doc.getIsApproved());
         instance.setComment(doc.getComment());
         return instance;
+    }
+
+    public ObjectId getObjectId() {
+        return new ObjectId(id);
     }
 }

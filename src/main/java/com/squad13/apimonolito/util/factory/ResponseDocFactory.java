@@ -5,9 +5,7 @@ import org.bson.Document;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Component
 public class ResponseDocFactory {
@@ -62,15 +60,15 @@ public class ResponseDocFactory {
                 ? buildItemsLookup(params)
                 : null;
 
-        return buildLookup("ambientes", "ambienteIds", "_id", "ambientes",
+        return LookupBuilder.getDocument("ambientes", "ambienteIds", "_id", "ambientes",
                 itemsLookup != null ? List.of(itemsLookup) : null);
     }
     private Document buildItemsLookup(LoadDocumentParamsDTO params) {
-        return buildLookup("items", "itemIds", "_id", "items", null);
+        return LookupBuilder.getDocument("items", "itemIds", "_id", "items", null);
     }
 
     private Document buildMarcasLookup(LoadDocumentParamsDTO params) {
-        return buildLookup("marcas", "marcaIds", "_id", "marcas", null);
+        return LookupBuilder.getDocument("marcas", "marcaIds", "_id", "marcas", null);
     }
 
     private Document buildConditionalLookup(
@@ -81,7 +79,7 @@ public class ResponseDocFactory {
             Document nestedLookup
     ) {
         if (!condition) return null;
-        return buildLookup(from, localFieldIds, "_id", asField,
+        return LookupBuilder.getDocument(from, localFieldIds, "_id", asField,
                 nestedLookup != null ? List.of(nestedLookup) : null);
     }
 
@@ -89,15 +87,5 @@ public class ResponseDocFactory {
         return context -> lookup == null
                 ? new Document("$match", new Document())
                 : new Document("$lookup", lookup);
-    }
-
-    public Document buildLookup(
-            String from,
-            String localFieldIds,
-            String foreignField,
-            String asField,
-            List<Document> nestedLookups
-    ) {
-        return PipelineBuilder.getDocument(from, localFieldIds, foreignField, asField, nestedLookups);
     }
 }

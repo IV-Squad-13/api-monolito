@@ -2,6 +2,7 @@ package com.squad13.apimonolito.util.search;
 
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
+import com.squad13.apimonolito.models.revision.structures.RevDocElement;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.BulkOperations;
@@ -78,8 +79,6 @@ public class DocumentSearch {
 
     @SuppressWarnings("unchecked")
     public <T> void deleteWithReferences(ObjectId id, Class<T> clazz) {
-        T target = findInDocument(id, clazz);
-
         Query referencingQuery = new Query(Criteria.where("prevId").is(id));
         List<DocElement> referencingDocs = mongoTemplate.find(referencingQuery, DocElement.class);
 
@@ -89,5 +88,10 @@ public class DocumentSearch {
 
         Query mainQuery = new Query(Criteria.where("_id").is(id));
         mongoTemplate.remove(mainQuery, clazz);
+    }
+
+    public <T extends RevDocElement> void deleteByRevisionId(Long revisionId, Class<T> clazz) {
+        Query revisionQuery = new Query(Criteria.where("revisionId").is(revisionId));
+        mongoTemplate.remove(revisionQuery, clazz);
     }
 }

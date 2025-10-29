@@ -79,9 +79,23 @@ public class DocElementBuilder {
 
         List<AggregationOperation> operations = new ArrayList<>();
 
-        if (params.isLoadRevDocuments()) {
+        if (params.isLoadRevDocuments() || params.isLoadLocais()) {
             operations.add(revResDocFactory.lookupLocais(params));
+        }
+
+        if (params.isLoadRevDocuments() || params.isLoadAmbientes()) {
+            operations.add(revResDocFactory.lookupAmbientes(params));
+        }
+
+        if (params.isLoadRevDocuments() || params.isLoadItems()) {
+            operations.add(revResDocFactory.lookupItems(params));
+        }
+
+        if (params.isLoadRevDocuments() || params.isLoadMateriais()) {
             operations.add(revResDocFactory.lookupMateriais(params));
+        }
+
+        if (params.isLoadRevDocuments() || params.isLoadMarcas()) {
             operations.add(revResDocFactory.lookupMarcas(params));
         }
 

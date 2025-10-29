@@ -4,18 +4,18 @@ import com.squad13.apimonolito.DTO.editor.LoadDocumentParamsDTO;
 import com.squad13.apimonolito.DTO.editor.res.ResEmpDTO;
 import com.squad13.apimonolito.DTO.editor.res.ResSpecDTO;
 import com.squad13.apimonolito.DTO.revision.LoadRevDocParamsDTO;
+import com.squad13.apimonolito.DTO.revision.RevDocSearchParamsDTO;
 import com.squad13.apimonolito.DTO.revision.res.ResRevDTO;
+import com.squad13.apimonolito.DTO.revision.res.ResRevDocDTO;
 import com.squad13.apimonolito.DTO.revision.res.ResSpecRevDTO;
 import com.squad13.apimonolito.exceptions.InvalidStageException;
 import com.squad13.apimonolito.exceptions.InvalidUserException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
-import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
 import com.squad13.apimonolito.models.revision.mongo.*;
 import com.squad13.apimonolito.models.revision.relational.Revisao;
 import com.squad13.apimonolito.models.revision.structures.RevDocElement;
 import com.squad13.apimonolito.models.user.Usuario;
 import com.squad13.apimonolito.models.user.associative.UsuarioEmpreendimento;
-import com.squad13.apimonolito.mongo.editor.EspecificacaoDocRepository;
 import com.squad13.apimonolito.mongo.revision.EspecificacaoRevDocElementRepository;
 import com.squad13.apimonolito.repository.revision.RevisaoRepository;
 import com.squad13.apimonolito.repository.user.UsuarioRepository;
@@ -23,20 +23,24 @@ import com.squad13.apimonolito.repository.user.associative.UsuarioEmpreendimento
 import com.squad13.apimonolito.services.editor.EmpreendimentoService;
 import com.squad13.apimonolito.util.builder.DocElementBuilder;
 import com.squad13.apimonolito.util.enums.AccessEnum;
+import com.squad13.apimonolito.util.enums.RevDocElementEnum;
 import com.squad13.apimonolito.util.enums.RevisaoStatusEnum;
 import com.squad13.apimonolito.util.enums.rule.RevisionRule;
-import com.squad13.apimonolito.util.mapper.EditorMapper;
 import com.squad13.apimonolito.util.mapper.RevisionMapper;
 import com.squad13.apimonolito.util.search.DocumentSearch;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.MatchOperation;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 @Service
 @RequiredArgsConstructor
@@ -52,25 +56,18 @@ public class RevisionService {
     private final UsuarioEmpreendimentoRepository userEmpRepository;
     private final DocumentSearch documentSearch;
     private final RevisionMapper revisionMapper;
-    private final EditorMapper editorMapper;
     private final DocElementBuilder docBuilder;
-    private final EspecificacaoDocRepository specDocRespository;
 
     private ResRevDTO mappingHelper(Revisao rev, LoadRevDocParamsDTO params) {
-        List<ResSpecRevDTO> revDocs = Collections.emptyList();
+        List<? extends ResRevDocDTO> revDocs = Collections.emptyList();
         ResEmpDTO emp = null;
 
         if (params.isLoadRevDocuments()) {
-            List<EspecificacaoRevDocElement> revDocElements = revDocRepository.findByRevisionId(rev.getId());
-            revDocElements.forEach(revDoc -> {
-                EspecificacaoDoc specDoc = specDocRespository.findById(revDoc.getRevisedDocId())
-                                .orElseThrow(() -> new ResourceNotFoundException("Especificação não encontrada para o ID: " + revDoc.getRevisedDocId()));
-                revDoc.setRevisedDoc(specDoc);
-            });
+            RevDocSearchParamsDTO searchParams = new RevDocSearchParamsDTO();
+            searchParams.setDocType(RevDocElementEnum.ESPECIFICACAO);
+            searchParams.setRevisionId(rev.getId());
 
-            revDocs = revDocElements.stream()
-                    .map(specRev -> ResSpecRevDTO.fromDoc(specRev, editorMapper.toResponse(specRev.getRevisedDoc())))
-                    .toList();
+            revDocs = searchDocs(params, searchParams);
         }
 
         if (params.isLoadEmpreendimento()) {
@@ -78,6 +75,15 @@ public class RevisionService {
         }
 
         return ResRevDTO.from(rev, revDocs, emp);
+    }
+
+    private String getCollection(RevDocElementEnum docType) {
+        Document doc = docType.getRevDocument().getAnnotation(Document.class);
+        if (doc == null || doc.collection().isBlank()) {
+            return docType.getRevDocument().getSimpleName();
+        }
+
+        return doc.collection();
     }
 
     private Revisao findByIdOrThrow(Long id) {
@@ -101,7 +107,7 @@ public class RevisionService {
                 );
     }
 
-    private ResSpecDTO getSpecByEmpId(Long id) {
+    private ResSpecDTO findSpecByEmpId(Long id) {
         Aggregation aggregation = docBuilder.buildAggregation(LoadDocumentParamsDTO.allTrue());
         return documentSearch.findWithAggregation("especificacoes", ResSpecDTO.class, aggregation)
                 .stream()
@@ -120,6 +126,31 @@ public class RevisionService {
     public List<ResSpecRevDTO> findAllDocs(LoadRevDocParamsDTO params) {
         Aggregation aggregation = docBuilder.buildAggregation(params);
         return documentSearch.findWithAggregation("especificacao_rev", ResSpecRevDTO.class, aggregation);
+    }
+
+    public ResRevDocDTO findDocById(ObjectId id, LoadRevDocParamsDTO params, RevDocElementEnum docType) {
+        return searchDocs(params, new RevDocSearchParamsDTO(docType, id)).stream()
+                .findFirst()
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(docType + " não encontrado para o ID: " + id)
+                );
+    }
+
+    public List<? extends ResRevDocDTO> searchDocs(
+            LoadRevDocParamsDTO loadParams,
+            RevDocSearchParamsDTO searchParams
+    ) {
+        RevDocElementEnum docType = searchParams.getDocType();
+        Map<String, Object> filters = searchParams.buildFilters();
+        List<MatchOperation> matchOperations = documentSearch.buildMatchOps(filters);
+
+        Aggregation agg = docBuilder.buildAggregation(loadParams);
+        return documentSearch.searchWithAggregation(
+                getCollection(docType),
+                searchParams.getDocType().getResponse(),
+                matchOperations,
+                agg
+        );
     }
 
     public ResRevDTO findById(Long id, LoadRevDocParamsDTO params) {
@@ -149,7 +180,7 @@ public class RevisionService {
         revision.setStatus(RevisaoStatusEnum.INICIADA);
         revRepository.save(revision);
 
-        ResSpecDTO spec = getSpecByEmpId(revision.getEmpreendimento().getId());
+        ResSpecDTO spec = findSpecByEmpId(revision.getEmpreendimento().getId());
 
         EspecificacaoRevDocElement specRev = new EspecificacaoRevDocElement();
         specRev.setRevisionId(revision.getId());
@@ -295,7 +326,12 @@ public class RevisionService {
         return list != null ? list : Collections.emptyList();
     }
 
+    // TODO: Decidir se o Empreendimento retorna para elaboração quando uma revisão é deletada
     public void delete(Long id) {
+        for (RevDocElementEnum val : RevDocElementEnum.values()) {
+            documentSearch.deleteByRevisionId(id, val.getRevDocument());
+        }
+
         Revisao rev = findByIdOrThrow(id);
         revRepository.delete(rev);
     }

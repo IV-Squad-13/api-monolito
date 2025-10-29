@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Transactional
 @Service
@@ -136,5 +137,9 @@ public class AmbienteService {
         Ambiente existing = findByIdOrThrow(id);
         existing.setIsActive(false);
         return catalogMapper.toResponse(ambienteRepository.save(existing), LoadCatalogParamsDTO.allTrue());
+    }
+
+    public List<ResAmbienteDTO> findByFilters(Map<String, String> filters, LoadCatalogParamsDTO loadDTO) {
+        return null;
     }
 }

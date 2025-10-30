@@ -2,9 +2,11 @@ package com.squad13.apimonolito.controllers.revisao;
 
 import com.squad13.apimonolito.DTO.revision.LoadRevDocParamsDTO;
 import com.squad13.apimonolito.DTO.revision.RevDocSearchParamsDTO;
+import com.squad13.apimonolito.DTO.revision.edit.EditRevDocDTO;
 import com.squad13.apimonolito.DTO.revision.res.ResRevDTO;
 import com.squad13.apimonolito.DTO.revision.res.ResRevDocDTO;
 import com.squad13.apimonolito.DTO.revision.res.ResSpecRevDTO;
+import com.squad13.apimonolito.services.revision.ApprovalService;
 import com.squad13.apimonolito.services.revision.RevisionService;
 import com.squad13.apimonolito.util.enums.RevDocElementEnum;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import java.util.List;
 public class RevisionController {
 
     private final RevisionService revService;
+    private final ApprovalService approvalService;
 
     @GetMapping
     public ResponseEntity<List<ResRevDTO>> getAll(@ModelAttribute LoadRevDocParamsDTO params) {
@@ -54,7 +57,7 @@ public class RevisionController {
     }
 
     @GetMapping("/emp/{id}")
-    public ResponseEntity<ResRevDTO> getByEmpId(@PathVariable Long id, LoadRevDocParamsDTO params) {
+    public ResponseEntity<ResRevDTO> getByEmpId(@PathVariable Long id, @ModelAttribute LoadRevDocParamsDTO params) {
         return ResponseEntity.ok(revService.findByEmpreendimentoId(id, params));
     }
 
@@ -65,6 +68,14 @@ public class RevisionController {
             @ModelAttribute LoadRevDocParamsDTO params
     ) {
         return ResponseEntity.ok(revService.start(id, revisorId, params));
+    }
+
+    @PutMapping("/doc/{id}")
+    public ResponseEntity<? extends ResRevDocDTO> update(
+            @PathVariable String id,
+            @RequestBody EditRevDocDTO dto
+    ) {
+        return ResponseEntity.ok(approvalService.update(new ObjectId(id), dto));
     }
 
     @DeleteMapping("/{id}")

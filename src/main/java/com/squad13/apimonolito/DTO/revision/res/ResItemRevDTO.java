@@ -23,7 +23,10 @@ public class ResItemRevDTO extends ResRevDocDTO {
 
     public static ResItemRevDTO fromDoc(ItemRevDocElement doc) {
         ResItemRevDTO dto = ResRevDocDTO.fromDoc(doc, ResItemRevDTO::new);
-        dto.setRevisedDoc(ResItemDocDTO.fromDoc(doc.getDoc()));
+        if (doc.getDoc() != null) {
+            dto.setRevisedDoc(ResItemDocDTO.fromDoc(doc.getDoc()));
+        }
+
         dto.setIsDescApproved(doc.getIsDescApproved());
         dto.setIsTypeApproved(doc.getIsTypeApproved());
         return dto;

@@ -34,6 +34,8 @@ public class RevDocSearchParamsDTO {
     private Boolean isDescApproved;
     private Boolean isTypeApproved;
 
+    // TODO: Colocar parâmetros de especificação
+
     public RevDocSearchParamsDTO(RevDocElementEnum docType, ObjectId id) {
         this.docType = docType;
         this.id = id.toHexString();

@@ -19,7 +19,9 @@ public class ResMarRevDTO extends ResRevDocDTO {
 
     public static ResMarRevDTO fromDoc(MarcaRevDocElement doc) {
         ResMarRevDTO resMarRevDTO = ResRevDocDTO.fromDoc(doc, ResMarRevDTO::new);
-        resMarRevDTO.setRevisedDoc(ResMarDocDTO.fromDoc(doc.getDoc()));
+        if (doc.getDoc() != null) {
+            resMarRevDTO.setRevisedDoc(ResMarDocDTO.fromDoc(doc.getDoc()));
+        }
         return resMarRevDTO;
     }
 }

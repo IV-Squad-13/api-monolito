@@ -1,6 +1,7 @@
 package com.squad13.apimonolito.util.factory;
 
 import com.squad13.apimonolito.DTO.revision.LoadRevDocParamsDTO;
+import com.squad13.apimonolito.util.builder.LookupBuilder;
 import org.bson.Document;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.stereotype.Component;

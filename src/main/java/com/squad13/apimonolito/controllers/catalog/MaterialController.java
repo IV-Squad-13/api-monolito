@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/catalogo/material")
@@ -34,13 +35,29 @@ public class MaterialController {
         return ResponseEntity.ok(materialService.findById(id, loadDTO));
     }
 
+    //@GetMapping("/search")
+    //public ResponseEntity<List<ResMaterialDTO>> getByAttribute(
+    //        @RequestParam String attribute,
+    //        @RequestParam String value,
+    //        @ModelAttribute LoadCatalogParamsDTO loadDTO
+    //) {
+    //   return ResponseEntity.ok(materialService.findByAttribute(attribute, value, loadDTO));
+    //}
+
     @GetMapping("/search")
-    public ResponseEntity<List<ResMaterialDTO>> getByAttribute(
-            @RequestParam String attribute,
-            @RequestParam String value,
+    public ResponseEntity<List<ResMaterialDTO>> search(
+            @RequestParam Map<String, String> filters,
             @ModelAttribute LoadCatalogParamsDTO loadDTO
     ) {
-        return ResponseEntity.ok(materialService.findByAttribute(attribute, value, loadDTO));
+        filters.remove("loadAll");
+        filters.remove("loadPadroes");
+        filters.remove("loadAmbientes");
+        filters.remove("loadItems");
+        filters.remove("loadMateriais");
+        filters.remove("loadMarcas");
+        filters.remove("loadNested");
+
+        return ResponseEntity.ok(materialService.findByFilters(filters, loadDTO));
     }
 
     @GetMapping("/rel")

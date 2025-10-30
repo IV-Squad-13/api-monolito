@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.function.Supplier;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,16 +20,12 @@ public class ResDocElementDTO {
     private boolean inSync;
 
     public static <D extends DocElement, T extends ResDocElementDTO>
-    T fromDoc(D doc, Class<T> clazz) {
-        try {
-            T instance = clazz.getDeclaredConstructor().newInstance();
-            instance.setId(doc.getId().toHexString());
-            instance.setCatalogId(doc.getCatalogId());
-            instance.setName(doc.getName());
-            instance.setInSync(doc.isInSync());
-            return instance;
-        } catch (Exception e) {
-            throw new ResourceNotFoundException("Erro ao instanciar objeto: " + e.getMessage());
-        }
+    T fromDoc(D doc, Supplier<T> factory) {
+        T instance = factory.get();
+        instance.setId(doc.getId().toHexString());
+        instance.setCatalogId(doc.getCatalogId());
+        instance.setName(doc.getName());
+        instance.setInSync(doc.isInSync());
+        return instance;
     }
 }

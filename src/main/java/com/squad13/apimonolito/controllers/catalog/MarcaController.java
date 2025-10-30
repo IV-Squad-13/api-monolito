@@ -1,8 +1,8 @@
 package com.squad13.apimonolito.controllers.catalog;
 
 import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
-import com.squad13.apimonolito.DTO.catalog.edit.EditMarcaDTO;
 import com.squad13.apimonolito.DTO.catalog.MarcaDTO;
+import com.squad13.apimonolito.DTO.catalog.edit.EditMarcaDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResMarcaDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResMarcaMaterialDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResMaterialDTO;
@@ -34,7 +34,7 @@ public class MarcaController {
     public ResponseEntity<ResMarcaDTO> getById(
             @PathVariable Long id,
             @ModelAttribute("loadAll") LoadCatalogParamsDTO loadDTO
-    ){
+    ) {
         return ResponseEntity.ok(marcaService.findById(id, loadDTO));
     }
 
@@ -71,7 +71,7 @@ public class MarcaController {
 
     @PostMapping("/new")
     public ResponseEntity<ResMarcaDTO> create(@RequestBody @Valid MarcaDTO dto) {
-            return ResponseEntity.ok(marcaService.createMarca(dto));
+        return ResponseEntity.ok(marcaService.createMarca(dto));
     }
 
     @PostMapping("/{id}/material")
@@ -81,13 +81,13 @@ public class MarcaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ResMarcaDTO> update(@PathVariable Long id, @RequestBody @Valid EditMarcaDTO dto) {
-            return ResponseEntity.ok(marcaService.updateMarca(id, dto));
+        return ResponseEntity.ok(marcaService.updateMarca(id, dto));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-            marcaService.deleteMarca(id);
-            return ResponseEntity.ok("Marca excluída com sucesso.");
+        marcaService.deleteMarca(id);
+        return ResponseEntity.ok("Marca excluída com sucesso.");
     }
 
     @DeleteMapping("/{id}/material")

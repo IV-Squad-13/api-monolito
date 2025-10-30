@@ -1,8 +1,8 @@
 package com.squad13.apimonolito.controllers.catalog;
 
 import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
-import com.squad13.apimonolito.DTO.catalog.edit.EditMaterialDTO;
 import com.squad13.apimonolito.DTO.catalog.MaterialDTO;
+import com.squad13.apimonolito.DTO.catalog.edit.EditMaterialDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResMarcaDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResMarcaMaterialDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResMaterialDTO;
@@ -83,8 +83,8 @@ public class MaterialController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-            materialService.deleteMaterial(id);
-            return ResponseEntity.ok("Material excluído com sucesso.");
+        materialService.deleteMaterial(id);
+        return ResponseEntity.ok("Material excluído com sucesso.");
     }
 
     @DeleteMapping("/{id}/marca")

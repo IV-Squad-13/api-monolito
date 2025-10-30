@@ -2,7 +2,6 @@ package com.squad13.apimonolito.controllers.user;
 
 import com.squad13.apimonolito.DTO.auth.register.RegisterDto;
 import com.squad13.apimonolito.DTO.auth.res.ResUserDTO;
-import com.squad13.apimonolito.models.user.Usuario;
 import com.squad13.apimonolito.services.user.UserService;
 import com.squad13.apimonolito.util.enums.PapelEnum;
 import jakarta.validation.Valid;
@@ -43,7 +42,7 @@ public class UserController {
     public ResponseEntity<Object> updateUsuario(@PathVariable Long id, @Valid @RequestBody RegisterDto dto) {
         try {
             return ResponseEntity.ok(userService.updateUser(id, dto));
-        }  catch (UsernameNotFoundException e) {
+        } catch (UsernameNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

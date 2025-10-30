@@ -1,8 +1,8 @@
 package com.squad13.apimonolito.util.search;
 
-import com.squad13.apimonolito.DTO.editor.res.ResDocElementDTO;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
+import com.squad13.apimonolito.models.revision.structures.RevDocElement;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.BulkOperations;
@@ -12,12 +12,10 @@ import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -47,8 +45,13 @@ public class DocumentSearch {
                 ));
     }
 
-    public <T extends DocElement> List<T> findDocuments(Class<T> clazz) {
-        return mongoTemplate.findAll(clazz);
+    public <T> List<T> findAllByIds(List<ObjectId> ids, Class<T> clazz) {
+        if (ids == null || ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        Query query = new Query(Criteria.where("_id").in(ids));
+        return mongoTemplate.find(query, clazz);
     }
 
     public <T> List<T> findWithAggregation(String collection, Class<T> resultType, Aggregation aggregation) {
@@ -75,13 +78,17 @@ public class DocumentSearch {
         mongoTemplate.bulkOps(BulkOperations.BulkMode.UNORDERED, clazz)
                 .insert(docs)
                 .execute();
+    }
 
+    public <T> void updateMany(List<ObjectId> ids, Update update, Class<T> clazz) {
+        if (ids == null || ids.isEmpty()) return;
+
+        Query query = new Query(Criteria.where("_id").in(ids));
+        mongoTemplate.updateMulti(query, update, clazz);
     }
 
     @SuppressWarnings("unchecked")
     public <T> void deleteWithReferences(ObjectId id, Class<T> clazz) {
-        T target = findInDocument(id, clazz);
-
         Query referencingQuery = new Query(Criteria.where("prevId").is(id));
         List<DocElement> referencingDocs = mongoTemplate.find(referencingQuery, DocElement.class);
 
@@ -91,5 +98,10 @@ public class DocumentSearch {
 
         Query mainQuery = new Query(Criteria.where("_id").is(id));
         mongoTemplate.remove(mainQuery, clazz);
+    }
+
+    public <T extends RevDocElement> void deleteByRevisionId(Long revisionId, Class<T> clazz) {
+        Query revisionQuery = new Query(Criteria.where("revisionId").is(revisionId));
+        mongoTemplate.remove(revisionQuery, clazz);
     }
 }

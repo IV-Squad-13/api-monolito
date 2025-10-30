@@ -9,11 +9,11 @@ import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.editor.mongo.*;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import com.squad13.apimonolito.mongo.editor.*;
-import com.squad13.apimonolito.util.search.CatalogSearch;
 import com.squad13.apimonolito.util.builder.DocElementBuilder;
-import com.squad13.apimonolito.util.search.DocumentSearch;
 import com.squad13.apimonolito.util.enums.DocElementEnum;
-import com.squad13.apimonolito.util.mappers.EditorMapper;
+import com.squad13.apimonolito.util.mapper.EditorMapper;
+import com.squad13.apimonolito.util.search.CatalogSearch;
+import com.squad13.apimonolito.util.search.DocumentSearch;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -59,7 +59,7 @@ public class DocElementService {
 
     public List<? extends ResDocElementDTO> getAll(LoadDocumentParamsDTO params, DocElementEnum docType) {
         Aggregation agg = docBuilder.buildAggregation(params);
-        return documentSearch.findWithAggregation(getCollection(docType), docType.getResDoc(), agg);
+        return documentSearch.findWithAggregation(getCollection(docType), docType.getResDocDTO(), agg);
     }
 
     public ResDocElementDTO getById(ObjectId id, LoadDocumentParamsDTO params, DocElementEnum docType) {
@@ -78,7 +78,7 @@ public class DocElementService {
         Aggregation agg = docBuilder.buildAggregation(loadParams);
         return documentSearch.searchWithAggregation(
                 getCollection(docType),
-                docType.getResDoc(),
+                docType.getResDocDTO(),
                 matchOperations,
                 agg
         );
@@ -102,7 +102,7 @@ public class DocElementService {
         if (dto.associatedId() != null)
             associateIfNeeded(dto, newElement);
 
-        return ResDocElementDTO.fromDoc(newElement, dto.type().getResDoc());
+        return ResDocElementDTO.fromDoc(newElement, dto.type().getResDocSupplier());
     }
 
     public ResDocElementDTO createRawElement(ObjectId specId, DocElementDTO dto) {
@@ -111,7 +111,7 @@ public class DocElementService {
         DocElement newElement = docElementBuilder.create(specId, dto);
         saveElement(spec, newElement, dto.getDocType());
 
-        return ResDocElementDTO.fromDoc(newElement, dto.getDocType().getResDoc());
+        return ResDocElementDTO.fromDoc(newElement, dto.getDocType().getResDocSupplier());
     }
 
     private void saveElement(EspecificacaoDoc spec, DocElement element, DocElementEnum type) {
@@ -332,7 +332,7 @@ public class DocElementService {
                             new ResourceNotFoundException("Ambiente não encontrado com o id informado: " + dto.getParentId())
                     );
 
-            if (item.getParentId() != null && !item.getParentId().equals(dto.getParentId())) {
+            if (item.getParentId() != null && !item.getParentId().equals(new ObjectId(dto.getParentId()))) {
                 AmbienteDocElement prevAmbiente = ambienteDocRepository.findById(item.getParentId())
                         .orElseThrow(() ->
                                 new ResourceNotFoundException("Ambiente anterior não encontrado: " + item.getParentId())
@@ -388,7 +388,7 @@ public class DocElementService {
                             new ResourceNotFoundException("Material não encontrado com o id informado: " + dto.getParentId())
                     );
 
-            if (marca.getParentId() != null && !marca.getParentId().equals(dto.getParentId())) {
+            if (marca.getParentId() != null && !marca.getParentId().equals(new ObjectId(dto.getParentId()))) {
                 MaterialDocElement oldMaterial = materialDocRepository.findById(marca.getParentId())
                         .orElseThrow(() ->
                                 new ResourceNotFoundException("Material anterior não encontrado: " + marca.getParentId())

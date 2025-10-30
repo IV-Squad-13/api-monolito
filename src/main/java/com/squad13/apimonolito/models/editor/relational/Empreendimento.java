@@ -2,6 +2,7 @@ package com.squad13.apimonolito.models.editor.relational;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.squad13.apimonolito.models.catalog.Padrao;
+import com.squad13.apimonolito.models.revision.relational.Revisao;
 import com.squad13.apimonolito.models.user.associative.UsuarioEmpreendimento;
 import com.squad13.apimonolito.util.enums.EmpStatusEnum;
 import jakarta.persistence.*;
@@ -35,6 +36,10 @@ public class Empreendimento {
     @JoinColumn(name = "id_padrao")
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private Padrao padrao;
+
+    @OneToOne(mappedBy = "empreendimento", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private Revisao revisao;
 
     @OneToMany(mappedBy = "empreendimento",
             fetch = FetchType.LAZY,

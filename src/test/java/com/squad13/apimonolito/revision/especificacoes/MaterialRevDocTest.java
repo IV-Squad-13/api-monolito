@@ -1,13 +1,14 @@
 package com.squad13.apimonolito.revision.especificacoes;
 
-import com.squad13.apimonolito.models.editor.mongo.MaterialDocElement;
 import com.squad13.apimonolito.models.editor.mongo.MarcaDocElement;
-import com.squad13.apimonolito.models.revision.mongo.MaterialRevDocElement;
+import com.squad13.apimonolito.models.editor.mongo.MaterialDocElement;
 import com.squad13.apimonolito.models.revision.mongo.MarcaRevDocElement;
-import com.squad13.apimonolito.mongo.editor.MaterialDocElementRepository;
+import com.squad13.apimonolito.models.revision.mongo.MaterialRevDocElement;
 import com.squad13.apimonolito.mongo.editor.MarcaDocElementRepository;
-import com.squad13.apimonolito.mongo.revision.MaterialRevDocElementRepository;
+import com.squad13.apimonolito.mongo.editor.MaterialDocElementRepository;
 import com.squad13.apimonolito.mongo.revision.MarcaRevDocElementRepository;
+import com.squad13.apimonolito.mongo.revision.MaterialRevDocElementRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,18 +62,19 @@ class MaterialRevDocTest {
     @Test
     void testMaterialRevPersistence() {
         MarcaRevDocElement marcaRev = new MarcaRevDocElement();
-        marcaRev.setMarca(marca);
-        marcaRev.setRevisaoId(1L);
-        marcaRev.setApproved(true);
+        marcaRev.setRevisedDocId(marca.getId());
+        marcaRev.setRevisionId(1L);
+        marcaRev.setIsApproved(true);
         marcaRev.setComment("First revision");
         marcaRevDocRepository.save(marcaRev);
 
         MaterialRevDocElement materialRev = new MaterialRevDocElement();
-        materialRev.setMaterial(material);
-        materialRev.setRevisaoId(1L);
+        materialRev.setRevisedDocId(material.getId());
+        materialRev.setRevisionId(1L);
         materialRevDocRepository.save(materialRev);
 
-        MaterialRevDocElement foundRev = materialRevDocRepository.findByMaterialAndRevisaoId(material, 1L);
+        MaterialRevDocElement foundRev = materialRevDocRepository.findByRevisedDocIdAndRevisionId(material.getId(), 1L)
+                .orElse(null);
         assertThat(foundRev).isNotNull();
         assertThat(foundRev.getId()).isNotNull();
     }
@@ -80,40 +82,44 @@ class MaterialRevDocTest {
     @Test
     void testMaterialRevUpdate() {
         MaterialRevDocElement materialRev = new MaterialRevDocElement();
-        materialRev.setMaterial(material);
-        materialRev.setRevisaoId(1L);
+        materialRev.setRevisedDocId(material.getId());
+        materialRev.setRevisionId(1L);
         materialRevDocRepository.save(materialRev);
 
-        MaterialRevDocElement found = materialRevDocRepository.findByMaterialAndRevisaoId(material, 1L);
+        MaterialRevDocElement found = materialRevDocRepository.findByRevisedDocIdAndRevisionId(material.getId(), 1L)
+                .orElse(null);
+        Assertions.assertNotNull(found);
         materialRevDocRepository.save(found);
 
-        MaterialRevDocElement updated = materialRevDocRepository.findByMaterialAndRevisaoId(material, 1L);
+        MaterialRevDocElement updated = materialRevDocRepository.findByRevisedDocIdAndRevisionId(material.getId(), 1L)
+                .orElse(null);
         assertThat(updated).isNotNull();
-        assertThat(updated.getRevisaoId()).isEqualTo(1L);
+        assertThat(updated.getRevisionId()).isEqualTo(1L);
     }
 
     @Test
     void testMaterialRevDelete() {
         MaterialRevDocElement materialRev = new MaterialRevDocElement();
-        materialRev.setMaterial(material);
-        materialRev.setRevisaoId(1L);
+        materialRev.setRevisedDocId(material.getId());
+        materialRev.setRevisionId(1L);
         materialRevDocRepository.save(materialRev);
 
-        materialRevDocRepository.deleteByMaterialAndRevisaoId(material, 1L);
-        MaterialRevDocElement found = materialRevDocRepository.findByMaterialAndRevisaoId(material, 1L);
+        materialRevDocRepository.deleteByRevisedDocIdAndRevisionId(material.getId(), 1L);
+        MaterialRevDocElement found = materialRevDocRepository.findByRevisedDocIdAndRevisionId(material.getId(), 1L)
+                .orElse(null);
         assertThat(found).isNull();
     }
 
     @Test
     void testMaterialRevDuplicateThrows() {
         MaterialRevDocElement rev1 = new MaterialRevDocElement();
-        rev1.setMaterial(material);
-        rev1.setRevisaoId(1L);
+        rev1.setRevisedDocId(material.getId());
+        rev1.setRevisionId(1L);
         materialRevDocRepository.save(rev1);
 
         MaterialRevDocElement rev2 = new MaterialRevDocElement();
-        rev2.setMaterial(material);
-        rev2.setRevisaoId(1L);
+        rev2.setRevisedDocId(material.getId());
+        rev2.setRevisionId(1L);
 
         assertThrows(DataIntegrityViolationException.class,
                 () -> materialRevDocRepository.save(rev2));

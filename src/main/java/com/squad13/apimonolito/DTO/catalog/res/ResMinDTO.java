@@ -7,4 +7,5 @@ public record ResMinDTO(
         String name,
         Boolean isActive,
         List<Long> associatedIds
-) { }
+) {
+}

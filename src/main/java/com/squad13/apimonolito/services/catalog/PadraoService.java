@@ -13,6 +13,7 @@ import com.squad13.apimonolito.models.catalog.Padrao;
 import com.squad13.apimonolito.repository.catalog.PadraoRepository;
 import com.squad13.apimonolito.util.mappers.CatalogMapper;
 import com.squad13.apimonolito.util.search.CatalogSearch;
+import com.squad13.apimonolito.util.mapper.CatalogMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,8 +1,8 @@
 package com.squad13.apimonolito.controllers.catalog;
 
+import com.squad13.apimonolito.DTO.catalog.ItemDTO;
 import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
 import com.squad13.apimonolito.DTO.catalog.edit.EditItemDTO;
-import com.squad13.apimonolito.DTO.catalog.ItemDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResAmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResItemAmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResItemDTO;
@@ -85,8 +85,8 @@ public class ItemController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-            itemService.deleteItem(id);
-            return ResponseEntity.ok("Item excluído com sucesso.");
+        itemService.deleteItem(id);
+        return ResponseEntity.ok("Item excluído com sucesso.");
     }
 
     @DeleteMapping("/{id}/ambiente")

@@ -5,4 +5,5 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MaterialElementDTO extends DocElementDTO { }
+public class MaterialElementDTO extends DocElementDTO {
+}

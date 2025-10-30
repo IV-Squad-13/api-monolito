@@ -17,5 +17,6 @@ public record EmpDTO(
         Long creatorId,
 
         // Eventualment, a criação de especificação vai acontecer junto da criação de empreendimento
+        // Esse momento chegou
         DocInitializationEnum init
 ) { }

@@ -4,17 +4,21 @@ import com.squad13.apimonolito.DTO.editor.AmbienteDocDTO;
 import com.squad13.apimonolito.DTO.editor.DocElementDTO;
 import com.squad13.apimonolito.DTO.editor.ItemDocDTO;
 import com.squad13.apimonolito.DTO.editor.LoadDocumentParamsDTO;
+import com.squad13.apimonolito.DTO.revision.LoadRevDocParamsDTO;
 import com.squad13.apimonolito.exceptions.InvalidDocumentTypeException;
 import com.squad13.apimonolito.models.catalog.ItemType;
-import com.squad13.apimonolito.models.editor.mongo.*;
+import com.squad13.apimonolito.models.editor.mongo.AmbienteDocElement;
+import com.squad13.apimonolito.models.editor.mongo.ItemDocElement;
+import com.squad13.apimonolito.models.editor.mongo.MarcaDocElement;
+import com.squad13.apimonolito.models.editor.mongo.MaterialDocElement;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import com.squad13.apimonolito.services.editor.SynchronizationService;
-import com.squad13.apimonolito.util.factory.ResponseDocFactory;
-import com.squad13.apimonolito.util.search.CatalogSearch;
 import com.squad13.apimonolito.util.enums.DocElementEnum;
+import com.squad13.apimonolito.util.factory.ResponseDocFactory;
+import com.squad13.apimonolito.util.factory.RevResponseDocFactory;
+import com.squad13.apimonolito.util.search.CatalogSearch;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -32,6 +36,7 @@ public class DocElementBuilder {
     private final SynchronizationService syncService;
 
     private final ResponseDocFactory resDocFactory;
+    private final RevResponseDocFactory revResDocFactory;
 
     public Aggregation buildAggregation(LoadDocumentParamsDTO params) {
         if (params == null) {
@@ -44,6 +49,10 @@ public class DocElementBuilder {
             operations.add(resDocFactory.lookupLocais(params));
         }
 
+        if (params.isLoadAmbientes()) {
+            operations.add(resDocFactory.lookupAmbientes(params));
+        }
+
         if (params.isLoadItems()) {
             operations.add(resDocFactory.lookupItems(params));
         }
@@ -54,6 +63,40 @@ public class DocElementBuilder {
 
         if (params.isLoadMarcas()) {
             operations.add(resDocFactory.lookupMarcas(params));
+        }
+
+        if (operations.isEmpty()) {
+            operations.add(Aggregation.match(new Criteria()));
+        }
+
+        return Aggregation.newAggregation(operations);
+    }
+
+    public Aggregation buildAggregation(LoadRevDocParamsDTO params) {
+        if (params == null) {
+            return Aggregation.newAggregation(Aggregation.match(new Criteria()));
+        }
+
+        List<AggregationOperation> operations = new ArrayList<>();
+
+        if (params.isLoadRevDocuments() || params.isLoadLocais()) {
+            operations.add(revResDocFactory.lookupLocais(params));
+        }
+
+        if (params.isLoadRevDocuments() || params.isLoadAmbientes()) {
+            operations.add(revResDocFactory.lookupAmbientes(params));
+        }
+
+        if (params.isLoadRevDocuments() || params.isLoadItems()) {
+            operations.add(revResDocFactory.lookupItems(params));
+        }
+
+        if (params.isLoadRevDocuments() || params.isLoadMateriais()) {
+            operations.add(revResDocFactory.lookupMateriais(params));
+        }
+
+        if (params.isLoadRevDocuments() || params.isLoadMarcas()) {
+            operations.add(revResDocFactory.lookupMarcas(params));
         }
 
         if (operations.isEmpty()) {

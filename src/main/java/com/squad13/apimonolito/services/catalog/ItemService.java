@@ -1,8 +1,8 @@
 package com.squad13.apimonolito.services.catalog;
 
+import com.squad13.apimonolito.DTO.catalog.ItemDTO;
 import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
 import com.squad13.apimonolito.DTO.catalog.edit.EditItemDTO;
-import com.squad13.apimonolito.DTO.catalog.ItemDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResItemDTO;
 import com.squad13.apimonolito.exceptions.InvalidAttributeException;
 import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
@@ -11,6 +11,7 @@ import com.squad13.apimonolito.models.catalog.ItemDesc;
 import com.squad13.apimonolito.models.catalog.ItemType;
 import com.squad13.apimonolito.repository.catalog.ItemRepository;
 import com.squad13.apimonolito.repository.catalog.ItemTypeRepository;
+import com.squad13.apimonolito.util.mapper.CatalogMapper;
 import com.squad13.apimonolito.util.mappers.CatalogMapper;
 import com.squad13.apimonolito.util.search.CatalogSearch;
 import jakarta.persistence.EntityManager;
@@ -98,7 +99,7 @@ public class ItemService {
 
     public ResItemDTO createItem(ItemDTO dto) {
         ItemType type = itemTypeRepository.findByIdOrName(dto.getTypeId(), dto.getName())
-                        .orElse(null);
+                .orElse(null);
 
         itemRepository.findByNameAndDescAndType(dto.getName(), dto.getDesc(), type)
                 .ifPresent(i -> {

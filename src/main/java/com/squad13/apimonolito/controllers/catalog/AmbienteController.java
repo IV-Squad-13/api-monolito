@@ -42,9 +42,15 @@ public class AmbienteController {
             @RequestParam Map<String, String> filters,
             @ModelAttribute LoadCatalogParamsDTO loadDTO
             ) {
-        if (filters.containsKey("loadAll")) {
+
             filters.remove("loadAll");
-        }
+            filters.remove("loadPadroes");
+            filters.remove("loadAmbientes");
+            filters.remove("loadItems");
+            filters.remove("loadMateriais");
+            filters.remove("loadMarcas");
+            filters.remove("loadNested");
+
         return ResponseEntity.ok(ambienteService.findByFilters(filters, loadDTO));
         }
 

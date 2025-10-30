@@ -11,6 +11,7 @@ import com.squad13.apimonolito.models.catalog.Ambiente;
 import com.squad13.apimonolito.repository.catalog.AmbienteRepository;
 import com.squad13.apimonolito.util.mappers.CatalogMapper;
 import com.squad13.apimonolito.util.enums.LocalEnum;
+import com.squad13.apimonolito.util.search.CatalogSearch;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +34,8 @@ public class AmbienteService {
 
     @PersistenceContext
     private EntityManager em;
+
+    private final CatalogSearch catalogSearch;
 
     private final AmbienteRepository ambienteRepository;
 
@@ -139,7 +143,48 @@ public class AmbienteService {
         return catalogMapper.toResponse(ambienteRepository.save(existing), LoadCatalogParamsDTO.allTrue());
     }
 
-    public List<ResAmbienteDTO> findByFilters(Map<String, String> filters, LoadCatalogParamsDTO loadDTO) {
-        return null;
+    public List<ResAmbienteDTO> findByFilters(Map<String, String> stringFilters, LoadCatalogParamsDTO loadDTO) {
+        Map<String, Object> typedFilters = new HashMap<>();
+
+        for (Map.Entry<String, String> entry : stringFilters.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+
+            switch (key) {
+                case "name":
+                    typedFilters.put(key, value);
+                    break;
+
+                case "local":
+                    try {
+                        typedFilters.put(key, LocalEnum.valueOf(value.toUpperCase()));
+                    } catch (IllegalArgumentException e) {
+                        throw new InvalidAttributeException("Valor inválido para o filtro 'local': " + value);
+                    }
+                    break;
+
+                case "id":
+                    try {
+                        typedFilters.put(key, Long.parseLong(value));
+                    } catch (NumberFormatException e) {
+                        throw new InvalidAttributeException("Valor inválido para o filtro 'id': " + value);
+                    }
+                    break;
+
+                case "isActive":
+                    typedFilters.put(key, Boolean.parseBoolean(value));
+                    break;
+
+                default:
+                    System.out.println("Ignorando filtro desconhecido: " + key);
+
+            }
+        }
+
+        List<Ambiente> ambientes = catalogSearch.findByCriteria(typedFilters, Ambiente.class);
+
+        return ambientes.stream()
+                .map(ambiente -> catalogMapper.toResponse(ambiente, loadDTO))
+                .toList();
     }
 }

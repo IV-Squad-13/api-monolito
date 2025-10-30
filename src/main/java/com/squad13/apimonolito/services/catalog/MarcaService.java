@@ -10,7 +10,6 @@ import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.catalog.Marca;
 import com.squad13.apimonolito.repository.catalog.MarcaRepository;
 import com.squad13.apimonolito.util.mapper.CatalogMapper;
-import com.squad13.apimonolito.util.mappers.CatalogMapper;
 import com.squad13.apimonolito.util.search.CatalogSearch;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

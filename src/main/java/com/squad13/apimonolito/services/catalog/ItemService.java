@@ -12,7 +12,6 @@ import com.squad13.apimonolito.models.catalog.ItemType;
 import com.squad13.apimonolito.repository.catalog.ItemRepository;
 import com.squad13.apimonolito.repository.catalog.ItemTypeRepository;
 import com.squad13.apimonolito.util.mapper.CatalogMapper;
-import com.squad13.apimonolito.util.mappers.CatalogMapper;
 import com.squad13.apimonolito.util.search.CatalogSearch;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -98,8 +97,11 @@ public class ItemService {
     }
 
     public ResItemDTO createItem(ItemDTO dto) {
-        ItemType type = itemTypeRepository.findByIdOrName(dto.getTypeId(), dto.getName())
-                .orElse(null);
+        ItemType type = null;
+        if (dto.getType() != null || dto.getTypeId() != null) {
+            type = itemTypeRepository.findByIdOrName(dto.getTypeId(), dto.getName())
+                    .orElse(null);
+        }
 
         itemRepository.findByNameAndDescAndType(dto.getName(), dto.getDesc(), type)
                 .ifPresent(i -> {

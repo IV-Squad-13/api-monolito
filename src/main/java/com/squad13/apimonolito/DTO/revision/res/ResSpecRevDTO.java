@@ -32,7 +32,10 @@ public class ResSpecRevDTO extends ResRevDocDTO {
 
     public static ResSpecRevDTO fromDoc(EspecificacaoRevDocElement doc, ResSpecDTO resSpec) {
         ResSpecRevDTO dto = ResRevDocDTO.fromDoc(doc, ResSpecRevDTO::new);
-        dto.setRevisedDoc(resSpec);
+
+        if (resSpec != null) {
+            dto.setRevisedDoc(resSpec);
+        }
 
         dto.setLocalRevIds(
                 Optional.ofNullable(doc.getLocalRevIds())

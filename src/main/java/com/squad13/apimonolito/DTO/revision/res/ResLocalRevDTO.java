@@ -23,7 +23,9 @@ public class ResLocalRevDTO extends ResRevDocDTO {
 
     public static ResLocalRevDTO fromDoc(LocalRevDocElement doc) {
         ResLocalRevDTO dto = ResRevDocDTO.fromDoc(doc, ResLocalRevDTO::new);
-        dto.setRevisedDoc(ResLocalDocDTO.fromDoc(doc.getDoc()));
+        if (doc.getDoc() != null) {
+            dto.setRevisedDoc(ResLocalDocDTO.fromDoc(doc.getDoc()));
+        }
 
         dto.setAmbienteRevIds(
                 Optional.ofNullable(doc.getAmbienteRevIds())

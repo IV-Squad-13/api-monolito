@@ -23,7 +23,9 @@ public class ResMatRevDTO extends ResRevDocDTO {
 
     public static ResMatRevDTO fromDoc(MaterialRevDocElement doc) {
         ResMatRevDTO dto = ResRevDocDTO.fromDoc(doc, ResMatRevDTO::new);
-        dto.setRevisedDoc(ResMatDocDTO.fromDoc(doc.getDoc()));
+        if (doc.getDoc() != null) {
+            dto.setRevisedDoc(ResMatDocDTO.fromDoc(doc.getDoc()));
+        }
 
         dto.setMarcaRevIds(
                 Optional.ofNullable(doc.getMarcaRevIds())

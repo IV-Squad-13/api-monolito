@@ -25,7 +25,9 @@ public class ResAmbRevDTO extends ResRevDocDTO {
 
     public static ResAmbRevDTO fromDoc(AmbienteRevDocElement doc) {
         ResAmbRevDTO dto = ResRevDocDTO.fromDoc(doc, ResAmbRevDTO::new);
-        dto.setRevisedDoc(ResAmbDocDTO.fromDoc(doc.getDoc()));
+        if (doc.getDoc() != null) {
+            dto.setRevisedDoc(ResAmbDocDTO.fromDoc(doc.getDoc()));
+        }
 
         dto.setItemRevIds(
                 Optional.ofNullable(doc.getItemRevIds())

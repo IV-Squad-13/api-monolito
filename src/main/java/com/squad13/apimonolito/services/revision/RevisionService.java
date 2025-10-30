@@ -5,6 +5,7 @@ import com.squad13.apimonolito.DTO.editor.res.ResEmpDTO;
 import com.squad13.apimonolito.DTO.editor.res.ResSpecDTO;
 import com.squad13.apimonolito.DTO.revision.LoadRevDocParamsDTO;
 import com.squad13.apimonolito.DTO.revision.RevDocSearchParamsDTO;
+import com.squad13.apimonolito.DTO.revision.edit.EditRevDocDTO;
 import com.squad13.apimonolito.DTO.revision.res.ResRevDTO;
 import com.squad13.apimonolito.DTO.revision.res.ResRevDocDTO;
 import com.squad13.apimonolito.DTO.revision.res.ResSpecRevDTO;

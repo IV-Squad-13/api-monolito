@@ -60,9 +60,10 @@ public class DocElementController {
         return ResponseEntity.ok(docElementService.createRawElement(new ObjectId(specId), dto));
     }
 
+    // TODO: Criar DTO de edição de documentos
     @PutMapping("/{id}")
     @PreAuthorize("@require.editingStage(#id, #dto.docType)")
-    public ResponseEntity<ResDocElementDTO> update(@PathVariable String id, @Valid @RequestBody DocElementDTO dto) {
+    public ResponseEntity<ResDocElementDTO> update(@PathVariable String id, @RequestBody DocElementDTO dto) {
         return ResponseEntity.ok(docElementService.update(new ObjectId(id), dto));
     }
 

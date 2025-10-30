@@ -18,13 +18,26 @@ import java.util.stream.Collectors;
 @Component
 public class CatalogMapper {
 
-    public ResItemDTO toResponse(ItemDesc item, LoadCatalogParamsDTO loadDTO) {
+    public ResItemDTO toResponse(ItemDesc item, LoadCatalogParamsDTO params) {
         if (item == null) return null;
 
-        ResItemTypeDTO typeDto = toResItemTypeDTO(item);
+        ResItemTypeDTO typeDto = null;
+        if (item.getType() != null) {
+            typeDto = toResItemTypeDTO(item);
+        }
 
-        Set<ResMinDTO> padroes = loadDTO.isLoadPadroes() ? getAmbienteMinPadraoDTO(item.getAmbienteSet()) : Collections.emptySet();
-        Set<ResMinDTO> ambientes = loadDTO.isLoadAmbientes() ? getMinAmbienteDTO(item.getAmbienteSet()) : Collections.emptySet();
+        Set<ResMinDTO> padroes = Collections.emptySet();
+        Set<ResMinDTO> ambientes = Collections.emptySet();
+
+        if (item.getAmbienteSet() != null) {
+            padroes = params.isLoadPadroes()
+                    ? getAmbienteMinPadraoDTO(item.getAmbienteSet())
+                    : Collections.emptySet();
+
+            ambientes = params.isLoadAmbientes()
+                    ? getMinAmbienteDTO(item.getAmbienteSet())
+                    : Collections.emptySet();
+        }
 
         return new ResItemDTO(
                 item.getId(),
@@ -53,8 +66,19 @@ public class CatalogMapper {
     public ResAmbienteDTO toResponse(Ambiente ambiente, LoadCatalogParamsDTO params) {
         if (ambiente == null) return null;
 
-        Set<ResMinDTO> padroes = params.isLoadPadroes() ? getAmbienteMinPadraoDTO(ambiente.getItemSet()) : Collections.emptySet();
-        Set<ResMinDTO> items = params.isLoadItems() ? getMinItemDTO(ambiente.getItemSet()) : Collections.emptySet();
+
+        Set<ResMinDTO> padroes = Collections.emptySet();
+        Set<ResMinDTO> items = Collections.emptySet();
+
+        if (ambiente.getItemSet() != null) {
+            padroes = params.isLoadPadroes()
+                    ? getAmbienteMinPadraoDTO(ambiente.getItemSet())
+                    : Collections.emptySet();
+
+            items = params.isLoadItems()
+                    ? getMinItemDTO(ambiente.getItemSet())
+                    : Collections.emptySet();
+        }
 
         return new ResAmbienteDTO(
                 ambiente.getId(),
@@ -76,11 +100,21 @@ public class CatalogMapper {
         );
     }
 
-    public ResMarcaDTO toResponse(Marca marca, LoadCatalogParamsDTO loadDTO) {
+    public ResMarcaDTO toResponse(Marca marca, LoadCatalogParamsDTO params) {
         if (marca == null) return null;
 
-        Set<ResMinDTO> padroes = loadDTO.isLoadPadroes() ? getMaterialMinPadraoDTO(marca.getMaterialSet()) : Collections.emptySet();
-        Set<ResMinDTO> materiais = loadDTO.isLoadMateriais() ? getMinMaterialDTO(marca.getMaterialSet()) : Collections.emptySet();
+        Set<ResMinDTO> padroes = Collections.emptySet();
+        Set<ResMinDTO> materiais = Collections.emptySet();
+
+        if (marca.getMaterialSet() != null) {
+            padroes = params.isLoadPadroes()
+                    ? getMaterialMinPadraoDTO(marca.getMaterialSet())
+                    : Collections.emptySet();
+
+            materiais = params.isLoadMateriais()
+                    ? getMinMaterialDTO(marca.getMaterialSet())
+                    : Collections.emptySet();
+        }
 
         return new ResMarcaDTO(
                 marca.getId(),
@@ -91,11 +125,21 @@ public class CatalogMapper {
         );
     }
 
-    public ResMaterialDTO toResponse(Material material, LoadCatalogParamsDTO loadDTO) {
+    public ResMaterialDTO toResponse(Material material, LoadCatalogParamsDTO params) {
         if (material == null) return null;
 
-        Set<ResMinDTO> padroes = loadDTO.isLoadPadroes() ? getMaterialMinPadraoDTO(material.getMarcaSet()) : Collections.emptySet();
-        Set<ResMinDTO> marcas = loadDTO.isLoadMarcas() ? getMinMarcaDTO(material.getMarcaSet()) : Collections.emptySet();
+        Set<ResMinDTO> padroes = Collections.emptySet();
+        Set<ResMinDTO> marcas = Collections.emptySet();
+
+        if (material.getMarcaSet() != null) {
+            padroes = params.isLoadPadroes()
+                    ? getMaterialMinPadraoDTO(material.getMarcaSet())
+                    : Collections.emptySet();
+
+            marcas = params.isLoadMarcas()
+                    ? getMinMaterialDTO(material.getMarcaSet())
+                    : Collections.emptySet();
+        }
 
         return new ResMaterialDTO(
                 material.getId(),

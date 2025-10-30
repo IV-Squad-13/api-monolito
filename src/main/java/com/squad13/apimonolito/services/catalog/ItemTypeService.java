@@ -11,7 +11,6 @@ import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.catalog.ItemType;
 import com.squad13.apimonolito.repository.catalog.ItemTypeRepository;
 import com.squad13.apimonolito.util.mapper.CatalogMapper;
-import com.squad13.apimonolito.util.mappers.CatalogMapper;
 import com.squad13.apimonolito.util.search.CatalogSearch;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

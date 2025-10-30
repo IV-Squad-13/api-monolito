@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/catalogo/padrao")
@@ -112,5 +113,21 @@ public class PadraoController {
     @DeleteMapping("/{id}/deactivate")
     public ResponseEntity<ResPadraoDTO> deactivate(@PathVariable Long id) {
         return ResponseEntity.ok(padraoService.deactivatePadrao(id));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ResPadraoDTO>> search(
+            @RequestParam Map<String, String> filters,
+            @ModelAttribute LoadCatalogParamsDTO loadDTO
+    ) {
+        filters.remove("loadAll");
+        filters.remove("loadPadroes");
+        filters.remove("loadAmbientes");
+        filters.remove("loadItems");
+        filters.remove("loadMateriais");
+        filters.remove("loadMarcas");
+        filters.remove("loadNested");
+
+        return ResponseEntity.ok(padraoService.findByFilters(filters, loadDTO));
     }
 }

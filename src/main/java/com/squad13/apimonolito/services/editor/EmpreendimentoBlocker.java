@@ -5,10 +5,15 @@ import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
 import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
+import com.squad13.apimonolito.models.revision.mongo.EspecificacaoRevDocElement;
+import com.squad13.apimonolito.models.revision.relational.Revisao;
 import com.squad13.apimonolito.mongo.editor.EspecificacaoDocRepository;
+import com.squad13.apimonolito.mongo.revision.EspecificacaoRevDocElementRepository;
 import com.squad13.apimonolito.repository.editor.EmpreendimentoRepository;
+import com.squad13.apimonolito.repository.revision.RevisaoRepository;
 import com.squad13.apimonolito.util.enums.DocElementEnum;
 import com.squad13.apimonolito.util.enums.EmpStatusEnum;
+import com.squad13.apimonolito.util.enums.RevisaoStatusEnum;
 import com.squad13.apimonolito.util.search.DocumentSearch;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -23,6 +28,8 @@ public class EmpreendimentoBlocker {
     private final EspecificacaoDocRepository specRepository;
 
     private final DocumentSearch docSearch;
+    private final RevisaoRepository revisaoRepository;
+    private final EspecificacaoRevDocElementRepository especificacaoRevDocElementRepository;
 
     public boolean editingStage(Long id) {
         Empreendimento emp = empRepository.findById(id)
@@ -52,5 +59,35 @@ public class EmpreendimentoBlocker {
                 .orElseThrow(() -> new ResourceNotFoundException("Especificação não encontrada: " + id));
 
         return editingStage(spec.getEmpreendimentoId());
+    }
+
+    public boolean revisionStage(Long id) {
+        Revisao rev = revisaoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Revisão não encontrada: " + id));
+
+        if (!rev.getStatus().equals(RevisaoStatusEnum.INICIADA)) {
+            throw new InvalidStageException("Não é possível realizar essa operação durante a etapa atual do processo");
+        }
+
+        return true;
+    }
+
+    public boolean revisionStage(String id) {
+        ObjectId objectId = new ObjectId(id);
+        EspecificacaoRevDocElement revDoc = especificacaoRevDocElementRepository.findById(objectId)
+                .orElseThrow(() -> new ResourceNotFoundException("Documento de Revisão não encontrado: " + objectId));
+
+        return revisionStage(revDoc.getRevisionId());
+    }
+
+    public boolean pendingRevisionStage(Long id) {
+        Revisao rev = revisaoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Revisão não encontrada: " + id));
+
+        if (!rev.getStatus().equals(RevisaoStatusEnum.PENDENTE)) {
+            throw new InvalidStageException("Não é possível realizar essa operação durante a etapa atual do processo");
+        }
+
+        return true;
     }
 }

@@ -12,6 +12,7 @@ import com.squad13.apimonolito.util.enums.RevDocElementEnum;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -62,6 +63,7 @@ public class RevisionController {
     }
 
     @PostMapping("/{id}/start")
+    @PreAuthorize("@require.pendingRevisionStage(#id)")
     public ResponseEntity<ResRevDTO> start(
             @PathVariable Long id,
             @RequestParam Long revisorId,
@@ -70,7 +72,17 @@ public class RevisionController {
         return ResponseEntity.ok(revService.start(id, revisorId, params));
     }
 
+    @PostMapping("/{id}/reject")
+    @PreAuthorize("@require.revisionStage(#id)")
+    public ResponseEntity<?> reject(
+            @PathVariable Long id
+    ) {
+        approvalService.reject(id);
+        return ResponseEntity.ok("Revisão rejeitada! Processo de elaboração reaberto");
+    }
+
     @PutMapping("/doc/{id}")
+    @PreAuthorize("@require.revisionStage(#id)")
     public ResponseEntity<? extends ResRevDocDTO> update(
             @PathVariable String id,
             @RequestBody EditRevDocDTO dto

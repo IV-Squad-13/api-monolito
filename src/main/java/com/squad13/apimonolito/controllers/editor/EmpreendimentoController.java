@@ -40,7 +40,7 @@ public class EmpreendimentoController {
         return ResponseEntity.ok(empService.findByAttribute(attribute, value, loadDTO));
     }
 
-    @PostMapping("/{id}/actions/request-revision")
+    @PostMapping("/{id}/request-revision")
     public ResponseEntity<ResRevDTO> sendToRevision(@PathVariable Long id, @RequestBody ToRevisionDTO dto) {
         return ResponseEntity.ok(empService.sendToRevision(id, dto));
     }

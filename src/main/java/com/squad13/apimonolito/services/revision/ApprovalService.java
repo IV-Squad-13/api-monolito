@@ -2,12 +2,19 @@ package com.squad13.apimonolito.services.revision;
 
 import com.squad13.apimonolito.DTO.revision.edit.*;
 import com.squad13.apimonolito.DTO.revision.res.*;
+import com.squad13.apimonolito.exceptions.InvalidStageException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
+import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import com.squad13.apimonolito.models.revision.mongo.*;
+import com.squad13.apimonolito.models.revision.relational.Revisao;
 import com.squad13.apimonolito.mongo.editor.EspecificacaoDocRepository;
 import com.squad13.apimonolito.mongo.revision.*;
+import com.squad13.apimonolito.repository.editor.EmpreendimentoRepository;
+import com.squad13.apimonolito.repository.revision.RevisaoRepository;
 import com.squad13.apimonolito.util.enums.ApprovalEnum;
+import com.squad13.apimonolito.util.enums.EmpStatusEnum;
+import com.squad13.apimonolito.util.enums.RevisaoStatusEnum;
 import com.squad13.apimonolito.util.mapper.EditorMapper;
 import com.squad13.apimonolito.util.search.DocumentSearch;
 import jakarta.transaction.Transactional;
@@ -31,6 +38,15 @@ public class ApprovalService {
     private final EspecificacaoRevDocElementRepository especificacaoRevDocElementRepository;
     private final EspecificacaoDocRepository especificacaoDocRepository;
     private final EditorMapper editorMapper;
+    private final RevisaoRepository revisaoRepository;
+    private final EmpreendimentoRepository empreendimentoRepository;
+
+    private Revisao findByRevisaoById(Long id) {
+        return revisaoRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Revisão não encontrada: " + id)
+                );
+    }
 
     @Transactional
     public ResRevDocDTO update(ObjectId id, EditRevDocDTO dto) {
@@ -191,6 +207,23 @@ public class ApprovalService {
                 .map(MarcaRevDocElement::getId)
                 .toList();
         documentSearch.updateMany(marcaRevIds, update, MarcaRevDocElement.class);
+    }
+
+    // TODO: Implementar lógica de continuação da Elaboração
+    public void reject(Long id) {
+        Revisao rev = findByRevisaoById(id);
+
+        if (!rev.getStatus().equals(RevisaoStatusEnum.INICIADA)) {
+            throw new InvalidStageException("Apenas Revisões Iniciadas podem ser Rejeitadas.");
+        }
+
+        rev.setStatus(RevisaoStatusEnum.REJEITADA);
+
+        Empreendimento emp = rev.getEmpreendimento();
+        emp.setStatus(EmpStatusEnum.EM_ELABORACAO);
+
+        empreendimentoRepository.save(emp);
+        revisaoRepository.save(rev);
     }
 
     private ResMatRevDTO updateMaterial(ObjectId id, EditMatRevDocDTO dto) {

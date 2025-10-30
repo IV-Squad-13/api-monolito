@@ -28,13 +28,13 @@ RUN echo "# Configurações de produção para GKE" > .env.prod.properties
 
 # Variáveis de ambiente com valores padrão
 ENV SERVER_PORT=13000
-ENV POSTGRES_URL=jdbc:postgresql://postgres-service:5432/postgres
+ENV POSTGRES_URL=jdbc:postgresql://136.112.152.217:5432/postgres
 ENV POSTGRES_USER=postgres
-ENV POSTGRES_PASSWORD=postgres
-ENV MONGO_URI=mongodb://admin:admin@mongo-service:27017/monolito?authSource=admin
+ENV POSTGRES_PASSWORD=4@OaOAPLv}v0(T1i
+ENV MONGO_URI=mongodb+srv://S13:mjtbAvnoBRS9MDAq@monolito.wrvc4cl.mongodb.net/monolito?retryWrites=true&w=majority&appName=monolito
 ENV ALLOWED_ORIGINS=*
 ENV SECRET=secret-0000000000000000000000000000
-ENV JAVA_OPTS="-Xmx256m -Xms128m"
+ENV JAVA_OPTS="-Xmx512m -Xms256m"
 
 # Expor a porta
 EXPOSE 13000

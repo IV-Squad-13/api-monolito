@@ -13,6 +13,7 @@ import com.squad13.apimonolito.mongo.revision.AmbienteRevDocElementRepository;
 import com.squad13.apimonolito.mongo.revision.ItemRevDocElementRepository;
 import com.squad13.apimonolito.mongo.revision.LocalRevDocElementRepository;
 import com.squad13.apimonolito.util.enums.LocalEnum;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,23 +82,24 @@ class LocalRevDocTest {
     @Test
     void testLocalRevPersistence() {
         ItemRevDocElement itemRev = new ItemRevDocElement();
-        itemRev.setItem(item);
-        itemRev.setRevisaoId(1L);
-        itemRev.setApproved(true);
+        itemRev.setRevisedDocId(item.getId());
+        itemRev.setRevisionId(1L);
+        itemRev.setIsApproved(true);
         itemRev.setComment("First revision");
         itemRevDocRepository.save(itemRev);
 
         AmbienteRevDocElement ambienteRev = new AmbienteRevDocElement();
-        ambienteRev.setAmbiente(ambiente);
-        ambienteRev.setRevisaoId(1L);
+        ambienteRev.setRevisedDocId(ambiente.getId());
+        ambienteRev.setRevisionId(1L);
         ambienteRevDocRepository.save(ambienteRev);
 
         LocalRevDocElement localRev = new LocalRevDocElement();
-        localRev.setLocal(local);
-        localRev.setRevisaoId(1L);
+        localRev.setRevisedDocId(local.getId());
+        localRev.setRevisionId(1L);
         localRevDocRepository.save(localRev);
 
-        LocalRevDocElement foundRev = localRevDocRepository.findByLocalAndRevisaoId(local, 1L);
+        LocalRevDocElement foundRev = localRevDocRepository.findByRevisedDocIdAndRevisionId(local.getId(), 1L)
+                        .orElse(null);
         assertThat(foundRev).isNotNull();
         assertThat(foundRev.getId()).isNotNull();
     }
@@ -105,13 +107,13 @@ class LocalRevDocTest {
     @Test
     void testLocalRevDuplicateThrows() {
         LocalRevDocElement rev1 = new LocalRevDocElement();
-        rev1.setLocal(local);
-        rev1.setRevisaoId(1L);
+        rev1.setRevisedDocId(local.getId());
+        rev1.setRevisionId(1L);
         localRevDocRepository.save(rev1);
 
         LocalRevDocElement rev2 = new LocalRevDocElement();
-        rev2.setLocal(local);
-        rev2.setRevisaoId(1L);
+        rev2.setRevisedDocId(local.getId());
+        rev2.setRevisionId(1L);
 
         assertThrows(DataIntegrityViolationException.class,
                 () -> localRevDocRepository.save(rev2));
@@ -120,27 +122,31 @@ class LocalRevDocTest {
     @Test
     void testLocalRevUpdate() {
         LocalRevDocElement localRev = new LocalRevDocElement();
-        localRev.setLocal(local);
-        localRev.setRevisaoId(1L);
+        localRev.setRevisedDocId(local.getId());
+        localRev.setRevisionId(1L);
         localRevDocRepository.save(localRev);
 
-        LocalRevDocElement found = localRevDocRepository.findByLocalAndRevisaoId(local, 1L);
+        LocalRevDocElement found = localRevDocRepository.findByRevisedDocIdAndRevisionId(local.getId(), 1L)
+                .orElse(null);
+        Assertions.assertNotNull(found);
         localRevDocRepository.save(found);
 
-        LocalRevDocElement updated = localRevDocRepository.findByLocalAndRevisaoId(local, 1L);
+        LocalRevDocElement updated = localRevDocRepository.findByRevisedDocIdAndRevisionId(local.getId(), 1L)
+                .orElse(null);
         assertThat(updated).isNotNull();
-        assertThat(updated.getRevisaoId()).isEqualTo(1L);
+        assertThat(updated.getRevisionId()).isEqualTo(1L);
     }
 
     @Test
     void testLocalRevDelete() {
         LocalRevDocElement localRev = new LocalRevDocElement();
-        localRev.setLocal(local);
-        localRev.setRevisaoId(1L);
+        localRev.setRevisedDocId(local.getId());
+        localRev.setRevisionId(1L);
         localRevDocRepository.save(localRev);
 
-        localRevDocRepository.deleteByLocalAndRevisaoId(local, 1L);
-        LocalRevDocElement found = localRevDocRepository.findByLocalAndRevisaoId(local, 1L);
+        localRevDocRepository.deleteByRevisedDocIdAndRevisionId(local.getId(), 1L);
+        LocalRevDocElement found = localRevDocRepository.findByRevisedDocIdAndRevisionId(local.getId(), 1L)
+                .orElse(null);
         assertThat(found).isNull();
     }
 }

@@ -49,13 +49,13 @@ class RevisaoTest {
     void testJpaPersistenceWithRevisao() {
         Empreendimento empreendimento = new Empreendimento();
         empreendimento.setName("Empreendimento A");
-        empreendimento.setStatus(EmpStatusEnum.INICIADO);
+        empreendimento.setStatus(EmpStatusEnum.EM_ELABORACAO);
 
         Empreendimento savedEmp = empreendimentoRepository.save(empreendimento);
         assertThat(savedEmp.getId()).isNotNull();
 
         Revisao revisao = new Revisao();
-        revisao.setStatusEnum(RevisaoStatusEnum.INICIADA);
+        revisao.setStatus(RevisaoStatusEnum.INICIADA);
         revisao.setEmpreendimento(savedEmp);
 
         Revisao savedRevisao = revisaoRepository.save(revisao);
@@ -64,7 +64,7 @@ class RevisaoTest {
         assertThat(savedRevisao.getEmpreendimento().getId()).isEqualTo(savedEmp.getId());
 
         Revisao foundRev = revisaoRepository.findById(savedRevisao.getId()).orElseThrow();
-        assertThat(foundRev.getStatusEnum()).isEqualTo(RevisaoStatusEnum.INICIADA);
+        assertThat(foundRev.getStatus()).isEqualTo(RevisaoStatusEnum.INICIADA);
         assertThat(foundRev.getEmpreendimento().getName()).isEqualTo("Empreendimento A");
     }
 
@@ -99,7 +99,7 @@ class RevisaoTest {
     void testConsistencyBetweenJpaAndMongo() {
         Empreendimento e = new Empreendimento();
         e.setName("Empreendimento C");
-        e.setStatus(EmpStatusEnum.INICIADO);
+        e.setStatus(EmpStatusEnum.EM_ELABORACAO);
         Empreendimento savedEntity = empreendimentoRepository.save(e);
 
         EspecificacaoDoc doc = new EspecificacaoDoc();
@@ -119,12 +119,12 @@ class RevisaoTest {
     void testCreateEmpreendimentoRevisionDoc() {
         Empreendimento emp = new Empreendimento();
         emp.setName("Empreendimento D");
-        emp.setStatus(EmpStatusEnum.INICIADO);
+        emp.setStatus(EmpStatusEnum.EM_ELABORACAO);
         Empreendimento savedEmp = empreendimentoRepository.save(emp);
 
         Revisao revisao = new Revisao();
         revisao.setEmpreendimento(savedEmp);
-        revisao.setStatusEnum(RevisaoStatusEnum.INICIADA);
+        revisao.setStatus(RevisaoStatusEnum.INICIADA);
         Revisao savedRevisao = revisaoRepository.save(revisao);
 
         EspecificacaoDoc doc = new EspecificacaoDoc();
@@ -133,17 +133,17 @@ class RevisaoTest {
         EspecificacaoDoc savedDoc = especificacaoDocRepository.save(doc);
 
         EspecificacaoRevDocElement revDoc = new EspecificacaoRevDocElement();
-        revDoc.setRevisaoId(savedRevisao.getId());
-        revDoc.setEspecificacao(savedDoc);
-        revDoc.setNameApproved(true);
-        revDoc.setDescApproved(false);
-        revDoc.setObsApproved(false);
+        revDoc.setRevisionId(savedRevisao.getId());
+        revDoc.setRevisedDocId(savedDoc.getId());
+        revDoc.setIsNameApproved(true);
+        revDoc.setIsDescApproved(false);
+        revDoc.setIsObsApproved(false);
 
         EspecificacaoRevDocElement savedRevDoc = especificacaoRevDocRepository.save(revDoc);
 
         assertThat(savedRevDoc.getId()).isNotNull();
-        assertThat(savedRevDoc.getRevisaoId()).isEqualTo(savedRevisao.getId());
-        assertThat(savedRevDoc.getEspecificacao().getId()).isEqualTo(savedDoc.getId());
-        assertThat(savedRevDoc.isNameApproved()).isTrue();
+        assertThat(savedRevDoc.getRevisionId()).isEqualTo(savedRevisao.getId());
+        assertThat(savedRevDoc.getRevisedDocId()).isEqualTo(savedDoc.getId());
+        assertThat(savedRevDoc.getIsNameApproved()).isTrue();
     }
 }

@@ -7,14 +7,13 @@ import com.squad13.apimonolito.models.user.Usuario;
 import com.squad13.apimonolito.repository.user.PapelRepository;
 import com.squad13.apimonolito.repository.user.UsuarioRepository;
 import com.squad13.apimonolito.util.enums.PapelEnum;
-import com.squad13.apimonolito.util.mappers.UserMapper;
+import com.squad13.apimonolito.util.mapper.UserMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,7 +76,7 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUser(Long id){
+    public void deleteUser(Long id) {
         if (!usuarioRepository.existsById(id)) {
             throw new UsernameNotFoundException("Usuário com id " + id + " não encontrado.");
         }

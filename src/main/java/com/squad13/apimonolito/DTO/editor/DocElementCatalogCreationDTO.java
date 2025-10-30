@@ -12,4 +12,5 @@ public record DocElementCatalogCreationDTO(
         Long elementId,
 
         String associatedId
-) { }
+) {
+}

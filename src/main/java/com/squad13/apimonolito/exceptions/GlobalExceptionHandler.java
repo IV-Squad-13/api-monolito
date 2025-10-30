@@ -30,6 +30,11 @@ public class GlobalExceptionHandler {
         return buildResponse(ex, request, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(InvalidStageException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidStageException(InvalidStageException ex, WebRequest request) {
+        return buildResponse(ex, request, HttpStatus.FORBIDDEN);
+    }
+
     @ExceptionHandler(InvalidDocumentTypeException.class)
     public ResponseEntity<ErrorResponse> handleInvalidDocumentType(InvalidDocumentTypeException ex, WebRequest request) {
         return buildResponse(ex, request, HttpStatus.BAD_REQUEST);
@@ -53,6 +58,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidInitException.class)
     public ResponseEntity<ErrorResponse> handleInvalidInitException(Exception ex, WebRequest request) {
         return buildResponse(ex, request, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(InvalidUserException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidUserException(InvalidUserException ex, WebRequest request) {
+        return buildResponse(ex, request, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)

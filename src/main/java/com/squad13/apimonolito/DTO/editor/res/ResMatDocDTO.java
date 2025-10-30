@@ -1,6 +1,5 @@
 package com.squad13.apimonolito.DTO.editor.res;
 
-import com.squad13.apimonolito.models.editor.mongo.MarcaDocElement;
 import com.squad13.apimonolito.models.editor.mongo.MaterialDocElement;
 import lombok.*;
 import org.bson.types.ObjectId;
@@ -18,7 +17,7 @@ public class ResMatDocDTO extends ResDocElementDTO {
     private List<ResMarDocDTO> marcas = new ArrayList<>();
 
     public static ResMatDocDTO fromDoc(MaterialDocElement doc) {
-        ResMatDocDTO mat = ResDocElementDTO.fromDoc(doc, ResMatDocDTO.class);
+        ResMatDocDTO mat = ResDocElementDTO.fromDoc(doc, ResMatDocDTO::new);
         mat.setMarcaIds(doc.getMarcaIds().stream()
                 .map(ObjectId::toHexString)
                 .toList());

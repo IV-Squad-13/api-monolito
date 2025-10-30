@@ -1,14 +1,15 @@
 package com.squad13.apimonolito.services.catalog;
 
 import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
-import com.squad13.apimonolito.DTO.catalog.edit.EditMarcaDTO;
 import com.squad13.apimonolito.DTO.catalog.MarcaDTO;
+import com.squad13.apimonolito.DTO.catalog.edit.EditMarcaDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResMarcaDTO;
 import com.squad13.apimonolito.exceptions.InvalidAttributeException;
 import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.catalog.Marca;
 import com.squad13.apimonolito.repository.catalog.MarcaRepository;
+import com.squad13.apimonolito.util.mapper.CatalogMapper;
 import com.squad13.apimonolito.util.mappers.CatalogMapper;
 import com.squad13.apimonolito.util.search.CatalogSearch;
 import jakarta.persistence.EntityManager;

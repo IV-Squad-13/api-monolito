@@ -7,5 +7,5 @@ import java.util.List;
 
 @Repository
 public interface EspecificacaoRevDocElementRepository extends RevDocElementRepository<EspecificacaoRevDocElement> {
-    List<EspecificacaoRevDocElement> findByRevisaoId(Long revisaoId);
+    List<EspecificacaoRevDocElement> findByRevisionId(Long revisionId);
 }

@@ -1,578 +1,5211 @@
 -- RELACIONAR TIPO DE ITEM A DESCRIÇÃO
-UPDATE tb_item_desc idesc SET id_item_type = it.id_item_type FROM tb_item_type it WHERE idesc.nm_item_desc LIKE it.nm_item_type;
+UPDATE tb_item_desc idesc
+SET id_item_type = it.id_item_type
+FROM tb_item_type it
+WHERE idesc.nm_item_desc LIKE it.nm_item_type;
 
 -- ITEM_AMBIENTE
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Sala de Estar/Jantar', 'Piso') AND (i.nm_item_desc IN ('Sala de Estar/Jantar', 'Piso') AND i.ds_item = 'Porcelanato ou laminado') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Sala de Estar/Jantar', 'Parede') AND (i.nm_item_desc IN ('Sala de Estar/Jantar', 'Parede') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Sala de Estar/Jantar', 'Teto') AND (i.nm_item_desc IN ('Sala de Estar/Jantar', 'Teto') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regularização PVA.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Sala de Estar/Jantar', 'Rodapé') AND (i.nm_item_desc IN ('Sala de Estar/Jantar', 'Rodapé') AND i.ds_item = 'Porcelanato ou Laminado, h= 5cm') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Sala de Estar/Jantar', 'Soleira') AND (i.nm_item_desc IN ('Sala de Estar/Jantar', 'Soleira') AND i.ds_item = 'Mármore ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Sala de Estar/Jantar', 'Peitoril') AND (i.nm_item_desc IN ('Sala de Estar/Jantar', 'Peitoril') AND i.ds_item = 'Metálico') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Sala de Estar/Jantar', 'Esquadria') AND (i.nm_item_desc IN ('Sala de Estar/Jantar', 'Esquadria') AND i.ds_item = 'Alumínio pintado de branco') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Sala de Estar/Jantar', 'Vidro') AND (i.nm_item_desc IN ('Sala de Estar/Jantar', 'Vidro') AND i.ds_item = 'Liso incolor.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Sala de Estar/Jantar', 'Porta') AND (i.nm_item_desc IN ('Sala de Estar/Jantar', 'Porta') AND i.ds_item = 'Porta semi–ôca comum pintada c/ esmalte sintético.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Sala de Estar/Jantar', 'Ferragem') AND (i.nm_item_desc IN ('Sala de Estar/Jantar', 'Ferragem') AND i.ds_item = 'Acabamento cromado.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Sala de Estar/Jantar', 'Inst. Elétrica') AND (i.nm_item_desc IN ('Sala de Estar/Jantar', 'Inst. Elétrica') AND i.ds_item = 'Pontos de luz no teto, tomadas de corrente e interruptores') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Sala de Estar/Jantar', 'Inst. Comunic.') AND (i.nm_item_desc IN ('Sala de Estar/Jantar', 'Inst. Comunic.') AND i.ds_item = 'Pontos secos de comunicação e de antena de TV.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Circulação', 'Piso') AND (i.nm_item_desc IN ('Circulação', 'Piso') AND i.ds_item = 'Porcelanato ou laminado') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Circulação', 'Parede') AND (i.nm_item_desc IN ('Circulação', 'Parede') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Circulação', 'Teto') AND (i.nm_item_desc IN ('Circulação', 'Teto') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regularização PVA.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Circulação', 'Rodapé') AND (i.nm_item_desc IN ('Circulação', 'Rodapé') AND i.ds_item = 'Porcelanato ou Laminado, h= 5cm') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Circulação', 'Inst. Elétrica') AND (i.nm_item_desc IN ('Circulação', 'Inst. Elétrica') AND i.ds_item = 'Pontos de luz no teto, tomadas de corrente e interruptores') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quarto e Suíte', 'Piso') AND (i.nm_item_desc IN ('Quarto e Suíte', 'Piso') AND i.ds_item = 'Porcelanato ou laminado.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quarto e Suíte', 'Parede') AND (i.nm_item_desc IN ('Quarto e Suíte', 'Parede') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quarto e Suíte', 'Teto') AND (i.nm_item_desc IN ('Quarto e Suíte', 'Teto') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regularização PVA.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quarto e Suíte', 'Rodapé') AND (i.nm_item_desc IN ('Quarto e Suíte', 'Rodapé') AND i.ds_item = 'Porcelanato ou Laminado, h= 5cm.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quarto e Suíte', 'Soleira') AND (i.nm_item_desc IN ('Quarto e Suíte', 'Soleira') AND i.ds_item = 'Mármore ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quarto e Suíte', 'Peitoril') AND (i.nm_item_desc IN ('Quarto e Suíte', 'Peitoril') AND i.ds_item = 'Metálico.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quarto e Suíte', 'Esquadria') AND (i.nm_item_desc IN ('Quarto e Suíte', 'Esquadria') AND i.ds_item = 'Alumínio pintado de branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Gourmets', 'Vidro') AND (i.nm_item_desc IN ('Gourmets', 'Vidro') AND i.ds_item = 'Liso incolor.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quarto e Suíte', 'Porta') AND (i.nm_item_desc IN ('Quarto e Suíte', 'Porta') AND i.ds_item = 'Porta semi–ôca comum pintada c/ esmalte sintético.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quarto e Suíte', 'Ferragem') AND (i.nm_item_desc IN ('Quarto e Suíte', 'Ferragem') AND i.ds_item = 'Acabamento cromado.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quarto e Suíte', 'Inst. Elétrica') AND (i.nm_item_desc IN ('Quarto e Suíte', 'Inst. Elétrica') AND i.ds_item = 'Pontos de luz no teto, tomadas de corrente e interruptores.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quarto e Suíte', 'Inst. Comunic.') AND (i.nm_item_desc IN ('Quarto e Suíte', 'Inst. Comunic.') AND i.ds_item = 'Pontos secos de comunicação e de antena de TV.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quarto e Suíte', 'Ar Condicionado') AND (i.nm_item_desc IN ('Quarto e Suíte', 'Ar Condicionado') AND i.ds_item = 'Infraestrutura para high wall com condensadora axial.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Piso') AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Piso') AND i.ds_item = 'Cerâmica.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Parede') AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Parede') AND i.ds_item = 'Cerâmica até o teto.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Teto') AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Teto') AND i.ds_item = 'Forro de gesso.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Filete') AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Filete') AND i.ds_item = 'Mármore ou granito L=3,5cm.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Cordão de Box') AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Cordão de Box') AND i.ds_item = 'Mármore ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Bancada') AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Bancada') AND i.ds_item = 'Em mármore ou granito com cuba em louça cor branca') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Porta') AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Porta') AND i.ds_item = 'Porta semi-ôca comum pintura c/ esmalte sintético.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Peitoril') AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Peitoril') AND i.ds_item = 'Metálico.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Ferragem') AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Ferragem') AND i.ds_item = 'Acabamento cromado.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Esquadria') AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Esquadria') AND i.ds_item = 'Alumínio pintado de branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Vidro ') AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Vidro ') AND i.ds_item = 'Pontilhado Incolor.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Metal Sanitário') AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Metal Sanitário') AND i.ds_item = 'Torneira para Lavatório, registro de gaveta e registro de pressão com acabamento cromado .') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Louças') AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Louças') AND i.ds_item = 'Vaso Sanitário com Caixa Acoplada em louça cor branca.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Inst. Elétrica') AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Inst. Elétrica') AND i.ds_item = 'Pontos de luz no teto, tomada de corrente e interruptor da Prime, Alumbra, Cemar ou Fame na cor branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Inst. Hidráulica') AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Inst. Hidráulica') AND i.ds_item = 'Sifão em PVC, esgoto em PVC, rede de água fria e ducha higiênica em PEX.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Cozinha/ Área de Serviço', 'Piso') AND (i.nm_item_desc IN ('Cozinha/ Área de Serviço', 'Piso') AND i.ds_item = 'Cerâmica.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Cozinha/ Área de Serviço', 'Parede') AND (i.nm_item_desc IN ('Cozinha/ Área de Serviço', 'Parede') AND i.ds_item = 'Cerâmica até o teto.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Cozinha/ Área de Serviço', 'Teto') AND (i.nm_item_desc IN ('Cozinha/ Área de Serviço', 'Teto') AND i.ds_item = 'Pintura látex PVA sobre gesso ou argamassa de regularização PVA.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Cozinha/ Área de Serviço', 'Filete') AND (i.nm_item_desc IN ('Cozinha/ Área de Serviço', 'Filete') AND i.ds_item = 'Mármore ou granito L=3,5cm.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Cozinha/ Área de Serviço', 'Bancada') AND (i.nm_item_desc IN ('Cozinha/ Área de Serviço', 'Bancada') AND i.ds_item = 'Em mármore ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Cozinha/ Área de Serviço', 'Cuba') AND (i.nm_item_desc IN ('Cozinha/ Área de Serviço', 'Cuba') AND i.ds_item = 'Inox.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Cozinha/ Área de Serviço', 'Peitoril') AND (i.nm_item_desc IN ('Cozinha/ Área de Serviço', 'Peitoril') AND i.ds_item = 'Metálico.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Cozinha/ Área de Serviço', 'Tanque') AND (i.nm_item_desc IN ('Cozinha/ Área de Serviço', 'Tanque') AND i.ds_item = 'Louça cor branca.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Cozinha/ Área de Serviço', 'Esquadrias') AND (i.nm_item_desc IN ('Cozinha/ Área de Serviço', 'Esquadrias') AND i.ds_item = 'Alumínio pintado de branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Cozinha/ Área de Serviço', 'Metais') AND (i.nm_item_desc IN ('Cozinha/ Área de Serviço', 'Metais') AND i.ds_item = 'Torneiras e registro de gaveta com acabamento cromado.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Cozinha/ Área de Serviço', 'Inst. Elétricas') AND (i.nm_item_desc IN ('Cozinha/ Área de Serviço', 'Inst. Elétricas') AND i.ds_item = 'Ponto de luz no teto, tomadas de corrente e interruptores.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Cozinha/ Área de Serviço', 'Inst. Hidráulica') AND (i.nm_item_desc IN ('Cozinha/ Área de Serviço', 'Inst. Hidráulica') AND i.ds_item = 'Rede de água fria em PEX e esgoto em PVC') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Cozinha/ Área de Serviço', 'Inst. Comunicação') AND (i.nm_item_desc IN ('Cozinha/ Área de Serviço', 'Inst. Comunicação') AND i.ds_item = 'Tubulação seca.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Área Técnica', 'Piso') AND (i.nm_item_desc IN ('Área Técnica', 'Piso') AND i.ds_item = 'Em concreto desempolado.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Área Técnica', 'Parede') AND (i.nm_item_desc IN ('Área Técnica', 'Parede') AND i.ds_item = 'Textura acrílica.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Área Técnica', 'Teto') AND (i.nm_item_desc IN ('Área Técnica', 'Teto') AND i.ds_item = 'Pintura ou textura acrílica.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Área Técnica', 'Gradil') AND (i.nm_item_desc IN ('Área Técnica', 'Gradil') AND i.ds_item = 'Em perfil metálico pintado de branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Varanda', 'Piso') AND (i.nm_item_desc IN ('Varanda', 'Piso') AND i.ds_item = 'Porcelanato.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Varanda', 'Parede') AND (i.nm_item_desc IN ('Varanda', 'Parede') AND i.ds_item = 'Textura Acrílica ou Pastilha Cerâmica, conforme definido em projeto arquitetônico.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Varanda', 'Teto ') AND (i.nm_item_desc IN ('Varanda', 'Teto ') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA ou Forro de gesso.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Varanda', 'Rodapé') AND (i.nm_item_desc IN ('Varanda', 'Rodapé') AND i.ds_item = 'Porcelanato ou Laminado, h=5cm.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Varanda', 'Porta') AND (i.nm_item_desc IN ('Varanda', 'Porta') AND i.ds_item = 'Alumínio pintado de branco com vidro liso.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Varanda', 'Inst. Elétrica') AND (i.nm_item_desc IN ('Varanda', 'Inst. Elétrica') AND i.ds_item = 'Ponto de luz no teto.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Varanda', 'Guarda Corpo') AND (i.nm_item_desc IN ('Varanda', 'Guarda Corpo') AND i.ds_item = 'Em perfil metálico pintado de branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Garden', 'Piso') AND (i.nm_item_desc IN ('Garden', 'Piso') AND i.ds_item = 'Grama') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Garden', 'Gradil') AND (i.nm_item_desc IN ('Garden', 'Gradil') AND i.ds_item = 'Em perfil metálico pintado de branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Guarita', 'Piso') AND (i.nm_item_desc IN ('Guarita', 'Piso') AND i.ds_item = 'Cerâmica.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Guarita', 'Parede Interna') AND (i.nm_item_desc IN ('Guarita', 'Parede Interna') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Guarita', 'Teto') AND (i.nm_item_desc IN ('Guarita', 'Teto') AND i.ds_item = 'Forro de gesso.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Guarita', 'Parede Externa') AND (i.nm_item_desc IN ('Guarita', 'Parede Externa') AND i.ds_item = 'Acabamento em textura acrílica.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Guarita', 'Rodapé') AND (i.nm_item_desc IN ('Guarita', 'Rodapé') AND i.ds_item = 'Cerâmica, h=5 cm.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Guarita', 'Soleira') AND (i.nm_item_desc IN ('Guarita', 'Soleira') AND i.ds_item = 'Mármore ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Guarita', 'Peitoril') AND (i.nm_item_desc IN ('Guarita', 'Peitoril') AND i.ds_item = 'Metálico ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Guarita', 'Ferragens') AND (i.nm_item_desc IN ('Guarita', 'Ferragens') AND i.ds_item = 'Acabamento cromado.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Guarita', 'Porta externa') AND (i.nm_item_desc IN ('Guarita', 'Porta externa') AND i.ds_item = 'Alumínio pintado na cor branca com vidro liso.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Guarita', 'Esquadrias') AND (i.nm_item_desc IN ('Guarita', 'Esquadrias') AND i.ds_item = 'Alumínio pintado de branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Guarita', 'Vidro ') AND (i.nm_item_desc IN ('Guarita', 'Vidro ') AND i.ds_item = 'Liso incolor.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Guarita', 'Inst. Elétricas ') AND (i.nm_item_desc IN ('Guarita', 'Inst. Elétricas ') AND i.ds_item = 'Ponto de luz no teto com luminária, tomada de corrente e interruptor na cor branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Guarita', 'Inst. Comunic.') AND (i.nm_item_desc IN ('Guarita', 'Inst. Comunic.') AND i.ds_item = 'Tubulação seca.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Gourmets', 'Piso') AND (i.nm_item_desc IN ('Gourmets', 'Piso') AND i.ds_item = 'Porcelanato.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Gourmets', 'Parede Interna') AND (i.nm_item_desc IN ('Gourmets', 'Parede Interna') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA. Acima das bancadas será aplicado revestimento cerâmico. Nas demais paredes textura acrílica ou pintura acrílica.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Gourmets', 'Teto') AND (i.nm_item_desc IN ('Gourmets', 'Teto') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Gourmets', 'Rodapé') AND (i.nm_item_desc IN ('Gourmets', 'Rodapé') AND i.ds_item = 'Porcelanato, h=5 cm.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Gourmets', 'Tabeira') AND (i.nm_item_desc IN ('Gourmets', 'Tabeira') AND i.ds_item = 'Mármore ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Gourmets', 'Bancada ') AND (i.nm_item_desc IN ('Gourmets', 'Bancada ') AND i.ds_item = 'Mármore ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Gourmets', 'Cuba') AND (i.nm_item_desc IN ('Gourmets', 'Cuba') AND i.ds_item = 'Inox.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Gourmets', 'Metais') AND (i.nm_item_desc IN ('Gourmets', 'Metais') AND i.ds_item = 'Torneira para pia com acabamento cromado.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Gourmets', 'Tampo do balcão') AND (i.nm_item_desc IN ('Gourmets', 'Tampo do balcão') AND i.ds_item = 'Mármore ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Gourmets', 'Churrasqueira') AND (i.nm_item_desc IN ('Gourmets', 'Churrasqueira') AND i.ds_item = 'Pré-moldada ou alvenaria.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Gourmets', 'Inst. Elétricas ') AND (i.nm_item_desc IN ('Gourmets', 'Inst. Elétricas ') AND i.ds_item = 'Ponto de luz no teto com luminária, tomada de corrente e interruptor na cor branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Gourmets', 'Inst. Hidráulica') AND (i.nm_item_desc IN ('Gourmets', 'Inst. Hidráulica') AND i.ds_item = 'Engate, sifão, rede de água fria e esgoto em PVC.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Gourmets', 'Inst. Comunic.') AND (i.nm_item_desc IN ('Gourmets', 'Inst. Comunic.') AND i.ds_item = 'Tubulação seca.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quiosques', 'Piso') AND (i.nm_item_desc IN ('Quiosques', 'Piso') AND i.ds_item = 'Porcelanato.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quiosques', 'Parede Interna') AND (i.nm_item_desc IN ('Quiosques', 'Parede Interna') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA. Acima das bancadas será aplicado revestimento cerâmico. Nas demais paredes textura acrílica ou pintura acrílica.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quiosques', 'Teto') AND (i.nm_item_desc IN ('Quiosques', 'Teto') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quiosques', 'Rodapé') AND (i.nm_item_desc IN ('Quiosques', 'Rodapé') AND i.ds_item = 'Porcelanato, h=5 cm.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quiosques', 'Tabeira') AND (i.nm_item_desc IN ('Quiosques', 'Tabeira') AND i.ds_item = 'Mármore ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quiosques', 'Porcelanato, h=5 cm. ') AND (i.nm_item_desc IN ('Quiosques', 'Porcelanato, h=5 cm. ') AND i.ds_item = 'Mármore ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quiosques', 'Cuba') AND (i.nm_item_desc IN ('Quiosques', 'Cuba') AND i.ds_item = 'Inox.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quiosques', 'Metais') AND (i.nm_item_desc IN ('Quiosques', 'Metais') AND i.ds_item = 'Torneira para pia com acabamento cromado.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quiosques', 'Tampo do balcão') AND (i.nm_item_desc IN ('Quiosques', 'Tampo do balcão') AND i.ds_item = 'Mármore ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quiosques', 'Churrasqueira') AND (i.nm_item_desc IN ('Quiosques', 'Churrasqueira') AND i.ds_item = 'Pré-moldada ou alvenaria.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quiosques', 'Inst. Elétricas ') AND (i.nm_item_desc IN ('Quiosques', 'Inst. Elétricas ') AND i.ds_item = 'Ponto de luz no teto com luminária, tomada de corrente e interruptor na cor branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quiosques', 'Inst. Hidráulica') AND (i.nm_item_desc IN ('Quiosques', 'Inst. Hidráulica') AND i.ds_item = 'Engate, sifão, rede de água fria e esgoto em PVC.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quiosques', 'Inst. Comunic.') AND (i.nm_item_desc IN ('Quiosques', 'Inst. Comunic.') AND i.ds_item = 'Tubulação seca.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Copa Funcionários', 'Piso') AND (i.nm_item_desc IN ('Copa Funcionários', 'Piso') AND i.ds_item = 'Porcelanato.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Copa Funcionários', 'Parede Interna') AND (i.nm_item_desc IN ('Copa Funcionários', 'Parede Interna') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA. Acima das bancadas será aplicado revestimento cerâmico. Nas demais paredes textura acrílica ou pintura acrílica.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Copa Funcionários', 'Teto') AND (i.nm_item_desc IN ('Copa Funcionários', 'Teto') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Copa Funcionários', 'Rodapé') AND (i.nm_item_desc IN ('Copa Funcionários', 'Rodapé') AND i.ds_item = 'Porcelanato, h=5 cm.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Copa Funcionários', 'Porta') AND (i.nm_item_desc IN ('Copa Funcionários', 'Porta') AND i.ds_item = 'Alumínio pintado de branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Copa Funcionários', 'Esquadria') AND (i.nm_item_desc IN ('Copa Funcionários', 'Esquadria') AND i.ds_item = 'Alumínio printado de branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Copa Funcionários', 'Vidro') AND (i.nm_item_desc IN ('Copa Funcionários', 'Vidro') AND i.ds_item = 'Liso.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Copa Funcionários', 'Soleira') AND (i.nm_item_desc IN ('Copa Funcionários', 'Soleira') AND i.ds_item = 'Mármore ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Copa Funcionários', 'Peitoril') AND (i.nm_item_desc IN ('Copa Funcionários', 'Peitoril') AND i.ds_item = 'Metálico ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Copa Funcionários', 'Bancada ') AND (i.nm_item_desc IN ('Copa Funcionários', 'Bancada ') AND i.ds_item = 'Mármore ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Copa Funcionários', 'Cuba') AND (i.nm_item_desc IN ('Copa Funcionários', 'Cuba') AND i.ds_item = 'Inox.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Copa Funcionários', 'Metais') AND (i.nm_item_desc IN ('Copa Funcionários', 'Metais') AND i.ds_item = 'Torneira para pia com acabamento cromado.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Copa Funcionários', 'Inst. Elétricas ') AND (i.nm_item_desc IN ('Copa Funcionários', 'Inst. Elétricas ') AND i.ds_item = 'Ponto de luz no teto com luminária, tomada de corrente e interruptor na cor branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Copa Funcionários', 'Inst. Hidráulica') AND (i.nm_item_desc IN ('Copa Funcionários', 'Inst. Hidráulica') AND i.ds_item = 'Engate, sifão, rede de água fria e esgoto em PVC.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Copa Funcionários', 'Inst. Comunic.') AND (i.nm_item_desc IN ('Copa Funcionários', 'Inst. Comunic.') AND i.ds_item = 'Tubulação seca.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Petplay', 'Piso') AND (i.nm_item_desc IN ('Petplay', 'Piso') AND i.ds_item = 'Grama') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Petplay', 'Fechamento') AND (i.nm_item_desc IN ('Petplay', 'Fechamento') AND i.ds_item = 'Tela alambrado ou tela de proteção.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Petplay', 'Equipamentos') AND (i.nm_item_desc IN ('Petplay', 'Equipamentos') AND i.ds_item = 'A serem definidos') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Parque Infantil', 'Piso') AND (i.nm_item_desc IN ('Parque Infantil', 'Piso') AND i.ds_item = 'Intertravado emborrachado ou grama.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Parque Infantil', 'Brinquedos') AND (i.nm_item_desc IN ('Parque Infantil', 'Brinquedos') AND i.ds_item = 'A serem definidos.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Brinquedoteca', 'Piso') AND (i.nm_item_desc IN ('Brinquedoteca', 'Piso') AND i.ds_item = 'Porcelanato') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Brinquedoteca', 'Parede') AND (i.nm_item_desc IN ('Brinquedoteca', 'Parede') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Brinquedoteca', 'Teto') AND (i.nm_item_desc IN ('Brinquedoteca', 'Teto') AND i.ds_item = 'Forro de gesso.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Brinquedoteca', 'Rodapé') AND (i.nm_item_desc IN ('Brinquedoteca', 'Rodapé') AND i.ds_item = 'Porcelanato, h=5 cm.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Brinquedoteca', 'Soleira') AND (i.nm_item_desc IN ('Brinquedoteca', 'Soleira') AND i.ds_item = 'Mármore ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Brinquedoteca', 'Peitoril') AND (i.nm_item_desc IN ('Brinquedoteca', 'Peitoril') AND i.ds_item = 'Metálico ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Brinquedoteca', 'Ferragens') AND (i.nm_item_desc IN ('Brinquedoteca', 'Ferragens') AND i.ds_item = 'Acabamento cromado.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Brinquedoteca', 'Esquadrias') AND (i.nm_item_desc IN ('Brinquedoteca', 'Esquadrias') AND i.ds_item = 'Alumínio pintado de branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Brinquedoteca', 'Vidro ') AND (i.nm_item_desc IN ('Brinquedoteca', 'Vidro ') AND i.ds_item = 'Liso incolor.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Brinquedoteca', 'Inst. Elétricas ') AND (i.nm_item_desc IN ('Brinquedoteca', 'Inst. Elétricas ') AND i.ds_item = 'Ponto de luz no teto com luminária, tomada de corrente e interruptor na cor branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Salão de Festas', 'Piso') AND (i.nm_item_desc IN ('Salão de Festas', 'Piso') AND i.ds_item = 'Porcelanato.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Salão de Festas', 'Parede') AND (i.nm_item_desc IN ('Salão de Festas', 'Parede') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regularização PVA. Acima das bancadas será aplicado revestimento cerâmico. Nas demais paredes textura acrílica ou pintura acrílica.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Salão de Festas', 'Teto') AND (i.nm_item_desc IN ('Salão de Festas', 'Teto') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Salão de Festas', 'Rodapé') AND (i.nm_item_desc IN ('Salão de Festas', 'Rodapé') AND i.ds_item = 'Porcelanato, h=5 cm.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Salão de Festas', 'Porta') AND (i.nm_item_desc IN ('Salão de Festas', 'Porta') AND i.ds_item = 'Alumínio pintado de branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Salão de Festas', 'Esquadria') AND (i.nm_item_desc IN ('Salão de Festas', 'Esquadria') AND i.ds_item = 'Alumínio printado de branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Salão de Festas', 'Vidro') AND (i.nm_item_desc IN ('Salão de Festas', 'Vidro') AND i.ds_item = 'Liso incolor.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Salão de Festas', 'Soleira') AND (i.nm_item_desc IN ('Salão de Festas', 'Soleira') AND i.ds_item = 'Mármore ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Salão de Festas', 'Peitoril') AND (i.nm_item_desc IN ('Salão de Festas', 'Peitoril') AND i.ds_item = 'Metálico ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Salão de Festas', 'Bancada ') AND (i.nm_item_desc IN ('Salão de Festas', 'Bancada ') AND i.ds_item = 'Mármore ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Salão de Festas', 'Cuba') AND (i.nm_item_desc IN ('Salão de Festas', 'Cuba') AND i.ds_item = 'Inox.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Salão de Festas', 'Metais') AND (i.nm_item_desc IN ('Salão de Festas', 'Metais') AND i.ds_item = 'Torneira para pia com acabamento cromado.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Salão de Festas', 'Tampo do Balcão') AND (i.nm_item_desc IN ('Salão de Festas', 'Tampo do Balcão') AND i.ds_item = 'Mármore ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Salão de Festas', 'Inst. Elétricas ') AND (i.nm_item_desc IN ('Salão de Festas', 'Inst. Elétricas ') AND i.ds_item = 'Ponto de luz no teto com luminária, tomada de corrente e interruptor na cor branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Salão de Festas', 'Inst. Hidráulica') AND (i.nm_item_desc IN ('Salão de Festas', 'Inst. Hidráulica') AND i.ds_item = 'Engate, sifão, rede de água fria e esgoto em PVC.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Salão de Festas', 'Inst. Comunic.') AND (i.nm_item_desc IN ('Salão de Festas', 'Inst. Comunic.') AND i.ds_item = 'Tubulação seca.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Bicicletário', 'Piso') AND (i.nm_item_desc IN ('Bicicletário', 'Piso') AND i.ds_item = 'Em concreto desempolado.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Bicicletário', 'Parede') AND (i.nm_item_desc IN ('Bicicletário', 'Parede') AND i.ds_item = 'Pintura acrílica ou textura acrílica.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Bicicletário', 'Teto') AND (i.nm_item_desc IN ('Bicicletário', 'Teto') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regularização PVA.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Salão de jogos', 'Piso') AND (i.nm_item_desc IN ('Salão de jogos', 'Piso') AND i.ds_item = 'Porcelanato') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Salão de jogos', 'Parede') AND (i.nm_item_desc IN ('Salão de jogos', 'Parede') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Salão de jogos', 'Teto') AND (i.nm_item_desc IN ('Salão de jogos', 'Teto') AND i.ds_item = 'Forro de gesso.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Salão de jogos', 'Rodapé') AND (i.nm_item_desc IN ('Salão de jogos', 'Rodapé') AND i.ds_item = 'Porcelanato, h=5 cm.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Salão de jogos', 'Soleira') AND (i.nm_item_desc IN ('Salão de jogos', 'Soleira') AND i.ds_item = 'Mármore ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Salão de jogos', 'Peitoril') AND (i.nm_item_desc IN ('Salão de jogos', 'Peitoril') AND i.ds_item = 'Metálico ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Salão de jogos', 'Esquadrias') AND (i.nm_item_desc IN ('Salão de jogos', 'Esquadrias') AND i.ds_item = 'Alumínio pintado de branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Salão de jogos', 'Vidro ') AND (i.nm_item_desc IN ('Salão de jogos', 'Vidro ') AND i.ds_item = 'Liso incolor.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Salão de jogos', 'Inst. Elétricas ') AND (i.nm_item_desc IN ('Salão de jogos', 'Inst. Elétricas ') AND i.ds_item = 'Ponto de luz no teto com luminária, tomada de corrente e interruptor na cor branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Academia', 'Piso') AND (i.nm_item_desc IN ('Academia', 'Piso') AND i.ds_item = 'Vinílico.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Academia', 'Parede') AND (i.nm_item_desc IN ('Academia', 'Parede') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Academia', 'Teto') AND (i.nm_item_desc IN ('Academia', 'Teto') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA ou Forro em gesso.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Academia', 'Rodapé') AND (i.nm_item_desc IN ('Academia', 'Rodapé') AND i.ds_item = 'Vinílico, mármore, granito ou madeira, h=5cm.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Academia', 'Soleira') AND (i.nm_item_desc IN ('Academia', 'Soleira') AND i.ds_item = 'Mármore ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Academia', 'Peitoril') AND (i.nm_item_desc IN ('Academia', 'Peitoril') AND i.ds_item = 'Metálico ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Academia', 'Ferragens') AND (i.nm_item_desc IN ('Academia', 'Ferragens') AND i.ds_item = 'Acabamento cromado.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Academia', 'Esquadrias') AND (i.nm_item_desc IN ('Academia', 'Esquadrias') AND i.ds_item = 'Alumínio pintado de branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Academia', 'Vidro ') AND (i.nm_item_desc IN ('Academia', 'Vidro ') AND i.ds_item = 'Liso incolor.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Academia', 'Inst. Elétricas ') AND (i.nm_item_desc IN ('Academia', 'Inst. Elétricas ') AND i.ds_item = 'Ponto de luz no teto com luminária, tomada de corrente e interruptor na cor branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Administração', 'Piso') AND (i.nm_item_desc IN ('Administração', 'Piso') AND i.ds_item = 'Cerâmica.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Administração', 'Parede') AND (i.nm_item_desc IN ('Administração', 'Parede') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Administração', 'Teto') AND (i.nm_item_desc IN ('Administração', 'Teto') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regularização PVA.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Administração', 'Rodapé') AND (i.nm_item_desc IN ('Administração', 'Rodapé') AND i.ds_item = 'Cerâmica, h=5 cm.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Administração', 'Soleira') AND (i.nm_item_desc IN ('Administração', 'Soleira') AND i.ds_item = 'Mármore ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Administração', 'Peitoril') AND (i.nm_item_desc IN ('Administração', 'Peitoril') AND i.ds_item = 'Metálico ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Administração', 'Esquadrias') AND (i.nm_item_desc IN ('Administração', 'Esquadrias') AND i.ds_item = 'Alumínio pintado de branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Administração', 'Vidro ') AND (i.nm_item_desc IN ('Administração', 'Vidro ') AND i.ds_item = 'Liso incolor.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Administração', 'Inst. Elétricas ') AND (i.nm_item_desc IN ('Administração', 'Inst. Elétricas ') AND i.ds_item = 'Ponto de luz no teto com luminária, tomada de corrente e interruptor na cor branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quadra Esportiva', 'Piso') AND (i.nm_item_desc IN ('Quadra Esportiva', 'Piso') AND i.ds_item = 'Concreto.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quadra Esportiva', 'Parede') AND (i.nm_item_desc IN ('Quadra Esportiva', 'Parede') AND i.ds_item = 'Fechamento em tela de nylon ou alambrado.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quadra Esportiva', 'Equipamentos') AND (i.nm_item_desc IN ('Quadra Esportiva', 'Equipamentos') AND i.ds_item = 'A serem definidos.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quadra de Areia', 'Piso') AND (i.nm_item_desc IN ('Quadra de Areia', 'Piso') AND i.ds_item = 'Concreto.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quadra de Areia', 'Parede') AND (i.nm_item_desc IN ('Quadra de Areia', 'Parede') AND i.ds_item = 'Fechamento em tela de nylon ou alambrado.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Quadra de Areia', 'Equipamentos') AND (i.nm_item_desc IN ('Quadra de Areia', 'Equipamentos') AND i.ds_item = 'A serem definidos.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Piscina Adulto/ Infantil/ Deck', 'Piso (Piscina)') AND (i.nm_item_desc IN ('Piscina Adulto/ Infantil/ Deck', 'Piso (Piscina)') AND i.ds_item = 'Pastilha cerâmica.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Piscina Adulto/ Infantil/ Deck', 'Parede (Piscina)') AND (i.nm_item_desc IN ('Piscina Adulto/ Infantil/ Deck', 'Parede (Piscina)') AND i.ds_item = 'Pastilha cerâmica.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Piscina Adulto/ Infantil/ Deck', 'Piso Deck') AND (i.nm_item_desc IN ('Piscina Adulto/ Infantil/ Deck', 'Piso Deck') AND i.ds_item = 'Porcelanato Incesa, Lef, Incefra, Portobello ou Cecafi, ou pedra natural.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Piscina Adulto/ Infantil/ Deck', 'Borda') AND (i.nm_item_desc IN ('Piscina Adulto/ Infantil/ Deck', 'Borda') AND i.ds_item = 'Mármore ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Piscina Adulto/ Infantil/ Deck', 'Equipamentos') AND (i.nm_item_desc IN ('Piscina Adulto/ Infantil/ Deck', 'Equipamentos') AND i.ds_item = 'Bomba e filtro da Jacuzzi, Mark Peerles ou similar, e dispositivos em aço inox ou PVC.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Gerador', 'Piso') AND (i.nm_item_desc IN ('Gerador', 'Piso') AND i.ds_item = 'Cerâmica.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Gerador', 'Parede interna') AND (i.nm_item_desc IN ('Gerador', 'Parede interna') AND i.ds_item = 'Pintura PVA látex.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Gerador', 'Parede externa') AND (i.nm_item_desc IN ('Gerador', 'Parede externa') AND i.ds_item = 'Textura acrílica.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Gerador', 'Teto') AND (i.nm_item_desc IN ('Gerador', 'Teto') AND i.ds_item = 'Pintura acrílica.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Gerador', 'Soleira') AND (i.nm_item_desc IN ('Gerador', 'Soleira') AND i.ds_item = 'Mármore ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Gerador', 'Cobogó') AND (i.nm_item_desc IN ('Gerador', 'Cobogó') AND i.ds_item = 'Em concreto.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Gerador', 'Portão') AND (i.nm_item_desc IN ('Gerador', 'Portão') AND i.ds_item = 'Metálico pintado de branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Gerador', 'Inst. Elétricas ') AND (i.nm_item_desc IN ('Gerador', 'Inst. Elétricas ') AND i.ds_item = 'Ponto de luz no teto com luminária e interruptor na cor branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Casa de lixo', 'Piso') AND (i.nm_item_desc IN ('Casa de lixo', 'Piso') AND i.ds_item = 'Cerâmica.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Casa de lixo', 'Parede interna') AND (i.nm_item_desc IN ('Casa de lixo', 'Parede interna') AND i.ds_item = 'Cerâmica.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Casa de lixo', 'Parede externa') AND (i.nm_item_desc IN ('Casa de lixo', 'Parede externa') AND i.ds_item = 'Textura acrílica.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Casa de lixo', 'Teto') AND (i.nm_item_desc IN ('Casa de lixo', 'Teto') AND i.ds_item = 'Pintura PVA látex branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Casa de lixo', 'Soleira') AND (i.nm_item_desc IN ('Casa de lixo', 'Soleira') AND i.ds_item = 'Mármore ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Casa de lixo', 'Portão') AND (i.nm_item_desc IN ('Casa de lixo', 'Portão') AND i.ds_item = 'Metálico pintado de branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Casa de lixo', 'Inst. Elétricas ') AND (i.nm_item_desc IN ('Casa de lixo', 'Inst. Elétricas ') AND i.ds_item = 'Ponto de luz no teto com luminária, tomada de corrente e interruptor na cor branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Casa de lixo', 'Inst. Hidráulico') AND (i.nm_item_desc IN ('Casa de lixo', 'Inst. Hidráulico') AND i.ds_item = 'Torneira em PVC rígido.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Vestiário Feminino/ Masculino', 'Piso') AND (i.nm_item_desc IN ('Vestiário Feminino/ Masculino', 'Piso') AND i.ds_item = 'Cerâmica.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Vestiário Feminino/ Masculino', 'Parede') AND (i.nm_item_desc IN ('Vestiário Feminino/ Masculino', 'Parede') AND i.ds_item = 'Cerâmica.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Vestiário Feminino/ Masculino', 'Teto') AND (i.nm_item_desc IN ('Vestiário Feminino/ Masculino', 'Teto') AND i.ds_item = 'Forro de gesso.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Vestiário Feminino/ Masculino', 'Soleira') AND (i.nm_item_desc IN ('Vestiário Feminino/ Masculino', 'Soleira') AND i.ds_item = 'Mármore ou granito.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Vestiário Feminino/ Masculino', 'Porta') AND (i.nm_item_desc IN ('Vestiário Feminino/ Masculino', 'Porta') AND i.ds_item = 'Alumínio pintado de branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Vestiário Feminino/ Masculino', 'Ferragens') AND (i.nm_item_desc IN ('Vestiário Feminino/ Masculino', 'Ferragens') AND i.ds_item = 'Com acabamento cromado.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Vestiário Feminino/ Masculino', 'Inst. Elétricas ') AND (i.nm_item_desc IN ('Vestiário Feminino/ Masculino', 'Inst. Elétricas ') AND i.ds_item = 'Ponto de luz no teto com luminária e interruptor na cor branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Escadaria das torres', 'Piso') AND (i.nm_item_desc IN ('Escadaria das torres', 'Piso') AND i.ds_item = 'Concreto desempolado.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Escadaria das torres', 'Parede') AND (i.nm_item_desc IN ('Escadaria das torres', 'Parede') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Escadaria das torres', 'Teto') AND (i.nm_item_desc IN ('Escadaria das torres', 'Teto') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Depósito (DML)', 'Piso') AND (i.nm_item_desc IN ('Depósito (DML)', 'Piso') AND i.ds_item = 'Cerâmica.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Depósito (DML)', 'Parede') AND (i.nm_item_desc IN ('Depósito (DML)', 'Parede') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Depósito (DML)', 'Teto') AND (i.nm_item_desc IN ('Depósito (DML)', 'Teto') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Depósito (DML)', 'Rodapé') AND (i.nm_item_desc IN ('Depósito (DML)', 'Rodapé') AND i.ds_item = 'Cerâmica, h=5cm.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Depósito (DML)', 'Porta') AND (i.nm_item_desc IN ('Depósito (DML)', 'Porta') AND i.ds_item = 'Alumínio pintado de branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Depósito (DML)', 'Ferragens') AND (i.nm_item_desc IN ('Depósito (DML)', 'Ferragens') AND i.ds_item = 'Com acabamento cromado.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Depósito (DML)', 'Inst. Elétricas ') AND (i.nm_item_desc IN ('Depósito (DML)', 'Inst. Elétricas ') AND i.ds_item = 'Ponto de luz no teto com luminária e interruptor na cor branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Muro de fechamento do condomínio', 'Acabamento Interno') AND (i.nm_item_desc IN ('Muro de fechamento do condomínio', 'Acabamento Interno') AND i.ds_item = 'Bloco cerâmico rebocado e pintado ou bloco de concreto aparente.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Muro de fechamento do condomínio', 'Acabamento Externo') AND (i.nm_item_desc IN ('Muro de fechamento do condomínio', 'Acabamento Externo') AND i.ds_item = 'Bloco cerâmico rebocado e pintura ou bloco cerâmico com chapisco rústico ou bloco de concreto aparente.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Hall’s do lazer e torres', 'Piso') AND (i.nm_item_desc IN ('Hall’s do lazer e torres', 'Piso') AND i.ds_item = 'Porcelanato.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Hall’s do lazer e torres', 'Parede') AND (i.nm_item_desc IN ('Hall’s do lazer e torres', 'Parede') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Hall’s do lazer e torres', 'Teto') AND (i.nm_item_desc IN ('Hall’s do lazer e torres', 'Teto') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA ou forro de gesso.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Hall’s do lazer e torres', 'Rodapé') AND (i.nm_item_desc IN ('Hall’s do lazer e torres', 'Rodapé') AND i.ds_item = 'Porcelanato, h=5cm.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Hall’s do lazer e torres', 'Inst. Elétricas ') AND (i.nm_item_desc IN ('Hall’s do lazer e torres', 'Inst. Elétricas ') AND i.ds_item = 'Ponto de luz no teto com luminária.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Escadaria das torres', 'Piso') AND (i.nm_item_desc IN ('Escadaria das torres', 'Piso') AND i.ds_item = 'Concreto desempolado.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Escadaria das torres', 'Parede') AND (i.nm_item_desc IN ('Escadaria das torres', 'Parede') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Escadaria das torres', 'Teto') AND (i.nm_item_desc IN ('Escadaria das torres', 'Teto') AND i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Instalações Gerais', 'Rede elétrica') AND (i.nm_item_desc IN ('Instalações Gerais', 'Rede elétrica') AND i.ds_item = 'Rede aérea ou subterrânea.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Instalações Gerais', 'Rede de comunicação') AND (i.nm_item_desc IN ('Instalações Gerais', 'Rede de comunicação') AND i.ds_item = 'Rede subterrânea ou aérea com tubulação seca e shafts ao longo dos pavimentos.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Instalações Gerais', 'Iluminação das ruas') AND (i.nm_item_desc IN ('Instalações Gerais', 'Iluminação das ruas') AND i.ds_item = 'Braços com Lâmpadas instalados nos postes da concessionária de energia ou em postes exclusivos para iluminação.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Instalações Gerais', 'Drenag./pluviais') AND (i.nm_item_desc IN ('Instalações Gerais', 'Drenag./pluviais') AND i.ds_item = 'Através de caixas com lançamento em rede existente.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Instalações Gerais', 'Esgot. Sanitário') AND (i.nm_item_desc IN ('Instalações Gerais', 'Esgot. Sanitário') AND i.ds_item = 'Rede interna lançando no sistema público de coleta de esgoto ou Estação de Tratamento de Esgoto de operação do condomínio.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Instalações Gerais', 'Rede de Água') AND (i.nm_item_desc IN ('Instalações Gerais', 'Rede de Água') AND i.ds_item = 'Rede de água interligada ao sistema público de fornecimento de água tratada, alimentando reservatório inferior.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Vias internas e estacionamentos das unidades', 'Pavimentação') AND (i.nm_item_desc IN ('Vias internas e estacionamentos das unidades', 'Pavimentação') AND i.ds_item = 'Piso intertravado de concreto ou paralelepípedo sobre colchão de areia.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Jardins', 'Jardins') AND (i.nm_item_desc IN ('Jardins', 'Jardins') AND i.ds_item = 'Grama e alguns arbustos em locais definidos no projeto.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Passeio externo', 'Passeio') AND (i.nm_item_desc IN ('Passeio externo', 'Passeio') AND i.ds_item = 'Em concreto com junta seca.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Portão de veículos (externo)', 'Portão') AND (i.nm_item_desc IN ('Portão de veículos (externo)', 'Portão') AND i.ds_item = 'Metálico pintado de branco.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
-INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente) SELECT i.id_item_desc, a.id_ambiente FROM tb_ambiente a CROSS JOIN tb_item_desc i WHERE a.nm_ambiente IN ('Portão de veículos (externo)', 'Inst. Elétrica') AND (i.nm_item_desc IN ('Portão de veículos (externo)', 'Inst. Elétrica') AND i.ds_item = 'Fechadura elétrica no portão para pedestres, e motor para acionamento do portão para veículos.') AND NOT EXISTS (SELECT 1 FROM tb_item_ambiente ia WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Sala de Estar/Jantar', 'Piso')
+  AND (i.nm_item_desc IN ('Sala de Estar/Jantar', 'Piso') AND i.ds_item = 'Porcelanato ou laminado')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Sala de Estar/Jantar', 'Parede')
+  AND (i.nm_item_desc IN ('Sala de Estar/Jantar', 'Parede') AND
+       i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Sala de Estar/Jantar', 'Teto')
+  AND (i.nm_item_desc IN ('Sala de Estar/Jantar', 'Teto') AND
+       i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regularização PVA.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Sala de Estar/Jantar', 'Rodapé')
+  AND (i.nm_item_desc IN ('Sala de Estar/Jantar', 'Rodapé') AND i.ds_item = 'Porcelanato ou Laminado, h= 5cm')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Sala de Estar/Jantar', 'Soleira')
+  AND (i.nm_item_desc IN ('Sala de Estar/Jantar', 'Soleira') AND i.ds_item = 'Mármore ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Sala de Estar/Jantar', 'Peitoril')
+  AND (i.nm_item_desc IN ('Sala de Estar/Jantar', 'Peitoril') AND i.ds_item = 'Metálico')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Sala de Estar/Jantar', 'Esquadria')
+  AND (i.nm_item_desc IN ('Sala de Estar/Jantar', 'Esquadria') AND i.ds_item = 'Alumínio pintado de branco')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Sala de Estar/Jantar', 'Vidro')
+  AND (i.nm_item_desc IN ('Sala de Estar/Jantar', 'Vidro') AND i.ds_item = 'Liso incolor.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Sala de Estar/Jantar', 'Porta')
+  AND (i.nm_item_desc IN ('Sala de Estar/Jantar', 'Porta') AND
+       i.ds_item = 'Porta semi–ôca comum pintada c/ esmalte sintético.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Sala de Estar/Jantar', 'Ferragem')
+  AND (i.nm_item_desc IN ('Sala de Estar/Jantar', 'Ferragem') AND i.ds_item = 'Acabamento cromado.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Sala de Estar/Jantar', 'Inst. Elétrica')
+  AND (i.nm_item_desc IN ('Sala de Estar/Jantar', 'Inst. Elétrica') AND
+       i.ds_item = 'Pontos de luz no teto, tomadas de corrente e interruptores')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Sala de Estar/Jantar', 'Inst. Comunic.')
+  AND (i.nm_item_desc IN ('Sala de Estar/Jantar', 'Inst. Comunic.') AND
+       i.ds_item = 'Pontos secos de comunicação e de antena de TV.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Circulação', 'Piso')
+  AND (i.nm_item_desc IN ('Circulação', 'Piso') AND i.ds_item = 'Porcelanato ou laminado')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Circulação', 'Parede')
+  AND (i.nm_item_desc IN ('Circulação', 'Parede') AND
+       i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Circulação', 'Teto')
+  AND (i.nm_item_desc IN ('Circulação', 'Teto') AND
+       i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regularização PVA.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Circulação', 'Rodapé')
+  AND (i.nm_item_desc IN ('Circulação', 'Rodapé') AND i.ds_item = 'Porcelanato ou Laminado, h= 5cm')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Circulação', 'Inst. Elétrica')
+  AND (i.nm_item_desc IN ('Circulação', 'Inst. Elétrica') AND
+       i.ds_item = 'Pontos de luz no teto, tomadas de corrente e interruptores')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quarto e Suíte', 'Piso')
+  AND (i.nm_item_desc IN ('Quarto e Suíte', 'Piso') AND i.ds_item = 'Porcelanato ou laminado.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quarto e Suíte', 'Parede')
+  AND (i.nm_item_desc IN ('Quarto e Suíte', 'Parede') AND
+       i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quarto e Suíte', 'Teto')
+  AND (i.nm_item_desc IN ('Quarto e Suíte', 'Teto') AND
+       i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regularização PVA.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quarto e Suíte', 'Rodapé')
+  AND (i.nm_item_desc IN ('Quarto e Suíte', 'Rodapé') AND i.ds_item = 'Porcelanato ou Laminado, h= 5cm.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quarto e Suíte', 'Soleira')
+  AND (i.nm_item_desc IN ('Quarto e Suíte', 'Soleira') AND i.ds_item = 'Mármore ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quarto e Suíte', 'Peitoril')
+  AND (i.nm_item_desc IN ('Quarto e Suíte', 'Peitoril') AND i.ds_item = 'Metálico.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quarto e Suíte', 'Esquadria')
+  AND (i.nm_item_desc IN ('Quarto e Suíte', 'Esquadria') AND i.ds_item = 'Alumínio pintado de branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Gourmets', 'Vidro')
+  AND (i.nm_item_desc IN ('Gourmets', 'Vidro') AND i.ds_item = 'Liso incolor.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quarto e Suíte', 'Porta')
+  AND (i.nm_item_desc IN ('Quarto e Suíte', 'Porta') AND
+       i.ds_item = 'Porta semi–ôca comum pintada c/ esmalte sintético.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quarto e Suíte', 'Ferragem')
+  AND (i.nm_item_desc IN ('Quarto e Suíte', 'Ferragem') AND i.ds_item = 'Acabamento cromado.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quarto e Suíte', 'Inst. Elétrica')
+  AND (i.nm_item_desc IN ('Quarto e Suíte', 'Inst. Elétrica') AND
+       i.ds_item = 'Pontos de luz no teto, tomadas de corrente e interruptores.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quarto e Suíte', 'Inst. Comunic.')
+  AND (i.nm_item_desc IN ('Quarto e Suíte', 'Inst. Comunic.') AND
+       i.ds_item = 'Pontos secos de comunicação e de antena de TV.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quarto e Suíte', 'Ar Condicionado')
+  AND (i.nm_item_desc IN ('Quarto e Suíte', 'Ar Condicionado') AND
+       i.ds_item = 'Infraestrutura para high wall com condensadora axial.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Piso')
+  AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Piso') AND i.ds_item = 'Cerâmica.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Parede')
+  AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Parede') AND i.ds_item = 'Cerâmica até o teto.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Teto')
+  AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Teto') AND i.ds_item = 'Forro de gesso.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Filete')
+  AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Filete') AND i.ds_item = 'Mármore ou granito L=3,5cm.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Cordão de Box')
+  AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Cordão de Box') AND i.ds_item = 'Mármore ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Bancada')
+  AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Bancada') AND
+       i.ds_item = 'Em mármore ou granito com cuba em louça cor branca')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Porta')
+  AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Porta') AND
+       i.ds_item = 'Porta semi-ôca comum pintura c/ esmalte sintético.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Peitoril')
+  AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Peitoril') AND i.ds_item = 'Metálico.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Ferragem')
+  AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Ferragem') AND i.ds_item = 'Acabamento cromado.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Esquadria')
+  AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Esquadria') AND i.ds_item = 'Alumínio pintado de branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Vidro ')
+  AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Vidro ') AND i.ds_item = 'Pontilhado Incolor.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Metal Sanitário')
+  AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Metal Sanitário') AND
+       i.ds_item = 'Torneira para Lavatório, registro de gaveta e registro de pressão com acabamento cromado .')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Louças')
+  AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Louças') AND
+       i.ds_item = 'Vaso Sanitário com Caixa Acoplada em louça cor branca.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Inst. Elétrica')
+  AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Inst. Elétrica') AND i.ds_item =
+                                                                     'Pontos de luz no teto, tomada de corrente e interruptor da Prime, Alumbra, Cemar ou Fame na cor branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Sanitário/ Lavabo', 'Inst. Hidráulica')
+  AND (i.nm_item_desc IN ('Sanitário/ Lavabo', 'Inst. Hidráulica') AND
+       i.ds_item = 'Sifão em PVC, esgoto em PVC, rede de água fria e ducha higiênica em PEX.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Cozinha/ Área de Serviço', 'Piso')
+  AND (i.nm_item_desc IN ('Cozinha/ Área de Serviço', 'Piso') AND i.ds_item = 'Cerâmica.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Cozinha/ Área de Serviço', 'Parede')
+  AND (i.nm_item_desc IN ('Cozinha/ Área de Serviço', 'Parede') AND i.ds_item = 'Cerâmica até o teto.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Cozinha/ Área de Serviço', 'Teto')
+  AND (i.nm_item_desc IN ('Cozinha/ Área de Serviço', 'Teto') AND
+       i.ds_item = 'Pintura látex PVA sobre gesso ou argamassa de regularização PVA.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Cozinha/ Área de Serviço', 'Filete')
+  AND (i.nm_item_desc IN ('Cozinha/ Área de Serviço', 'Filete') AND i.ds_item = 'Mármore ou granito L=3,5cm.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Cozinha/ Área de Serviço', 'Bancada')
+  AND (i.nm_item_desc IN ('Cozinha/ Área de Serviço', 'Bancada') AND i.ds_item = 'Em mármore ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Cozinha/ Área de Serviço', 'Cuba')
+  AND (i.nm_item_desc IN ('Cozinha/ Área de Serviço', 'Cuba') AND i.ds_item = 'Inox.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Cozinha/ Área de Serviço', 'Peitoril')
+  AND (i.nm_item_desc IN ('Cozinha/ Área de Serviço', 'Peitoril') AND i.ds_item = 'Metálico.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Cozinha/ Área de Serviço', 'Tanque')
+  AND (i.nm_item_desc IN ('Cozinha/ Área de Serviço', 'Tanque') AND i.ds_item = 'Louça cor branca.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Cozinha/ Área de Serviço', 'Esquadrias')
+  AND (i.nm_item_desc IN ('Cozinha/ Área de Serviço', 'Esquadrias') AND i.ds_item = 'Alumínio pintado de branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Cozinha/ Área de Serviço', 'Metais')
+  AND (i.nm_item_desc IN ('Cozinha/ Área de Serviço', 'Metais') AND
+       i.ds_item = 'Torneiras e registro de gaveta com acabamento cromado.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Cozinha/ Área de Serviço', 'Inst. Elétricas')
+  AND (i.nm_item_desc IN ('Cozinha/ Área de Serviço', 'Inst. Elétricas') AND
+       i.ds_item = 'Ponto de luz no teto, tomadas de corrente e interruptores.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Cozinha/ Área de Serviço', 'Inst. Hidráulica')
+  AND (i.nm_item_desc IN ('Cozinha/ Área de Serviço', 'Inst. Hidráulica') AND
+       i.ds_item = 'Rede de água fria em PEX e esgoto em PVC')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Cozinha/ Área de Serviço', 'Inst. Comunicação')
+  AND (i.nm_item_desc IN ('Cozinha/ Área de Serviço', 'Inst. Comunicação') AND i.ds_item = 'Tubulação seca.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Área Técnica', 'Piso')
+  AND (i.nm_item_desc IN ('Área Técnica', 'Piso') AND i.ds_item = 'Em concreto desempolado.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Área Técnica', 'Parede')
+  AND (i.nm_item_desc IN ('Área Técnica', 'Parede') AND i.ds_item = 'Textura acrílica.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Área Técnica', 'Teto')
+  AND (i.nm_item_desc IN ('Área Técnica', 'Teto') AND i.ds_item = 'Pintura ou textura acrílica.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Área Técnica', 'Gradil')
+  AND (i.nm_item_desc IN ('Área Técnica', 'Gradil') AND i.ds_item = 'Em perfil metálico pintado de branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Varanda', 'Piso')
+  AND (i.nm_item_desc IN ('Varanda', 'Piso') AND i.ds_item = 'Porcelanato.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Varanda', 'Parede')
+  AND (i.nm_item_desc IN ('Varanda', 'Parede') AND
+       i.ds_item = 'Textura Acrílica ou Pastilha Cerâmica, conforme definido em projeto arquitetônico.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Varanda', 'Teto ')
+  AND (i.nm_item_desc IN ('Varanda', 'Teto ') AND
+       i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA ou Forro de gesso.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Varanda', 'Rodapé')
+  AND (i.nm_item_desc IN ('Varanda', 'Rodapé') AND i.ds_item = 'Porcelanato ou Laminado, h=5cm.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Varanda', 'Porta')
+  AND (i.nm_item_desc IN ('Varanda', 'Porta') AND i.ds_item = 'Alumínio pintado de branco com vidro liso.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Varanda', 'Inst. Elétrica')
+  AND (i.nm_item_desc IN ('Varanda', 'Inst. Elétrica') AND i.ds_item = 'Ponto de luz no teto.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Varanda', 'Guarda Corpo')
+  AND (i.nm_item_desc IN ('Varanda', 'Guarda Corpo') AND i.ds_item = 'Em perfil metálico pintado de branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Garden', 'Piso')
+  AND (i.nm_item_desc IN ('Garden', 'Piso') AND i.ds_item = 'Grama')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Garden', 'Gradil')
+  AND (i.nm_item_desc IN ('Garden', 'Gradil') AND i.ds_item = 'Em perfil metálico pintado de branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Guarita', 'Piso')
+  AND (i.nm_item_desc IN ('Guarita', 'Piso') AND i.ds_item = 'Cerâmica.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Guarita', 'Parede Interna')
+  AND (i.nm_item_desc IN ('Guarita', 'Parede Interna') AND
+       i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Guarita', 'Teto')
+  AND (i.nm_item_desc IN ('Guarita', 'Teto') AND i.ds_item = 'Forro de gesso.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Guarita', 'Parede Externa')
+  AND (i.nm_item_desc IN ('Guarita', 'Parede Externa') AND i.ds_item = 'Acabamento em textura acrílica.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Guarita', 'Rodapé')
+  AND (i.nm_item_desc IN ('Guarita', 'Rodapé') AND i.ds_item = 'Cerâmica, h=5 cm.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Guarita', 'Soleira')
+  AND (i.nm_item_desc IN ('Guarita', 'Soleira') AND i.ds_item = 'Mármore ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Guarita', 'Peitoril')
+  AND (i.nm_item_desc IN ('Guarita', 'Peitoril') AND i.ds_item = 'Metálico ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Guarita', 'Ferragens')
+  AND (i.nm_item_desc IN ('Guarita', 'Ferragens') AND i.ds_item = 'Acabamento cromado.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Guarita', 'Porta externa')
+  AND (i.nm_item_desc IN ('Guarita', 'Porta externa') AND i.ds_item = 'Alumínio pintado na cor branca com vidro liso.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Guarita', 'Esquadrias')
+  AND (i.nm_item_desc IN ('Guarita', 'Esquadrias') AND i.ds_item = 'Alumínio pintado de branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Guarita', 'Vidro ')
+  AND (i.nm_item_desc IN ('Guarita', 'Vidro ') AND i.ds_item = 'Liso incolor.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Guarita', 'Inst. Elétricas ')
+  AND (i.nm_item_desc IN ('Guarita', 'Inst. Elétricas ') AND
+       i.ds_item = 'Ponto de luz no teto com luminária, tomada de corrente e interruptor na cor branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Guarita', 'Inst. Comunic.')
+  AND (i.nm_item_desc IN ('Guarita', 'Inst. Comunic.') AND i.ds_item = 'Tubulação seca.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Gourmets', 'Piso')
+  AND (i.nm_item_desc IN ('Gourmets', 'Piso') AND i.ds_item = 'Porcelanato.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Gourmets', 'Parede Interna')
+  AND (i.nm_item_desc IN ('Gourmets', 'Parede Interna') AND i.ds_item =
+                                                            'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA. Acima das bancadas será aplicado revestimento cerâmico. Nas demais paredes textura acrílica ou pintura acrílica.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Gourmets', 'Teto')
+  AND (i.nm_item_desc IN ('Gourmets', 'Teto') AND
+       i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Gourmets', 'Rodapé')
+  AND (i.nm_item_desc IN ('Gourmets', 'Rodapé') AND i.ds_item = 'Porcelanato, h=5 cm.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Gourmets', 'Tabeira')
+  AND (i.nm_item_desc IN ('Gourmets', 'Tabeira') AND i.ds_item = 'Mármore ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Gourmets', 'Bancada ')
+  AND (i.nm_item_desc IN ('Gourmets', 'Bancada ') AND i.ds_item = 'Mármore ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Gourmets', 'Cuba')
+  AND (i.nm_item_desc IN ('Gourmets', 'Cuba') AND i.ds_item = 'Inox.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Gourmets', 'Metais')
+  AND (i.nm_item_desc IN ('Gourmets', 'Metais') AND i.ds_item = 'Torneira para pia com acabamento cromado.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Gourmets', 'Tampo do balcão')
+  AND (i.nm_item_desc IN ('Gourmets', 'Tampo do balcão') AND i.ds_item = 'Mármore ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Gourmets', 'Churrasqueira')
+  AND (i.nm_item_desc IN ('Gourmets', 'Churrasqueira') AND i.ds_item = 'Pré-moldada ou alvenaria.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Gourmets', 'Inst. Elétricas ')
+  AND (i.nm_item_desc IN ('Gourmets', 'Inst. Elétricas ') AND
+       i.ds_item = 'Ponto de luz no teto com luminária, tomada de corrente e interruptor na cor branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Gourmets', 'Inst. Hidráulica')
+  AND (i.nm_item_desc IN ('Gourmets', 'Inst. Hidráulica') AND
+       i.ds_item = 'Engate, sifão, rede de água fria e esgoto em PVC.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Gourmets', 'Inst. Comunic.')
+  AND (i.nm_item_desc IN ('Gourmets', 'Inst. Comunic.') AND i.ds_item = 'Tubulação seca.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quiosques', 'Piso')
+  AND (i.nm_item_desc IN ('Quiosques', 'Piso') AND i.ds_item = 'Porcelanato.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quiosques', 'Parede Interna')
+  AND (i.nm_item_desc IN ('Quiosques', 'Parede Interna') AND i.ds_item =
+                                                             'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA. Acima das bancadas será aplicado revestimento cerâmico. Nas demais paredes textura acrílica ou pintura acrílica.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quiosques', 'Teto')
+  AND (i.nm_item_desc IN ('Quiosques', 'Teto') AND
+       i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quiosques', 'Rodapé')
+  AND (i.nm_item_desc IN ('Quiosques', 'Rodapé') AND i.ds_item = 'Porcelanato, h=5 cm.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quiosques', 'Tabeira')
+  AND (i.nm_item_desc IN ('Quiosques', 'Tabeira') AND i.ds_item = 'Mármore ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quiosques', 'Porcelanato, h=5 cm. ')
+  AND (i.nm_item_desc IN ('Quiosques', 'Porcelanato, h=5 cm. ') AND i.ds_item = 'Mármore ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quiosques', 'Cuba')
+  AND (i.nm_item_desc IN ('Quiosques', 'Cuba') AND i.ds_item = 'Inox.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quiosques', 'Metais')
+  AND (i.nm_item_desc IN ('Quiosques', 'Metais') AND i.ds_item = 'Torneira para pia com acabamento cromado.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quiosques', 'Tampo do balcão')
+  AND (i.nm_item_desc IN ('Quiosques', 'Tampo do balcão') AND i.ds_item = 'Mármore ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quiosques', 'Churrasqueira')
+  AND (i.nm_item_desc IN ('Quiosques', 'Churrasqueira') AND i.ds_item = 'Pré-moldada ou alvenaria.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quiosques', 'Inst. Elétricas ')
+  AND (i.nm_item_desc IN ('Quiosques', 'Inst. Elétricas ') AND
+       i.ds_item = 'Ponto de luz no teto com luminária, tomada de corrente e interruptor na cor branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quiosques', 'Inst. Hidráulica')
+  AND (i.nm_item_desc IN ('Quiosques', 'Inst. Hidráulica') AND
+       i.ds_item = 'Engate, sifão, rede de água fria e esgoto em PVC.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quiosques', 'Inst. Comunic.')
+  AND (i.nm_item_desc IN ('Quiosques', 'Inst. Comunic.') AND i.ds_item = 'Tubulação seca.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Copa Funcionários', 'Piso')
+  AND (i.nm_item_desc IN ('Copa Funcionários', 'Piso') AND i.ds_item = 'Porcelanato.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Copa Funcionários', 'Parede Interna')
+  AND (i.nm_item_desc IN ('Copa Funcionários', 'Parede Interna') AND i.ds_item =
+                                                                     'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA. Acima das bancadas será aplicado revestimento cerâmico. Nas demais paredes textura acrílica ou pintura acrílica.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Copa Funcionários', 'Teto')
+  AND (i.nm_item_desc IN ('Copa Funcionários', 'Teto') AND
+       i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Copa Funcionários', 'Rodapé')
+  AND (i.nm_item_desc IN ('Copa Funcionários', 'Rodapé') AND i.ds_item = 'Porcelanato, h=5 cm.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Copa Funcionários', 'Porta')
+  AND (i.nm_item_desc IN ('Copa Funcionários', 'Porta') AND i.ds_item = 'Alumínio pintado de branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Copa Funcionários', 'Esquadria')
+  AND (i.nm_item_desc IN ('Copa Funcionários', 'Esquadria') AND i.ds_item = 'Alumínio printado de branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Copa Funcionários', 'Vidro')
+  AND (i.nm_item_desc IN ('Copa Funcionários', 'Vidro') AND i.ds_item = 'Liso.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Copa Funcionários', 'Soleira')
+  AND (i.nm_item_desc IN ('Copa Funcionários', 'Soleira') AND i.ds_item = 'Mármore ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Copa Funcionários', 'Peitoril')
+  AND (i.nm_item_desc IN ('Copa Funcionários', 'Peitoril') AND i.ds_item = 'Metálico ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Copa Funcionários', 'Bancada ')
+  AND (i.nm_item_desc IN ('Copa Funcionários', 'Bancada ') AND i.ds_item = 'Mármore ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Copa Funcionários', 'Cuba')
+  AND (i.nm_item_desc IN ('Copa Funcionários', 'Cuba') AND i.ds_item = 'Inox.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Copa Funcionários', 'Metais')
+  AND (i.nm_item_desc IN ('Copa Funcionários', 'Metais') AND i.ds_item = 'Torneira para pia com acabamento cromado.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Copa Funcionários', 'Inst. Elétricas ')
+  AND (i.nm_item_desc IN ('Copa Funcionários', 'Inst. Elétricas ') AND
+       i.ds_item = 'Ponto de luz no teto com luminária, tomada de corrente e interruptor na cor branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Copa Funcionários', 'Inst. Hidráulica')
+  AND (i.nm_item_desc IN ('Copa Funcionários', 'Inst. Hidráulica') AND
+       i.ds_item = 'Engate, sifão, rede de água fria e esgoto em PVC.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Copa Funcionários', 'Inst. Comunic.')
+  AND (i.nm_item_desc IN ('Copa Funcionários', 'Inst. Comunic.') AND i.ds_item = 'Tubulação seca.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Petplay', 'Piso')
+  AND (i.nm_item_desc IN ('Petplay', 'Piso') AND i.ds_item = 'Grama')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Petplay', 'Fechamento')
+  AND (i.nm_item_desc IN ('Petplay', 'Fechamento') AND i.ds_item = 'Tela alambrado ou tela de proteção.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Petplay', 'Equipamentos')
+  AND (i.nm_item_desc IN ('Petplay', 'Equipamentos') AND i.ds_item = 'A serem definidos')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Parque Infantil', 'Piso')
+  AND (i.nm_item_desc IN ('Parque Infantil', 'Piso') AND i.ds_item = 'Intertravado emborrachado ou grama.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Parque Infantil', 'Brinquedos')
+  AND (i.nm_item_desc IN ('Parque Infantil', 'Brinquedos') AND i.ds_item = 'A serem definidos.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Brinquedoteca', 'Piso')
+  AND (i.nm_item_desc IN ('Brinquedoteca', 'Piso') AND i.ds_item = 'Porcelanato')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Brinquedoteca', 'Parede')
+  AND (i.nm_item_desc IN ('Brinquedoteca', 'Parede') AND
+       i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Brinquedoteca', 'Teto')
+  AND (i.nm_item_desc IN ('Brinquedoteca', 'Teto') AND i.ds_item = 'Forro de gesso.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Brinquedoteca', 'Rodapé')
+  AND (i.nm_item_desc IN ('Brinquedoteca', 'Rodapé') AND i.ds_item = 'Porcelanato, h=5 cm.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Brinquedoteca', 'Soleira')
+  AND (i.nm_item_desc IN ('Brinquedoteca', 'Soleira') AND i.ds_item = 'Mármore ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Brinquedoteca', 'Peitoril')
+  AND (i.nm_item_desc IN ('Brinquedoteca', 'Peitoril') AND i.ds_item = 'Metálico ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Brinquedoteca', 'Ferragens')
+  AND (i.nm_item_desc IN ('Brinquedoteca', 'Ferragens') AND i.ds_item = 'Acabamento cromado.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Brinquedoteca', 'Esquadrias')
+  AND (i.nm_item_desc IN ('Brinquedoteca', 'Esquadrias') AND i.ds_item = 'Alumínio pintado de branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Brinquedoteca', 'Vidro ')
+  AND (i.nm_item_desc IN ('Brinquedoteca', 'Vidro ') AND i.ds_item = 'Liso incolor.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Brinquedoteca', 'Inst. Elétricas ')
+  AND (i.nm_item_desc IN ('Brinquedoteca', 'Inst. Elétricas ') AND
+       i.ds_item = 'Ponto de luz no teto com luminária, tomada de corrente e interruptor na cor branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Salão de Festas', 'Piso')
+  AND (i.nm_item_desc IN ('Salão de Festas', 'Piso') AND i.ds_item = 'Porcelanato.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Salão de Festas', 'Parede')
+  AND (i.nm_item_desc IN ('Salão de Festas', 'Parede') AND i.ds_item =
+                                                           'Pintura PVA látex branco sobre gesso ou massa de regularização PVA. Acima das bancadas será aplicado revestimento cerâmico. Nas demais paredes textura acrílica ou pintura acrílica.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Salão de Festas', 'Teto')
+  AND (i.nm_item_desc IN ('Salão de Festas', 'Teto') AND
+       i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Salão de Festas', 'Rodapé')
+  AND (i.nm_item_desc IN ('Salão de Festas', 'Rodapé') AND i.ds_item = 'Porcelanato, h=5 cm.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Salão de Festas', 'Porta')
+  AND (i.nm_item_desc IN ('Salão de Festas', 'Porta') AND i.ds_item = 'Alumínio pintado de branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Salão de Festas', 'Esquadria')
+  AND (i.nm_item_desc IN ('Salão de Festas', 'Esquadria') AND i.ds_item = 'Alumínio printado de branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Salão de Festas', 'Vidro')
+  AND (i.nm_item_desc IN ('Salão de Festas', 'Vidro') AND i.ds_item = 'Liso incolor.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Salão de Festas', 'Soleira')
+  AND (i.nm_item_desc IN ('Salão de Festas', 'Soleira') AND i.ds_item = 'Mármore ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Salão de Festas', 'Peitoril')
+  AND (i.nm_item_desc IN ('Salão de Festas', 'Peitoril') AND i.ds_item = 'Metálico ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Salão de Festas', 'Bancada ')
+  AND (i.nm_item_desc IN ('Salão de Festas', 'Bancada ') AND i.ds_item = 'Mármore ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Salão de Festas', 'Cuba')
+  AND (i.nm_item_desc IN ('Salão de Festas', 'Cuba') AND i.ds_item = 'Inox.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Salão de Festas', 'Metais')
+  AND (i.nm_item_desc IN ('Salão de Festas', 'Metais') AND i.ds_item = 'Torneira para pia com acabamento cromado.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Salão de Festas', 'Tampo do Balcão')
+  AND (i.nm_item_desc IN ('Salão de Festas', 'Tampo do Balcão') AND i.ds_item = 'Mármore ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Salão de Festas', 'Inst. Elétricas ')
+  AND (i.nm_item_desc IN ('Salão de Festas', 'Inst. Elétricas ') AND
+       i.ds_item = 'Ponto de luz no teto com luminária, tomada de corrente e interruptor na cor branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Salão de Festas', 'Inst. Hidráulica')
+  AND (i.nm_item_desc IN ('Salão de Festas', 'Inst. Hidráulica') AND
+       i.ds_item = 'Engate, sifão, rede de água fria e esgoto em PVC.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Salão de Festas', 'Inst. Comunic.')
+  AND (i.nm_item_desc IN ('Salão de Festas', 'Inst. Comunic.') AND i.ds_item = 'Tubulação seca.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Bicicletário', 'Piso')
+  AND (i.nm_item_desc IN ('Bicicletário', 'Piso') AND i.ds_item = 'Em concreto desempolado.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Bicicletário', 'Parede')
+  AND (i.nm_item_desc IN ('Bicicletário', 'Parede') AND i.ds_item = 'Pintura acrílica ou textura acrílica.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Bicicletário', 'Teto')
+  AND (i.nm_item_desc IN ('Bicicletário', 'Teto') AND
+       i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regularização PVA.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Salão de jogos', 'Piso')
+  AND (i.nm_item_desc IN ('Salão de jogos', 'Piso') AND i.ds_item = 'Porcelanato')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Salão de jogos', 'Parede')
+  AND (i.nm_item_desc IN ('Salão de jogos', 'Parede') AND
+       i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Salão de jogos', 'Teto')
+  AND (i.nm_item_desc IN ('Salão de jogos', 'Teto') AND i.ds_item = 'Forro de gesso.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Salão de jogos', 'Rodapé')
+  AND (i.nm_item_desc IN ('Salão de jogos', 'Rodapé') AND i.ds_item = 'Porcelanato, h=5 cm.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Salão de jogos', 'Soleira')
+  AND (i.nm_item_desc IN ('Salão de jogos', 'Soleira') AND i.ds_item = 'Mármore ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Salão de jogos', 'Peitoril')
+  AND (i.nm_item_desc IN ('Salão de jogos', 'Peitoril') AND i.ds_item = 'Metálico ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Salão de jogos', 'Esquadrias')
+  AND (i.nm_item_desc IN ('Salão de jogos', 'Esquadrias') AND i.ds_item = 'Alumínio pintado de branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Salão de jogos', 'Vidro ')
+  AND (i.nm_item_desc IN ('Salão de jogos', 'Vidro ') AND i.ds_item = 'Liso incolor.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Salão de jogos', 'Inst. Elétricas ')
+  AND (i.nm_item_desc IN ('Salão de jogos', 'Inst. Elétricas ') AND
+       i.ds_item = 'Ponto de luz no teto com luminária, tomada de corrente e interruptor na cor branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Academia', 'Piso')
+  AND (i.nm_item_desc IN ('Academia', 'Piso') AND i.ds_item = 'Vinílico.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Academia', 'Parede')
+  AND (i.nm_item_desc IN ('Academia', 'Parede') AND
+       i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Academia', 'Teto')
+  AND (i.nm_item_desc IN ('Academia', 'Teto') AND
+       i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA ou Forro em gesso.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Academia', 'Rodapé')
+  AND (i.nm_item_desc IN ('Academia', 'Rodapé') AND i.ds_item = 'Vinílico, mármore, granito ou madeira, h=5cm.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Academia', 'Soleira')
+  AND (i.nm_item_desc IN ('Academia', 'Soleira') AND i.ds_item = 'Mármore ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Academia', 'Peitoril')
+  AND (i.nm_item_desc IN ('Academia', 'Peitoril') AND i.ds_item = 'Metálico ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Academia', 'Ferragens')
+  AND (i.nm_item_desc IN ('Academia', 'Ferragens') AND i.ds_item = 'Acabamento cromado.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Academia', 'Esquadrias')
+  AND (i.nm_item_desc IN ('Academia', 'Esquadrias') AND i.ds_item = 'Alumínio pintado de branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Academia', 'Vidro ')
+  AND (i.nm_item_desc IN ('Academia', 'Vidro ') AND i.ds_item = 'Liso incolor.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Academia', 'Inst. Elétricas ')
+  AND (i.nm_item_desc IN ('Academia', 'Inst. Elétricas ') AND
+       i.ds_item = 'Ponto de luz no teto com luminária, tomada de corrente e interruptor na cor branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Administração', 'Piso')
+  AND (i.nm_item_desc IN ('Administração', 'Piso') AND i.ds_item = 'Cerâmica.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Administração', 'Parede')
+  AND (i.nm_item_desc IN ('Administração', 'Parede') AND
+       i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Administração', 'Teto')
+  AND (i.nm_item_desc IN ('Administração', 'Teto') AND
+       i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regularização PVA.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Administração', 'Rodapé')
+  AND (i.nm_item_desc IN ('Administração', 'Rodapé') AND i.ds_item = 'Cerâmica, h=5 cm.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Administração', 'Soleira')
+  AND (i.nm_item_desc IN ('Administração', 'Soleira') AND i.ds_item = 'Mármore ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Administração', 'Peitoril')
+  AND (i.nm_item_desc IN ('Administração', 'Peitoril') AND i.ds_item = 'Metálico ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Administração', 'Esquadrias')
+  AND (i.nm_item_desc IN ('Administração', 'Esquadrias') AND i.ds_item = 'Alumínio pintado de branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Administração', 'Vidro ')
+  AND (i.nm_item_desc IN ('Administração', 'Vidro ') AND i.ds_item = 'Liso incolor.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Administração', 'Inst. Elétricas ')
+  AND (i.nm_item_desc IN ('Administração', 'Inst. Elétricas ') AND
+       i.ds_item = 'Ponto de luz no teto com luminária, tomada de corrente e interruptor na cor branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quadra Esportiva', 'Piso')
+  AND (i.nm_item_desc IN ('Quadra Esportiva', 'Piso') AND i.ds_item = 'Concreto.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quadra Esportiva', 'Parede')
+  AND (i.nm_item_desc IN ('Quadra Esportiva', 'Parede') AND i.ds_item = 'Fechamento em tela de nylon ou alambrado.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quadra Esportiva', 'Equipamentos')
+  AND (i.nm_item_desc IN ('Quadra Esportiva', 'Equipamentos') AND i.ds_item = 'A serem definidos.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quadra de Areia', 'Piso')
+  AND (i.nm_item_desc IN ('Quadra de Areia', 'Piso') AND i.ds_item = 'Concreto.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quadra de Areia', 'Parede')
+  AND (i.nm_item_desc IN ('Quadra de Areia', 'Parede') AND i.ds_item = 'Fechamento em tela de nylon ou alambrado.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Quadra de Areia', 'Equipamentos')
+  AND (i.nm_item_desc IN ('Quadra de Areia', 'Equipamentos') AND i.ds_item = 'A serem definidos.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Piscina Adulto/ Infantil/ Deck', 'Piso (Piscina)')
+  AND (i.nm_item_desc IN ('Piscina Adulto/ Infantil/ Deck', 'Piso (Piscina)') AND i.ds_item = 'Pastilha cerâmica.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Piscina Adulto/ Infantil/ Deck', 'Parede (Piscina)')
+  AND (i.nm_item_desc IN ('Piscina Adulto/ Infantil/ Deck', 'Parede (Piscina)') AND i.ds_item = 'Pastilha cerâmica.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Piscina Adulto/ Infantil/ Deck', 'Piso Deck')
+  AND (i.nm_item_desc IN ('Piscina Adulto/ Infantil/ Deck', 'Piso Deck') AND
+       i.ds_item = 'Porcelanato Incesa, Lef, Incefra, Portobello ou Cecafi, ou pedra natural.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Piscina Adulto/ Infantil/ Deck', 'Borda')
+  AND (i.nm_item_desc IN ('Piscina Adulto/ Infantil/ Deck', 'Borda') AND i.ds_item = 'Mármore ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Piscina Adulto/ Infantil/ Deck', 'Equipamentos')
+  AND (i.nm_item_desc IN ('Piscina Adulto/ Infantil/ Deck', 'Equipamentos') AND
+       i.ds_item = 'Bomba e filtro da Jacuzzi, Mark Peerles ou similar, e dispositivos em aço inox ou PVC.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Gerador', 'Piso')
+  AND (i.nm_item_desc IN ('Gerador', 'Piso') AND i.ds_item = 'Cerâmica.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Gerador', 'Parede interna')
+  AND (i.nm_item_desc IN ('Gerador', 'Parede interna') AND i.ds_item = 'Pintura PVA látex.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Gerador', 'Parede externa')
+  AND (i.nm_item_desc IN ('Gerador', 'Parede externa') AND i.ds_item = 'Textura acrílica.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Gerador', 'Teto')
+  AND (i.nm_item_desc IN ('Gerador', 'Teto') AND i.ds_item = 'Pintura acrílica.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Gerador', 'Soleira')
+  AND (i.nm_item_desc IN ('Gerador', 'Soleira') AND i.ds_item = 'Mármore ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Gerador', 'Cobogó')
+  AND (i.nm_item_desc IN ('Gerador', 'Cobogó') AND i.ds_item = 'Em concreto.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Gerador', 'Portão')
+  AND (i.nm_item_desc IN ('Gerador', 'Portão') AND i.ds_item = 'Metálico pintado de branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Gerador', 'Inst. Elétricas ')
+  AND (i.nm_item_desc IN ('Gerador', 'Inst. Elétricas ') AND
+       i.ds_item = 'Ponto de luz no teto com luminária e interruptor na cor branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Casa de lixo', 'Piso')
+  AND (i.nm_item_desc IN ('Casa de lixo', 'Piso') AND i.ds_item = 'Cerâmica.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Casa de lixo', 'Parede interna')
+  AND (i.nm_item_desc IN ('Casa de lixo', 'Parede interna') AND i.ds_item = 'Cerâmica.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Casa de lixo', 'Parede externa')
+  AND (i.nm_item_desc IN ('Casa de lixo', 'Parede externa') AND i.ds_item = 'Textura acrílica.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Casa de lixo', 'Teto')
+  AND (i.nm_item_desc IN ('Casa de lixo', 'Teto') AND i.ds_item = 'Pintura PVA látex branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Casa de lixo', 'Soleira')
+  AND (i.nm_item_desc IN ('Casa de lixo', 'Soleira') AND i.ds_item = 'Mármore ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Casa de lixo', 'Portão')
+  AND (i.nm_item_desc IN ('Casa de lixo', 'Portão') AND i.ds_item = 'Metálico pintado de branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Casa de lixo', 'Inst. Elétricas ')
+  AND (i.nm_item_desc IN ('Casa de lixo', 'Inst. Elétricas ') AND
+       i.ds_item = 'Ponto de luz no teto com luminária, tomada de corrente e interruptor na cor branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Casa de lixo', 'Inst. Hidráulico')
+  AND (i.nm_item_desc IN ('Casa de lixo', 'Inst. Hidráulico') AND i.ds_item = 'Torneira em PVC rígido.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Vestiário Feminino/ Masculino', 'Piso')
+  AND (i.nm_item_desc IN ('Vestiário Feminino/ Masculino', 'Piso') AND i.ds_item = 'Cerâmica.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Vestiário Feminino/ Masculino', 'Parede')
+  AND (i.nm_item_desc IN ('Vestiário Feminino/ Masculino', 'Parede') AND i.ds_item = 'Cerâmica.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Vestiário Feminino/ Masculino', 'Teto')
+  AND (i.nm_item_desc IN ('Vestiário Feminino/ Masculino', 'Teto') AND i.ds_item = 'Forro de gesso.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Vestiário Feminino/ Masculino', 'Soleira')
+  AND (i.nm_item_desc IN ('Vestiário Feminino/ Masculino', 'Soleira') AND i.ds_item = 'Mármore ou granito.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Vestiário Feminino/ Masculino', 'Porta')
+  AND (i.nm_item_desc IN ('Vestiário Feminino/ Masculino', 'Porta') AND i.ds_item = 'Alumínio pintado de branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Vestiário Feminino/ Masculino', 'Ferragens')
+  AND (i.nm_item_desc IN ('Vestiário Feminino/ Masculino', 'Ferragens') AND i.ds_item = 'Com acabamento cromado.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Vestiário Feminino/ Masculino', 'Inst. Elétricas ')
+  AND (i.nm_item_desc IN ('Vestiário Feminino/ Masculino', 'Inst. Elétricas ') AND
+       i.ds_item = 'Ponto de luz no teto com luminária e interruptor na cor branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Escadaria das torres', 'Piso')
+  AND (i.nm_item_desc IN ('Escadaria das torres', 'Piso') AND i.ds_item = 'Concreto desempolado.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Escadaria das torres', 'Parede')
+  AND (i.nm_item_desc IN ('Escadaria das torres', 'Parede') AND
+       i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Escadaria das torres', 'Teto')
+  AND (i.nm_item_desc IN ('Escadaria das torres', 'Teto') AND
+       i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Depósito (DML)', 'Piso')
+  AND (i.nm_item_desc IN ('Depósito (DML)', 'Piso') AND i.ds_item = 'Cerâmica.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Depósito (DML)', 'Parede')
+  AND (i.nm_item_desc IN ('Depósito (DML)', 'Parede') AND
+       i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Depósito (DML)', 'Teto')
+  AND (i.nm_item_desc IN ('Depósito (DML)', 'Teto') AND
+       i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Depósito (DML)', 'Rodapé')
+  AND (i.nm_item_desc IN ('Depósito (DML)', 'Rodapé') AND i.ds_item = 'Cerâmica, h=5cm.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Depósito (DML)', 'Porta')
+  AND (i.nm_item_desc IN ('Depósito (DML)', 'Porta') AND i.ds_item = 'Alumínio pintado de branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Depósito (DML)', 'Ferragens')
+  AND (i.nm_item_desc IN ('Depósito (DML)', 'Ferragens') AND i.ds_item = 'Com acabamento cromado.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Depósito (DML)', 'Inst. Elétricas ')
+  AND (i.nm_item_desc IN ('Depósito (DML)', 'Inst. Elétricas ') AND
+       i.ds_item = 'Ponto de luz no teto com luminária e interruptor na cor branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Muro de fechamento do condomínio', 'Acabamento Interno')
+  AND (i.nm_item_desc IN ('Muro de fechamento do condomínio', 'Acabamento Interno') AND
+       i.ds_item = 'Bloco cerâmico rebocado e pintado ou bloco de concreto aparente.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Muro de fechamento do condomínio', 'Acabamento Externo')
+  AND (i.nm_item_desc IN ('Muro de fechamento do condomínio', 'Acabamento Externo') AND i.ds_item =
+                                                                                        'Bloco cerâmico rebocado e pintura ou bloco cerâmico com chapisco rústico ou bloco de concreto aparente.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Hall’s do lazer e torres', 'Piso')
+  AND (i.nm_item_desc IN ('Hall’s do lazer e torres', 'Piso') AND i.ds_item = 'Porcelanato.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Hall’s do lazer e torres', 'Parede')
+  AND (i.nm_item_desc IN ('Hall’s do lazer e torres', 'Parede') AND
+       i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Hall’s do lazer e torres', 'Teto')
+  AND (i.nm_item_desc IN ('Hall’s do lazer e torres', 'Teto') AND
+       i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA ou forro de gesso.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Hall’s do lazer e torres', 'Rodapé')
+  AND (i.nm_item_desc IN ('Hall’s do lazer e torres', 'Rodapé') AND i.ds_item = 'Porcelanato, h=5cm.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Hall’s do lazer e torres', 'Inst. Elétricas ')
+  AND (i.nm_item_desc IN ('Hall’s do lazer e torres', 'Inst. Elétricas ') AND
+       i.ds_item = 'Ponto de luz no teto com luminária.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Escadaria das torres', 'Piso')
+  AND (i.nm_item_desc IN ('Escadaria das torres', 'Piso') AND i.ds_item = 'Concreto desempolado.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Escadaria das torres', 'Parede')
+  AND (i.nm_item_desc IN ('Escadaria das torres', 'Parede') AND
+       i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Escadaria das torres', 'Teto')
+  AND (i.nm_item_desc IN ('Escadaria das torres', 'Teto') AND
+       i.ds_item = 'Pintura PVA látex branco sobre gesso ou massa de regulariação PVA.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Instalações Gerais', 'Rede elétrica')
+  AND (i.nm_item_desc IN ('Instalações Gerais', 'Rede elétrica') AND i.ds_item = 'Rede aérea ou subterrânea.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Instalações Gerais', 'Rede de comunicação')
+  AND (i.nm_item_desc IN ('Instalações Gerais', 'Rede de comunicação') AND
+       i.ds_item = 'Rede subterrânea ou aérea com tubulação seca e shafts ao longo dos pavimentos.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Instalações Gerais', 'Iluminação das ruas')
+  AND (i.nm_item_desc IN ('Instalações Gerais', 'Iluminação das ruas') AND i.ds_item =
+                                                                           'Braços com Lâmpadas instalados nos postes da concessionária de energia ou em postes exclusivos para iluminação.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Instalações Gerais', 'Drenag./pluviais')
+  AND (i.nm_item_desc IN ('Instalações Gerais', 'Drenag./pluviais') AND
+       i.ds_item = 'Através de caixas com lançamento em rede existente.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Instalações Gerais', 'Esgot. Sanitário')
+  AND (i.nm_item_desc IN ('Instalações Gerais', 'Esgot. Sanitário') AND i.ds_item =
+                                                                        'Rede interna lançando no sistema público de coleta de esgoto ou Estação de Tratamento de Esgoto de operação do condomínio.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Instalações Gerais', 'Rede de Água')
+  AND (i.nm_item_desc IN ('Instalações Gerais', 'Rede de Água') AND i.ds_item =
+                                                                    'Rede de água interligada ao sistema público de fornecimento de água tratada, alimentando reservatório inferior.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Vias internas e estacionamentos das unidades', 'Pavimentação')
+  AND (i.nm_item_desc IN ('Vias internas e estacionamentos das unidades', 'Pavimentação') AND
+       i.ds_item = 'Piso intertravado de concreto ou paralelepípedo sobre colchão de areia.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Jardins', 'Jardins')
+  AND (i.nm_item_desc IN ('Jardins', 'Jardins') AND
+       i.ds_item = 'Grama e alguns arbustos em locais definidos no projeto.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Passeio externo', 'Passeio')
+  AND (i.nm_item_desc IN ('Passeio externo', 'Passeio') AND i.ds_item = 'Em concreto com junta seca.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Portão de veículos (externo)', 'Portão')
+  AND (i.nm_item_desc IN ('Portão de veículos (externo)', 'Portão') AND i.ds_item = 'Metálico pintado de branco.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
+INSERT INTO tb_item_ambiente (id_item_desc, id_ambiente)
+SELECT i.id_item_desc, a.id_ambiente
+FROM tb_ambiente a
+         CROSS JOIN tb_item_desc i
+WHERE a.nm_ambiente IN ('Portão de veículos (externo)', 'Inst. Elétrica')
+  AND (i.nm_item_desc IN ('Portão de veículos (externo)', 'Inst. Elétrica') AND
+       i.ds_item = 'Fechadura elétrica no portão para pedestres, e motor para acionamento do portão para veículos.')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_item_ambiente ia
+                  WHERE i.id_item_desc = ia.id_item_desc AND a.id_ambiente = ia.id_ambiente);
 
 -- MARCA_MATERIAL
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Cerâmica' AND mar.nm_marca IN ('Arielle', 'Portobello', 'Pamesa', 'Elizabeth', 'Ceusa', 'Pointer', 'Tecnogres', 'Camelo', 'Fior', 'Biancogrês', 'Villagres') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Laminado' AND mar.nm_marca IN ('Eucatex', 'Durafloor', 'Espaçofloor') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Esquadria' AND mar.nm_marca IN ('Esaf', 'Alumasa', 'Atlantica', 'Ramassol', 'Unicasa') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Ferragem' AND mar.nm_marca IN ('Silvana', 'Stam', 'Arouca', 'Soprano', 'Aliança') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Inst. Elétrica' AND mar.nm_marca IN ('Margirius', 'Ilumi', 'Alumbra', 'Peesa', '–', 'Una', 'Max', 'Fame', 'Steck') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Metal Sanitário' AND mar.nm_marca IN ('Kelly', 'Forusi', 'Esteves', 'Talita', 'Fabrimar', 'Meber') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Louças' AND mar.nm_marca IN ('Celite', 'Logasa', 'Deca', 'Mari', 'Louças', 'Icasa') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Porta (alumínio)' AND mar.nm_marca IN ('Esaf', 'Mgm', 'Alumasa', 'Atlantica', 'Ramassol', 'Unicasa') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Cuba (inox)' AND mar.nm_marca IN ('Ghel', 'Plus', 'Frank', 'Tramontina', 'Pianox', 'Tecnocuba') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Louças' AND mar.nm_marca IN ('Celite', 'Deca', 'Logasa', 'Mari', 'Louças', 'Ideal', 'Icasa') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Cerâmica' AND mar.nm_marca IN ('Incesa', 'Portobello', 'Arielle', 'Tecnogres', 'Pamesa', 'Camelo', 'Fior', 'Biancogrês', 'Lef', 'Pointer') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Porcelanato' AND mar.nm_marca IN ('Portobello', 'Tecnogres', 'Pamesa', 'Biancogrês', 'Elizabeth', 'Portinari', 'Eliane', 'Ceusa', 'Villagres') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Laminado' AND mar.nm_marca IN ('Eucatex', 'Durafloor', 'Espaçofloor') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Esquadria' AND mar.nm_marca IN ('Esaf', 'Alumasa', 'Atlantica', 'Ramassol', 'Unicasa') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Ferragem' AND mar.nm_marca IN ('Pado', 'La', 'Fonte', 'Papaiz', 'Stam', 'Arouca', 'Soprano', 'Imab') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Inst. Elétrica' AND mar.nm_marca IN ('Alumbra', 'Steck', 'Margirius', 'Fame') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Metal Sanitário' AND mar.nm_marca IN ('Forusi', 'Deca', 'Celite', 'Fabrimar', 'Roca', 'Docol') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Louças' AND mar.nm_marca IN ('Celite', 'Elizabeth', 'Deca', 'Incepa', 'Roca') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Porta (alumínio)' AND mar.nm_marca IN ('Esaf', 'Mgm', 'Alumasa', 'Atlantica', 'Ramassol', 'Unicasa') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Cuba (inox)' AND mar.nm_marca IN ('Ghel', 'Plus', 'Frank', 'Tramontina', 'Pianox', 'Tecnocuba') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Cuba (louça)' AND mar.nm_marca IN ('Celite', 'Deca', 'Incepa') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Cerâmica' AND mar.nm_marca IN ('Incesa', 'Portobello', 'Arielle', 'Tecnogres', 'Pamesa', 'Camelo', 'Fior', 'Biancogrês', 'Pointer') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Porcelanato' AND mar.nm_marca IN ('Portobello', 'Arielle', 'Tecnogres', 'Pamesa', 'Biancogrês', 'Elizabeth', 'Ceusa', 'Pointer', 'Villagres') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Laminado' AND mar.nm_marca IN ('Eucatex', 'Durafloor', 'Espaçofloor') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Esquadria' AND mar.nm_marca IN ('Esaf', 'Alumasa', 'Atlantica', 'Ramassol', 'Unicasa') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Ferragem' AND mar.nm_marca IN ('Silvana', 'Stam', 'Arouca', 'Soprano', 'Aliança', 'Imab') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Inst. Elétrica' AND mar.nm_marca IN ('Alumbra', 'Steck', 'Ilumi', 'Schneider', 'Margirius', 'Fame') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Metal Sanitário' AND mar.nm_marca IN ('Forusi', 'Deca', 'Celite', 'Fabrimar', 'Docol') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Louças' AND mar.nm_marca IN ('Celite', 'Deca', 'Incepa') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Porta (alumínio)' AND mar.nm_marca IN ('Esaf', 'Mgm', 'Alumasa', 'Atlantica', 'Ramassol', 'Unicasa') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Cuba (inox)' AND mar.nm_marca IN ('Ghel', 'Plus', 'Frank', 'Tramontina', 'Pianox', 'Tecnocuba') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
-INSERT INTO tb_marca_material (id_marca, id_material) SELECT mar.id_marca, mat.id_material FROM tb_marca mar CROSS JOIN tb_material mat WHERE mat.nm_material ILIKE 'Cuba (louça)' AND mar.nm_marca IN ('Celite', 'Deca', 'Incepa') AND NOT EXISTS (SELECT 1 FROM tb_marca_material mama WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Cerâmica'
+  AND mar.nm_marca IN
+      ('Arielle', 'Portobello', 'Pamesa', 'Elizabeth', 'Ceusa', 'Pointer', 'Tecnogres', 'Camelo', 'Fior', 'Biancogrês',
+       'Villagres')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Laminado'
+  AND mar.nm_marca IN ('Eucatex', 'Durafloor', 'Espaçofloor')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Esquadria'
+  AND mar.nm_marca IN ('Esaf', 'Alumasa', 'Atlantica', 'Ramassol', 'Unicasa')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Ferragem'
+  AND mar.nm_marca IN ('Silvana', 'Stam', 'Arouca', 'Soprano', 'Aliança')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Inst. Elétrica'
+  AND mar.nm_marca IN ('Margirius', 'Ilumi', 'Alumbra', 'Peesa', '–', 'Una', 'Max', 'Fame', 'Steck')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Metal Sanitário'
+  AND mar.nm_marca IN ('Kelly', 'Forusi', 'Esteves', 'Talita', 'Fabrimar', 'Meber')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Louças'
+  AND mar.nm_marca IN ('Celite', 'Logasa', 'Deca', 'Mari', 'Louças', 'Icasa')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Porta (alumínio)'
+  AND mar.nm_marca IN ('Esaf', 'Mgm', 'Alumasa', 'Atlantica', 'Ramassol', 'Unicasa')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Cuba (inox)'
+  AND mar.nm_marca IN ('Ghel', 'Plus', 'Frank', 'Tramontina', 'Pianox', 'Tecnocuba')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Louças'
+  AND mar.nm_marca IN ('Celite', 'Deca', 'Logasa', 'Mari', 'Louças', 'Ideal', 'Icasa')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Cerâmica'
+  AND mar.nm_marca IN
+      ('Incesa', 'Portobello', 'Arielle', 'Tecnogres', 'Pamesa', 'Camelo', 'Fior', 'Biancogrês', 'Lef', 'Pointer')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Porcelanato'
+  AND mar.nm_marca IN
+      ('Portobello', 'Tecnogres', 'Pamesa', 'Biancogrês', 'Elizabeth', 'Portinari', 'Eliane', 'Ceusa', 'Villagres')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Laminado'
+  AND mar.nm_marca IN ('Eucatex', 'Durafloor', 'Espaçofloor')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Esquadria'
+  AND mar.nm_marca IN ('Esaf', 'Alumasa', 'Atlantica', 'Ramassol', 'Unicasa')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Ferragem'
+  AND mar.nm_marca IN ('Pado', 'La', 'Fonte', 'Papaiz', 'Stam', 'Arouca', 'Soprano', 'Imab')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Inst. Elétrica'
+  AND mar.nm_marca IN ('Alumbra', 'Steck', 'Margirius', 'Fame')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Metal Sanitário'
+  AND mar.nm_marca IN ('Forusi', 'Deca', 'Celite', 'Fabrimar', 'Roca', 'Docol')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Louças'
+  AND mar.nm_marca IN ('Celite', 'Elizabeth', 'Deca', 'Incepa', 'Roca')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Porta (alumínio)'
+  AND mar.nm_marca IN ('Esaf', 'Mgm', 'Alumasa', 'Atlantica', 'Ramassol', 'Unicasa')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Cuba (inox)'
+  AND mar.nm_marca IN ('Ghel', 'Plus', 'Frank', 'Tramontina', 'Pianox', 'Tecnocuba')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Cuba (louça)'
+  AND mar.nm_marca IN ('Celite', 'Deca', 'Incepa')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Cerâmica'
+  AND mar.nm_marca IN
+      ('Incesa', 'Portobello', 'Arielle', 'Tecnogres', 'Pamesa', 'Camelo', 'Fior', 'Biancogrês', 'Pointer')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Porcelanato'
+  AND mar.nm_marca IN
+      ('Portobello', 'Arielle', 'Tecnogres', 'Pamesa', 'Biancogrês', 'Elizabeth', 'Ceusa', 'Pointer', 'Villagres')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Laminado'
+  AND mar.nm_marca IN ('Eucatex', 'Durafloor', 'Espaçofloor')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Esquadria'
+  AND mar.nm_marca IN ('Esaf', 'Alumasa', 'Atlantica', 'Ramassol', 'Unicasa')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Ferragem'
+  AND mar.nm_marca IN ('Silvana', 'Stam', 'Arouca', 'Soprano', 'Aliança', 'Imab')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Inst. Elétrica'
+  AND mar.nm_marca IN ('Alumbra', 'Steck', 'Ilumi', 'Schneider', 'Margirius', 'Fame')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Metal Sanitário'
+  AND mar.nm_marca IN ('Forusi', 'Deca', 'Celite', 'Fabrimar', 'Docol')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Louças'
+  AND mar.nm_marca IN ('Celite', 'Deca', 'Incepa')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Porta (alumínio)'
+  AND mar.nm_marca IN ('Esaf', 'Mgm', 'Alumasa', 'Atlantica', 'Ramassol', 'Unicasa')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Cuba (inox)'
+  AND mar.nm_marca IN ('Ghel', 'Plus', 'Frank', 'Tramontina', 'Pianox', 'Tecnocuba')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
+INSERT INTO tb_marca_material (id_marca, id_material)
+SELECT mar.id_marca, mat.id_material
+FROM tb_marca mar
+         CROSS JOIN tb_material mat
+WHERE mat.nm_material ILIKE 'Cuba (louça)'
+  AND mar.nm_marca IN ('Celite', 'Deca', 'Incepa')
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_marca_material mama
+                  WHERE mar.id_marca = mama.id_marca AND mat.id_material = mama.id_material);
 
 -- COMPOSIÇÃO MATERIAL
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'MAIS VIVER' WHERE m.nm_material ILIKE 'Cerâmica' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'MAIS VIVER' WHERE m.nm_material ILIKE 'Laminado' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'MAIS VIVER' WHERE m.nm_material ILIKE 'Esquadria' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'MAIS VIVER' WHERE m.nm_material ILIKE 'Ferragem' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'MAIS VIVER' WHERE m.nm_material ILIKE 'Inst. Elétrica' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'MAIS VIVER' WHERE m.nm_material ILIKE 'Metal Sanitário' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'MAIS VIVER' WHERE m.nm_material ILIKE 'Louças' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'MAIS VIVER' WHERE m.nm_material ILIKE 'Porta (alumínio)' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'MAIS VIVER' WHERE m.nm_material ILIKE 'Cuba (inox)' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'MAIS VIVER' WHERE m.nm_material ILIKE 'Louças' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'RESIDENCE' WHERE m.nm_material ILIKE 'Cerâmica' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'RESIDENCE' WHERE m.nm_material ILIKE 'Porcelanato' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'RESIDENCE' WHERE m.nm_material ILIKE 'Laminado' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'RESIDENCE' WHERE m.nm_material ILIKE 'Esquadria' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'RESIDENCE' WHERE m.nm_material ILIKE 'Ferragem' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'RESIDENCE' WHERE m.nm_material ILIKE 'Inst. Elétrica' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'RESIDENCE' WHERE m.nm_material ILIKE 'Metal Sanitário' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'RESIDENCE' WHERE m.nm_material ILIKE 'Louças' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'RESIDENCE' WHERE m.nm_material ILIKE 'Porta (alumínio)' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'RESIDENCE' WHERE m.nm_material ILIKE 'Cuba (inox)' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'RESIDENCE' WHERE m.nm_material ILIKE 'Cuba (louça)' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE m.nm_material ILIKE 'Cerâmica' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE m.nm_material ILIKE 'Porcelanato' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE m.nm_material ILIKE 'Laminado' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE m.nm_material ILIKE 'Esquadria' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE m.nm_material ILIKE 'Ferragem' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE m.nm_material ILIKE 'Inst. Elétrica' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE m.nm_material ILIKE 'Metal Sanitário' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE m.nm_material ILIKE 'Louças' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE m.nm_material ILIKE 'Porta (alumínio)' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE m.nm_material ILIKE 'Cuba (inox)' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_material (id_marca_material, id_padrao) SELECT mm.id_marca_material, p.id_padrao FROM tb_marca_material mm JOIN tb_material m ON mm.id_material = m.id_material JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE m.nm_material ILIKE 'Cuba (louça)' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_material cm  WHERE cm.id_marca_material = mm.id_marca_material    AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'MAIS VIVER'
+WHERE m.nm_material ILIKE 'Cerâmica'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'MAIS VIVER'
+WHERE m.nm_material ILIKE 'Laminado'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'MAIS VIVER'
+WHERE m.nm_material ILIKE 'Esquadria'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'MAIS VIVER'
+WHERE m.nm_material ILIKE 'Ferragem'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'MAIS VIVER'
+WHERE m.nm_material ILIKE 'Inst. Elétrica'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'MAIS VIVER'
+WHERE m.nm_material ILIKE 'Metal Sanitário'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'MAIS VIVER'
+WHERE m.nm_material ILIKE 'Louças'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'MAIS VIVER'
+WHERE m.nm_material ILIKE 'Porta (alumínio)'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'MAIS VIVER'
+WHERE m.nm_material ILIKE 'Cuba (inox)'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'MAIS VIVER'
+WHERE m.nm_material ILIKE 'Louças'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'RESIDENCE'
+WHERE m.nm_material ILIKE 'Cerâmica'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'RESIDENCE'
+WHERE m.nm_material ILIKE 'Porcelanato'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'RESIDENCE'
+WHERE m.nm_material ILIKE 'Laminado'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'RESIDENCE'
+WHERE m.nm_material ILIKE 'Esquadria'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'RESIDENCE'
+WHERE m.nm_material ILIKE 'Ferragem'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'RESIDENCE'
+WHERE m.nm_material ILIKE 'Inst. Elétrica'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'RESIDENCE'
+WHERE m.nm_material ILIKE 'Metal Sanitário'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'RESIDENCE'
+WHERE m.nm_material ILIKE 'Louças'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'RESIDENCE'
+WHERE m.nm_material ILIKE 'Porta (alumínio)'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'RESIDENCE'
+WHERE m.nm_material ILIKE 'Cuba (inox)'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'RESIDENCE'
+WHERE m.nm_material ILIKE 'Cuba (louça)'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE m.nm_material ILIKE 'Cerâmica'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE m.nm_material ILIKE 'Porcelanato'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE m.nm_material ILIKE 'Laminado'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE m.nm_material ILIKE 'Esquadria'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE m.nm_material ILIKE 'Ferragem'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE m.nm_material ILIKE 'Inst. Elétrica'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE m.nm_material ILIKE 'Metal Sanitário'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE m.nm_material ILIKE 'Louças'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE m.nm_material ILIKE 'Porta (alumínio)'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE m.nm_material ILIKE 'Cuba (inox)'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_material (id_marca_material, id_padrao)
+SELECT mm.id_marca_material, p.id_padrao
+FROM tb_marca_material mm
+         JOIN tb_material m ON mm.id_material = m.id_material
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE m.nm_material ILIKE 'Cuba (louça)'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_material cm
+                  WHERE cm.id_marca_material = mm.id_marca_material AND cm.id_padrao = p.id_padrao);
 
 -- COMPOSIÇÃO AMBIENTE
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Sala de Estar/Jantar' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Sala de Estar/Jantar' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Sala de Estar/Jantar' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Sala de Estar/Jantar' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Sala de Estar/Jantar' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Sala de Estar/Jantar' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Sala de Estar/Jantar' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Sala de Estar/Jantar' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Sala de Estar/Jantar' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Sala de Estar/Jantar' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Sala de Estar/Jantar' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Sala de Estar/Jantar' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Circulação' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Circulação' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Circulação' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Circulação' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Circulação' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quarto e Suíte' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quarto e Suíte' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quarto e Suíte' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quarto e Suíte' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quarto e Suíte' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quarto e Suíte' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quarto e Suíte' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Gourmets' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quarto e Suíte' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quarto e Suíte' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quarto e Suíte' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quarto e Suíte' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quarto e Suíte' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Cozinha/ Área de Serviço' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Cozinha/ Área de Serviço' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Cozinha/ Área de Serviço' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Cozinha/ Área de Serviço' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Cozinha/ Área de Serviço' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Cozinha/ Área de Serviço' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Cozinha/ Área de Serviço' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Cozinha/ Área de Serviço' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Cozinha/ Área de Serviço' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Cozinha/ Área de Serviço' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Cozinha/ Área de Serviço' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Cozinha/ Área de Serviço' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Cozinha/ Área de Serviço' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Área Técnica' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Área Técnica' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Área Técnica' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Área Técnica' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Varanda' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Varanda' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Varanda' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Varanda' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Varanda' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Varanda' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Varanda' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Garden' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Garden' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Guarita' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Guarita' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Guarita' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Guarita' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Guarita' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Guarita' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Guarita' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Guarita' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Guarita' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Guarita' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Guarita' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Guarita' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Guarita' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Gourmets' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Gourmets' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Gourmets' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Gourmets' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Gourmets' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Gourmets' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Gourmets' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Gourmets' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Gourmets' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Gourmets' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Gourmets' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Gourmets' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Gourmets' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quiosques' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quiosques' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quiosques' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quiosques' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quiosques' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quiosques' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quiosques' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quiosques' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quiosques' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quiosques' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quiosques' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quiosques' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quiosques' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Copa Funcionários' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Copa Funcionários' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Copa Funcionários' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Copa Funcionários' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Copa Funcionários' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Copa Funcionários' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Copa Funcionários' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Copa Funcionários' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Copa Funcionários' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Copa Funcionários' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Copa Funcionários' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Copa Funcionários' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Copa Funcionários' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Copa Funcionários' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Copa Funcionários' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Petplay' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Petplay' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Petplay' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Parque Infantil' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Parque Infantil' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Brinquedoteca' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Brinquedoteca' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Brinquedoteca' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Brinquedoteca' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Brinquedoteca' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Brinquedoteca' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Brinquedoteca' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Brinquedoteca' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Brinquedoteca' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Brinquedoteca' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Salão de Festas' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Salão de Festas' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Salão de Festas' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Salão de Festas' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Salão de Festas' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Salão de Festas' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Salão de Festas' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Salão de Festas' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Salão de Festas' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Salão de Festas' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Salão de Festas' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Salão de Festas' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Salão de Festas' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Salão de Festas' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Salão de Festas' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Salão de Festas' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Bicicletário' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Bicicletário' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Bicicletário' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Salão de jogos' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Salão de jogos' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Salão de jogos' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Salão de jogos' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Salão de jogos' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Salão de jogos' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Salão de jogos' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Salão de jogos' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Salão de jogos' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Academia' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Academia' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Academia' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Academia' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Academia' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Academia' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Academia' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Academia' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Academia' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Academia' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Administração' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Administração' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Administração' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Administração' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Administração' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Administração' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Administração' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Administração' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Administração' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quadra Esportiva' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quadra Esportiva' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quadra Esportiva' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quadra de Areia' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quadra de Areia' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Quadra de Areia' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Piscina Adulto/ Infantil/ Deck' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Piscina Adulto/ Infantil/ Deck' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Piscina Adulto/ Infantil/ Deck' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Piscina Adulto/ Infantil/ Deck' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Piscina Adulto/ Infantil/ Deck' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Gerador' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Gerador' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Gerador' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Gerador' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Gerador' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Gerador' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Gerador' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Gerador' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Casa de lixo' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Casa de lixo' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Casa de lixo' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Casa de lixo' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Casa de lixo' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Casa de lixo' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Casa de lixo' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Casa de lixo' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Vestiário Feminino/ Masculino' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Vestiário Feminino/ Masculino' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Vestiário Feminino/ Masculino' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Vestiário Feminino/ Masculino' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Vestiário Feminino/ Masculino' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Vestiário Feminino/ Masculino' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Vestiário Feminino/ Masculino' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Escadaria das torres' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Escadaria das torres' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Escadaria das torres' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Depósito (DML)' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Depósito (DML)' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Depósito (DML)' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Depósito (DML)' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Depósito (DML)' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Depósito (DML)' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Depósito (DML)' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Muro de fechamento do condomínio' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Muro de fechamento do condomínio' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Hall’s do lazer e torres' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Hall’s do lazer e torres' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Hall’s do lazer e torres' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Hall’s do lazer e torres' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Hall’s do lazer e torres' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Escadaria das torres' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Escadaria das torres' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Escadaria das torres' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Instalações Gerais' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Instalações Gerais' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Instalações Gerais' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Instalações Gerais' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Instalações Gerais' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Instalações Gerais' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Vias internas e estacionamentos das unidades' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Jardins' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Passeio externo' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Portão de veículos (externo)' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
-INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao) SELECT ai.id_item_ambiente, p.id_padrao FROM tb_item_ambiente ai JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA' WHERE a.nm_ambiente ILIKE 'Portão de veículos (externo)' AND NOT EXISTS ( SELECT 1 FROM tb_composicao_ambiente ca  WHERE ca.id_item_ambiente = ai.id_item_ambiente    AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Sala de Estar/Jantar'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Sala de Estar/Jantar'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Sala de Estar/Jantar'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Sala de Estar/Jantar'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Sala de Estar/Jantar'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Sala de Estar/Jantar'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Sala de Estar/Jantar'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Sala de Estar/Jantar'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Sala de Estar/Jantar'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Sala de Estar/Jantar'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Sala de Estar/Jantar'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Sala de Estar/Jantar'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Circulação'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Circulação'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Circulação'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Circulação'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Circulação'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quarto e Suíte'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quarto e Suíte'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quarto e Suíte'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quarto e Suíte'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quarto e Suíte'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quarto e Suíte'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quarto e Suíte'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Gourmets'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quarto e Suíte'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quarto e Suíte'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quarto e Suíte'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quarto e Suíte'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quarto e Suíte'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Sanitário/ Lavabo'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Cozinha/ Área de Serviço'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Cozinha/ Área de Serviço'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Cozinha/ Área de Serviço'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Cozinha/ Área de Serviço'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Cozinha/ Área de Serviço'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Cozinha/ Área de Serviço'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Cozinha/ Área de Serviço'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Cozinha/ Área de Serviço'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Cozinha/ Área de Serviço'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Cozinha/ Área de Serviço'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Cozinha/ Área de Serviço'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Cozinha/ Área de Serviço'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Cozinha/ Área de Serviço'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Área Técnica'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Área Técnica'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Área Técnica'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Área Técnica'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Varanda'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Varanda'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Varanda'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Varanda'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Varanda'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Varanda'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Varanda'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Garden'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Garden'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Guarita'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Guarita'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Guarita'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Guarita'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Guarita'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Guarita'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Guarita'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Guarita'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Guarita'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Guarita'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Guarita'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Guarita'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Guarita'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Gourmets'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Gourmets'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Gourmets'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Gourmets'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Gourmets'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Gourmets'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Gourmets'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Gourmets'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Gourmets'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Gourmets'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Gourmets'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Gourmets'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Gourmets'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quiosques'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quiosques'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quiosques'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quiosques'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quiosques'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quiosques'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quiosques'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quiosques'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quiosques'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quiosques'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quiosques'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quiosques'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quiosques'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Copa Funcionários'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Copa Funcionários'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Copa Funcionários'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Copa Funcionários'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Copa Funcionários'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Copa Funcionários'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Copa Funcionários'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Copa Funcionários'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Copa Funcionários'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Copa Funcionários'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Copa Funcionários'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Copa Funcionários'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Copa Funcionários'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Copa Funcionários'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Copa Funcionários'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Petplay'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Petplay'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Petplay'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Parque Infantil'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Parque Infantil'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Brinquedoteca'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Brinquedoteca'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Brinquedoteca'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Brinquedoteca'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Brinquedoteca'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Brinquedoteca'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Brinquedoteca'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Brinquedoteca'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Brinquedoteca'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Brinquedoteca'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Salão de Festas'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Salão de Festas'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Salão de Festas'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Salão de Festas'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Salão de Festas'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Salão de Festas'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Salão de Festas'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Salão de Festas'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Salão de Festas'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Salão de Festas'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Salão de Festas'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Salão de Festas'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Salão de Festas'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Salão de Festas'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Salão de Festas'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Salão de Festas'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Bicicletário'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Bicicletário'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Bicicletário'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Salão de jogos'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Salão de jogos'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Salão de jogos'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Salão de jogos'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Salão de jogos'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Salão de jogos'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Salão de jogos'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Salão de jogos'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Salão de jogos'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Academia'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Academia'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Academia'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Academia'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Academia'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Academia'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Academia'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Academia'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Academia'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Academia'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Administração'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Administração'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Administração'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Administração'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Administração'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Administração'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Administração'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Administração'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Administração'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quadra Esportiva'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quadra Esportiva'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quadra Esportiva'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quadra de Areia'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quadra de Areia'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Quadra de Areia'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Piscina Adulto/ Infantil/ Deck'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Piscina Adulto/ Infantil/ Deck'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Piscina Adulto/ Infantil/ Deck'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Piscina Adulto/ Infantil/ Deck'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Piscina Adulto/ Infantil/ Deck'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Gerador'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Gerador'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Gerador'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Gerador'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Gerador'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Gerador'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Gerador'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Gerador'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Casa de lixo'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Casa de lixo'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Casa de lixo'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Casa de lixo'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Casa de lixo'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Casa de lixo'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Casa de lixo'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Casa de lixo'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Vestiário Feminino/ Masculino'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Vestiário Feminino/ Masculino'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Vestiário Feminino/ Masculino'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Vestiário Feminino/ Masculino'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Vestiário Feminino/ Masculino'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Vestiário Feminino/ Masculino'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Vestiário Feminino/ Masculino'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Escadaria das torres'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Escadaria das torres'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Escadaria das torres'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Depósito (DML)'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Depósito (DML)'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Depósito (DML)'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Depósito (DML)'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Depósito (DML)'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Depósito (DML)'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Depósito (DML)'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Muro de fechamento do condomínio'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Muro de fechamento do condomínio'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Hall’s do lazer e torres'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Hall’s do lazer e torres'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Hall’s do lazer e torres'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Hall’s do lazer e torres'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Hall’s do lazer e torres'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Escadaria das torres'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Escadaria das torres'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Escadaria das torres'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Instalações Gerais'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Instalações Gerais'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Instalações Gerais'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Instalações Gerais'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Instalações Gerais'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Instalações Gerais'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Vias internas e estacionamentos das unidades'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Jardins'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Passeio externo'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Portão de veículos (externo)'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);
+INSERT INTO tb_composicao_ambiente (id_item_ambiente, id_padrao)
+SELECT ai.id_item_ambiente, p.id_padrao
+FROM tb_item_ambiente ai
+         JOIN tb_ambiente a ON ai.id_ambiente = a.id_ambiente
+         JOIN tb_padrao p ON p.nm_padrao ILIKE 'VIDA BELA'
+WHERE a.nm_ambiente ILIKE 'Portão de veículos (externo)'
+  AND NOT EXISTS (SELECT 1
+                  FROM tb_composicao_ambiente ca
+                  WHERE ca.id_item_ambiente = ai.id_item_ambiente AND ca.id_padrao = p.id_padrao);

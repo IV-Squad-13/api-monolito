@@ -11,7 +11,9 @@ import java.util.Optional;
 @NoRepositoryBean
 public interface DocElementRepository<T extends DocElement> extends MongoRepository<T, ObjectId> {
     Optional<T> findByName(String name);
+
     Optional<T> findByNameAndEspecificacaoId(String name, String especificacaoId);
+
     void deleteAllByName(@NotBlank String name);
 
     void deleteAllByEspecificacaoId(String especificacaoId);

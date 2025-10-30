@@ -11,4 +11,5 @@ public record ResItemDTO(
         ResItemTypeDTO type,
         Set<ResMinDTO> ambienteSet,
         Set<ResMinDTO> padraoSet
-) { }
+) {
+}

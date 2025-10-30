@@ -4,6 +4,7 @@ import com.squad13.apimonolito.models.editor.mongo.ItemDocElement;
 import com.squad13.apimonolito.models.revision.mongo.ItemRevDocElement;
 import com.squad13.apimonolito.mongo.editor.ItemDocElementRepository;
 import com.squad13.apimonolito.mongo.revision.ItemRevDocElementRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,67 +43,73 @@ class ItemRevDocTest {
     @Test
     void testItemRevPersistence() {
         ItemRevDocElement itemRev = new ItemRevDocElement();
-        itemRev.setItem(item);
-        itemRev.setRevisaoId(1L);
-        itemRev.setApproved(true);
+        itemRev.setRevisedDocId(item.getId());
+        itemRev.setRevisionId(1L);
+        itemRev.setIsApproved(true);
         itemRev.setComment("Revisão do item");
 
         itemRevDocRepository.save(itemRev);
 
-        ItemRevDocElement foundItemRev = itemRevDocRepository.findByItemAndRevisaoId(item, 1L);
+        ItemRevDocElement foundItemRev = itemRevDocRepository.findByRevisedDocIdAndRevisionId(item.getId(), 1L)
+                        .orElse(null);
         assertThat(foundItemRev).isNotNull();
         assertThat(foundItemRev.getId()).isEqualTo(itemRev.getId());
         assertThat(foundItemRev.getComment()).isEqualTo(itemRev.getComment());
-        assertThat(foundItemRev.getItem().getName()).isEqualTo(item.getName());
-        assertThat(foundItemRev.isApproved()).isTrue();
+        assertThat(foundItemRev.getRevisedDocId()).isEqualTo(item.getId());
+        assertThat(foundItemRev.getIsApproved()).isTrue();
     }
 
     @Test
     void testItemRevUpdate() {
         ItemRevDocElement itemRev = new ItemRevDocElement();
-        itemRev.setItem(item);
-        itemRev.setRevisaoId(1L);
-        itemRev.setApproved(false);
+        itemRev.setRevisedDocId(item.getId());
+        itemRev.setRevisionId(1L);
+        itemRev.setIsApproved(false);
         itemRev.setComment("Revisão do item");
         itemRevDocRepository.save(itemRev);
 
-        ItemRevDocElement found = itemRevDocRepository.findByItemAndRevisaoId(item, 1L);
-        found.setApproved(true);
+        ItemRevDocElement found = itemRevDocRepository.findByRevisedDocIdAndRevisionId(item.getId(), 1L)
+                        .orElse(null);
+        Assertions.assertNotNull(found);
+        found.setIsApproved(true);
         found.setComment("Revisão Aprovada");
         itemRevDocRepository.save(found);
 
-        ItemRevDocElement updated = itemRevDocRepository.findByItemAndRevisaoId(item, 1L);
-        assertThat(updated.isApproved()).isTrue();
+        ItemRevDocElement updated = itemRevDocRepository.findByRevisedDocIdAndRevisionId(item.getId(), 1L)
+                .orElse(null);
+        Assertions.assertNotNull(updated);
+        assertThat(updated.getIsApproved()).isTrue();
         assertThat(updated.getComment()).isEqualTo("Revisão Aprovada");
     }
 
     @Test
     void testItemRevDelete() {
         ItemRevDocElement itemRev = new ItemRevDocElement();
-        itemRev.setItem(item);
-        itemRev.setRevisaoId(1L);
-        itemRev.setApproved(false);
+        itemRev.setRevisedDocId(item.getId());
+        itemRev.setRevisionId(1L);
+        itemRev.setIsApproved(false);
         itemRev.setComment("O item deve ser removido");
         itemRevDocRepository.save(itemRev);
 
         itemRevDocRepository.delete(itemRev);
-        ItemRevDocElement found = itemRevDocRepository.findByItemAndRevisaoId(item, 1L);
+        ItemRevDocElement found = itemRevDocRepository.findByRevisedDocIdAndRevisionId(item.getId(), 1L)
+                .orElse(null);
         assertThat(found).isNull();
     }
 
     @Test
     void testDuplicateItemRevThrows() {
         ItemRevDocElement rev1 = new ItemRevDocElement();
-        rev1.setItem(item);
-        rev1.setRevisaoId(1L);
-        rev1.setApproved(true);
+        rev1.setRevisedDocId(item.getId());
+        rev1.setRevisionId(1L);
+        rev1.setIsApproved(true);
         rev1.setComment("First revision");
         itemRevDocRepository.save(rev1);
 
         ItemRevDocElement rev2 = new ItemRevDocElement();
-        rev2.setItem(item);
-        rev2.setRevisaoId(1L);
-        rev2.setApproved(false);
+        rev2.setRevisedDocId(item.getId());
+        rev2.setRevisionId(1L);
+        rev2.setIsApproved(false);
         rev2.setComment("Duplicate revision");
 
         assertThrows(DataIntegrityViolationException.class,

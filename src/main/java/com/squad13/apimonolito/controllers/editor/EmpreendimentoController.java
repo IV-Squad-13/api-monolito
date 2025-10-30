@@ -1,13 +1,11 @@
 package com.squad13.apimonolito.controllers.editor;
 
-import com.squad13.apimonolito.DTO.catalog.AmbienteDTO;
-import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
-import com.squad13.apimonolito.DTO.catalog.edit.EditAmbienteDTO;
-import com.squad13.apimonolito.DTO.catalog.res.ResAmbienteDTO;
 import com.squad13.apimonolito.DTO.editor.EmpDTO;
 import com.squad13.apimonolito.DTO.editor.LoadDocumentParamsDTO;
 import com.squad13.apimonolito.DTO.editor.edit.EditEmpDTO;
 import com.squad13.apimonolito.DTO.editor.res.ResEmpDTO;
+import com.squad13.apimonolito.DTO.revision.ToRevisionDTO;
+import com.squad13.apimonolito.DTO.revision.res.ResRevDTO;
 import com.squad13.apimonolito.services.editor.EmpreendimentoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +38,11 @@ public class EmpreendimentoController {
             @ModelAttribute LoadDocumentParamsDTO loadDTO
     ) {
         return ResponseEntity.ok(empService.findByAttribute(attribute, value, loadDTO));
+    }
+
+    @PostMapping("/{id}/request-revision")
+    public ResponseEntity<ResRevDTO> sendToRevision(@PathVariable Long id, @RequestBody ToRevisionDTO dto) {
+        return ResponseEntity.ok(empService.sendToRevision(id, dto));
     }
 
     @PostMapping("/new")

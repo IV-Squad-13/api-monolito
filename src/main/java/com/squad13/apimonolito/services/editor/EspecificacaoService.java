@@ -1,6 +1,5 @@
 package com.squad13.apimonolito.services.editor;
 
-import com.squad13.apimonolito.DTO.editor.DocSearchParamsDTO;
 import com.squad13.apimonolito.DTO.editor.EspecificacaoDocDTO;
 import com.squad13.apimonolito.DTO.editor.EspecificacaoSearchParamsDTO;
 import com.squad13.apimonolito.DTO.editor.LoadDocumentParamsDTO;
@@ -15,20 +14,19 @@ import com.squad13.apimonolito.models.catalog.associative.ItemAmbiente;
 import com.squad13.apimonolito.models.catalog.associative.MarcaMaterial;
 import com.squad13.apimonolito.models.editor.mongo.*;
 import com.squad13.apimonolito.models.editor.relational.Empreendimento;
-import com.squad13.apimonolito.mongo.editor.*;
+import com.squad13.apimonolito.mongo.editor.EspecificacaoDocRepository;
 import com.squad13.apimonolito.repository.editor.EmpreendimentoRepository;
 import com.squad13.apimonolito.services.catalog.ComposicaoService;
 import com.squad13.apimonolito.util.builder.DocElementBuilder;
-import com.squad13.apimonolito.util.factory.ResponseDocFactory;
-import com.squad13.apimonolito.util.search.DocumentSearch;
 import com.squad13.apimonolito.util.enums.LocalEnum;
-import com.squad13.apimonolito.util.mappers.CatalogMapper;
-import com.squad13.apimonolito.util.mappers.EditorMapper;
+import com.squad13.apimonolito.util.mapper.CatalogMapper;
+import com.squad13.apimonolito.util.mapper.EditorMapper;
+import com.squad13.apimonolito.util.search.DocumentSearch;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.core.aggregation.*;
-import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -46,9 +44,9 @@ public class EspecificacaoService {
 
     private final EditorMapper editorMapper;
     private final CatalogMapper catalogMapper;
-    
+
     private final DocElementBuilder docBuilder;
-    
+
     private final DocumentSearch documentSearch;
 
     public List<ResSpecDTO> findAll(LoadDocumentParamsDTO params) {
@@ -56,11 +54,12 @@ public class EspecificacaoService {
         return documentSearch.findWithAggregation("especificacoes", ResSpecDTO.class, aggregation);
     }
 
-    // TODO: Implementar busca por id com agregação
     public ResSpecDTO findById(ObjectId id, LoadDocumentParamsDTO params) {
         Aggregation aggregation = docBuilder.buildAggregation(params);
+
         return documentSearch.findWithAggregation("especificacoes", ResSpecDTO.class, aggregation)
                 .stream()
+                .filter(spec -> new ObjectId(spec.getId()).equals(id))
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("Especificação não encontrada para o ID: " + id));
     }
@@ -83,8 +82,10 @@ public class EspecificacaoService {
         );
     }
 
-    public List<ResSpecDTO> findByEmpId(Long id, LoadDocumentParamsDTO params) {
-        return search(params, new EspecificacaoSearchParamsDTO(id));
+    public ResSpecDTO findByEmpId(Long id, LoadDocumentParamsDTO params) {
+        return search(params, new EspecificacaoSearchParamsDTO(id)).stream()
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Especificação não encontrada para o Empreendimento: " + id));
     }
 
     @Transactional
@@ -132,7 +133,7 @@ public class EspecificacaoService {
                 .toList();
     }
 
-    public ResSpecDTO createFromPadrao(EspecificacaoDocDTO dto, Empreendimento emp) {
+    private ResSpecDTO createFromPadrao(EspecificacaoDocDTO dto, Empreendimento emp) {
         EspecificacaoDoc spec = new EspecificacaoDoc();
         spec.setId(newId());
         spec.setName(dto.name());
@@ -253,5 +254,10 @@ public class EspecificacaoService {
 
     public void delete(ObjectId id) {
         documentSearch.deleteWithReferences(id, EspecificacaoDoc.class);
+    }
+
+    public void delete(Long empId) {
+        ResSpecDTO spec = findByEmpId(empId, LoadDocumentParamsDTO.allFalse());
+        delete(new ObjectId(spec.getId()));
     }
 }

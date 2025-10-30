@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/catalogo/marca")
@@ -37,13 +38,29 @@ public class MarcaController {
         return ResponseEntity.ok(marcaService.findById(id, loadDTO));
     }
 
+    //@GetMapping("/search")
+    //public ResponseEntity<List<ResMarcaDTO>> getByAttribute(
+    //        @RequestParam String attribute,
+    //        @RequestParam String value,
+    //        @ModelAttribute LoadCatalogParamsDTO loadDTO
+    //) {
+    //    return ResponseEntity.ok(marcaService.findByAttribute(attribute, value, loadDTO));
+    //}
+
     @GetMapping("/search")
-    public ResponseEntity<List<ResMarcaDTO>> getByAttribute(
-            @RequestParam String attribute,
-            @RequestParam String value,
+    public ResponseEntity<List<ResMarcaDTO>> search(
+            @RequestParam Map<String, String> filters,
             @ModelAttribute LoadCatalogParamsDTO loadDTO
     ) {
-        return ResponseEntity.ok(marcaService.findByAttribute(attribute, value, loadDTO));
+        filters.remove("loadAll");
+        filters.remove("loadPadroes");
+        filters.remove("loadAmbientes");
+        filters.remove("loadItems");
+        filters.remove("loadMateriais");
+        filters.remove("loadMarcas");
+        filters.remove("loadNested");
+
+        return ResponseEntity.ok(marcaService.findByFilters(filters, loadDTO));
     }
 
     @GetMapping("/rel")

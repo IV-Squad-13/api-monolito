@@ -6,15 +6,19 @@ import com.squad13.apimonolito.DTO.catalog.PadraoDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResItemAmbienteDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResMarcaMaterialDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResPadraoDTO;
+import com.squad13.apimonolito.exceptions.InvalidAttributeException;
 import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.catalog.Padrao;
 import com.squad13.apimonolito.repository.catalog.PadraoRepository;
+import com.squad13.apimonolito.util.search.CatalogSearch;
 import com.squad13.apimonolito.util.mapper.CatalogMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +28,8 @@ public class PadraoService {
 
     private final CatalogMapper catalogMapper;
     private final ComposicaoService composicaoService;
+
+    private final CatalogSearch catalogSearch;
 
     public List<ResPadraoDTO> findAll(LoadCatalogParamsDTO params) {
         return padraoRepository.findAll()
@@ -105,5 +111,42 @@ public class PadraoService {
         Padrao existing = findByIdOrThrow(id);
         existing.setIsActive(false);
         return catalogMapper.toResponse(padraoRepository.save(existing), LoadCatalogParamsDTO.allTrue());
+    }
+
+    public List<ResPadraoDTO> findByFilters(Map<String, String> stringFilters, LoadCatalogParamsDTO loadDTO) {
+
+        Map<String, Object> typedFilters = new HashMap<>();
+
+        for (Map.Entry<String, String> entry : stringFilters.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+
+            switch (key) {
+                case "name":
+                    typedFilters.put(key, value);
+                    break;
+
+                case "isActive":
+                    typedFilters.put(key, Boolean.parseBoolean(value));
+                    break;
+
+                case "id":
+                    try {
+                        typedFilters.put(key, Long.parseLong(value));
+                    } catch (NumberFormatException e) {
+                        throw new InvalidAttributeException("Valor inválido para o filtro 'id': " + value);
+                    }
+                    break;
+
+                default:
+                    System.out.println("Ignorando filtro desconhecido: " + key);
+            }
+        }
+
+        List<Padrao> padroes = catalogSearch.findByCriteria(typedFilters, Padrao.class);
+
+        return padroes.stream()
+                .map(padrao -> catalogMapper.toResponse(padrao, loadDTO))
+                .toList();
     }
 }

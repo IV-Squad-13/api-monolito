@@ -1,17 +1,23 @@
 package com.squad13.apimonolito.services.catalog;
 
+import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
+import com.squad13.apimonolito.DTO.catalog.edit.EditItemTypeDTO;
 import com.squad13.apimonolito.DTO.catalog.ItemTypeDTO;
 import com.squad13.apimonolito.DTO.catalog.edit.EditItemTypeDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResItemTypeDTO;
+import com.squad13.apimonolito.exceptions.InvalidAttributeException;
 import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.catalog.ItemType;
 import com.squad13.apimonolito.repository.catalog.ItemTypeRepository;
 import com.squad13.apimonolito.util.mapper.CatalogMapper;
+import com.squad13.apimonolito.util.search.CatalogSearch;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +26,8 @@ public class ItemTypeService {
     private final ItemTypeRepository itemTypeRepository;
 
     private final CatalogMapper catalogMapper;
+
+    private final CatalogSearch catalogSearch;
 
     public List<ResItemTypeDTO> findAll() {
         return itemTypeRepository.findAll()
@@ -86,5 +94,45 @@ public class ItemTypeService {
         ItemType existing = findByIdOrThrow(id);
         existing.setIsActive(false);
         return catalogMapper.toResponse(itemTypeRepository.save(existing));
+    }
+
+    public List<ResItemTypeDTO> findByFilters(Map<String, String> stringFilters, LoadCatalogParamsDTO loadDTO) {
+
+        Map<String, Object> typedFilters = new HashMap<>();
+
+        for (Map.Entry<String, String> entry : stringFilters.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+
+            switch (key) {
+
+                case "name":
+                    typedFilters.put(key, value);
+                    break;
+
+
+                case "isActive":
+                    typedFilters.put(key, Boolean.parseBoolean(value));
+                    break;
+
+
+                case "id":
+                    try {
+                        typedFilters.put(key, Long.parseLong(value));
+                    } catch (NumberFormatException e) {
+                        throw new InvalidAttributeException("Valor inválido para o filtro 'id': " + value);
+                    }
+                    break;
+
+                default:
+                    System.out.println("Ignorando filtro desconhecido: " + key);
+            }
+        }
+
+        List<ItemType> itemTypes = catalogSearch.findByCriteria(typedFilters, ItemType.class);
+
+        return itemTypes.stream()
+                .map(catalogMapper::toResponse)
+                .toList();
     }
 }

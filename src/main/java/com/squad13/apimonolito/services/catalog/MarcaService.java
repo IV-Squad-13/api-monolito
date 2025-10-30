@@ -10,6 +10,7 @@ import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.catalog.Marca;
 import com.squad13.apimonolito.repository.catalog.MarcaRepository;
 import com.squad13.apimonolito.util.mapper.CatalogMapper;
+import com.squad13.apimonolito.util.search.CatalogSearch;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -21,7 +22,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Transactional
 @Service
@@ -31,6 +34,8 @@ public class MarcaService {
     private final MarcaRepository marcaRepository;
 
     private final CatalogMapper catalogMapper;
+
+    private final CatalogSearch catalogSearch;
 
     @PersistenceContext
     private EntityManager em;
@@ -121,5 +126,42 @@ public class MarcaService {
         Marca existing = findByIdOrThrow(id);
         existing.setIsActive(false);
         return catalogMapper.toResponse(marcaRepository.save(existing), LoadCatalogParamsDTO.allTrue());
+    }
+
+    public List<ResMarcaDTO> findByFilters(Map<String, String> stringFilters, LoadCatalogParamsDTO loadDTO) {
+
+        Map<String, Object> typedFilters = new HashMap<>();
+
+        for (Map.Entry<String, String> entry : stringFilters.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+
+            switch (key) {
+                case "name":
+                    typedFilters.put(key, value);
+                    break;
+
+                case "isActive":
+                    typedFilters.put(key, Boolean.parseBoolean(value));
+                    break;
+
+                case "id":
+                    try {
+                        typedFilters.put(key, Long.parseLong(value));
+                    } catch (NumberFormatException e) {
+                        throw new InvalidAttributeException("Valor inválido para o filtro 'id': " + value);
+                    }
+                    break;
+
+                default:
+                    System.out.println("Ignorando filtro desconhecido: " + key);
+            }
+        }
+
+        List<Marca> marcas = catalogSearch.findByCriteria(typedFilters, Marca.class);
+
+        return marcas.stream()
+                .map(marca -> catalogMapper.toResponse(marca, loadDTO))
+                .toList();
     }
 }

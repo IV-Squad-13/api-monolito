@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/catalogo/ambiente")
@@ -37,13 +38,21 @@ public class AmbienteController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<ResAmbienteDTO>> getByAttribute(
-            @RequestParam String attribute,
-            @RequestParam String value,
+    public ResponseEntity<List<ResAmbienteDTO>> search(
+            @RequestParam Map<String, String> filters,
             @ModelAttribute LoadCatalogParamsDTO loadDTO
-    ) {
-        return ResponseEntity.ok(ambienteService.findByAttribute(attribute, value, loadDTO));
-    }
+            ) {
+
+            filters.remove("loadAll");
+            filters.remove("loadPadroes");
+            filters.remove("loadAmbientes");
+            filters.remove("loadItems");
+            filters.remove("loadMateriais");
+            filters.remove("loadMarcas");
+            filters.remove("loadNested");
+
+        return ResponseEntity.ok(ambienteService.findByFilters(filters, loadDTO));
+        }
 
     @GetMapping("/rel")
     public ResponseEntity<List<ResItemDTO>> getAssociations(@RequestParam(required = false) Long id) {

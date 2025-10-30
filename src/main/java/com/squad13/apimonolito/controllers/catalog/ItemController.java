@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/catalogo/item")
@@ -34,13 +35,31 @@ public class ItemController {
         return ResponseEntity.ok(itemService.findById(id, loadDTO));
     }
 
+    //@GetMapping("/search")
+    //public ResponseEntity<List<ResItemDTO>> getByAttribute(
+    //        @RequestParam String attribute,
+    //        @RequestParam(required = false) String value,
+    //        @ModelAttribute LoadCatalogParamsDTO loadDTO
+    //) {
+    //    return ResponseEntity.ok(itemService.findByAttribute(attribute, value, loadDTO));
+    // }
+
     @GetMapping("/search")
-    public ResponseEntity<List<ResItemDTO>> getByAttribute(
-            @RequestParam String attribute,
-            @RequestParam(required = false) String value,
+    public ResponseEntity<List<ResItemDTO>> search(
+            @RequestParam Map<String, String> filters,
             @ModelAttribute LoadCatalogParamsDTO loadDTO
     ) {
-        return ResponseEntity.ok(itemService.findByAttribute(attribute, value, loadDTO));
+
+        filters.remove("loadAll");
+        filters.remove("loadPadroes");
+        filters.remove("loadAmbientes");
+        filters.remove("loadItems");
+        filters.remove("loadMateriais");
+        filters.remove("loadMarcas");
+        filters.remove("loadNested");
+
+
+        return ResponseEntity.ok(itemService.findByFilters(filters, loadDTO));
     }
 
     @GetMapping("/rel")

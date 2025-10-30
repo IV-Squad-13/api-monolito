@@ -1,5 +1,6 @@
 package com.squad13.apimonolito.controllers.catalog;
 
+import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
 import com.squad13.apimonolito.DTO.catalog.edit.EditItemTypeDTO;
 import com.squad13.apimonolito.DTO.catalog.ItemTypeDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResAmbienteDTO;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/catalogo/item-types")
@@ -39,6 +41,23 @@ public class ItemTypeController {
     @GetMapping("/name/{name}")
     public ResponseEntity<ResItemTypeDTO> getByName(@PathVariable String name) {
         return ResponseEntity.ok(itemTypeService.findByNameOrThrow(name));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ResItemTypeDTO>> search(
+            @RequestParam Map<String, String> filters,
+            @ModelAttribute LoadCatalogParamsDTO loadDTO
+            ) {
+
+        filters.remove("loadAll");
+        filters.remove("loadPadroes");
+        filters.remove("loadAmbientes");
+        filters.remove("loadItems");
+        filters.remove("loadMateriais");
+        filters.remove("loadMarcas");
+        filters.remove("loadNested");
+
+        return ResponseEntity.ok(itemTypeService.findByFilters(filters, loadDTO));
     }
 
     @GetMapping("/rel")

@@ -177,7 +177,7 @@ public class EmpreendimentoService {
         userEmpRepository.save(userEmp);
     }
 
-    // TODO: add lógica para segundo envio para revisão
+    // TODO: implementar uma lógica de continuação de Revisão
     public ResRevDTO sendToRevision(Long id, ToRevisionDTO dto) {
         Empreendimento emp = findByIdOrThrow(id);
 
@@ -247,6 +247,7 @@ public class EmpreendimentoService {
             emp.setName(dto.name());
         }
 
+        // TODO: Definir o que acontece se o padrão for mudado
         if (dto.padraoId() != null) {
             Long currentPadraoId = emp.getPadrao() != null ? emp.getPadrao().getId() : null;
             if (!Objects.equals(currentPadraoId, dto.padraoId())) {

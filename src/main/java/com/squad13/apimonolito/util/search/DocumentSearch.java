@@ -72,7 +72,7 @@ public class DocumentSearch {
         return mongoTemplate.aggregate(finalAggregation, collection, resultType).getMappedResults();
     }
 
-    public <T> void bulkSave(Class<T> clazz, List<T> docs) {
+    public <T> void bulkSave(Class<? extends T> clazz, List<? extends T> docs) {
         if (docs == null || docs.isEmpty()) return;
 
         mongoTemplate.bulkOps(BulkOperations.BulkMode.UNORDERED, clazz)

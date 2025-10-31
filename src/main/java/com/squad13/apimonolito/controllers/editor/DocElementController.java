@@ -54,6 +54,12 @@ public class DocElementController {
         return ResponseEntity.ok(docElementService.createElement(new ObjectId(specId), dto));
     }
 
+    @PostMapping("/{specId}/catalog/bulk")
+    @PreAuthorize("@require.editingStage(#specId)")
+    public ResponseEntity<List<ResDocElementDTO>> createBulk(@PathVariable String specId, @Valid @RequestBody List<DocElementCatalogCreationDTO> dtoList) {
+        return ResponseEntity.ok(docElementService.createManyElements(new ObjectId(specId), dtoList));
+    }
+
     @PostMapping("/{specId}/raw")
     @PreAuthorize("@require.editingStage(#specId)")
     public ResponseEntity<ResDocElementDTO> createRawElement(@PathVariable String specId, @Valid @RequestBody DocElementDTO dto) {

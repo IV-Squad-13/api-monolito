@@ -2,14 +2,16 @@ package com.squad13.apimonolito.util.builder;
 
 
 import org.bson.Document;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public interface LookupBuilder {
+@Component
+public class LookupBuilder {
 
-    static Document getDocument(String from, String localFieldIds, String foreignField, String asField, List<Document> nestedLookups) {
+    public static Document getDocument(String from, String localFieldIds, String foreignField, String asField, List<Document> nestedLookups) {
         List<Document> pipeline = new ArrayList<>();
 
         pipeline.add(new Document("$match",

@@ -11,6 +11,5 @@ public record DocElementCatalogCreationDTO(
         @NotNull(message = "Informe o ID do elemento no catálogo")
         Long elementId,
 
-        String associatedId
-) {
-}
+        String parentId
+) { }

@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -99,8 +100,52 @@ public class DocElementService {
         DocElement newElement = editorMapper.fromCatalog(especificacaoDoc.getId(), catalogEntity, dto.type());
         saveElement(especificacaoDoc, newElement, dto.type());
 
-        if (dto.associatedId() != null)
+        if (dto.parentId() != null)
             associateIfNeeded(dto, newElement);
+
+        return ResDocElementDTO.fromDoc(newElement, dto.type().getResDocSupplier());
+    }
+
+    public ResDocElementDTO createManyElements(ObjectId specId, List<DocElementCatalogCreationDTO> dtoList) {
+        Map<DocElementEnum, Map<String, Object>> elementFilters = dtoList.stream()
+                .collect(Collectors.toMap(
+                        DocElementCatalogCreationDTO::type,
+                        dto -> Map.of("id", dto.elementId())
+                ));
+
+        Map<DocElementEnum, List<DocElement>> sortedDocuments = elementFilters.entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        entry -> {
+                            DocElementEnum docType = entry.getKey();
+                            Map<String, Object> filters = entry.getValue();
+
+                            List<?> catalogEntities = catalogSearch.findByCriteria(filters, docType.getCatalogEntity());
+
+                            return catalogEntities.stream()
+                                    .map(entity -> {
+                                        DocElement doc = editorMapper.fromCatalog(specId, entity, docType);
+
+                                        dtoList.stream()
+                                                .filter(dto -> dto.elementId().equals(doc.getCatalogId()))
+                                                .findFirst()
+                                                .map(DocElementCatalogCreationDTO::parentId)
+                                                .map(ObjectId::new)
+                                                .ifPresent(doc::setParentId);
+
+                                        return doc;
+                                    })
+                                    .toList();
+                        }
+                ));
+
+        sortedDocuments.forEach((docType, docs) -> {
+            if (!docs.isEmpty()) {
+                documentSearch.bulkSave(docType.getDocElement(), docs);
+            }
+        });
+
+
 
         return ResDocElementDTO.fromDoc(newElement, dto.type().getResDocSupplier());
     }
@@ -177,9 +222,9 @@ public class DocElementService {
             );
         };
 
-        DocElement associated = documentSearch.findInDocument(new ObjectId(dto.associatedId()), assocType.getDocElement());
+        DocElement associated = documentSearch.findInDocument(new ObjectId(dto.parentId()), assocType.getDocElement());
         if (associated == null) {
-            throw new ResourceNotFoundException("Elemento associado não encontrado: " + dto.associatedId());
+            throw new ResourceNotFoundException("Elemento associado não encontrado: " + dto.parentId());
         }
 
         switch (associated) {

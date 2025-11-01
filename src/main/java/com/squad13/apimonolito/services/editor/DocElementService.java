@@ -239,33 +239,6 @@ public class DocElementService {
         }
     }
 
-    private void associateIfNeeded(DocElementEnum docType, DocElementEnum parentType, List<DocElement> docs) {
-        for (DocElement doc : docs) {
-            DocElement parentDoc = documentSearch.findInDocument(doc.getParentId(), parentType.getDocElement());
-            if (parentDoc == null) {
-                throw new ResourceNotFoundException("Elemento associado não encontrado: " + doc.getParentId());
-            }
-
-            switch (parentDoc) {
-                case AmbienteDocElement ambiente when doc instanceof ItemDocElement item -> {
-                    if (ambiente.getItemIds().contains(item.getId())) {
-                        throw new AssociationAlreadyExistsException("O item já está associado ao ambiente");
-                    }
-                    ambiente.getItemIds().add(item.getId());
-                    ambienteDocRepository.save(ambiente);
-                }
-                case MaterialDocElement material when doc instanceof MarcaDocElement marca -> {
-                    if (material.getMarcaIds().contains(marca.getId())) {
-                        throw new AssociationAlreadyExistsException("A marca já está associada ao material");
-                    }
-                    material.getMarcaIds().add(marca.getId());
-                    materialDocRepository.save(material);
-                }
-                default -> throw new UnsupportedOperationException("Tipo de associação inválido: " + docType);
-            }
-        }
-    }
-
     private void associateIfNeeded(DocElementCatalogCreationDTO dto, DocElement doc) {
         DocElementEnum parentType = switch (dto.type()) {
             case ITEM -> DocElementEnum.AMBIENTE;

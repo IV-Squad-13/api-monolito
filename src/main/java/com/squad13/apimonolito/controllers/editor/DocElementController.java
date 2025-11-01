@@ -1,9 +1,6 @@
 package com.squad13.apimonolito.controllers.editor;
 
-import com.squad13.apimonolito.DTO.editor.DocElementCatalogCreationDTO;
-import com.squad13.apimonolito.DTO.editor.DocElementDTO;
-import com.squad13.apimonolito.DTO.editor.DocSearchParamsDTO;
-import com.squad13.apimonolito.DTO.editor.LoadDocumentParamsDTO;
+import com.squad13.apimonolito.DTO.editor.*;
 import com.squad13.apimonolito.DTO.editor.res.ResDocElementDTO;
 import com.squad13.apimonolito.services.editor.DocElementService;
 import com.squad13.apimonolito.util.enums.DocElementEnum;
@@ -15,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/editor/document")
@@ -56,8 +54,8 @@ public class DocElementController {
 
     @PostMapping("/{specId}/catalog/bulk")
     @PreAuthorize("@require.editingStage(#specId)")
-    public ResponseEntity<List<ResDocElementDTO>> createBulk(@PathVariable String specId, @Valid @RequestBody List<DocElementCatalogCreationDTO> dtoList) {
-        return ResponseEntity.ok(docElementService.createManyElements(new ObjectId(specId), dtoList));
+    public ResponseEntity<Map<DocElementEnum, List<? extends ResDocElementDTO>>> createBulk(@PathVariable String specId, @Valid @RequestBody BulkDocElementCatalogCreationDTO bulkDto) {
+        return ResponseEntity.ok(docElementService.createManyElements(new ObjectId(specId), bulkDto));
     }
 
     @PostMapping("/{specId}/raw")

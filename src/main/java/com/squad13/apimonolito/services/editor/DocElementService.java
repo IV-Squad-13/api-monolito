@@ -22,6 +22,8 @@ import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.stereotype.Service;
 
+import javax.print.Doc;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -90,6 +92,10 @@ public class DocElementService {
                 .orElseThrow(() -> new ResourceNotFoundException("Especificação não encontrada para o ID: " + id));
     }
 
+    private ObjectId newId() {
+        return new ObjectId();
+    }
+
     public ResDocElementDTO createElement(ObjectId especId, DocElementCatalogCreationDTO dto) {
         EspecificacaoDoc especificacaoDoc = getSpecById(especId);
 
@@ -97,57 +103,77 @@ public class DocElementService {
         if (catalogEntity == null)
             throw new ResourceNotFoundException("Entidade de catálogo não encontrada: " + dto.elementId());
 
-        DocElement newElement = editorMapper.fromCatalog(especificacaoDoc.getId(), catalogEntity, dto.type());
+        DocElement newElement = editorMapper.fromCatalog(especificacaoDoc.getId(), catalogEntity, null, dto.type());
         saveElement(especificacaoDoc, newElement, dto.type());
 
-        if (dto.parentId() != null)
+        if (dto.parentId() != null && isHexString(dto.parentId()))
             associateIfNeeded(dto, newElement);
 
         return ResDocElementDTO.fromDoc(newElement, dto.type().getResDocSupplier());
     }
 
-    public ResDocElementDTO createManyElements(ObjectId specId, List<DocElementCatalogCreationDTO> dtoList) {
-        Map<DocElementEnum, Map<String, Object>> elementFilters = dtoList.stream()
-                .collect(Collectors.toMap(
+    public Map<DocElementEnum, List<? extends ResDocElementDTO>> createManyElements(ObjectId specId, BulkDocElementCatalogCreationDTO bulkDto) {
+        List<DocElementCatalogCreationDTO> dtoList = bulkDto.elements();
+
+        Map<DocElementEnum, List<Long>> elementFilters = dtoList.stream()
+                .collect(Collectors.groupingBy(
                         DocElementCatalogCreationDTO::type,
-                        dto -> Map.of("id", dto.elementId())
+                        Collectors.mapping(DocElementCatalogCreationDTO::elementId, Collectors.toList())
                 ));
 
-        Map<DocElementEnum, List<DocElement>> sortedDocuments = elementFilters.entrySet().stream()
+        Map<DocElementEnum, List<DocElement>> sortedDocs = elementFilters.entrySet().stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
                         entry -> {
                             DocElementEnum docType = entry.getKey();
-                            Map<String, Object> filters = entry.getValue();
 
-                            List<?> catalogEntities = catalogSearch.findByCriteria(filters, docType.getCatalogEntity());
+                            return entry.getValue().stream()
+                                    .flatMap(idValue -> {
+                                        Map<String, Object> filter = Map.of("id", idValue);
 
-                            return catalogEntities.stream()
-                                    .map(entity -> {
-                                        DocElement doc = editorMapper.fromCatalog(specId, entity, docType);
+                                        return catalogSearch.findByCriteria(filter, docType.getCatalogEntity())
+                                                .stream()
+                                                .map(entity -> {
+                                                    DocElement doc = editorMapper.fromCatalog(specId, entity, null, docType);
+                                                    doc.setId(newId());
 
-                                        dtoList.stream()
-                                                .filter(dto -> dto.elementId().equals(doc.getCatalogId()))
-                                                .findFirst()
-                                                .map(DocElementCatalogCreationDTO::parentId)
-                                                .map(ObjectId::new)
-                                                .ifPresent(doc::setParentId);
+                                                    dtoList.stream()
+                                                            .filter(dto -> dto.elementId().equals(doc.getCatalogId()))
+                                                            .findFirst()
+                                                            .ifPresent(dto -> {
+                                                                if ((dto.type().equals(DocElementEnum.ITEM) || dto.type().equals(DocElementEnum.MARCA))
+                                                                    && (dto.parentId() != null && !dto.parentId().isEmpty())
+                                                                    && isHexString(dto.parentId())) {
 
-                                        return doc;
+                                                                    ObjectId parentObjectId = new ObjectId(dto.parentId());
+                                                                    doc.setParentId(parentObjectId);
+
+                                                                    associateIfNeeded(dto, doc);
+                                                                }
+                                                            });
+
+                                                    return doc;
+                                                });
                                     })
-                                    .toList();
+                                    .collect(Collectors.toList());
                         }
                 ));
 
-        sortedDocuments.forEach((docType, docs) -> {
-            if (!docs.isEmpty()) {
-                documentSearch.bulkSave(docType.getDocElement(), docs);
-            }
-        });
+        for (Map.Entry<DocElementEnum, List<DocElement>> entry : sortedDocs.entrySet()) {
+            documentSearch.bulkSave(entry.getKey().getDocElement(), entry.getValue());
+        }
 
+        return sortedDocs.entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        entry -> entry.getValue().stream()
+                                .map(doc -> ResDocElementDTO.fromDoc(doc, entry.getKey().getResDocSupplier()))
+                                .toList()
+                ));
+    }
 
-
-        return ResDocElementDTO.fromDoc(newElement, dto.type().getResDocSupplier());
+    private boolean isHexString(String string) {
+        return string.matches("^[0-9A-Fa-f]+$");
     }
 
     public ResDocElementDTO createRawElement(ObjectId specId, DocElementDTO dto) {
@@ -213,8 +239,35 @@ public class DocElementService {
         }
     }
 
+    private void associateIfNeeded(DocElementEnum docType, DocElementEnum parentType, List<DocElement> docs) {
+        for (DocElement doc : docs) {
+            DocElement parentDoc = documentSearch.findInDocument(doc.getParentId(), parentType.getDocElement());
+            if (parentDoc == null) {
+                throw new ResourceNotFoundException("Elemento associado não encontrado: " + doc.getParentId());
+            }
+
+            switch (parentDoc) {
+                case AmbienteDocElement ambiente when doc instanceof ItemDocElement item -> {
+                    if (ambiente.getItemIds().contains(item.getId())) {
+                        throw new AssociationAlreadyExistsException("O item já está associado ao ambiente");
+                    }
+                    ambiente.getItemIds().add(item.getId());
+                    ambienteDocRepository.save(ambiente);
+                }
+                case MaterialDocElement material when doc instanceof MarcaDocElement marca -> {
+                    if (material.getMarcaIds().contains(marca.getId())) {
+                        throw new AssociationAlreadyExistsException("A marca já está associada ao material");
+                    }
+                    material.getMarcaIds().add(marca.getId());
+                    materialDocRepository.save(material);
+                }
+                default -> throw new UnsupportedOperationException("Tipo de associação inválido: " + docType);
+            }
+        }
+    }
+
     private void associateIfNeeded(DocElementCatalogCreationDTO dto, DocElement doc) {
-        DocElementEnum assocType = switch (dto.type()) {
+        DocElementEnum parentType = switch (dto.type()) {
             case ITEM -> DocElementEnum.AMBIENTE;
             case MARCA -> DocElementEnum.MATERIAL;
             default -> throw new UnsupportedOperationException(
@@ -222,21 +275,23 @@ public class DocElementService {
             );
         };
 
-        DocElement associated = documentSearch.findInDocument(new ObjectId(dto.parentId()), assocType.getDocElement());
-        if (associated == null) {
+        DocElement parentDoc = documentSearch.findInDocument(new ObjectId(dto.parentId()), parentType.getDocElement());
+        if (parentDoc == null) {
             throw new ResourceNotFoundException("Elemento associado não encontrado: " + dto.parentId());
         }
 
-        switch (associated) {
+        switch (parentDoc) {
             case AmbienteDocElement ambiente when doc instanceof ItemDocElement item -> {
-                if (ambiente.getItemIds().contains(item.getId()))
+                if (ambiente.getItemIds().contains(item.getId())) {
                     throw new AssociationAlreadyExistsException("O item já está associado ao ambiente");
+                }
                 ambiente.getItemIds().add(item.getId());
                 ambienteDocRepository.save(ambiente);
             }
             case MaterialDocElement material when doc instanceof MarcaDocElement marca -> {
-                if (material.getMarcaIds().contains(marca.getId()))
+                if (material.getMarcaIds().contains(marca.getId())) {
                     throw new AssociationAlreadyExistsException("A marca já está associada ao material");
+                }
                 material.getMarcaIds().add(marca.getId());
                 materialDocRepository.save(material);
             }

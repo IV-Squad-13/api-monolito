@@ -27,21 +27,17 @@ public class PdfService {
 
         document.open();
 
-        // Add title
         Font fontTitle = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
         fontTitle.setSize(18);
         document.add(new Paragraph("Invoice Report", fontTitle));
         document.add(new Paragraph("\n"));
 
-        // Create table
         PdfPTable table = new PdfPTable(4); // 4 columns
         table.setWidthPercentage(100);
         table.setWidths(new float[]{1.5f, 3.5f, 2.0f, 2.0f});
 
-        // Add table headers
         addTableHeader(table);
 
-        // Add table data
         for (EspecificacaoDoc invoice : invoices) {
             addTableRows(table, invoice);
         }

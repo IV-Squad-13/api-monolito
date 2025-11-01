@@ -161,7 +161,7 @@ public class EspecificacaoService {
                     .ifPresent(l -> ambiente.setParentId(l.getId()));
 
             catalogItems.forEach(catalogItem -> {
-                ItemDocElement item = editorMapper.fromCatalog(spec.getId(), catalogItem);
+                ItemDocElement item = editorMapper.fromCatalog(spec.getId(), catalogItem, null);
                 item.setId(newId());
                 item.setParentId(ambiente.getId());
                 itemsToSave.add(item);
@@ -197,7 +197,7 @@ public class EspecificacaoService {
         List<MarcaDocElement> marcasToSave = new ArrayList<>();
 
         groupedMateriais.forEach((catalogMaterial, catalogMarcas) -> {
-            MaterialDocElement material = editorMapper.fromCatalog(spec.getId(), catalogMaterial);
+            MaterialDocElement material = editorMapper.fromCatalog(spec.getId(), catalogMaterial, null);
             material.setId(newId());
 
             catalogMarcas.forEach(catalogMarca -> {

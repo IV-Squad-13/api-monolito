@@ -67,11 +67,11 @@ public class EditorMapper {
         );
     }
 
-    public DocElement fromCatalog(ObjectId specId, Object entity, DocElementEnum type) {
+    public DocElement fromCatalog(ObjectId specId, Object entity, ObjectId parentId, DocElementEnum type) {
         return switch (type) {
             case AMBIENTE -> fromCatalog(specId, (Ambiente) entity);
-            case ITEM -> fromCatalog(specId, (ItemDesc) entity);
-            case MATERIAL -> fromCatalog(specId, (Material) entity);
+            case ITEM -> fromCatalog(specId, (ItemDesc) entity, parentId);
+            case MATERIAL -> fromCatalog(specId, (Material) entity, parentId);
             case MARCA -> fromCatalog(specId, (Marca) entity);
         };
     }
@@ -87,13 +87,17 @@ public class EditorMapper {
         return ambiente;
     }
 
-    public ItemDocElement fromCatalog(ObjectId specId, ItemDesc catalogItem) {
+    public ItemDocElement fromCatalog(ObjectId specId, ItemDesc catalogItem, ObjectId parentId) {
         ItemDocElement item = new ItemDocElement();
         item.setName(catalogItem.getName());
 
         if (catalogItem.getType() != null) {
             item.setTypeId(catalogItem.getType().getId());
             item.setType(catalogItem.getType().getName());
+        }
+
+        if (parentId != null) {
+            item.setParentId(parentId);
         }
 
         item.setDesc(catalogItem.getDesc());
@@ -104,12 +108,16 @@ public class EditorMapper {
         return item;
     }
 
-    public MaterialDocElement fromCatalog(ObjectId specId, Material catalogMaterial) {
+    public MaterialDocElement fromCatalog(ObjectId specId, Material catalogMaterial, ObjectId parentId) {
         MaterialDocElement material = new MaterialDocElement();
         material.setName(catalogMaterial.getName());
         material.setInSync(true);
         material.setEspecificacaoId(specId);
         material.setCatalogId(catalogMaterial.getId());
+
+        if (parentId != null) {
+            material.setParentId(parentId);
+        }
 
         return material;
     }

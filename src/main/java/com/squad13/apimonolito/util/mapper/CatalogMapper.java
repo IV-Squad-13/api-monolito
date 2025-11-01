@@ -305,21 +305,6 @@ public class CatalogMapper {
                         Collectors.mapping(valueMapper, Collectors.toList())
                 ));
     }
-    public <T, K, V> Map<K, List<V>> groupAndFlatten(
-            Collection<T> items,
-            Function<? super T, ? extends K> keyMapper,
-            Function<? super T, ? extends Collection<? extends V>> valuesMapper
-    ) {
-        return items.stream()
-                .filter(Objects::nonNull)
-                .collect(Collectors.groupingBy(
-                        keyMapper,
-                        Collectors.flatMapping(
-                                t -> valuesMapper.apply(t).stream(),
-                                Collectors.toList()
-                        )
-                ));
-    }
 
     // COMPOSIÇÂO
 

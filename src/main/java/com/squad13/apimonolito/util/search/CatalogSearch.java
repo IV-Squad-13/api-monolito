@@ -31,33 +31,6 @@ public class CatalogSearch {
                 );
     }
 
-    public <T> T findAssociativeInCatalog(
-            Long sourceId,
-            Long targetId,
-            Class<T> associativeClass,
-            String sourceAttr,
-            String targetAttr
-    ) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<T> query = cb.createQuery(associativeClass);
-        Root<T> root = query.from(associativeClass);
-
-        Predicate predicate = cb.and(
-                cb.equal(root.get(sourceAttr).get("id"), sourceId),
-                cb.equal(root.get(targetAttr).get("id"), targetId)
-        );
-
-        query.select(root).where(predicate);
-
-        return em.createQuery(query)
-                .getResultStream()
-                .findFirst()
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(associativeClass.getSimpleName() +
-                                " not found for (" + sourceAttr + "=" + sourceId +
-                                ", " + targetAttr + "=" + targetId + ")"));
-    }
-
     public <T> List<T> findByCriteria(Map<String, Object> filters, Class<T> clazz) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<T> query = cb.createQuery(clazz);

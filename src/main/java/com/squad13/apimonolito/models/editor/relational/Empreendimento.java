@@ -2,6 +2,7 @@ package com.squad13.apimonolito.models.editor.relational;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.squad13.apimonolito.models.catalog.Padrao;
+import com.squad13.apimonolito.models.revision.relational.ProcessoHistorico;
 import com.squad13.apimonolito.models.revision.relational.Revisao;
 import com.squad13.apimonolito.models.user.associative.UsuarioEmpreendimento;
 import com.squad13.apimonolito.util.enums.EmpStatusEnum;
@@ -37,10 +38,6 @@ public class Empreendimento {
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private Padrao padrao;
 
-    @OneToOne(mappedBy = "empreendimento", cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    private Revisao revisao;
-
     @OneToMany(mappedBy = "empreendimento",
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
@@ -48,4 +45,7 @@ public class Empreendimento {
     )
     @JsonManagedReference
     private List<UsuarioEmpreendimento> usuarioList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "emp", fetch = FetchType.LAZY)
+    private List<ProcessoHistorico> processes = new ArrayList<>();
 }

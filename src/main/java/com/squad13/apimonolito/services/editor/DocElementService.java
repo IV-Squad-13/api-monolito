@@ -51,18 +51,9 @@ public class DocElementService {
 
     private final DocElementBuilder docBuilder;
 
-    private String getCollection(DocElementEnum docType) {
-        Document doc = docType.getDocElement().getAnnotation(Document.class);
-        if (doc == null || doc.collection().isBlank()) {
-            return docType.getDocElement().getSimpleName();
-        }
-
-        return doc.collection();
-    }
-
     public List<? extends ResDocElementDTO> getAll(LoadDocumentParamsDTO params, DocElementEnum docType) {
         Aggregation agg = docBuilder.buildAggregation(params);
-        return documentSearch.findWithAggregation(getCollection(docType), docType.getResDocDTO(), agg);
+        return documentSearch.findWithAggregation(documentSearch.getCollection(docType), docType.getResDocDTO(), agg);
     }
 
     public ResDocElementDTO getById(ObjectId id, LoadDocumentParamsDTO params, DocElementEnum docType) {
@@ -80,8 +71,22 @@ public class DocElementService {
 
         Aggregation agg = docBuilder.buildAggregation(loadParams);
         return documentSearch.searchWithAggregation(
-                getCollection(docType),
+                documentSearch.getCollection(docType),
                 docType.getResDocDTO(),
+                matchOperations,
+                agg
+        );
+    }
+
+    public List<? extends DocElement> search(DocSearchParamsDTO searchParams) {
+        DocElementEnum docType = searchParams.getDocType();
+        Map<String, Object> filters = DocSearchParamsDTO.buildFilters(searchParams);
+        List<MatchOperation> matchOperations = documentSearch.buildMatchOps(filters);
+
+        Aggregation agg = docBuilder.buildAggregation(LoadDocumentParamsDTO.allFalse());
+        return documentSearch.searchWithAggregation(
+                documentSearch.getCollection(docType),
+                docType.getDocElement(),
                 matchOperations,
                 agg
         );
@@ -112,7 +117,9 @@ public class DocElementService {
         return ResDocElementDTO.fromDoc(newElement, dto.type().getResDocSupplier());
     }
 
-    public Map<DocElementEnum, List<? extends ResDocElementDTO>> createManyElements(ObjectId specId, BulkDocElementCatalogCreationDTO bulkDto) {
+    public Map<DocElementEnum, List<? extends ResDocElementDTO>> createManyElements(
+            ObjectId specId, BulkDocElementCatalogCreationDTO bulkDto) {
+
         List<DocElementCatalogCreationDTO> dtoList = bulkDto.elements();
 
         Map<DocElementEnum, List<Long>> elementFilters = dtoList.stream()
@@ -140,17 +147,7 @@ public class DocElementService {
                                                     dtoList.stream()
                                                             .filter(dto -> dto.elementId().equals(doc.getCatalogId()))
                                                             .findFirst()
-                                                            .ifPresent(dto -> {
-                                                                if ((dto.type().equals(DocElementEnum.ITEM) || dto.type().equals(DocElementEnum.MARCA))
-                                                                    && (dto.parentId() != null && !dto.parentId().isEmpty())
-                                                                    && isHexString(dto.parentId())) {
-
-                                                                    ObjectId parentObjectId = new ObjectId(dto.parentId());
-                                                                    doc.setParentId(parentObjectId);
-
-                                                                    associateIfNeeded(dto, doc);
-                                                                }
-                                                            });
+                                                            .ifPresent(dto -> handleElementAssociation(dto, doc, specId));
 
                                                     return doc;
                                                 });
@@ -159,9 +156,9 @@ public class DocElementService {
                         }
                 ));
 
-        for (Map.Entry<DocElementEnum, List<DocElement>> entry : sortedDocs.entrySet()) {
-            documentSearch.bulkSave(entry.getKey().getDocElement(), entry.getValue());
-        }
+        sortedDocs.forEach((type, docs) ->
+                documentSearch.bulkSave(type.getDocElement(), docs)
+        );
 
         return sortedDocs.entrySet().stream()
                 .collect(Collectors.toMap(
@@ -170,6 +167,31 @@ public class DocElementService {
                                 .map(doc -> ResDocElementDTO.fromDoc(doc, entry.getKey().getResDocSupplier()))
                                 .toList()
                 ));
+    }
+
+    private void handleElementAssociation(DocElementCatalogCreationDTO dto, DocElement doc, ObjectId specId) {
+        if ((dto.type().equals(DocElementEnum.ITEM) || dto.type().equals(DocElementEnum.MARCA))
+                && dto.parentId() != null && !dto.parentId().isEmpty()
+                && isHexString(dto.parentId())) {
+
+            doc.setParentId(new ObjectId(dto.parentId()));
+            associateIfNeeded(dto, doc);
+            return;
+        }
+
+        EspecificacaoDoc especificacaoDoc = getSpecById(specId);
+
+        if (doc instanceof AmbienteDocElement ambiente) {
+            LocalDoc local = localDocRepository.findByLocalAndEspecificacaoId(ambiente.getLocal(), specId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Local não encontrado: " + ambiente.getLocal()));
+
+            local.getAmbienteIds().add(ambiente.getId());
+            localDocRepository.save(local);
+
+        } else if (doc instanceof MaterialDocElement material) {
+            especificacaoDoc.getMateriaisIds().add(material.getId());
+            especificacaoDocRepository.save(especificacaoDoc);
+        }
     }
 
     private boolean isHexString(String string) {

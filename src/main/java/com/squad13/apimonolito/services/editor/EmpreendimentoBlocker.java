@@ -7,12 +7,15 @@ import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import com.squad13.apimonolito.models.revision.mongo.EspecificacaoRevDocElement;
 import com.squad13.apimonolito.models.revision.relational.Revisao;
+import com.squad13.apimonolito.models.revision.structures.RevDocElement;
 import com.squad13.apimonolito.mongo.editor.EspecificacaoDocRepository;
 import com.squad13.apimonolito.mongo.revision.EspecificacaoRevDocElementRepository;
 import com.squad13.apimonolito.repository.editor.EmpreendimentoRepository;
+import com.squad13.apimonolito.repository.revision.ProcessoHistoricoRepository;
 import com.squad13.apimonolito.repository.revision.RevisaoRepository;
 import com.squad13.apimonolito.util.enums.DocElementEnum;
 import com.squad13.apimonolito.util.enums.EmpStatusEnum;
+import com.squad13.apimonolito.util.enums.RevDocElementEnum;
 import com.squad13.apimonolito.util.enums.RevisaoStatusEnum;
 import com.squad13.apimonolito.util.search.DocumentSearch;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +38,7 @@ public class EmpreendimentoBlocker {
         Empreendimento emp = empRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Empreendimento não encontrado: " + id));
 
-        if (!emp.getStatus().equals(EmpStatusEnum.EM_ELABORACAO)) {
+        if (!emp.getStatus().equals(EmpStatusEnum.ELABORACAO)) {
             throw new InvalidStageException("Não é possível realizar essa operação durante a etapa atual do processo");
         }
 
@@ -78,6 +81,12 @@ public class EmpreendimentoBlocker {
                 .orElseThrow(() -> new ResourceNotFoundException("Documento de Revisão não encontrado: " + objectId));
 
         return revisionStage(revDoc.getRevisionId());
+    }
+
+    public boolean revisionStage(String id, RevDocElementEnum docType) {
+        ObjectId objectId = new ObjectId(id);
+        RevDocElement doc = docSearch.findInDocument(objectId, docType.getRevDocument());
+        return revisionStage(doc.getRevisionId());
     }
 
     public boolean pendingRevisionStage(Long id) {

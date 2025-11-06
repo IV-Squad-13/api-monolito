@@ -1,6 +1,5 @@
 package com.squad13.apimonolito.models.revision.relational;
 
-import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import com.squad13.apimonolito.util.enums.RevisaoStatusEnum;
 import com.squad13.apimonolito.util.enums.rule.RevisionRule;
 import jakarta.persistence.*;
@@ -10,6 +9,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,20 +27,24 @@ public class Revisao {
     @Enumerated(EnumType.STRING)
     private RevisaoStatusEnum status;
 
-    @Column(name = "tp_rule", nullable = false, length = 20)
+    /*
+    TODO: Adicionar um texto de conclusão da revisão
+
+    private String conclusion;
+    */
+
+    @Column(name = "tp_regra", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
     private RevisionRule rule;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @MapsId
-    @JoinColumn(name = "id_empreendimento")
-    private Empreendimento empreendimento;
-
     @CreationTimestamp
-    @Column(name = "created_at", updatable = false, nullable = false)
+    @Column(name = "dt_criacao", updatable = false, nullable = false)
     private Instant created;
 
     @UpdateTimestamp
-    @Column(name = "updated_at")
+    @Column(name = "dt_atualizacao")
     private Instant updated;
+
+    @OneToMany(mappedBy = "revision", fetch = FetchType.LAZY)
+    private List<ProcessoHistorico> processes = new ArrayList<>();
 }

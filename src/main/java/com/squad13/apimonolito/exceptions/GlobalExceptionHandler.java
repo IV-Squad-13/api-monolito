@@ -50,18 +50,28 @@ public class GlobalExceptionHandler {
         return buildResponse(ex, request, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(PreviousProcessNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handlePreviousProcessNotFound(PreviousProcessNotFoundException ex, WebRequest request) {
+        return buildResponse(ex, request, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(InvalidTokenException.class)
     public ResponseEntity<ErrorResponse> handleInvalidToken(InvalidTokenException ex, WebRequest request) {
         return buildResponse(ex, request, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(InvalidInitException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidInitException(Exception ex, WebRequest request) {
+    public ResponseEntity<ErrorResponse> handleInvalidInitException(InvalidInitException ex, WebRequest request) {
         return buildResponse(ex, request, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(InvalidUserException.class)
     public ResponseEntity<ErrorResponse> handleInvalidUserException(InvalidUserException ex, WebRequest request) {
+        return buildResponse(ex, request, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PendingEvaluationException.class)
+    public ResponseEntity<ErrorResponse> handlePendingEvaluationException(PendingEvaluationException ex, WebRequest request) {
         return buildResponse(ex, request, HttpStatus.BAD_REQUEST);
     }
 

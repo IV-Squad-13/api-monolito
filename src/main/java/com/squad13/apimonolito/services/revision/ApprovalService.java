@@ -1,20 +1,24 @@
 package com.squad13.apimonolito.services.revision;
 
+import com.squad13.apimonolito.DTO.revision.LoadRevDocParamsDTO;
+import com.squad13.apimonolito.DTO.revision.RevDocSearchParamsDTO;
 import com.squad13.apimonolito.DTO.revision.edit.*;
 import com.squad13.apimonolito.DTO.revision.res.*;
 import com.squad13.apimonolito.exceptions.InvalidStageException;
+import com.squad13.apimonolito.exceptions.PendingEvaluationException;
+import com.squad13.apimonolito.exceptions.PreviousProcessNotFoundException;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
 import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import com.squad13.apimonolito.models.revision.mongo.*;
+import com.squad13.apimonolito.models.revision.relational.ProcessoHistorico;
 import com.squad13.apimonolito.models.revision.relational.Revisao;
 import com.squad13.apimonolito.mongo.editor.EspecificacaoDocRepository;
 import com.squad13.apimonolito.mongo.revision.*;
 import com.squad13.apimonolito.repository.editor.EmpreendimentoRepository;
+import com.squad13.apimonolito.repository.revision.ProcessoHistoricoRepository;
 import com.squad13.apimonolito.repository.revision.RevisaoRepository;
-import com.squad13.apimonolito.util.enums.ApprovalEnum;
-import com.squad13.apimonolito.util.enums.EmpStatusEnum;
-import com.squad13.apimonolito.util.enums.RevisaoStatusEnum;
+import com.squad13.apimonolito.util.enums.*;
 import com.squad13.apimonolito.util.mapper.EditorMapper;
 import com.squad13.apimonolito.util.search.DocumentSearch;
 import jakarta.transaction.Transactional;
@@ -23,28 +27,44 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ApprovalService {
 
+    private final EspecificacaoRevDocElementRepository especificacaoRevDocElementRepository;
     private final LocalRevDocElementRepository localRevDocElementRepository;
     private final AmbienteRevDocElementRepository ambienteRevDocElementRepository;
     private final ItemRevDocElementRepository itemRevDocElementRepository;
-    private final DocumentSearch documentSearch;
     private final MaterialRevDocElementRepository materialRevDocElementRepository;
     private final MarcaRevDocElementRepository marcaRevDocElementRepository;
-    private final EspecificacaoRevDocElementRepository especificacaoRevDocElementRepository;
+
     private final EspecificacaoDocRepository especificacaoDocRepository;
+
+    private final DocumentSearch documentSearch;
     private final EditorMapper editorMapper;
+
+    private final RevisionService revisionService;
     private final RevisaoRepository revisaoRepository;
+
     private final EmpreendimentoRepository empreendimentoRepository;
+    private final ProcessoHistoricoRepository processoHistoricoRepository;
 
     private Revisao findByRevisaoById(Long id) {
         return revisaoRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Revisão não encontrada: " + id)
+                );
+    }
+
+    private ProcessoHistorico findPreviousProcess(Revisao rev, ProcActionEnum action) {
+        return rev.getProcesses().stream()
+                .filter(p -> p.getFinished() == null && p.getProcAction().equals(action))
+                .findFirst().orElseThrow(
+                        () -> new PreviousProcessNotFoundException("Processo em aberto não encontrado para a Revisão de ID '" + rev.getId() + "' em " + rev.getStatus())
                 );
     }
 
@@ -209,7 +229,21 @@ public class ApprovalService {
         documentSearch.updateMany(marcaRevIds, update, MarcaRevDocElement.class);
     }
 
-    // TODO: Implementar lógica de continuação da Elaboração
+    private ProcessoHistorico createProcessFromOrigin(ProcessoHistorico origin, ProcActionEnum action) {
+        ProcessoHistorico newProcess = new ProcessoHistorico();
+        newProcess.setEmp(origin.getEmp());
+        newProcess.setRevision(origin.getRevision());
+        newProcess.setProcAction(action);
+        newProcess.setOrigin(origin);
+        return newProcess;
+    }
+
+    private void finishProcess(ProcessoHistorico proc) {
+        proc.setFinished(Instant.now());
+        processoHistoricoRepository.save(proc);
+    }
+
+    @Transactional
     public void reject(Long id) {
         Revisao rev = findByRevisaoById(id);
 
@@ -219,10 +253,46 @@ public class ApprovalService {
 
         rev.setStatus(RevisaoStatusEnum.REJEITADA);
 
-        Empreendimento emp = rev.getEmpreendimento();
-        emp.setStatus(EmpStatusEnum.EM_ELABORACAO);
+        ProcessoHistorico previousProcess = findPreviousProcess(rev, ProcActionEnum.REQUEST);
+        finishProcess(previousProcess);
+        ProcessoHistorico process = createProcessFromOrigin(previousProcess, ProcActionEnum.REJECTION);
+        processoHistoricoRepository.save(process);
 
+        Empreendimento emp = process.getEmp();
+        emp.setStatus(EmpStatusEnum.ELABORACAO);
         empreendimentoRepository.save(emp);
+
+        revisaoRepository.save(rev);
+    }
+
+    // TODO: Implementar versionamento após aprovação de documento
+    @Transactional
+    public void approve(Long id) {
+        Revisao rev = findByRevisaoById(id);
+
+        Arrays.stream(RevDocElementEnum.values()).forEach(docType -> {
+            RevDocSearchParamsDTO params = new RevDocSearchParamsDTO();
+            params.setDocType(docType);
+
+            revisionService.searchDocs(LoadRevDocParamsDTO.allFalse(), params, true).stream()
+                    .findAny().ifPresent(revDoc -> {
+                        if (revDoc.getIsApproved() == null) {
+                            throw new PendingEvaluationException("Documento do tipo " + docType + " com avaliação pendente: " + revDoc.getId());
+                        }
+                    });
+        });
+
+        ProcessoHistorico previousProcess = findPreviousProcess(rev, ProcActionEnum.REQUEST);
+        finishProcess(previousProcess);
+        ProcessoHistorico process = createProcessFromOrigin(previousProcess, ProcActionEnum.APPROVAL);
+        // TODO: Criar documento pós aprovação e referenciar o ID
+        processoHistoricoRepository.save(process);
+
+        Empreendimento emp = process.getEmp();
+        emp.setStatus(EmpStatusEnum.FINALIZADO);
+        empreendimentoRepository.save(emp);
+
+        rev.setStatus(RevisaoStatusEnum.APROVADA);
         revisaoRepository.save(rev);
     }
 

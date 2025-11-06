@@ -48,6 +48,7 @@ public class EspecificacaoService {
     private final DocElementBuilder docBuilder;
 
     private final DocumentSearch documentSearch;
+    private final DocElementService docService;
 
     public List<ResSpecDTO> findAll(LoadDocumentParamsDTO params) {
         Aggregation aggregation = docBuilder.buildAggregation(params);
@@ -98,7 +99,7 @@ public class EspecificacaoService {
         return switch (dto.initType()) {
             case AVULSO -> createEspecificacaoAvulso(dto);
             case PADRAO -> createFromPadrao(dto, emp);
-            case IMPORT -> createFromImport(dto); // TODO: implementar
+            case IMPORT -> createFromImport(dto);
         };
     }
 
@@ -216,18 +217,92 @@ public class EspecificacaoService {
 
         spec.setMateriaisIds(materialsToSave.stream().map(MaterialDocElement::getId).toList());
 
-        documentSearch.bulkSave(EspecificacaoDoc.class, List.of(spec));
-
+        specRepository.save(spec);
         return editorMapper.toResponse(spec);
+    }
+
+    private ResSpecDTO createFromImport(EspecificacaoDocDTO dto) {
+        ObjectId referenceId = dto.empId() != null
+                ? new ObjectId(findByEmpId(dto.empImportId(), LoadDocumentParamsDTO.allFalse()).getId())
+                : new ObjectId(dto.docImportId());
+
+        EspecificacaoDoc importReference = findById(referenceId);
+
+        EspecificacaoDoc newSpec = new EspecificacaoDoc();
+        newSpec.setId(newId());
+        newSpec.setReference(importReference.getId());
+        newSpec.setEmpreendimentoId(dto.empId());
+        newSpec.setName(importReference.getName());
+        newSpec.setDesc(importReference.getDesc());
+        newSpec.setObs(importReference.getObs());
+
+        List<LocalDoc> locais = importReference.getLocaisIds().stream().map(localId -> {
+            LocalDoc local = documentSearch.findInDocument(localId, LocalDoc.class);
+            local.setId(newId());
+            local.setEspecificacaoId(newSpec.getId());
+
+            List<AmbienteDocElement> ambientes = local.getAmbienteIds().stream()
+                    .map(ambienteId -> {
+                        AmbienteDocElement ambiente = documentSearch.findInDocument(ambienteId, AmbienteDocElement.class);
+                        ambiente.setId(newId());
+                        ambiente.setEspecificacaoId(newSpec.getId());
+                        ambiente.setParentId(local.getId());
+
+                        List<ItemDocElement> items = ambiente.getItemIds().stream()
+                                .map(itemId -> {
+                                    ItemDocElement item = documentSearch.findInDocument(itemId, ItemDocElement.class);
+                                    item.setId(newId());
+                                    item.setEspecificacaoId(newSpec.getId());
+                                    item.setParentId(ambiente.getId());
+                                    return item;
+                                }).toList();
+
+                        documentSearch.bulkSave(ItemDocElement.class, items);
+                        ambiente.setItemIds(items.stream().map(ItemDocElement::getId).collect(Collectors.toList()));
+
+                        return ambiente;
+                    }).toList();
+
+            documentSearch.bulkSave(AmbienteDocElement.class, ambientes);
+            local.setAmbienteIds(ambientes.stream().map(AmbienteDocElement::getId).collect(Collectors.toList()));
+
+            return local;
+        }).toList();
+
+        documentSearch.bulkSave(LocalDoc.class, locais);
+        newSpec.setLocaisIds(locais.stream().map(LocalDoc::getId).collect(Collectors.toList()));
+
+        List<MaterialDocElement> materiais = importReference.getMateriaisIds().stream()
+                .map(materialId -> {
+                    MaterialDocElement material = documentSearch.findInDocument(materialId, MaterialDocElement.class);
+                    material.setId(newId());
+                    material.setEspecificacaoId(newSpec.getId());
+                    material.setParentId(newSpec.getId());
+
+                    List<MarcaDocElement> marcas = material.getMarcaIds().stream()
+                            .map(marcaId -> {
+                                MarcaDocElement marca = documentSearch.findInDocument(marcaId, MarcaDocElement.class);
+                                marca.setId(newId());
+                                marca.setEspecificacaoId(newSpec.getId());
+                                marca.setParentId(material.getId());
+                                return marca;
+                            }).toList();
+
+                    documentSearch.bulkSave(MarcaDocElement.class, marcas);
+                    material.setMarcaIds(marcas.stream().map(MarcaDocElement::getId).collect(Collectors.toList()));
+
+                    return material;
+                }).toList();
+
+        documentSearch.bulkSave(MaterialDocElement.class, materiais);
+        newSpec.setMateriaisIds(materiais.stream().map(MaterialDocElement::getId).collect(Collectors.toList()));
+
+        specRepository.save(newSpec);
+        return editorMapper.toResponse(newSpec);
     }
 
     private static ObjectId newId() {
         return new ObjectId();
-    }
-
-    private ResSpecDTO createFromImport(EspecificacaoDocDTO dto) {
-        // TODO: implementar inicialização por importação
-        throw new UnsupportedOperationException("Inicialização por IMPORT ainda não implementada");
     }
 
     public ResSpecDTO update(ObjectId id, EditEspecificacaoDocDTO dto) {

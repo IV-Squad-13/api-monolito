@@ -36,6 +36,9 @@ public class EspecificacaoDoc {
     @JsonSerialize(using = ToStringSerializer.class)
     private ObjectId id;
 
+    @Indexed
+    private ObjectId reference;
+
     @NotNull
     @Indexed
     private Long empreendimentoId;

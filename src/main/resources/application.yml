@@ -7,7 +7,7 @@ spring:
   config:
     # .env.properties - ambiente local
     # .env.prod.properties - ambiente preparado para deploy
-    import: file:.env.prod.properties
+    import: file:.env.properties
 
   data:
     mongodb:
@@ -34,7 +34,7 @@ spring:
   flyway:
     enabled: true
     baseline-on-migrate: true
-    locations: classpath:db/migration
+    locations: classpath:db/migration/test
 
 springdoc:
   api-docs:

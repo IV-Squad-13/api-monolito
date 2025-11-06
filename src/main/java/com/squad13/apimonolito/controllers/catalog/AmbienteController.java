@@ -41,7 +41,7 @@ public class AmbienteController {
     public ResponseEntity<List<ResAmbienteDTO>> search(
             @RequestParam Map<String, String> filters,
             @ModelAttribute LoadCatalogParamsDTO loadDTO
-            ) {
+    ) {
 
             filters.remove("loadAll");
             filters.remove("loadPadroes");
@@ -51,8 +51,8 @@ public class AmbienteController {
             filters.remove("loadMarcas");
             filters.remove("loadNested");
 
-        return ResponseEntity.ok(ambienteService.findByFilters(filters, loadDTO));
-        }
+            return ResponseEntity.ok(ambienteService.findByFilters(filters, loadDTO));
+    }
 
     @GetMapping("/rel")
     public ResponseEntity<List<ResItemDTO>> getAssociations(@RequestParam(required = false) Long id) {

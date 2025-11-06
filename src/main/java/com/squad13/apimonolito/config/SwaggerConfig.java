@@ -47,14 +47,6 @@ public class SwaggerConfig {
     }
 
     @Bean
-    public GroupedOpenApi apiMonolitoPdf() {
-        return GroupedOpenApi.builder()
-                .group("pdf-public")
-                .pathsToMatch("/api/pdf/**")
-                .build();
-    }
-
-    @Bean
     public OpenAPI authOpenAPI() {
         return new OpenAPI()
                 .info(new Info()

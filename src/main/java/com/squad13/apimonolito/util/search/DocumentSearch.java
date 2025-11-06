@@ -3,6 +3,7 @@ package com.squad13.apimonolito.util.search;
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import com.squad13.apimonolito.models.revision.structures.RevDocElement;
+import com.squad13.apimonolito.util.enums.DocElementEnum;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.BulkOperations;
@@ -10,6 +11,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -22,6 +24,15 @@ import java.util.*;
 public class DocumentSearch {
 
     private final MongoTemplate mongoTemplate;
+
+    public String getCollection(DocElementEnum docType) {
+        Document doc = docType.getDocElement().getAnnotation(Document.class);
+        if (doc == null || doc.collection().isBlank()) {
+            return docType.getDocElement().getSimpleName();
+        }
+
+        return doc.collection();
+    }
 
     public List<MatchOperation> buildMatchOps(Map<String, Object> filters) {
         return filters.entrySet().stream()

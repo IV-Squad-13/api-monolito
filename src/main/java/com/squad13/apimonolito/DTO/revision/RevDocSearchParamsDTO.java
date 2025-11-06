@@ -41,7 +41,7 @@ public class RevDocSearchParamsDTO {
         this.id = id.toHexString();
     }
 
-    public Map<String, Object> buildFilters() {
+    public Map<String, Object> buildFilters(boolean unsetApproval) {
         Map<String, Object> filters = new HashMap<>();
 
         if (this.getId() != null)
@@ -53,7 +53,7 @@ public class RevDocSearchParamsDTO {
         if (this.getRevisionId() != null)
             filters.put("revisionId", this.getRevisionId());
 
-        if (this.getIsApproved() != null)
+        if (this.getIsApproved() != null || unsetApproval)
             filters.put("isApproved", this.getIsApproved());
 
         if (this.getComment() != null)

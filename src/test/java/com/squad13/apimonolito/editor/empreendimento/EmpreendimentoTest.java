@@ -44,23 +44,20 @@ class EmpreendimentoTest {
     void testJpaPersistenceWithRevisao() {
         Empreendimento empreendimento = new Empreendimento();
         empreendimento.setName("Empreendimento A");
-        empreendimento.setStatus(EmpStatusEnum.EM_ELABORACAO);
+        empreendimento.setStatus(EmpStatusEnum.ELABORACAO);
 
         Empreendimento savedEmp = empreendimentoRepository.save(empreendimento);
         assertThat(savedEmp.getId()).isNotNull();
 
         Revisao revisao = new Revisao();
         revisao.setStatus(RevisaoStatusEnum.INICIADA);
-        revisao.setEmpreendimento(savedEmp);
 
         Revisao savedRevisao = revisaoRepository.save(revisao);
         assertThat(savedRevisao.getId()).isNotNull();
-        assertThat(savedRevisao.getEmpreendimento().getId()).isEqualTo(savedEmp.getId());
 
         Revisao foundRev = revisaoRepository.findById(savedRevisao.getId()).orElseThrow(
                 () -> new RuntimeException("Revisão não encontrada"));
         assertThat(foundRev.getId()).isEqualTo(savedRevisao.getId());
-        assertThat(foundRev.getEmpreendimento().getName()).isEqualTo("Empreendimento A");
         assertThat(foundRev.getStatus()).isEqualTo(RevisaoStatusEnum.INICIADA);
     }
 
@@ -94,7 +91,7 @@ class EmpreendimentoTest {
     void testConsistencyBetweenJpaAndMongo() {
         Empreendimento e = new Empreendimento();
         e.setName("Empreendimento C");
-        e.setStatus(EmpStatusEnum.EM_ELABORACAO);
+        e.setStatus(EmpStatusEnum.ELABORACAO);
 
         Empreendimento savedEntity = empreendimentoRepository.save(e);
 

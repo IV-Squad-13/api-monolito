@@ -12,17 +12,20 @@ import com.squad13.apimonolito.DTO.revision.res.ResSpecRevDTO;
 import com.squad13.apimonolito.exceptions.*;
 import com.squad13.apimonolito.models.catalog.Padrao;
 import com.squad13.apimonolito.models.editor.relational.Empreendimento;
+import com.squad13.apimonolito.models.revision.relational.ProcessoHistorico;
 import com.squad13.apimonolito.models.revision.relational.Revisao;
 import com.squad13.apimonolito.models.user.Usuario;
 import com.squad13.apimonolito.models.user.associative.UsuarioEmpreendimento;
 import com.squad13.apimonolito.mongo.revision.EspecificacaoRevDocElementRepository;
 import com.squad13.apimonolito.repository.catalog.PadraoRepository;
 import com.squad13.apimonolito.repository.editor.EmpreendimentoRepository;
+import com.squad13.apimonolito.repository.revision.ProcessoHistoricoRepository;
 import com.squad13.apimonolito.repository.revision.RevisaoRepository;
 import com.squad13.apimonolito.repository.user.UsuarioRepository;
 import com.squad13.apimonolito.repository.user.associative.UsuarioEmpreendimentoRepository;
 import com.squad13.apimonolito.util.enums.AccessEnum;
 import com.squad13.apimonolito.util.enums.EmpStatusEnum;
+import com.squad13.apimonolito.util.enums.ProcActionEnum;
 import com.squad13.apimonolito.util.enums.RevisaoStatusEnum;
 import com.squad13.apimonolito.util.enums.rule.RevisionRule;
 import com.squad13.apimonolito.util.mapper.EditorMapper;
@@ -33,15 +36,16 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.time.Instant;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class EmpreendimentoService {
 
+    private final ProcessoHistoricoRepository processoHistoricoRepository;
     @PersistenceContext
     private EntityManager em;
 
@@ -65,7 +69,8 @@ public class EmpreendimentoService {
 
         ResRevDTO rev = null;
         if (params.isLoadRevision()) {
-            rev = revisaoRepository.findByEmpreendimento(emp)
+            rev = processoHistoricoRepository.findByEmp_Id(emp.getId()).stream()
+                    .map(ProcessoHistorico::getRevision)
                     .map(r -> {
                         List<ResSpecRevDTO> resSpecRevs = specRevDocRepository.findByRevisionId(r.getId()).stream()
                                 .map(specRev -> ResSpecRevDTO.fromDoc(specRev, editorMapper.toResponse(specRev.getRevisedDoc())))
@@ -73,6 +78,7 @@ public class EmpreendimentoService {
 
                         return ResRevDTO.from(r, resSpecRevs, null);
                     })
+                    .findFirst()
                     .orElse(null);
         }
 
@@ -156,11 +162,11 @@ public class EmpreendimentoService {
     }
 
     private void blockEmp(Empreendimento emp) {
-        if (emp.getStatus().equals(EmpStatusEnum.EM_REVISAO)) {
+        if (emp.getStatus().equals(EmpStatusEnum.SUSPENSO)) {
             throw new InvalidStageException("O Empreendimento " + emp.getName() + " já está em Revisão");
         }
 
-        emp.setStatus(EmpStatusEnum.EM_REVISAO);
+        emp.setStatus(EmpStatusEnum.SUSPENSO);
         empRepository.save(emp);
     }
 
@@ -177,20 +183,72 @@ public class EmpreendimentoService {
         userEmpRepository.save(userEmp);
     }
 
-    // TODO: implementar uma lógica de continuação de Revisão
-    public ResRevDTO sendToRevision(Long id, ToRevisionDTO dto) {
+    private Revisao createRevision() {
+        Revisao rev = new Revisao();
+        rev.setStatus(RevisaoStatusEnum.PENDENTE);
+        rev.setRule(RevisionRule.START_BY_ASSIGNED);
+        return rev;
+    }
+
+    private ProcessoHistorico createProcessoHistorico(Empreendimento emp, Revisao rev, ProcActionEnum procAction) {
+        ProcessoHistorico proc = new ProcessoHistorico();
+        proc.setEmp(emp);
+        proc.setRevision(rev);
+        proc.setProcAction(procAction);
+
+        return proc;
+    }
+
+    private void finishProcess(ProcessoHistorico proc) {
+        proc.setFinished(Instant.now());
+        processoHistoricoRepository.save(proc);
+    }
+
+    public ResRevDTO requestRevision(Long id, ToRevisionDTO dto) {
         Empreendimento emp = findByIdOrThrow(id);
+
+        List<ProcessoHistorico> processes = processoHistoricoRepository.findByEmp_Id(id);
+
+        Set<Long> finishedRevisionIds = processes.stream()
+                .filter(p -> p.getProcAction() == ProcActionEnum.APPROVAL)
+                .map(p -> p.getRevision().getId())
+                .collect(Collectors.toSet());
+
+        List<ProcessoHistorico> activeProcs = processes.stream()
+                .filter(p -> !finishedRevisionIds.contains(p.getRevision().getId()))
+                .toList();
+
+        Revisao revision;
+        ProcessoHistorico newProcess;
+        if (!activeProcs.isEmpty()) {
+            ProcessoHistorico rejectedProcess = activeProcs.stream()
+                    .filter(p -> p.getProcAction() == ProcActionEnum.REJECTION && p.getFinished() == null)
+                    .findFirst()
+                    .orElse(null);
+
+            assert rejectedProcess != null;
+            revision = rejectedProcess.getRevision();
+            revision.setStatus(RevisaoStatusEnum.INICIADA);
+            revision = revisaoRepository.save(revision);
+
+            finishProcess(rejectedProcess);
+
+            newProcess = createProcessoHistorico(emp, revision, ProcActionEnum.REQUEST);
+            newProcess.setOrigin(rejectedProcess);
+        } else {
+            revision = createRevision();
+            revision = revisaoRepository.save(revision);
+
+            newProcess = createProcessoHistorico(emp, revision, ProcActionEnum.REQUEST);
+        }
+
+        processoHistoricoRepository.save(newProcess);
 
         blockEmp(emp);
         createUserAccess(emp, dto.revisorId(), AccessEnum.REVISOR);
 
-        Revisao rev = new Revisao();
-        rev.setEmpreendimento(emp);
-        rev.setStatus(RevisaoStatusEnum.PENDENTE);
-        rev.setRule(RevisionRule.START_BY_ASSIGNED);
-
         ResEmpDTO resEmpDTO = mappingHelper(emp, LoadDocumentParamsDTO.allFalse());
-        return ResRevDTO.from(revisaoRepository.save(rev), null, resEmpDTO);
+        return ResRevDTO.from(revision, null, resEmpDTO);
     }
 
     public ResEmpDTO create(EmpDTO dto, LoadDocumentParamsDTO loadDTO) {
@@ -203,7 +261,7 @@ public class EmpreendimentoService {
 
         Empreendimento emp = new Empreendimento();
         emp.setName(dto.name());
-        emp.setStatus(EmpStatusEnum.EM_ELABORACAO);
+        emp.setStatus(EmpStatusEnum.ELABORACAO);
 
         if (dto.padraoId() != null) {
             Padrao padrao = padraoRepository.findById(dto.padraoId())
@@ -221,6 +279,8 @@ public class EmpreendimentoService {
                 null,
                 null,
                 emp.getId(),
+                dto.empImportId(),
+                dto.docImportId(),
                 dto.init()
         );
         specService.create(specDocDTO);
@@ -268,7 +328,7 @@ public class EmpreendimentoService {
     public void delete(Long id) {
         Empreendimento emp = findByIdOrThrow(id);
         specService.delete(emp.getId());
-        revisaoRepository.deleteByEmpreendimento_Id(id);
+        processoHistoricoRepository.deleteAllByEmp_Id(id);
         userEmpRepository.deleteByEmpreendimento_Id(id);
 
         empRepository.delete(emp);

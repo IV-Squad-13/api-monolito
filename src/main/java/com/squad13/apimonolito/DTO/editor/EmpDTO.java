@@ -16,7 +16,10 @@ public record EmpDTO(
         @NotNull(message = "É necessário informar o criador")
         Long creatorId,
 
-        // Eventualment, a criação de especificação vai acontecer junto da criação de empreendimento
-        // Esse momento chegou
+        Long empImportId,
+
+        String docImportId,
+
+        @NotNull(message = "Informe a forma de criação da Especificação")
         DocInitializationEnum init
 ) { }

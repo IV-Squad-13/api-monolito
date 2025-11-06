@@ -1,11 +1,13 @@
-package com.squad13.apimonolito.controllers.revisao;
+package com.squad13.apimonolito.controllers.revision;
 
 import com.squad13.apimonolito.DTO.revision.LoadRevDocParamsDTO;
 import com.squad13.apimonolito.DTO.revision.RevDocSearchParamsDTO;
+import com.squad13.apimonolito.DTO.revision.ToRevisionDTO;
 import com.squad13.apimonolito.DTO.revision.edit.EditRevDocDTO;
 import com.squad13.apimonolito.DTO.revision.res.ResRevDTO;
 import com.squad13.apimonolito.DTO.revision.res.ResRevDocDTO;
 import com.squad13.apimonolito.DTO.revision.res.ResSpecRevDTO;
+import com.squad13.apimonolito.services.editor.EmpreendimentoService;
 import com.squad13.apimonolito.services.revision.ApprovalService;
 import com.squad13.apimonolito.services.revision.RevisionService;
 import com.squad13.apimonolito.util.enums.RevDocElementEnum;
@@ -22,6 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RevisionController {
 
+    private final EmpreendimentoService empService;
     private final RevisionService revService;
     private final ApprovalService approvalService;
 
@@ -54,12 +57,18 @@ public class RevisionController {
             @ModelAttribute LoadRevDocParamsDTO loadParams,
             @ModelAttribute RevDocSearchParamsDTO searchParams
     ) {
-        return ResponseEntity.ok(revService.searchDocs(loadParams, searchParams));
+        return ResponseEntity.ok(revService.searchDocs(loadParams, searchParams, false));
     }
 
     @GetMapping("/emp/{id}")
     public ResponseEntity<ResRevDTO> getByEmpId(@PathVariable Long id, @ModelAttribute LoadRevDocParamsDTO params) {
         return ResponseEntity.ok(revService.findByEmpreendimentoId(id, params));
+    }
+
+    @PostMapping("/{id}/request")
+    @PreAuthorize("@require.editingStage(#id)")
+    public ResponseEntity<ResRevDTO> toRevision(@PathVariable Long id, @RequestBody ToRevisionDTO dto) {
+        return ResponseEntity.ok(empService.requestRevision(id, dto));
     }
 
     @PostMapping("/{id}/start")
@@ -81,8 +90,17 @@ public class RevisionController {
         return ResponseEntity.ok("Revisão rejeitada! Processo de elaboração reaberto");
     }
 
-    @PutMapping("/doc/{id}")
+    @PostMapping("/{id}/approve")
     @PreAuthorize("@require.revisionStage(#id)")
+    public ResponseEntity<?> approve(
+            @PathVariable Long id
+    ) {
+        approvalService.approve(id);
+        return ResponseEntity.ok("Revisão Aprovada! Processo de elaboração concluído");
+    }
+
+    @PutMapping("/doc/{id}")
+    @PreAuthorize("@require.revisionStage(#id, #dto.docType)")
     public ResponseEntity<? extends ResRevDocDTO> update(
             @PathVariable String id,
             @RequestBody EditRevDocDTO dto

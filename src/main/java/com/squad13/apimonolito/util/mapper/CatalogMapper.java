@@ -137,7 +137,7 @@ public class CatalogMapper {
                     : Collections.emptySet();
 
             marcas = params.isLoadMarcas()
-                    ? getMinMaterialDTO(material.getMarcaSet())
+                    ? getMinMarcaDTO(material.getMarcaSet())
                     : Collections.emptySet();
         }
 

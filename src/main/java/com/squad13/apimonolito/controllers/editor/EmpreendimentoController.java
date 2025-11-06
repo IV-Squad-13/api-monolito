@@ -10,6 +10,7 @@ import com.squad13.apimonolito.services.editor.EmpreendimentoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,11 +39,6 @@ public class EmpreendimentoController {
             @ModelAttribute LoadDocumentParamsDTO loadDTO
     ) {
         return ResponseEntity.ok(empService.findByAttribute(attribute, value, loadDTO));
-    }
-
-    @PostMapping("/{id}/request-revision")
-    public ResponseEntity<ResRevDTO> sendToRevision(@PathVariable Long id, @RequestBody ToRevisionDTO dto) {
-        return ResponseEntity.ok(empService.sendToRevision(id, dto));
     }
 
     @PostMapping("/new")

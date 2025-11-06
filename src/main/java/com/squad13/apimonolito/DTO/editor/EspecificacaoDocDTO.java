@@ -1,6 +1,5 @@
 package com.squad13.apimonolito.DTO.editor;
 
-import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import com.squad13.apimonolito.util.enums.DocInitializationEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -14,6 +13,10 @@ public record EspecificacaoDocDTO(
 
         @NotNull(message = "A Especificação precisa ter o id do Empreendimento")
         Long empId,
+
+        Long empImportId,
+
+        String docImportId,
 
         @NotNull(message = "Informe o tipo de inicialização para a Especificação")
         DocInitializationEnum initType

@@ -9,10 +9,4 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface RevisaoRepository extends JpaRepository<Revisao, Long> {
-    Optional<Revisao> findByEmpreendimento(Empreendimento empreendimento);
-
-    Optional<Revisao> findByEmpreendimento_Id(Long empreendimentoId);
-
-    void deleteByEmpreendimento_Id(Long empreendimentoId);
-}
+public interface RevisaoRepository extends JpaRepository<Revisao, Long> { }

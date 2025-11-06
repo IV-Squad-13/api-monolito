@@ -2,14 +2,8 @@ package com.squad13.apimonolito.DTO.revision.edit;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.squad13.apimonolito.DTO.editor.AmbienteDocDTO;
-import com.squad13.apimonolito.DTO.editor.ItemDocDTO;
-import com.squad13.apimonolito.DTO.editor.MarcaElementDTO;
-import com.squad13.apimonolito.DTO.editor.MaterialElementDTO;
 import com.squad13.apimonolito.util.enums.ApprovalEnum;
-import com.squad13.apimonolito.util.enums.DocElementEnum;
 import com.squad13.apimonolito.util.enums.RevDocElementEnum;
-import com.squad13.apimonolito.util.enums.RevisaoStatusEnum;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;

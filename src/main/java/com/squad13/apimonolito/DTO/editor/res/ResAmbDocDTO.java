@@ -1,5 +1,7 @@
 package com.squad13.apimonolito.DTO.editor.res;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.squad13.apimonolito.models.editor.mongo.AmbienteDocElement;
 import com.squad13.apimonolito.util.enums.LocalEnum;
 import lombok.*;
@@ -16,15 +18,16 @@ import java.util.List;
 public class ResAmbDocDTO extends ResDocElementDTO {
 
     private LocalEnum local;
-    private List<String> itemIds = new ArrayList<>();
+
+    @JsonSerialize(using = ToStringSerializer.class)
+    private List<ObjectId> itemIds = new ArrayList<>();
+
     private List<ResItemDocDTO> items = new ArrayList<>();
 
     public static ResAmbDocDTO fromDoc(AmbienteDocElement doc) {
         ResAmbDocDTO ambiente = ResDocElementDTO.fromDoc(doc, ResAmbDocDTO::new);
         ambiente.setLocal(doc.getLocal());
-        ambiente.setItemIds(doc.getItemIds().stream()
-                .map(ObjectId::toHexString)
-                .toList());
+        ambiente.setItemIds(doc.getItemIds());
 
         if (doc.getItems() != null && !doc.getItems().isEmpty()) {
             ambiente.setItems(

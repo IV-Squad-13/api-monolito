@@ -1,5 +1,7 @@
 package com.squad13.apimonolito.DTO.editor.res;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.squad13.apimonolito.DTO.revision.res.ResMarRevDTO;
 import com.squad13.apimonolito.DTO.revision.res.ResMatRevDTO;
 import com.squad13.apimonolito.DTO.revision.res.ResRevDocDTO;
@@ -22,23 +24,21 @@ import java.util.Optional;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResLocalDocDTO {
-    private String id;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private ObjectId id;
+
     private LocalEnum local;
-    private List<String> ambienteIds = new ArrayList<>();
+
+    @JsonSerialize(using = ToStringSerializer.class)
+    private List<ObjectId> ambienteIds = new ArrayList<>();
     private List<ResAmbDocDTO> ambientes = new ArrayList<>();
 
     public static ResLocalDocDTO fromDoc(LocalDoc doc) {
         ResLocalDocDTO dto = new ResLocalDocDTO();
-        dto.setId(String.valueOf(doc.getId()));
+        dto.setId(doc.getId());
         dto.setLocal(doc.getLocal());
 
-        dto.setAmbienteIds(
-                Optional.ofNullable(doc.getAmbienteIds())
-                        .orElse(Collections.emptyList())
-                        .stream()
-                        .map(ObjectId::toHexString)
-                        .toList()
-        );
+        dto.setAmbienteIds(doc.getAmbienteIds());
 
         dto.setAmbientes(
                 Optional.ofNullable(doc.getAmbientes())

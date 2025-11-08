@@ -33,7 +33,6 @@ import java.util.List;
 public class EspecificacaoDoc {
 
     @MongoId(FieldType.OBJECT_ID)
-    @JsonSerialize(using = ToStringSerializer.class)
     private ObjectId id;
 
     @Indexed
@@ -74,4 +73,8 @@ public class EspecificacaoDoc {
     @LastModifiedDate
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
     private Instant updated;
+
+    public List<String> getUniqueKeys() {
+        return List.of("empreendimentoId");
+    }
 }

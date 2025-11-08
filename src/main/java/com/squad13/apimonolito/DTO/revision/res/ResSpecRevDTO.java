@@ -1,5 +1,7 @@
 package com.squad13.apimonolito.DTO.revision.res;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.squad13.apimonolito.DTO.editor.res.ResSpecDTO;
 import com.squad13.apimonolito.models.revision.mongo.EspecificacaoRevDocElement;
 
@@ -20,10 +22,12 @@ public class ResSpecRevDTO extends ResRevDocDTO {
 
     private ResSpecDTO revisedDoc;
 
-    private List<String> localRevIds;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private List<ObjectId> localRevIds;
     private List<ResLocalRevDTO> localRevs = new ArrayList<>();
 
-    private List<String> materialRevIds;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private List<ObjectId> materialRevIds;
     private List<ResMatRevDTO> materialRevs = new ArrayList<>();
 
     private Boolean isNameApproved;
@@ -37,13 +41,7 @@ public class ResSpecRevDTO extends ResRevDocDTO {
             dto.setRevisedDoc(resSpec);
         }
 
-        dto.setLocalRevIds(
-                Optional.ofNullable(doc.getLocalRevIds())
-                        .orElse(Collections.emptyList())
-                        .stream()
-                        .map(ObjectId::toHexString)
-                        .toList()
-        );
+        dto.setLocalRevIds(doc.getLocalRevIds());
 
         dto.setLocalRevs(
                 Optional.ofNullable(doc.getLocalRevs())
@@ -53,13 +51,7 @@ public class ResSpecRevDTO extends ResRevDocDTO {
                         .toList()
         );
 
-        dto.setMaterialRevIds(
-                Optional.ofNullable(doc.getMaterialRevIds())
-                        .orElse(Collections.emptyList())
-                        .stream()
-                        .map(ObjectId::toHexString)
-                        .toList()
-        );
+        dto.setMaterialRevIds(doc.getMaterialRevIds());
 
         dto.setMaterialRevs(
                 Optional.ofNullable(doc.getMaterialRevs())

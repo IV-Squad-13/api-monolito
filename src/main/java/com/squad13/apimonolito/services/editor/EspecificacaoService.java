@@ -60,7 +60,7 @@ public class EspecificacaoService {
 
         return documentSearch.findWithAggregation("especificacoes", ResSpecDTO.class, aggregation)
                 .stream()
-                .filter(spec -> new ObjectId(spec.getId()).equals(id))
+                .filter(spec -> spec.getId().equals(id))
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("Especificação não encontrada para o ID: " + id));
     }
@@ -223,8 +223,8 @@ public class EspecificacaoService {
 
     private ResSpecDTO createFromImport(EspecificacaoDocDTO dto) {
         ObjectId referenceId = dto.empId() != null
-                ? new ObjectId(findByEmpId(dto.empImportId(), LoadDocumentParamsDTO.allFalse()).getId())
-                : new ObjectId(dto.docImportId());
+                ? findByEmpId(dto.empImportId(), LoadDocumentParamsDTO.allFalse()).getId()
+                : dto.docImportId();
 
         EspecificacaoDoc importReference = findById(referenceId);
 
@@ -333,6 +333,6 @@ public class EspecificacaoService {
 
     public void delete(Long empId) {
         ResSpecDTO spec = findByEmpId(empId, LoadDocumentParamsDTO.allFalse());
-        delete(new ObjectId(spec.getId()));
+        delete(spec.getId());
     }
 }

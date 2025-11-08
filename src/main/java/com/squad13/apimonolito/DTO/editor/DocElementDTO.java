@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.bson.types.ObjectId;
 
 @Getter
 @Setter
@@ -29,7 +30,7 @@ public abstract class DocElementDTO {
 
     private Long catalogId;
 
-    private String parentId;
+    private ObjectId parentId;
 
     @NotNull(message = "Informe o tipo de documento")
     private DocElementEnum docType;

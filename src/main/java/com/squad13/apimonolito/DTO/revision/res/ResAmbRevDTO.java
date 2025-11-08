@@ -1,5 +1,7 @@
 package com.squad13.apimonolito.DTO.revision.res;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.squad13.apimonolito.DTO.editor.res.ResAmbDocDTO;
 import com.squad13.apimonolito.models.editor.mongo.AmbienteDocElement;
 import com.squad13.apimonolito.models.revision.mongo.AmbienteRevDocElement;
@@ -20,7 +22,9 @@ import java.util.Optional;
 public class ResAmbRevDTO extends ResRevDocDTO {
 
     private ResAmbDocDTO revisedDoc;
-    private List<String> itemRevIds =  new ArrayList<>();
+
+    private List<ObjectId> itemRevIds =  new ArrayList<>();
+
     private List<ResItemRevDTO> itemRevs =  new ArrayList<>();
 
     public static ResAmbRevDTO fromDoc(AmbienteRevDocElement doc) {
@@ -29,13 +33,7 @@ public class ResAmbRevDTO extends ResRevDocDTO {
             dto.setRevisedDoc(ResAmbDocDTO.fromDoc(doc.getDoc()));
         }
 
-        dto.setItemRevIds(
-                Optional.ofNullable(doc.getItemRevIds())
-                        .orElse(Collections.emptyList())
-                        .stream()
-                        .map(ObjectId::toHexString)
-                        .toList()
-        );
+        dto.setItemRevIds(doc.getItemRevIds());
 
         dto.setItemRevs(
                 Optional.ofNullable(doc.getItemRevs())

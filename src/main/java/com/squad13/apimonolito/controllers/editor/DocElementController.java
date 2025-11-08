@@ -1,8 +1,12 @@
 package com.squad13.apimonolito.controllers.editor;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.squad13.apimonolito.DTO.editor.*;
 import com.squad13.apimonolito.DTO.editor.res.ResDocElementDTO;
 import com.squad13.apimonolito.services.editor.DocElementService;
+import com.squad13.apimonolito.util.ObjectIdDeserializer;
 import com.squad13.apimonolito.util.enums.DocElementEnum;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,11 +35,11 @@ public class DocElementController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ResDocElementDTO> getById(
-            @PathVariable String id,
+            @PathVariable ObjectId id,
             @ModelAttribute LoadDocumentParamsDTO params,
             @RequestParam DocElementEnum docType
     ) {
-        return ResponseEntity.ok(docElementService.getById(new ObjectId(id), params, docType));
+        return ResponseEntity.ok(docElementService.getById(id, params, docType));
     }
 
     @GetMapping("/search")
@@ -48,33 +52,33 @@ public class DocElementController {
 
     @PostMapping("/{specId}/catalog")
     @PreAuthorize("@require.editingStage(#specId)")
-    public ResponseEntity<ResDocElementDTO> create(@PathVariable String specId, @Valid @RequestBody DocElementCatalogCreationDTO dto) {
-        return ResponseEntity.ok(docElementService.createElement(new ObjectId(specId), dto));
+    public ResponseEntity<ResDocElementDTO> create(@PathVariable ObjectId specId, @Valid @RequestBody DocElementCatalogCreationDTO dto) {
+        return ResponseEntity.ok(docElementService.createElement(specId, dto));
     }
 
     @PostMapping("/{specId}/catalog/bulk")
     @PreAuthorize("@require.editingStage(#specId)")
-    public ResponseEntity<Map<DocElementEnum, List<? extends ResDocElementDTO>>> createBulk(@PathVariable String specId, @Valid @RequestBody BulkDocElementCatalogCreationDTO bulkDto) {
-        return ResponseEntity.ok(docElementService.createManyElements(new ObjectId(specId), bulkDto));
+    public ResponseEntity<Map<DocElementEnum, List<? extends ResDocElementDTO>>> createBulk(@PathVariable ObjectId specId, @Valid @RequestBody BulkDocElementCatalogCreationDTO bulkDto) {
+        return ResponseEntity.ok(docElementService.createManyElements(specId, bulkDto));
     }
 
     @PostMapping("/{specId}/raw")
     @PreAuthorize("@require.editingStage(#specId)")
-    public ResponseEntity<ResDocElementDTO> createRawElement(@PathVariable String specId, @Valid @RequestBody DocElementDTO dto) {
-        return ResponseEntity.ok(docElementService.createRawElement(new ObjectId(specId), dto));
+    public ResponseEntity<ResDocElementDTO> createRawElement(@PathVariable ObjectId specId, @Valid @RequestBody DocElementDTO dto) {
+        return ResponseEntity.ok(docElementService.createRawElement(specId, dto));
     }
 
     // TODO: Criar DTO de edição de documentos
     @PutMapping("/{id}")
     @PreAuthorize("@require.editingStage(#id, #dto.docType)")
-    public ResponseEntity<ResDocElementDTO> update(@PathVariable String id, @RequestBody DocElementDTO dto) {
-        return ResponseEntity.ok(docElementService.update(new ObjectId(id), dto));
+    public ResponseEntity<ResDocElementDTO> update(@PathVariable ObjectId id, @RequestBody DocElementDTO dto) {
+        return ResponseEntity.ok(docElementService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("@require.editingStage(#id, #type)")
-    public ResponseEntity<?> delete(@PathVariable String id, @RequestParam DocElementEnum type) {
-        docElementService.delete(new ObjectId(id), type);
+    public ResponseEntity<?> delete(@PathVariable ObjectId id, @RequestParam DocElementEnum type) {
+        docElementService.delete(id, type);
         return ResponseEntity.ok(type.getDocElement() + "deletado com sucesso");
     }
 }

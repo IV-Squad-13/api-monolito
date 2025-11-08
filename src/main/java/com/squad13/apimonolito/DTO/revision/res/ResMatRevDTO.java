@@ -1,5 +1,7 @@
 package com.squad13.apimonolito.DTO.revision.res;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.squad13.apimonolito.DTO.editor.res.ResMatDocDTO;
 import com.squad13.apimonolito.models.revision.mongo.MaterialRevDocElement;
 import lombok.*;
@@ -18,7 +20,9 @@ import java.util.Optional;
 public class ResMatRevDTO extends ResRevDocDTO {
 
     private ResMatDocDTO revisedDoc;
-    private List<String> marcaRevIds = new ArrayList<>();
+
+    private List<ObjectId> marcaRevIds = new ArrayList<>();
+
     private List<ResMarRevDTO> marcaRevs =  new ArrayList<>();
 
     public static ResMatRevDTO fromDoc(MaterialRevDocElement doc) {
@@ -27,13 +31,7 @@ public class ResMatRevDTO extends ResRevDocDTO {
             dto.setRevisedDoc(ResMatDocDTO.fromDoc(doc.getDoc()));
         }
 
-        dto.setMarcaRevIds(
-                Optional.ofNullable(doc.getMarcaRevIds())
-                        .orElse(Collections.emptyList())
-                        .stream()
-                        .map(ObjectId::toHexString)
-                        .toList()
-        );
+        dto.setMarcaRevIds(doc.getMarcaRevIds());
 
         dto.setMarcaRevs(
                 Optional.ofNullable(doc.getMarcaRevs())

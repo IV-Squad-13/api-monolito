@@ -122,7 +122,7 @@ public class ApprovalService {
         List<LocalRevDocElement> localRevDocs = documentSearch.findAllByIds(localRevIds, LocalRevDocElement.class);
 
         Update update = new Update().set("isApproved", isApproved);
-        documentSearch.updateMany(localRevIds, update, LocalRevDocElement.class);
+        documentSearch.bulkUpdate(localRevIds, update, LocalRevDocElement.class);
 
         List<ObjectId> ambienteRevIds = localRevDocs.stream()
                 .flatMap(local -> local.getAmbienteRevs().stream())
@@ -156,13 +156,13 @@ public class ApprovalService {
         List<AmbienteRevDocElement> ambienteRevDocs = documentSearch.findAllByIds(ambienteRevIds, AmbienteRevDocElement.class);
 
         Update update = new Update().set("isApproved", isApproved);
-        documentSearch.updateMany(ambienteRevIds, update, AmbienteRevDocElement.class);
+        documentSearch.bulkUpdate(ambienteRevIds, update, AmbienteRevDocElement.class);
 
         List<ObjectId> itemRevIds = ambienteRevDocs.stream()
                 .flatMap(amb -> amb.getItemRevs().stream())
                 .map(ItemRevDocElement::getId)
                 .toList();
-        documentSearch.updateMany(itemRevIds, update, ItemRevDocElement.class);
+        documentSearch.bulkUpdate(itemRevIds, update, ItemRevDocElement.class);
     }
 
     private ResAmbRevDTO updateAmbiente(ObjectId id, EditAmbRevDocDTO dto) {
@@ -188,7 +188,7 @@ public class ApprovalService {
 
     private void approveItems(Boolean isApproved, List<ObjectId> itemRevIds) {
         Update update = new Update().set("isApproved", isApproved);
-        documentSearch.updateMany(itemRevIds, update, ItemRevDocElement.class);
+        documentSearch.bulkUpdate(itemRevIds, update, ItemRevDocElement.class);
     }
 
     private ResItemRevDTO updateItem(ObjectId id, EditItemRevDocDTO dto) {
@@ -220,13 +220,13 @@ public class ApprovalService {
         List<MaterialRevDocElement> materialRevDocs = documentSearch.findAllByIds(materialRevIds, MaterialRevDocElement.class);
 
         Update update = new Update().set("isApproved", isApproved);
-        documentSearch.updateMany(materialRevIds, update, MaterialRevDocElement.class);
+        documentSearch.bulkUpdate(materialRevIds, update, MaterialRevDocElement.class);
 
         List<ObjectId> marcaRevIds = materialRevDocs.stream()
                 .flatMap(mat -> mat.getMarcaRevs().stream())
                 .map(MarcaRevDocElement::getId)
                 .toList();
-        documentSearch.updateMany(marcaRevIds, update, MarcaRevDocElement.class);
+        documentSearch.bulkUpdate(marcaRevIds, update, MarcaRevDocElement.class);
     }
 
     private ProcessoHistorico createProcessFromOrigin(ProcessoHistorico origin, ProcActionEnum action) {
@@ -319,7 +319,7 @@ public class ApprovalService {
 
     private void approveMarcas(Boolean isApproved, List<ObjectId> marcaRevIds) {
         Update update = new Update().set("isApproved", isApproved);
-        documentSearch.updateMany(marcaRevIds, update, MarcaRevDocElement.class);
+        documentSearch.bulkUpdate(marcaRevIds, update, MarcaRevDocElement.class);
     }
 
     private ResMarRevDTO updateMarca(ObjectId id, EditMarRevDocDTO dto) {

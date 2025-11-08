@@ -21,7 +21,7 @@ import java.util.Map;
 public class DocSearchParamsDTO {
 
     private DocElementEnum docType;
-    private String id;
+    private ObjectId id;
     private String name;
     private Long catalogId;
     private String especificacaoId;
@@ -40,14 +40,14 @@ public class DocSearchParamsDTO {
 
     public DocSearchParamsDTO(DocElementEnum docType, ObjectId id) {
         this.docType = docType;
-        this.id = id.toHexString();
+        this.id = id;
     }
 
     public static Map<String, Object> buildFilters(DocSearchParamsDTO params) {
         Map<String, Object> filters = new HashMap<>();
 
         if (params.getId() != null)
-            filters.put("id", params.getId());
+            filters.put("_id", params.getId());
 
         if (params.getName() != null)
             filters.put("name", params.getName());

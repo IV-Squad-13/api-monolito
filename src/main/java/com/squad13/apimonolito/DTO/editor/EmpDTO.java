@@ -1,9 +1,12 @@
 package com.squad13.apimonolito.DTO.editor;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.squad13.apimonolito.util.enums.DocInitializationEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.bson.types.ObjectId;
 
 public record EmpDTO(
 
@@ -18,7 +21,8 @@ public record EmpDTO(
 
         Long empImportId,
 
-        String docImportId,
+        @JsonSerialize(using = ToStringSerializer.class)
+        ObjectId docImportId,
 
         @NotNull(message = "Informe a forma de criação da Especificação")
         DocInitializationEnum init

@@ -15,8 +15,12 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
+import org.springframework.data.mongodb.core.query.Update;
 
 import java.time.Instant;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 @Data
@@ -70,5 +74,9 @@ public abstract class DocElement {
         }
 
         return instance;
+    }
+
+    public List<String> getUniqueKeys() {
+        return List.of("catalogId", "name", "especificacaoId");
     }
 }

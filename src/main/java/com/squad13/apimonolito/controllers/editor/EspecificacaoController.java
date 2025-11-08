@@ -30,9 +30,9 @@ public class EspecificacaoController {
     @GetMapping("/{id}")
     public ResponseEntity<ResSpecDTO> getById(
             @ModelAttribute LoadDocumentParamsDTO params,
-            @PathVariable String id
+            @PathVariable ObjectId id
     ) {
-        return ResponseEntity.ok(especificacaoService.findById(new ObjectId(id), params));
+        return ResponseEntity.ok(especificacaoService.findById(id, params));
     }
 
     @GetMapping("/emp/{empId}")
@@ -58,14 +58,14 @@ public class EspecificacaoController {
 
     @PutMapping("/{id}")
     @PreAuthorize("@require.editingStage(#id)")
-    public ResponseEntity<ResSpecDTO> update(@PathVariable String id, @Valid @RequestBody EditEspecificacaoDocDTO dto) {
-        return ResponseEntity.ok(especificacaoService.update(new ObjectId(id), dto));
+    public ResponseEntity<ResSpecDTO> update(@PathVariable ObjectId id, @Valid @RequestBody EditEspecificacaoDocDTO dto) {
+        return ResponseEntity.ok(especificacaoService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("@require.editingStage(#id)")
-    public ResponseEntity<?> delete(@PathVariable String id) {
-        especificacaoService.delete(new ObjectId(id));
+    public ResponseEntity<?> delete(@PathVariable ObjectId id) {
+        especificacaoService.delete(id);
         return ResponseEntity.ok("Especificação deletada com sucesso");
     }
 }

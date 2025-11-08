@@ -10,6 +10,7 @@ import com.squad13.apimonolito.models.editor.mongo.*;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import com.squad13.apimonolito.mongo.editor.*;
 import com.squad13.apimonolito.util.builder.DocElementBuilder;
+import com.squad13.apimonolito.util.builder.MongoUpdateBuilder;
 import com.squad13.apimonolito.util.enums.DocElementEnum;
 import com.squad13.apimonolito.util.mapper.EditorMapper;
 import com.squad13.apimonolito.util.search.CatalogSearch;
@@ -19,11 +20,9 @@ import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
-import javax.print.Doc;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -34,6 +33,8 @@ import java.util.stream.Collectors;
 public class DocElementService {
 
     private final DocElementBuilder docElementBuilder;
+    private final DocElementBuilder docBuilder;
+    private final MongoUpdateBuilder mongoUpdateBuilder;
 
     private final SynchronizationService syncService;
 
@@ -48,8 +49,6 @@ public class DocElementService {
     private final ItemDocElementRepository itemDocRepository;
     private final MaterialDocElementRepository materialDocRepository;
     private final MarcaDocElementRepository marcaDocRepository;
-
-    private final DocElementBuilder docBuilder;
 
     public List<? extends ResDocElementDTO> getAll(LoadDocumentParamsDTO params, DocElementEnum docType) {
         Aggregation agg = docBuilder.buildAggregation(params);
@@ -111,15 +110,13 @@ public class DocElementService {
         DocElement newElement = editorMapper.fromCatalog(especificacaoDoc.getId(), catalogEntity, null, dto.type());
         saveElement(especificacaoDoc, newElement, dto.type());
 
-        if (dto.parentId() != null && isHexString(dto.parentId()))
+        if (dto.parentId() != null)
             associateIfNeeded(dto, newElement);
 
         return ResDocElementDTO.fromDoc(newElement, dto.type().getResDocSupplier());
     }
 
-    public Map<DocElementEnum, List<? extends ResDocElementDTO>> createManyElements(
-            ObjectId specId, BulkDocElementCatalogCreationDTO bulkDto) {
-
+    public Map<DocElementEnum, List<? extends ResDocElementDTO>> createManyElements(ObjectId specId, BulkDocElementCatalogCreationDTO bulkDto) {
         List<DocElementCatalogCreationDTO> dtoList = bulkDto.elements();
 
         Map<DocElementEnum, List<Long>> elementFilters = dtoList.stream()
@@ -142,7 +139,15 @@ public class DocElementService {
                                                 .stream()
                                                 .map(entity -> {
                                                     DocElement doc = editorMapper.fromCatalog(specId, entity, null, docType);
-                                                    doc.setId(newId());
+
+                                                    Map<String, Object> updateMap = mongoUpdateBuilder.toMap(doc);
+                                                    Update update = new Update();
+                                                    updateMap.forEach((key, value) -> {
+                                                        if ("_class".equals(key)) update.set(key, value);
+                                                    });
+
+                                                    ObjectId persistedId = documentSearch.upsert(doc, docType.getDocElement());
+                                                    doc.setId(persistedId);
 
                                                     dtoList.stream()
                                                             .filter(dto -> dto.elementId().equals(doc.getCatalogId()))
@@ -156,10 +161,6 @@ public class DocElementService {
                         }
                 ));
 
-        sortedDocs.forEach((type, docs) ->
-                documentSearch.bulkSave(type.getDocElement(), docs)
-        );
-
         return sortedDocs.entrySet().stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
@@ -171,10 +172,9 @@ public class DocElementService {
 
     private void handleElementAssociation(DocElementCatalogCreationDTO dto, DocElement doc, ObjectId specId) {
         if ((dto.type().equals(DocElementEnum.ITEM) || dto.type().equals(DocElementEnum.MARCA))
-                && dto.parentId() != null && !dto.parentId().isEmpty()
-                && isHexString(dto.parentId())) {
+                && dto.parentId() != null) {
 
-            doc.setParentId(new ObjectId(dto.parentId()));
+            doc.setParentId(dto.parentId());
             associateIfNeeded(dto, doc);
             return;
         }
@@ -270,7 +270,8 @@ public class DocElementService {
             );
         };
 
-        DocElement parentDoc = documentSearch.findInDocument(new ObjectId(dto.parentId()), parentType.getDocElement());
+        ObjectId parentId = dto.parentId();
+        DocElement parentDoc = documentSearch.findInDocument(parentId, parentType.getDocElement());
         if (parentDoc == null) {
             throw new ResourceNotFoundException("Elemento associado não encontrado: " + dto.parentId());
         }
@@ -376,7 +377,7 @@ public class DocElementService {
             ambiente.setLocal(dto.getLocal());
 
             if (dto.getParentId() != null) {
-                LocalDoc local = localDocRepository.findById(new ObjectId(dto.getParentId()))
+                LocalDoc local = localDocRepository.findById(dto.getParentId())
                         .orElseThrow(() ->
                                 new ResourceNotFoundException("Local não encontrado com o id informado: " + dto.getParentId())
                         );
@@ -422,12 +423,12 @@ public class DocElementService {
         }
 
         if (dto.getParentId() != null) {
-            AmbienteDocElement newAmbiente = ambienteDocRepository.findById(new ObjectId(dto.getParentId()))
+            AmbienteDocElement newAmbiente = ambienteDocRepository.findById(dto.getParentId())
                     .orElseThrow(() ->
                             new ResourceNotFoundException("Ambiente não encontrado com o id informado: " + dto.getParentId())
                     );
 
-            if (item.getParentId() != null && !item.getParentId().equals(new ObjectId(dto.getParentId()))) {
+            if (item.getParentId() != null && !item.getParentId().equals(dto.getParentId())) {
                 AmbienteDocElement prevAmbiente = ambienteDocRepository.findById(item.getParentId())
                         .orElseThrow(() ->
                                 new ResourceNotFoundException("Ambiente anterior não encontrado: " + item.getParentId())
@@ -478,12 +479,12 @@ public class DocElementService {
         }
 
         if (dto.getParentId() != null) {
-            MaterialDocElement newMaterial = materialDocRepository.findById(new ObjectId(dto.getParentId()))
+            MaterialDocElement newMaterial = materialDocRepository.findById(dto.getParentId())
                     .orElseThrow(() ->
                             new ResourceNotFoundException("Material não encontrado com o id informado: " + dto.getParentId())
                     );
 
-            if (marca.getParentId() != null && !marca.getParentId().equals(new ObjectId(dto.getParentId()))) {
+            if (marca.getParentId() != null && !marca.getParentId().equals(dto.getParentId())) {
                 MaterialDocElement oldMaterial = materialDocRepository.findById(marca.getParentId())
                         .orElseThrow(() ->
                                 new ResourceNotFoundException("Material anterior não encontrado: " + marca.getParentId())

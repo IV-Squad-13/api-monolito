@@ -45,18 +45,15 @@ public class EmpreendimentoBlocker {
         return true;
     }
 
-    public boolean editingStage(String id) {
-        ObjectId objectId = new ObjectId(id);
-        EspecificacaoDoc spec = specRepository.findById(objectId)
+    public boolean editingStage(ObjectId id) {
+        EspecificacaoDoc spec = specRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Especificação não encontrada: " + id));
 
         return editingStage(spec.getEmpreendimentoId());
     }
 
-    public boolean editingStage(String id, DocElementEnum docType) {
-        ObjectId objectId = new ObjectId(id);
-
-        DocElement doc = docSearch.findInDocument(objectId, docType.getDocElement());
+    public boolean editingStage(ObjectId id, DocElementEnum docType) {
+        DocElement doc = docSearch.findInDocument(id, docType.getDocElement());
 
         EspecificacaoDoc spec = specRepository.findById(doc.getEspecificacaoId())
                 .orElseThrow(() -> new ResourceNotFoundException("Especificação não encontrada: " + id));
@@ -75,17 +72,15 @@ public class EmpreendimentoBlocker {
         return true;
     }
 
-    public boolean revisionStage(String id) {
-        ObjectId objectId = new ObjectId(id);
-        EspecificacaoRevDocElement revDoc = especificacaoRevDocElementRepository.findById(objectId)
-                .orElseThrow(() -> new ResourceNotFoundException("Documento de Revisão não encontrado: " + objectId));
+    public boolean revisionStage(ObjectId id) {
+        EspecificacaoRevDocElement revDoc = especificacaoRevDocElementRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Documento de Revisão não encontrado: " + id));
 
         return revisionStage(revDoc.getRevisionId());
     }
 
-    public boolean revisionStage(String id, RevDocElementEnum docType) {
-        ObjectId objectId = new ObjectId(id);
-        RevDocElement doc = docSearch.findInDocument(objectId, docType.getRevDocument());
+    public boolean revisionStage(ObjectId id, RevDocElementEnum docType) {
+        RevDocElement doc = docSearch.findInDocument(id, docType.getRevDocument());
         return revisionStage(doc.getRevisionId());
     }
 

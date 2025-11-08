@@ -5,8 +5,11 @@ import com.squad13.apimonolito.models.editor.structures.DocElement;
 import com.squad13.apimonolito.models.revision.structures.RevDocElement;
 import com.squad13.apimonolito.util.enums.DocElementEnum;
 import lombok.RequiredArgsConstructor;
+import org.bson.BsonValue;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.BulkOperations;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
@@ -32,6 +35,34 @@ public class DocumentSearch {
         }
 
         return doc.collection();
+    }
+
+    public Update buildUpdateFrom(Object source) {
+        if (source == null) {
+            throw new IllegalArgumentException("Source object for update cannot be null");
+        }
+
+        // Convert the object into a BSON Document using MongoConverter
+        org.bson.Document doc = new org.bson.Document();
+        mongoTemplate.getConverter().write(source, doc);
+
+        Update update = new Update();
+
+        doc.forEach((key, value) -> {
+            // Skip MongoDB internal or immutable fields
+            if ("_id".equals(key) || "_class".equals(key)) {
+                return;
+            }
+
+            // Handle nested structures safely (optional improvement)
+            if (value instanceof Map || value instanceof List) {
+                update.set(key, value);
+            } else {
+                update.set(key, value);
+            }
+        });
+
+        return update;
     }
 
     public List<MatchOperation> buildMatchOps(Map<String, Object> filters) {
@@ -84,18 +115,44 @@ public class DocumentSearch {
     }
 
     public <T> void bulkSave(Class<? extends T> clazz, List<? extends T> docs) {
-        if (docs == null || docs.isEmpty()) return;
+        if (docs == null || docs.isEmpty() || clazz == null) return;
 
         mongoTemplate.bulkOps(BulkOperations.BulkMode.UNORDERED, clazz)
                 .insert(docs)
                 .execute();
     }
 
-    public <T> void updateMany(List<ObjectId> ids, Update update, Class<T> clazz) {
-        if (ids == null || ids.isEmpty()) return;
+    public <T> void bulkUpdate(List<ObjectId> ids, Update update, Class<T> clazz) {
+        if (ids == null || ids.isEmpty() || update == null || clazz == null) return;
 
         Query query = new Query(Criteria.where("_id").in(ids));
         mongoTemplate.updateMulti(query, update, clazz);
+    }
+
+    public <T extends DocElement> ObjectId upsert(T source, Class<? extends T> clazz) {
+        if (source == null || clazz == null) return null;
+
+        org.bson.Document doc = new org.bson.Document();
+        mongoTemplate.getConverter().write(source, doc);
+
+        Query query = new Query();
+        source.getUniqueKeys().forEach(key ->
+                query.addCriteria(Criteria.where(key).is(doc.get(key)))
+        );
+
+        doc.remove("_id");
+        doc.remove("_class");
+
+        Update update = new Update();
+        doc.forEach(update::set);
+
+        var result = mongoTemplate.upsert(query, update, clazz);
+
+        if (result.getUpsertedId() != null) {
+            return result.getUpsertedId().asObjectId().getValue();
+        }
+
+        return Objects.requireNonNull(mongoTemplate.findOne(query, clazz)).getId();
     }
 
     @SuppressWarnings("unchecked")

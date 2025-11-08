@@ -42,4 +42,8 @@ public class LocalDoc {
 
     @Transient
     private List<AmbienteDocElement> ambientes = new ArrayList<>();
+
+    public List<String> getUniqueKeys() {
+        return List.of("local", "especificacaoId");
+    }
 }

@@ -57,7 +57,7 @@ public class EditorMapper {
 
     public ResSpecDTO toResponse(EspecificacaoDoc doc) {
         return new ResSpecDTO(
-                doc.getId().toHexString(),
+                doc.getId(),
                 doc.getEmpreendimentoId(),
                 doc.getName(),
                 doc.getDesc(),

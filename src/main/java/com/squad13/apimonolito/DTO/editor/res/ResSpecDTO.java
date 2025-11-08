@@ -1,5 +1,7 @@
 package com.squad13.apimonolito.DTO.editor.res;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.squad13.apimonolito.DTO.revision.res.ResLocalRevDTO;
 import com.squad13.apimonolito.DTO.revision.res.ResMatRevDTO;
 import com.squad13.apimonolito.DTO.revision.res.ResRevDocDTO;
@@ -22,7 +24,10 @@ import java.util.Optional;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResSpecDTO {
-    private String id;
+
+    @JsonSerialize(using = ToStringSerializer.class)
+    private ObjectId id;
+
     private Long empreendimentoId;
     private String name;
     private String desc;

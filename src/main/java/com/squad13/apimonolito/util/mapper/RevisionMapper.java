@@ -24,7 +24,7 @@ public class RevisionMapper {
 
     public <D extends ResDocElementDTO, R extends RevDocElement> R toRevDoc(D doc, Long revisionId, Supplier<R> factory) {
         R rev = factory.get();
-        rev.setRevisedDocId(new ObjectId(doc.getId()));
+        rev.setRevisedDocId(doc.getId());
         rev.setRevisionId(revisionId);
         rev.setIsApproved(null);
         rev.setComment(null);

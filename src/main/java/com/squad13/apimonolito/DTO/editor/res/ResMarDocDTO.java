@@ -8,7 +8,6 @@ import lombok.Setter;
 @Setter
 public class ResMarDocDTO extends ResDocElementDTO {
 
-
     public static ResMarDocDTO fromDoc(MarcaDocElement doc) {
         return ResDocElementDTO.fromDoc(doc, ResMarDocDTO::new);
     }

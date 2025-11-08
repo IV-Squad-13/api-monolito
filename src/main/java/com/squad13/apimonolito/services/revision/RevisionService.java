@@ -199,7 +199,7 @@ public class RevisionService {
 
         EspecificacaoRevDocElement specRev = new EspecificacaoRevDocElement();
         specRev.setRevisionId(revision.getId());
-        specRev.setRevisedDocId(new ObjectId(spec.getId()));
+        specRev.setRevisedDocId(spec.getId());
 
         generateFullRevision(specRev, spec);
 
@@ -257,7 +257,7 @@ public class RevisionService {
                 .map(resLocal -> {
                     LocalRevDocElement localRev = new LocalRevDocElement();
                     localRev.setId(newId());
-                    localRev.setRevisedDocId(new ObjectId(resLocal.getId()));
+                    localRev.setRevisedDocId(resLocal.getId());
                     localRev.setRevisionId(revisionId);
                     localRev.setIsApproved(null);
                     localRev.setComment(null);

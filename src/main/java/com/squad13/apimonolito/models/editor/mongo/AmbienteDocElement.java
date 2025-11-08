@@ -39,4 +39,9 @@ public class AmbienteDocElement extends DocElement {
         ambiente.setLocal(dto.getLocal());
         return ambiente;
     }
+
+    @Override
+    public List<String> getUniqueKeys() {
+        return List.of("catalogId", "name", "local", "especificacaoId");
+    }
 }

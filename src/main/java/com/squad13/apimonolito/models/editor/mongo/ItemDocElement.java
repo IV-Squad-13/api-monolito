@@ -12,6 +12,8 @@ import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Data
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -37,5 +39,10 @@ public class ItemDocElement extends DocElement {
         item.setTypeId(type.getId());
         item.setType(type.getName());
         return item;
+    }
+
+    @Override
+    public List<String> getUniqueKeys() {
+        return List.of("catalogId", "name", "desc", "type", "parentId", "especificacaoId");
     }
 }

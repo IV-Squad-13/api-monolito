@@ -9,6 +9,8 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Data
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -22,5 +24,10 @@ public class MarcaDocElement extends DocElement {
 
     public static MarcaDocElement fromDto(ObjectId especId, DocElementDTO dto) {
         return DocElement.fromDto(dto, especId, MarcaDocElement::new);
+    }
+
+    @Override
+    public List<String> getUniqueKeys() {
+        return List.of("catalogId", "name", "parentId", "especificacaoId");
     }
 }

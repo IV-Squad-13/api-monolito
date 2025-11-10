@@ -42,19 +42,31 @@ public class PadraoController {
         return ResponseEntity.ok(padraoService.findByNameOrThrow(name, params));
     }
 
-    @GetMapping("/composition/catalogo")
-    public ResponseEntity<List<ResPadraoDTO>> getPadraoByCompositor(@RequestParam Long idCompositor, @RequestParam CompositorEnum compType) {
-        return ResponseEntity.ok(composicaoService.findPadraoByCompositor(idCompositor, compType));
+    @GetMapping("/composicao/catalogo")
+    public ResponseEntity<List<ResPadraoDTO>> getPadraoByCompositor(
+            @RequestParam Long idCompositor,
+            @ModelAttribute LoadCatalogParamsDTO params,
+            @RequestParam CompositorEnum compType
+    ) {
+        return ResponseEntity.ok(composicaoService.findPadraoByCompositor(idCompositor, params, compType));
     }
 
     @GetMapping("/{id}/ambiente")
-    public ResponseEntity<List<ResItemAmbienteDTO>> getItemAmbienteByPadrao(@PathVariable Long id) {
-        return ResponseEntity.ok(padraoService.findItensAmbienteByPadrao(id));
+    public ResponseEntity<List<ResItemAmbienteDTO>> getItemAmbienteByPadrao(
+            @PathVariable Long id,
+            @RequestParam(required = false) Long ambienteId,
+            @RequestParam(required = false) Long itemId
+    ) {
+        return ResponseEntity.ok(padraoService.findItensAmbienteByPadrao(id, ambienteId, itemId));
     }
 
     @GetMapping("/{id}/material")
-    public ResponseEntity<List<ResMarcaMaterialDTO>> getMarcaMaterialByPadrao(@PathVariable Long id) {
-        return ResponseEntity.ok(padraoService.findMarcasMaterialByPadrao(id));
+    public ResponseEntity<List<ResMarcaMaterialDTO>> getMarcaMaterialByPadrao(
+            @PathVariable Long id,
+            @RequestParam(required = false) Long materialId,
+            @RequestParam(required = false) Long marcaId
+    ) {
+        return ResponseEntity.ok(padraoService.findMarcasMaterialByPadrao(id, materialId, marcaId));
     }
 
     @PostMapping("/new")
@@ -120,14 +132,6 @@ public class PadraoController {
             @RequestParam Map<String, String> filters,
             @ModelAttribute LoadCatalogParamsDTO loadDTO
     ) {
-        filters.remove("loadAll");
-        filters.remove("loadPadroes");
-        filters.remove("loadAmbientes");
-        filters.remove("loadItems");
-        filters.remove("loadMateriais");
-        filters.remove("loadMarcas");
-        filters.remove("loadNested");
-
         return ResponseEntity.ok(padraoService.findByFilters(filters, loadDTO));
     }
 }

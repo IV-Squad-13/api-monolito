@@ -145,7 +145,7 @@ public class EspecificacaoService {
         List<LocalDoc> locais = generateLocais(spec.getId());
         spec.setLocaisIds(locais.stream().map(LocalDoc::getId).toList());
 
-        List<ItemAmbiente> itemAmbientes = compService.findItensAmbienteByPadrao(emp.getPadrao().getId());
+        List<ItemAmbiente> itemAmbientes = compService.findItensAmbienteByPadrao(emp.getPadrao().getId(), null, null);
         Map<Ambiente, List<ItemDesc>> groupedAmbientes =
                 catalogMapper.groupBy(itemAmbientes, ItemAmbiente::getAmbiente, ItemAmbiente::getItemDesc);
 
@@ -190,7 +190,7 @@ public class EspecificacaoService {
 
         documentSearch.bulkSave(LocalDoc.class, locais);
 
-        List<MarcaMaterial> marcaMateriais = compService.findMarcasMaterialByPadrao(emp.getPadrao().getId());
+        List<MarcaMaterial> marcaMateriais = compService.findMarcasMaterialByPadrao(emp.getPadrao().getId(), null, null);
         Map<Material, List<Marca>> groupedMateriais =
                 catalogMapper.groupBy(marcaMateriais, MarcaMaterial::getMaterial, MarcaMaterial::getMarca);
 

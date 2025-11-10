@@ -30,11 +30,11 @@ public class CatalogMapper {
         Set<ResMinDTO> ambientes = Collections.emptySet();
 
         if (item.getAmbienteSet() != null) {
-            padroes = params.isLoadPadroes()
+            padroes = (params.isLoadPadroes() || params.isLoadAll())
                     ? getAmbienteMinPadraoDTO(item.getAmbienteSet())
                     : Collections.emptySet();
 
-            ambientes = params.isLoadAmbientes()
+            ambientes =( params.isLoadAmbientes() || params.isLoadAll())
                     ? getMinAmbienteDTO(item.getAmbienteSet())
                     : Collections.emptySet();
         }
@@ -71,11 +71,11 @@ public class CatalogMapper {
         Set<ResMinDTO> items = Collections.emptySet();
 
         if (ambiente.getItemSet() != null) {
-            padroes = params.isLoadPadroes()
+            padroes = (params.isLoadPadroes() || params.isLoadAll())
                     ? getAmbienteMinPadraoDTO(ambiente.getItemSet())
                     : Collections.emptySet();
 
-            items = params.isLoadItems()
+            items = (params.isLoadItems() || params.isLoadAll())
                     ? getMinItemDTO(ambiente.getItemSet())
                     : Collections.emptySet();
         }
@@ -107,11 +107,11 @@ public class CatalogMapper {
         Set<ResMinDTO> materiais = Collections.emptySet();
 
         if (marca.getMaterialSet() != null) {
-            padroes = params.isLoadPadroes()
+            padroes = (params.isLoadPadroes() || params.isLoadAll())
                     ? getMaterialMinPadraoDTO(marca.getMaterialSet())
                     : Collections.emptySet();
 
-            materiais = params.isLoadMateriais()
+            materiais = (params.isLoadMateriais() || params.isLoadAll())
                     ? getMinMaterialDTO(marca.getMaterialSet())
                     : Collections.emptySet();
         }
@@ -132,11 +132,11 @@ public class CatalogMapper {
         Set<ResMinDTO> marcas = Collections.emptySet();
 
         if (material.getMarcaSet() != null) {
-            padroes = params.isLoadPadroes()
+            padroes = (params.isLoadPadroes() || params.isLoadAll())
                     ? getMaterialMinPadraoDTO(material.getMarcaSet())
                     : Collections.emptySet();
 
-            marcas = params.isLoadMarcas()
+            marcas = (params.isLoadMarcas() || params.isLoadAll())
                     ? getMinMarcaDTO(material.getMarcaSet())
                     : Collections.emptySet();
         }
@@ -163,25 +163,25 @@ public class CatalogMapper {
     public ResPadraoDTO toResponse(Padrao padrao, LoadCatalogParamsDTO params) {
         if (padrao == null) return null;
 
-        List<ResMinDTO> items = params.isLoadItems()
+        List<ResMinDTO> items = (params.isLoadItems() || params.isLoadAll())
                 ? padrao.getAmbienteSet().stream()
                 .map(comp -> toMinDTO(comp.getCompositor().getItemDesc(), params.isLoadNested()))
                 .toList()
                 : List.of();
 
-        List<ResMinDTO> ambientes = params.isLoadAmbientes()
+        List<ResMinDTO> ambientes = (params.isLoadAmbientes() || params.isLoadAll())
                 ? padrao.getAmbienteSet().stream()
                 .map(comp -> toMinDTO(comp.getCompositor().getAmbiente(), params.isLoadNested()))
                 .toList()
                 : List.of();
 
-        List<ResMinDTO> marcas = params.isLoadMarcas()
+        List<ResMinDTO> marcas = (params.isLoadMarcas() || params.isLoadAll())
                 ? padrao.getMaterialSet().stream()
                 .map(comp -> toMinDTO(comp.getCompositor().getMarca(), params.isLoadNested()))
                 .toList()
                 : List.of();
 
-        List<ResMinDTO> materiais = params.isLoadMateriais()
+        List<ResMinDTO> materiais = (params.isLoadMateriais() || params.isLoadAll())
                 ? padrao.getMaterialSet().stream()
                 .map(comp -> toMinDTO(comp.getCompositor().getMaterial(), params.isLoadNested()))
                 .toList()
@@ -258,7 +258,13 @@ public class CatalogMapper {
                 ? it.getAmbienteSet().stream().map(ia -> ia.getAmbiente().getId()).toList()
                 : List.of();
 
-        return new ResMinDTO(it.getId(), it.getDesc(), it.getIsActive(), associatedIds);
+        return ResMinItemDTO.builder()
+                .id(it.getId())
+                .name(it.getName())
+                .isActive(it.getIsActive())
+                .associatedIds(associatedIds)
+                .desc(it.getDesc())
+                .build();
     }
 
     private ResMinDTO toMinDTO(Ambiente am, boolean loadItems) {

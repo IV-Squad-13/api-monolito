@@ -49,14 +49,6 @@ public class MaterialController {
             @RequestParam Map<String, String> filters,
             @ModelAttribute LoadCatalogParamsDTO loadDTO
     ) {
-        filters.remove("loadAll");
-        filters.remove("loadPadroes");
-        filters.remove("loadAmbientes");
-        filters.remove("loadItems");
-        filters.remove("loadMateriais");
-        filters.remove("loadMarcas");
-        filters.remove("loadNested");
-
         return ResponseEntity.ok(materialService.findByFilters(filters, loadDTO));
     }
 

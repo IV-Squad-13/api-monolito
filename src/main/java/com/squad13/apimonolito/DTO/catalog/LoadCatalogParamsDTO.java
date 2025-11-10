@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 @ParameterObject
 public class LoadCatalogParamsDTO {
 
+    private boolean loadAll;
     private boolean loadPadroes;
     private boolean loadAmbientes;
     private boolean loadItems;
@@ -18,6 +19,7 @@ public class LoadCatalogParamsDTO {
     private boolean loadNested; // PERIGO!!!!!
 
     public LoadCatalogParamsDTO(
+            boolean loadAll,
             boolean loadPadroes,
             boolean loadAmbientes,
             boolean loadItems,
@@ -25,6 +27,7 @@ public class LoadCatalogParamsDTO {
             boolean loadMarcas,
             boolean loadNested
     ) {
+        this.loadAll = loadAll;
         this.loadPadroes = loadPadroes;
         this.loadAmbientes = loadAmbientes;
         this.loadItems = loadItems;
@@ -34,15 +37,15 @@ public class LoadCatalogParamsDTO {
     }
 
     public LoadCatalogParamsDTO() {
-        this(false, false, false, false, false, false);
+        this(false, false, false, false, false, false, false);
     }
 
     public static LoadCatalogParamsDTO allFalse() {
-        return new LoadCatalogParamsDTO(false, false, false, false, false, false);
+        return new LoadCatalogParamsDTO(false, false, false, false, false, false, false);
     }
 
     @ModelAttribute("loadAll")
     public static LoadCatalogParamsDTO allTrue() {
-        return new LoadCatalogParamsDTO(true, true, true, true, true, true);
+        return new LoadCatalogParamsDTO(true, true, true, true, true, true, true);
     }
 }

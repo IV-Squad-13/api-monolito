@@ -55,14 +55,14 @@ public class PadraoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Padrão com nome " + name + " não encontrado."));
     }
 
-    public List<ResItemAmbienteDTO> findItensAmbienteByPadrao(Long id) {
-        return composicaoService.findItensAmbienteByPadrao(id).stream()
+    public List<ResItemAmbienteDTO> findItensAmbienteByPadrao(Long id, Long ambienteId, Long itemId) {
+        return composicaoService.findItensAmbienteByPadrao(id, ambienteId, itemId).stream()
                 .map(catalogMapper::toResponse)
                 .toList();
     }
 
-    public List<ResMarcaMaterialDTO> findMarcasMaterialByPadrao(Long id) {
-        return composicaoService.findMarcasMaterialByPadrao(id).stream()
+    public List<ResMarcaMaterialDTO> findMarcasMaterialByPadrao(Long id, Long materialId, Long marcaId) {
+        return composicaoService.findMarcasMaterialByPadrao(id, materialId, marcaId).stream()
                 .map(catalogMapper::toResponse)
                 .toList();
     }

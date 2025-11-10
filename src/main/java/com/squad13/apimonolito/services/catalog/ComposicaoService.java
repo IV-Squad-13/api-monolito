@@ -58,21 +58,21 @@ public class ComposicaoService {
                 ));
     }
 
-    private List<ResPadraoDTO> findPadraoByAmbiente(Long id) {
+    private List<ResPadraoDTO> findPadraoByAmbiente(Long id, LoadCatalogParamsDTO params) {
         return compAmbienteRepository.findByCompositor_Ambiente_Id(id)
                 .stream()
                 .map(ComposicaoAmbiente::getPadrao)
                 .distinct()
-                .map(p -> catalogMapper.toResponse(p, LoadCatalogParamsDTO.allFalse()))
+                .map(p -> catalogMapper.toResponse(p, params))
                 .toList();
     }
 
-    private List<ResPadraoDTO> findPadraoByMaterial(Long id) {
+    private List<ResPadraoDTO> findPadraoByMaterial(Long id, LoadCatalogParamsDTO params) {
         return compMaterialRepository.findByCompositor_Material_Id(id)
                 .stream()
                 .map(ComposicaoMaterial::getPadrao)
                 .distinct()
-                .map(p -> catalogMapper.toResponse(p, LoadCatalogParamsDTO.allFalse()))
+                .map(p -> catalogMapper.toResponse(p, params))
                 .toList();
     }
 
@@ -158,22 +158,64 @@ public class ComposicaoService {
         }
     }
 
-    public List<ResPadraoDTO> findPadraoByCompositor(Long id, CompositorEnum compType) {
-        if (compType.equals(CompositorEnum.AMBIENTE)) return findPadraoByAmbiente(id);
-        if (compType.equals(CompositorEnum.MATERIAL)) return findPadraoByMaterial(id);
+    public List<ResPadraoDTO> findPadraoByCompositor(Long id, LoadCatalogParamsDTO params, CompositorEnum compType) {
+        if (compType.equals(CompositorEnum.AMBIENTE)) return findPadraoByAmbiente(id, params);
+        if (compType.equals(CompositorEnum.MATERIAL)) return findPadraoByMaterial(id, params);
 
         throw new InvalidCompositorException("Tipo de compositor inválido: " + compType);
     }
 
-    public List<ItemAmbiente> findItensAmbienteByPadrao(Long id) {
-        return compAmbienteRepository.findByPadrao_Id(id)
+    public List<ItemAmbiente> findItensAmbienteByPadrao(Long padraoId, Long ambienteId, Long itemId) {
+        if (ambienteId == null && itemId == null) {
+            return compAmbienteRepository.findByPadrao_Id(padraoId)
+                    .stream()
+                    .map(ComposicaoAmbiente::getCompositor)
+                    .toList();
+        }
+
+        if (ambienteId != null && itemId == null) {
+            return compAmbienteRepository.findFilteredByAmbiente(padraoId, ambienteId)
+                    .stream()
+                    .map(ComposicaoAmbiente::getCompositor)
+                    .toList();
+        }
+
+        if (ambienteId == null && itemId != null) {
+            return compAmbienteRepository.findFilteredByItem(padraoId, itemId)
+                    .stream()
+                    .map(ComposicaoAmbiente::getCompositor)
+                    .toList();
+        }
+
+        return compAmbienteRepository.findFiltered(padraoId, ambienteId, itemId)
                 .stream()
                 .map(ComposicaoAmbiente::getCompositor)
                 .toList();
     }
 
-    public List<MarcaMaterial> findMarcasMaterialByPadrao(Long id) {
-        return compMaterialRepository.findByPadrao_Id(id)
+    public List<MarcaMaterial> findMarcasMaterialByPadrao(Long padraoId, Long materialId, Long marcaId) {
+        if (materialId == null && marcaId == null) {
+            return compMaterialRepository.findByPadrao_Id(padraoId)
+                    .stream()
+                    .map(ComposicaoMaterial::getCompositor)
+                    .toList();
+        }
+
+        if (materialId != null && marcaId == null) {
+            return compMaterialRepository.findFilteredByMaterial(padraoId, materialId)
+                    .stream()
+                    .map(ComposicaoMaterial::getCompositor)
+                    .toList();
+        }
+
+        if (materialId == null && marcaId != null) {
+            return compMaterialRepository.findFilteredByMarca(padraoId, marcaId)
+                    .stream()
+                    .map(ComposicaoMaterial::getCompositor)
+                    .toList();
+        }
+
+        return compMaterialRepository.findFiltered(padraoId, materialId, marcaId)
                 .stream()
                 .map(ComposicaoMaterial::getCompositor)
                 .toList();

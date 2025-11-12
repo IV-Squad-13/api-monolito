@@ -31,11 +31,12 @@ WORKDIR /app
 # Copiar o JAR da etapa de build
 COPY --from=build /app/target/*.jar app.jar
 
-# Copiar ou criar o arquivo de configurações de produção
-COPY .env.prod.properties .env.prod.properties
+# Usuário root para garantir que o arquivo .env.prod.properties possa ser criado
+USER root
+RUN echo "# Configurações de produção para GKE" > /app/.env.prod.properties
 
-# Ou criar o arquivo de propriedades (caso ele não exista)
-RUN echo "# Configurações de produção para GKE" > .env.prod.properties
+# Voltar para o usuário spring
+USER spring:spring
 
 # Variáveis de ambiente com valores padrão
 ENV SERVER_PORT=13000 \

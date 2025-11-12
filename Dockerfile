@@ -31,14 +31,7 @@ WORKDIR /app
 # Copiar o JAR da etapa de build
 COPY --from=build /app/target/*.jar app.jar
 
-# Usuário root para garantir que o arquivo .env.prod.properties possa ser criado
-USER root
-RUN echo "# Configurações de produção para GKE" > /app/.env.prod.properties
-
-# Voltar para o usuário spring
-USER spring:spring
-
-# Variáveis de ambiente com valores padrão
+# Definir variáveis de ambiente diretamente no Dockerfile
 ENV SERVER_PORT=13000 \
     POSTGRES_URL=jdbc:postgresql://136.112.152.217:5432/postgres \
     POSTGRES_USER=postgres \

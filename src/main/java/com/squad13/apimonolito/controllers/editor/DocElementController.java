@@ -1,16 +1,17 @@
 package com.squad13.apimonolito.controllers.editor;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squad13.apimonolito.DTO.editor.*;
 import com.squad13.apimonolito.DTO.editor.res.ResDocElementDTO;
 import com.squad13.apimonolito.services.editor.DocElementService;
-import com.squad13.apimonolito.util.ObjectIdDeserializer;
+import com.squad13.apimonolito.services.pdf.PdfGeneratorService;
 import com.squad13.apimonolito.util.enums.DocElementEnum;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,8 @@ import java.util.Map;
 public class DocElementController {
 
     private final DocElementService docElementService;
+    private final PdfGeneratorService pdfGeneratorService;
+    private final ObjectMapper objectMapper;
 
     @GetMapping
     public ResponseEntity<List<? extends ResDocElementDTO>> getAll(
@@ -40,6 +43,40 @@ public class DocElementController {
             @RequestParam DocElementEnum docType
     ) {
         return ResponseEntity.ok(docElementService.getById(id, params, docType));
+    }
+
+    @GetMapping("/{id}/pdf")
+    public ResponseEntity<byte[]> getByIdPdf(
+            @PathVariable ObjectId id,
+            @ModelAttribute LoadDocumentParamsDTO params,
+            @RequestParam DocElementEnum docType
+    ) {
+        ResDocElementDTO doc = docElementService.getById(id, params, docType);
+
+        String titulo = "Documento - " + docType.name() + " - " + id;
+
+        String conteudo;
+        try {
+            conteudo = objectMapper
+                    .writerWithDefaultPrettyPrinter()
+                    .writeValueAsString(doc);
+        } catch (JsonProcessingException e) {
+            conteudo = doc.toString();
+        }
+
+        byte[] pdfBytes = pdfGeneratorService.gerarPdfSimples(titulo, conteudo);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData(
+                "attachment",
+                "documento-" + docType.name().toLowerCase() + "-" + id + ".pdf"
+        );
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .body(pdfBytes);
     }
 
     @GetMapping("/search")

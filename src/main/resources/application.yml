@@ -5,13 +5,12 @@ spring:
   application:
     name: api-monolito
   config:
-    # .env.properties - ambiente local
-    # .env.prod.properties - ambiente preparado para deploy A
     import: file:.env.prod.properties
 
   data:
     mongodb:
       uri: ${MONGO_URI}
+      database: ${MONGO_NAME}
       auto-index-creation: true
 
   datasource:
@@ -47,7 +46,7 @@ springdoc:
 
 api:
   cors:
-    allowed-origins: "${ALLOWED_ORIGINS}"
+    allowed-origins: "${ALLOWED_ORIGIN}"
   security:
     token:
       secret: ${SECRET:secret-00000000000000000000000000000}

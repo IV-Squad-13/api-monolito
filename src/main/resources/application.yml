@@ -15,9 +15,9 @@ spring:
       auto-index-creation: true
 
   datasource:
-    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/monolito}
-    username: ${POSTGRES_USER:postgres}
-    password: ${POSTGRES_PASSWORD:postgres}
+    url: ${POSTGRES_URL}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:

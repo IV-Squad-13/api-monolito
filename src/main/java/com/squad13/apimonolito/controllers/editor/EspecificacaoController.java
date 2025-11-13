@@ -6,9 +6,12 @@ import com.squad13.apimonolito.DTO.editor.LoadDocumentParamsDTO;
 import com.squad13.apimonolito.DTO.editor.edit.EditEspecificacaoDocDTO;
 import com.squad13.apimonolito.DTO.editor.res.ResSpecDTO;
 import com.squad13.apimonolito.services.editor.EspecificacaoService;
+import com.squad13.apimonolito.services.pdf.PdfGeneratorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +24,7 @@ import java.util.List;
 public class EspecificacaoController {
 
     private final EspecificacaoService especificacaoService;
+    private final PdfGeneratorService pdfGeneratorService;
 
     @GetMapping()
     public ResponseEntity<List<ResSpecDTO>> getAll(@ModelAttribute LoadDocumentParamsDTO params) {
@@ -33,6 +37,31 @@ public class EspecificacaoController {
             @PathVariable ObjectId id
     ) {
         return ResponseEntity.ok(especificacaoService.findById(id, params));
+    }
+
+    @GetMapping("/{id}/pdf")
+    public ResponseEntity<byte[]> getByIdPdf(
+            @ModelAttribute LoadDocumentParamsDTO params,
+            @PathVariable ObjectId id
+    ) {
+        ResSpecDTO spec = especificacaoService.findById(id, params);
+
+        String titulo = "Especificação - " + id;
+        String conteudo = spec.toString();
+
+        byte[] pdfBytes = pdfGeneratorService.gerarPdfSimples(titulo, conteudo);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData(
+                "attachment",
+                "especificacao-" + id + ".pdf"
+        );
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .body(pdfBytes);
     }
 
     @GetMapping("/emp/{empId}")

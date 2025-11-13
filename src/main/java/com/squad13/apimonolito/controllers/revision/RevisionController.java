@@ -8,6 +8,7 @@ import com.squad13.apimonolito.DTO.revision.res.ResRevDTO;
 import com.squad13.apimonolito.DTO.revision.res.ResRevDocDTO;
 import com.squad13.apimonolito.DTO.revision.res.ResSpecRevDTO;
 import com.squad13.apimonolito.services.editor.EmpreendimentoService;
+import com.squad13.apimonolito.services.pdf.PdfGeneratorService;
 import com.squad13.apimonolito.services.revision.ApprovalService;
 import com.squad13.apimonolito.services.revision.RevisionService;
 import com.squad13.apimonolito.util.enums.RevDocElementEnum;
@@ -16,6 +17,9 @@ import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 
 import java.util.List;
 
@@ -27,6 +31,7 @@ public class RevisionController {
     private final EmpreendimentoService empService;
     private final RevisionService revService;
     private final ApprovalService approvalService;
+    private final PdfGeneratorService pdfGeneratorService;
 
     @GetMapping
     public ResponseEntity<List<ResRevDTO>> getAll(@ModelAttribute LoadRevDocParamsDTO params) {
@@ -50,6 +55,33 @@ public class RevisionController {
             @RequestParam RevDocElementEnum docType
     ) {
         return ResponseEntity.ok(revService.findDocById(new ObjectId(id), params, docType));
+    }
+
+    @GetMapping("/doc/{id}/pdf")
+    public ResponseEntity<byte[]> getDocPdfById(
+            @PathVariable String id,
+            @ModelAttribute LoadRevDocParamsDTO params,
+            @RequestParam RevDocElementEnum docType
+    ) {
+        ResRevDocDTO doc = revService.findDocById(new ObjectId(id), params, docType);
+
+        String titulo = "Documento de Revisão - " + id;
+        String conteudo = doc.toString();
+
+
+        byte[] pdfBytes = pdfGeneratorService.gerarPdfSimples(titulo, conteudo);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData(
+                "attachment",
+                "documento-revisao-" + id + ".pdf"
+        );
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .body(pdfBytes);
     }
 
     @GetMapping("/doc/search")

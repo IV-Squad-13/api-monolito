@@ -5,7 +5,11 @@ spring:
   application:
     name: api-monolito
   config:
+<<<<<<< HEAD
     import:  optional:file:.env.prod.properties
+=======
+    import: optional:file:.env.prod.properties
+>>>>>>> 9649de1df1a4341d16ed184b1ccb4d85d31897a0
 
   data:
     mongodb:

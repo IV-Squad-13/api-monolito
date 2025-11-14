@@ -1,0 +1,54 @@
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/
+mvnw
+mvnw.cmd
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.settings/
+.classpath
+.project
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Logs
+*.log
+logs/
+
+# Environment files (não copiar para a imagem)
+.env
+.env.*
+*.properties
+
+# Test
+src/test/
+
+# Documentation
+README.md
+*.md
+docs/
+
+# Kubernetes
+k8s/
+kubernetes/
+
+# Docker
+docker-compose.yml
+Dockerfile
+.dockerignore

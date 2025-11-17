@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 @AllArgsConstructor
 public class LoadDocumentParamsDTO {
 
+    private boolean loadAll;
     private boolean loadEspecificacao;
     private boolean loadMateriais;
     private boolean loadMarcas;
     private boolean loadLocais;
     private boolean loadAmbientes;
     private boolean loadItems;
-    private boolean loadNested;
     private boolean loadPadrao;
     private boolean loadRevision;
     private boolean loadUsers;

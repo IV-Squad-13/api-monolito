@@ -2,17 +2,19 @@ package com.squad13.apimonolito.models.catalog;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.squad13.apimonolito.models.catalog.associative.MarcaMaterial;
+import com.squad13.apimonolito.util.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Set;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "tb_material")
-public class Material {
+public class Material extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_material")

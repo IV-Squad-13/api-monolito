@@ -85,4 +85,3 @@ public class DocSearchParamsDTO {
         return filters;
     }
 }
-

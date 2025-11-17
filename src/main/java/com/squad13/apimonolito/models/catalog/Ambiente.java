@@ -2,6 +2,7 @@ package com.squad13.apimonolito.models.catalog;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.squad13.apimonolito.models.catalog.associative.ItemAmbiente;
+import com.squad13.apimonolito.util.Auditable;
 import com.squad13.apimonolito.util.enums.LocalEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -12,32 +13,13 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@NamedEntityGraph(
-        name = "Ambiente.withItemsAndPadroes",
-        attributeNodes = {
-                @NamedAttributeNode(value = "itemSet", subgraph = "items-subgraph")
-        },
-        subgraphs = {
-                @NamedSubgraph(
-                        name = "items-subgraph",
-                        attributeNodes = {
-                                @NamedAttributeNode(value = "compSet", subgraph = "comp-subgraph"),
-                                @NamedAttributeNode("itemDesc")
-                        }
-                ),
-                @NamedSubgraph(
-                        name = "comp-subgraph",
-                        attributeNodes = @NamedAttributeNode("padrao")
-                )
-        }
-)
 @Table(
         name = "tb_ambiente",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = {"nm_ambiente", "tp_local"})
         }
 )
-public class Ambiente {
+public class Ambiente extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -31,10 +31,6 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class AmbienteService {
-
-    @PersistenceContext
-    private EntityManager em;
-
     private final CatalogSearch catalogSearch;
 
     private final AmbienteRepository ambienteRepository;
@@ -53,30 +49,10 @@ public class AmbienteService {
                 .orElseThrow(() -> new ResourceNotFoundException("Ambiente com ID: " + id + " não encontrado."));
     }
 
-    public ResAmbienteDTO findById(Long id, LoadCatalogParamsDTO loadDTO) {
+    public ResAmbienteDTO findById(Long id, LoadCatalogParamsDTO loadParams) {
         return ambienteRepository.findById(id)
-                .map(ambiente -> catalogMapper.toResponse(ambiente, loadDTO))
+                .map(ambiente -> catalogMapper.toResponse(ambiente, loadParams))
                 .orElseThrow(() -> new ResourceNotFoundException("Ambiente com ID: " + id + " não encontrado."));
-    }
-
-    public List<ResAmbienteDTO> findByAttribute(String attribute, String value, LoadCatalogParamsDTO loadDTO) {
-        boolean attributeExists = Arrays.stream(Ambiente.class.getDeclaredFields())
-                .anyMatch(f -> f.getName().equals(attribute));
-
-        if (!attributeExists)
-            throw new InvalidAttributeException("Atributo inválido: " + attribute);
-
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Ambiente> cq = cb.createQuery(Ambiente.class);
-        Root<Ambiente> root = cq.from(Ambiente.class);
-
-        Predicate pAttributeMatch = cb.like(cb.lower(root.get(attribute)), value.toLowerCase());
-
-        cq.select(root).where(pAttributeMatch);
-        return em.createQuery(cq).getResultList()
-                .stream()
-                .map(ambiente -> catalogMapper.toResponse(ambiente, loadDTO))
-                .toList();
     }
 
     public ResAmbienteDTO createAmbiente(AmbienteDTO dto) {

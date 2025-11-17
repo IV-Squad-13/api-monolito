@@ -25,6 +25,7 @@ public class EspecificacaoSearchParamsDTO {
     private Instant created;
     private Instant updated;
 
+    // TODO: busca por associação
     // private String childId;
 
     public EspecificacaoSearchParamsDTO(Long empId) {

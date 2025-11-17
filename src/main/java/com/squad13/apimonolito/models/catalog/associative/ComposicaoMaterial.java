@@ -2,6 +2,7 @@ package com.squad13.apimonolito.models.catalog.associative;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.squad13.apimonolito.models.catalog.Padrao;
+import com.squad13.apimonolito.util.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +14,7 @@ import lombok.Setter;
         name = "tb_composicao_material",
         uniqueConstraints = @UniqueConstraint(columnNames = {"id_padrao", "id_marca_material"})
 )
-public class ComposicaoMaterial {
+public class ComposicaoMaterial extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

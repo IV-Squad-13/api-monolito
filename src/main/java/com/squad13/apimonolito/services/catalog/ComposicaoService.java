@@ -180,7 +180,7 @@ public class ComposicaoService {
                     .toList();
         }
 
-        if (ambienteId == null && itemId != null) {
+        if (ambienteId == null) {
             return compAmbienteRepository.findFilteredByItem(padraoId, itemId)
                     .stream()
                     .map(ComposicaoAmbiente::getCompositor)
@@ -208,7 +208,7 @@ public class ComposicaoService {
                     .toList();
         }
 
-        if (materialId == null && marcaId != null) {
+        if (materialId == null) {
             return compMaterialRepository.findFilteredByMarca(padraoId, marcaId)
                     .stream()
                     .map(ComposicaoMaterial::getCompositor)

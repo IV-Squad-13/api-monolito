@@ -45,23 +45,23 @@ public class DocElementBuilder {
 
         List<AggregationOperation> operations = new ArrayList<>();
 
-        if (params.isLoadLocais()) {
+        if (params.isLoadAll() || params.isLoadLocais()) {
             operations.add(resDocFactory.lookupLocais(params));
         }
 
-        if (params.isLoadAmbientes()) {
+        if (params.isLoadAll() || params.isLoadAmbientes()) {
             operations.add(resDocFactory.lookupAmbientes(params));
         }
 
-        if (params.isLoadItems()) {
+        if (params.isLoadAll() || params.isLoadItems()) {
             operations.add(resDocFactory.lookupItems(params));
         }
 
-        if (params.isLoadMateriais()) {
+        if (params.isLoadAll() || params.isLoadMateriais()) {
             operations.add(resDocFactory.lookupMateriais(params));
         }
 
-        if (params.isLoadMarcas()) {
+        if (params.isLoadAll() || params.isLoadMarcas()) {
             operations.add(resDocFactory.lookupMarcas(params));
         }
 

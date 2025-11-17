@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.squad13.apimonolito.models.catalog.Ambiente;
 import com.squad13.apimonolito.models.catalog.ItemDesc;
+import com.squad13.apimonolito.util.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +19,7 @@ import java.util.Set;
         name = "tb_item_ambiente",
         uniqueConstraints = @UniqueConstraint(columnNames = {"id_item_desc", "id_ambiente"})
 )
-public class ItemAmbiente {
+public class ItemAmbiente extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

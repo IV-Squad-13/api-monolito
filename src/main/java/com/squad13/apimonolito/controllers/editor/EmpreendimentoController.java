@@ -1,6 +1,8 @@
 package com.squad13.apimonolito.controllers.editor;
 
+import com.squad13.apimonolito.DTO.editor.DocSearchParamsDTO;
 import com.squad13.apimonolito.DTO.editor.EmpDTO;
+import com.squad13.apimonolito.DTO.editor.EmpSearchParamsDTO;
 import com.squad13.apimonolito.DTO.editor.LoadDocumentParamsDTO;
 import com.squad13.apimonolito.DTO.editor.edit.EditEmpDTO;
 import com.squad13.apimonolito.DTO.editor.res.ResEmpDTO;
@@ -14,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/editor/empreendimento")
@@ -33,12 +36,11 @@ public class EmpreendimentoController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<ResEmpDTO>> getByAttribute(
-            @RequestParam String attribute,
-            @RequestParam String value,
-            @ModelAttribute LoadDocumentParamsDTO loadDTO
+    public ResponseEntity<List<ResEmpDTO>> search(
+            @ModelAttribute EmpSearchParamsDTO searchParams,
+            @ModelAttribute LoadDocumentParamsDTO loadParams
     ) {
-        return ResponseEntity.ok(empService.findByAttribute(attribute, value, loadDTO));
+        return ResponseEntity.ok(empService.search(searchParams, loadParams));
     }
 
     @PostMapping("/new")

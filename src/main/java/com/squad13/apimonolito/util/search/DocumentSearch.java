@@ -37,41 +37,13 @@ public class DocumentSearch {
         return doc.collection();
     }
 
-    public Update buildUpdateFrom(Object source) {
-        if (source == null) {
-            throw new IllegalArgumentException("Source object for update cannot be null");
-        }
-
-        // Convert the object into a BSON Document using MongoConverter
-        org.bson.Document doc = new org.bson.Document();
-        mongoTemplate.getConverter().write(source, doc);
-
-        Update update = new Update();
-
-        doc.forEach((key, value) -> {
-            // Skip MongoDB internal or immutable fields
-            if ("_id".equals(key) || "_class".equals(key)) {
-                return;
-            }
-
-            // Handle nested structures safely (optional improvement)
-            if (value instanceof Map || value instanceof List) {
-                update.set(key, value);
-            } else {
-                update.set(key, value);
-            }
-        });
-
-        return update;
-    }
-
     public List<MatchOperation> buildMatchOps(Map<String, Object> filters) {
         return filters.entrySet().stream()
                 .filter(e -> e.getValue() != null)
                 .map(e -> {
                     Object value = e.getValue();
-                    Criteria criteria = (value instanceof String)
-                            ? Criteria.where(e.getKey()).regex((String) value, "i")
+                    Criteria criteria = (value instanceof String strValue)
+                            ? Criteria.where(e.getKey()).regex(strValue, "i")
                             : Criteria.where(e.getKey()).is(value);
 
                     return Aggregation.match(criteria);

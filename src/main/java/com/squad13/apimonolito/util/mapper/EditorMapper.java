@@ -15,6 +15,7 @@ import com.squad13.apimonolito.models.editor.mongo.*;
 import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import com.squad13.apimonolito.util.enums.DocElementEnum;
+import com.squad13.apimonolito.util.enums.DocInitializationEnum;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
@@ -31,16 +32,17 @@ public class EditorMapper {
     public ResEmpDTO toResponse(
             Empreendimento emp,
             ResSpecDTO doc,
+            ResSpecDTO refDoc,
             ResRevDTO revDTO,
-            LoadDocumentParamsDTO loadDTO
+            LoadDocumentParamsDTO loadParams
     ) {
         if (emp == null) return null;
 
-        ResPadraoDTO padrao = loadDTO.isLoadPadrao()
+        ResPadraoDTO padrao = emp.getInit().equals(DocInitializationEnum.PADRAO) && (loadParams.isLoadPadrao() || loadParams.isLoadAll())
                 ? catalogMapper.toResponse(emp.getPadrao(), LoadCatalogParamsDTO.allTrue())
                 : null;
 
-        List<ResUserDTO> users = loadDTO.isLoadUsers()
+        List<ResUserDTO> users = loadParams.isLoadUsers() || loadParams.isLoadAll()
                 ? userMapper.getUsersDTO(emp.getUsuarioList())
                 : null;
 
@@ -48,9 +50,11 @@ public class EditorMapper {
                 emp.getId(),
                 emp.getName(),
                 emp.getStatus(),
+                emp.getInit(),
                 padrao,
-                loadDTO.isLoadEspecificacao() ? doc : null,
-                loadDTO.isLoadRevision() ? revDTO : null,
+                refDoc,
+                loadParams.isLoadEspecificacao() || loadParams.isLoadAll() ? doc : null,
+                loadParams.isLoadRevision() || loadParams.isLoadAll() ? revDTO : null,
                 users
         );
     }

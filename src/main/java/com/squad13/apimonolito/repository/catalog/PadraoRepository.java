@@ -17,5 +17,12 @@ public interface PadraoRepository extends JpaRepository<Padrao, Long> {
     })
     List<Padrao> findAll();
 
+    @EntityGraph(attributePaths = {
+            "materialSet", "ambienteSet", "empreendimentoSet",
+            "ambienteSet.compositor", "ambienteSet.compositor.ambiente", "ambienteSet.compositor.itemDesc",
+            "materialSet.compositor", "materialSet.compositor.material", "materialSet.compositor.marca"
+    })
+    Optional<Padrao> findById(Long id);
+
     Optional<Padrao> findByName(String name);
 }

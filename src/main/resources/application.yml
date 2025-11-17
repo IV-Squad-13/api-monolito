@@ -5,22 +5,19 @@ spring:
   application:
     name: api-monolito
   config:
-<<<<<<< HEAD
-    import:  optional:file:.env.prod.properties
-=======
-    import: optional:file:.env.prod.properties
->>>>>>> 9649de1df1a4341d16ed184b1ccb4d85d31897a0
+    # .env.properties - ambiente local
+    # .env.prod.properties - ambiente preparado para deploy A
+    import: optional:file:.env.dev.properties
 
   data:
     mongodb:
-      uri: ${MONGO_URI}
-      database: ${MONGO_NAME}
+      uri: ${MONGO_URI:mongodb://admin:admin@localhost:27017/monolito?authSource=admin}
       auto-index-creation: true
 
   datasource:
-    url: ${POSTGRES_URL}
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/monolito}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -37,7 +34,7 @@ spring:
   flyway:
     enabled: true
     baseline-on-migrate: true
-    locations: classpath:db/migration/test
+    locations: classpath:db/migration/final
 
 springdoc:
   api-docs:
@@ -50,7 +47,7 @@ springdoc:
 
 api:
   cors:
-    allowed-origins: "${ALLOWED_ORIGIN}"
+    allowed-origins: "${ALLOWED_ORIGINS:http://localhost:5173}"
   security:
     token:
       secret: ${SECRET:secret-00000000000000000000000000000}

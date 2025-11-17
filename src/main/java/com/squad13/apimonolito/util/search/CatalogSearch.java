@@ -2,11 +2,9 @@ package com.squad13.apimonolito.util.search;
 
 import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -31,16 +29,30 @@ public class CatalogSearch {
                 );
     }
 
-    public <T> List<T> findByCriteria(Map<String, Object> filters, Class<T> clazz) {
+    public <T> List<T> findByCriteria(
+            Map<String, Object> filters,
+            Class<T> clazz,
+            String... fetches
+    ) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<T> query = cb.createQuery(clazz);
         Root<T> root = query.from(clazz);
 
+        for (String f : fetches) {
+            root.fetch(f, JoinType.LEFT);
+        }
+
         Predicate[] predicates = filters.entrySet().stream()
-                .map(entry -> cb.equal(root.get(entry.getKey()), entry.getValue()))
+                .filter(e -> e.getValue() != null)
+                .map(entry -> {
+                    Object value = entry.getValue();
+                    return (value instanceof String strValue)
+                            ? cb.like(cb.lower(root.get(entry.getKey())), "%" + strValue.toLowerCase() + "%")
+                            : cb.equal(root.get(entry.getKey()), value);
+                })
                 .toArray(Predicate[]::new);
 
-        query.select(root).where(predicates);
+        query.select(root).where(predicates).distinct(true);
 
         return em.createQuery(query).getResultList();
     }

@@ -5,10 +5,13 @@ import com.squad13.apimonolito.models.catalog.Padrao;
 import com.squad13.apimonolito.models.revision.relational.ProcessoHistorico;
 import com.squad13.apimonolito.models.revision.relational.Revisao;
 import com.squad13.apimonolito.models.user.associative.UsuarioEmpreendimento;
+import com.squad13.apimonolito.util.Auditable;
+import com.squad13.apimonolito.util.enums.DocInitializationEnum;
 import com.squad13.apimonolito.util.enums.EmpStatusEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.bson.types.ObjectId;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -19,7 +22,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "tb_empreendimento")
-public class Empreendimento {
+public class Empreendimento extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +35,13 @@ public class Empreendimento {
     @Column(name = "tp_status", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
     private EmpStatusEnum status;
+
+    @Column(name = "tp_init", nullable = false, length = 20)
+    @Enumerated(EnumType.STRING)
+    private DocInitializationEnum init;
+
+    @Column(name = "id_reference_doc", length = 24)
+    private ObjectId referenceDocId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_padrao")

@@ -3,6 +3,7 @@ package com.squad13.apimonolito.models.catalog;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.squad13.apimonolito.models.catalog.associative.ItemAmbiente;
+import com.squad13.apimonolito.util.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +21,7 @@ import java.util.Set;
                 @UniqueConstraint(columnNames = {"nm_item_desc", "ds_item", "id_item_type"})
         }
 )
-public class ItemDesc {
+public class ItemDesc extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

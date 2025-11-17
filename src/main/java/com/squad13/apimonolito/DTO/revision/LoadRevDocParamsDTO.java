@@ -22,10 +22,6 @@ public class LoadRevDocParamsDTO {
     private boolean loadSpecDocuments; // Não funciona, alguém se importa?
     private boolean loadEmpreendimento;
 
-    public LoadRevDocParamsDTO() {
-        this(false, false, false, false, false, false, false, false);
-    }
-
     public static LoadRevDocParamsDTO allFalse() {
         return new LoadRevDocParamsDTO(false, false, false, false, false, false, false, false);
     }

@@ -1,5 +1,6 @@
 package com.squad13.apimonolito.models.user;
 
+import com.squad13.apimonolito.util.Auditable;
 import com.squad13.apimonolito.util.enums.PapelEnum;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -7,7 +8,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "tb_papel")
-public class Papel {
+public class Papel extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

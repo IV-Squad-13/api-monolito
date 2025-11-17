@@ -1,6 +1,8 @@
 package com.squad13.apimonolito.models.revision.relational;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.squad13.apimonolito.models.editor.relational.Empreendimento;
+import com.squad13.apimonolito.util.Auditable;
 import com.squad13.apimonolito.util.enums.ProcActionEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -50,15 +52,17 @@ public class ProcessoHistorico {
 
     /*
     TODO: Referenciar documento gerado em registros de processos aprovados
-
-    private Long bin;
     */
+    @Column(name = "id_bin")
+    private Long binId;
 
     @CreationTimestamp
     @Column(name = "dt_comeco", updatable = false, nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
     private Instant started;
 
     @Column(name = "dt_fim")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
     private Instant finished;
 
     @OneToMany(mappedBy = "origin", fetch = FetchType.LAZY)

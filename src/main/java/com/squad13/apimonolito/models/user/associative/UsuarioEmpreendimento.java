@@ -3,6 +3,7 @@ package com.squad13.apimonolito.models.user.associative;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import com.squad13.apimonolito.models.user.Usuario;
+import com.squad13.apimonolito.util.Auditable;
 import com.squad13.apimonolito.util.enums.AccessEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ import lombok.Setter;
 @Table(name = "tb_usuario_empreendimento")
 @NoArgsConstructor
 @AllArgsConstructor
-public class UsuarioEmpreendimento {
+public class UsuarioEmpreendimento extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

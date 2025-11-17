@@ -89,7 +89,6 @@ public class EspecificacaoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Especificação não encontrada para o Empreendimento: " + id));
     }
 
-    @Transactional
     public ResSpecDTO create(EspecificacaoDocDTO dto) {
         Empreendimento emp = empRepository.findById(dto.empId())
                 .orElseThrow(() ->

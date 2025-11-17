@@ -1,6 +1,9 @@
 package com.squad13.apimonolito.services.editor;
 
+import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
+import com.squad13.apimonolito.DTO.catalog.res.ResMarcaDTO;
 import com.squad13.apimonolito.DTO.editor.EmpDTO;
+import com.squad13.apimonolito.DTO.editor.EmpSearchParamsDTO;
 import com.squad13.apimonolito.DTO.editor.EspecificacaoDocDTO;
 import com.squad13.apimonolito.DTO.editor.LoadDocumentParamsDTO;
 import com.squad13.apimonolito.DTO.editor.edit.EditEmpDTO;
@@ -10,7 +13,9 @@ import com.squad13.apimonolito.DTO.revision.ToRevisionDTO;
 import com.squad13.apimonolito.DTO.revision.res.ResRevDTO;
 import com.squad13.apimonolito.DTO.revision.res.ResSpecRevDTO;
 import com.squad13.apimonolito.exceptions.*;
+import com.squad13.apimonolito.models.catalog.Marca;
 import com.squad13.apimonolito.models.catalog.Padrao;
+import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
 import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import com.squad13.apimonolito.models.revision.relational.ProcessoHistorico;
 import com.squad13.apimonolito.models.revision.relational.Revisao;
@@ -23,12 +28,10 @@ import com.squad13.apimonolito.repository.revision.ProcessoHistoricoRepository;
 import com.squad13.apimonolito.repository.revision.RevisaoRepository;
 import com.squad13.apimonolito.repository.user.UsuarioRepository;
 import com.squad13.apimonolito.repository.user.associative.UsuarioEmpreendimentoRepository;
-import com.squad13.apimonolito.util.enums.AccessEnum;
-import com.squad13.apimonolito.util.enums.EmpStatusEnum;
-import com.squad13.apimonolito.util.enums.ProcActionEnum;
-import com.squad13.apimonolito.util.enums.RevisaoStatusEnum;
+import com.squad13.apimonolito.util.enums.*;
 import com.squad13.apimonolito.util.enums.rule.RevisionRule;
 import com.squad13.apimonolito.util.mapper.EditorMapper;
+import com.squad13.apimonolito.util.search.CatalogSearch;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.*;
@@ -46,8 +49,7 @@ import java.util.stream.Collectors;
 public class EmpreendimentoService {
 
     private final ProcessoHistoricoRepository processoHistoricoRepository;
-    @PersistenceContext
-    private EntityManager em;
+    private final CatalogSearch catalogSearch;
 
     private final EmpreendimentoRepository empRepository;
 
@@ -63,12 +65,16 @@ public class EmpreendimentoService {
     private final EditorMapper editorMapper;
 
     private ResEmpDTO mappingHelper(Empreendimento emp, LoadDocumentParamsDTO params) {
-        ResSpecDTO doc = params.isLoadEspecificacao()
+        ResSpecDTO doc = params.isLoadEspecificacao() || params.isLoadAll()
                 ? specService.findByEmpId(emp.getId(), params)
                 : null;
 
+        ResSpecDTO refDoc = emp.getInit().equals(DocInitializationEnum.IMPORT) && params.isLoadAll()
+                ? specService.findById(emp.getReferenceDocId(), LoadDocumentParamsDTO.allFalse())
+                : null;
+
         ResRevDTO rev = null;
-        if (params.isLoadRevision()) {
+        if (params.isLoadRevision() || params.isLoadAll()) {
             rev = processoHistoricoRepository.findByEmp_Id(emp.getId()).stream()
                     .map(ProcessoHistorico::getRevision)
                     .map(r -> {
@@ -82,7 +88,7 @@ public class EmpreendimentoService {
                     .orElse(null);
         }
 
-        return editorMapper.toResponse(emp, doc, rev, params);
+        return editorMapper.toResponse(emp, doc, refDoc, rev, params);
     }
 
     private Usuario findUser(Long id) {
@@ -110,54 +116,12 @@ public class EmpreendimentoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Empreendimento com ID: " + id + " não encontrado."));
     }
 
-    public List<ResEmpDTO> findByAttribute(String attribute, String value, LoadDocumentParamsDTO params) {
-        boolean attributeExists = Arrays.stream(Empreendimento.class.getDeclaredFields())
-                .anyMatch(f -> f.getName().equals(attribute));
+    public List<ResEmpDTO> search(EmpSearchParamsDTO searchParams, LoadDocumentParamsDTO loadParams) {
+        Map<String, Object> typedFilters = EmpSearchParamsDTO.buildFilters(searchParams);
 
-        if (!attributeExists && !attribute.equals("padrao") && !attribute.equals("usuarioList")) {
-            throw new InvalidAttributeException("Atributo inválido: " + attribute);
-        }
-
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Empreendimento> cq = cb.createQuery(Empreendimento.class);
-        Root<Empreendimento> root = cq.from(Empreendimento.class);
-
-        Predicate predicate;
-
-        if (attribute.equals("padrao")) {
-            Join<Empreendimento, Padrao> padraoJoin = root.join("padrao", JoinType.LEFT);
-            predicate = (value == null)
-                    ? cb.isNull(padraoJoin.get("name"))
-                    : cb.like(cb.lower(padraoJoin.get("name")), "%" + value.toLowerCase() + "%");
-        } else if (attribute.equals("usuarioList")) {
-            Join<Empreendimento, UsuarioEmpreendimento> relJoin = root.join("usuarioList", JoinType.LEFT);
-            Join<UsuarioEmpreendimento, Usuario> userJoin = relJoin.join("usuario", JoinType.LEFT);
-            predicate = (value == null)
-                    ? cb.isNull(userJoin.get("id"))
-                    : cb.equal(userJoin.get("id").as(String.class), value);
-        } else {
-            if (value == null) {
-                predicate = cb.isNull(root.get(attribute));
-            } else {
-                Class<?> fieldType = root.get(attribute).getJavaType();
-
-                if (fieldType.isEnum() && fieldType.equals(EmpStatusEnum.class)) {
-                    EmpStatusEnum status = EmpStatusEnum.fromString(value);
-                    predicate = cb.equal(root.get(attribute), status);
-                } else if (Number.class.isAssignableFrom(fieldType)) {
-                    predicate = cb.equal(root.get(attribute).as(String.class), value);
-                } else {
-                    predicate = cb.like(cb.lower(root.get(attribute).as(String.class)), "%" + value.toLowerCase() + "%");
-                }
-            }
-        }
-
-        cq.select(root).where(predicate);
-
-        List<Empreendimento> results = em.createQuery(cq).getResultList();
-
-        return results.stream()
-                .map(emp -> mappingHelper(emp, params))
+        List<Empreendimento> emps = catalogSearch.findByCriteria(typedFilters, Empreendimento.class);
+        return emps.stream()
+                .map(emp -> mappingHelper(emp, loadParams))
                 .toList();
     }
 
@@ -262,6 +226,7 @@ public class EmpreendimentoService {
         Empreendimento emp = new Empreendimento();
         emp.setName(dto.name());
         emp.setStatus(EmpStatusEnum.ELABORACAO);
+        emp.setInit(dto.init());
 
         if (dto.padraoId() != null) {
             Padrao padrao = padraoRepository.findById(dto.padraoId())
@@ -269,6 +234,10 @@ public class EmpreendimentoService {
                             "Padrão não encontrado com o ID: " + dto.padraoId()
                     ));
             emp.setPadrao(padrao);
+        }
+
+        if (dto.docImportId() != null) {
+            emp.setReferenceDocId(dto.docImportId());
         }
 
         Empreendimento saved = empRepository.save(emp);
@@ -283,8 +252,8 @@ public class EmpreendimentoService {
                 dto.docImportId(),
                 dto.init()
         );
-        specService.create(specDocDTO);
 
+        specService.create(specDocDTO);
         return mappingHelper(saved, loadDTO);
     }
 

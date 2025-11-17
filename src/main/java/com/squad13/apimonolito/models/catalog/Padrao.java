@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.squad13.apimonolito.models.catalog.associative.ComposicaoAmbiente;
 import com.squad13.apimonolito.models.catalog.associative.ComposicaoMaterial;
 import com.squad13.apimonolito.models.editor.relational.Empreendimento;
+import com.squad13.apimonolito.util.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +15,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "tb_padrao")
-public class Padrao {
+public class Padrao extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

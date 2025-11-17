@@ -53,7 +53,9 @@ public class CatalogMapper {
     public ResItemTypeDTO toResponse(ItemType item) {
         if (item == null) return null;
 
-        Set<ResMinDTO> items = getMinItemDTOByEntity(item.getItemDescSet());
+        Set<ResMinDTO> items = item.getItemDescSet() != null
+                ? getMinItemDTOByEntity(item.getItemDescSet())
+                : Collections.emptySet();
 
         return new ResItemTypeDTO(
                 item.getId(),
@@ -163,29 +165,45 @@ public class CatalogMapper {
     public ResPadraoDTO toResponse(Padrao padrao, LoadCatalogParamsDTO params) {
         if (padrao == null) return null;
 
-        List<ResMinDTO> items = (params.isLoadItems() || params.isLoadAll())
-                ? padrao.getAmbienteSet().stream()
-                .map(comp -> toMinDTO(comp.getCompositor().getItemDesc(), params.isLoadNested()))
-                .toList()
-                : List.of();
+        List<ResMinDTO> items =
+                (padrao.getAmbienteSet() != null && (params.isLoadItems() || params.isLoadAll()))
+                        ? padrao.getAmbienteSet().stream()
+                        .map(comp -> toMinDTO(comp.getCompositor().getItemDesc(), params.isLoadNested()))
+                        .collect(Collectors.collectingAndThen(
+                                Collectors.toMap(ResMinDTO::getId, Function.identity(), (a, b) -> a),
+                                m -> new ArrayList<>(m.values())
+                        ))
+                        : List.of();
 
-        List<ResMinDTO> ambientes = (params.isLoadAmbientes() || params.isLoadAll())
-                ? padrao.getAmbienteSet().stream()
-                .map(comp -> toMinDTO(comp.getCompositor().getAmbiente(), params.isLoadNested()))
-                .toList()
-                : List.of();
+        List<ResMinDTO> ambientes =
+                (padrao.getAmbienteSet() != null && (params.isLoadAmbientes() || params.isLoadAll()))
+                        ? padrao.getAmbienteSet().stream()
+                        .map(comp -> toMinDTO(comp.getCompositor().getAmbiente(), params.isLoadNested()))
+                        .collect(Collectors.collectingAndThen(
+                                Collectors.toMap(ResMinDTO::getId, Function.identity(), (a, b) -> a),
+                                m -> new ArrayList<>(m.values())
+                        ))
+                        : List.of();
 
-        List<ResMinDTO> marcas = (params.isLoadMarcas() || params.isLoadAll())
-                ? padrao.getMaterialSet().stream()
-                .map(comp -> toMinDTO(comp.getCompositor().getMarca(), params.isLoadNested()))
-                .toList()
-                : List.of();
+        List<ResMinDTO> marcas =
+                (padrao.getMaterialSet() != null && (params.isLoadMarcas() || params.isLoadAll()))
+                        ? padrao.getMaterialSet().stream()
+                        .map(comp -> toMinDTO(comp.getCompositor().getMarca(), params.isLoadNested()))
+                        .collect(Collectors.collectingAndThen(
+                                Collectors.toMap(ResMinDTO::getId, Function.identity(), (a, b) -> a),
+                                m -> new ArrayList<>(m.values())
+                        ))
+                        : List.of();
 
-        List<ResMinDTO> materiais = (params.isLoadMateriais() || params.isLoadAll())
-                ? padrao.getMaterialSet().stream()
-                .map(comp -> toMinDTO(comp.getCompositor().getMaterial(), params.isLoadNested()))
-                .toList()
-                : List.of();
+        List<ResMinDTO> materiais =
+                (padrao.getMaterialSet() != null && (params.isLoadMateriais() || params.isLoadAll()))
+                        ? padrao.getMaterialSet().stream()
+                        .map(comp -> toMinDTO(comp.getCompositor().getMaterial(), params.isLoadNested()))
+                        .collect(Collectors.collectingAndThen(
+                                Collectors.toMap(ResMinDTO::getId, Function.identity(), (a, b) -> a),
+                                m -> new ArrayList<>(m.values())
+                        ))
+                        : List.of();
 
         return new ResPadraoDTO(
                 padrao.getId(),

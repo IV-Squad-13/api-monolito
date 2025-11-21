@@ -42,7 +42,6 @@ jobs:
         run: |
           docker buildx bake \
             --file docker-compose.yml \
-            --project-name s13 \
             --set *.cache-from=type=gha \
             --set *.cache-to=type=gha,mode=max \
             monolito_api

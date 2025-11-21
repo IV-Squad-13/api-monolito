@@ -1,7 +1,7 @@
 package com.squad13.apimonolito.services.editor;
 
-import com.squad13.apimonolito.exceptions.InvalidStageException;
-import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
+import com.squad13.apimonolito.exceptions.exceptions.InvalidStageException;
+import com.squad13.apimonolito.exceptions.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
 import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
@@ -11,7 +11,6 @@ import com.squad13.apimonolito.models.revision.structures.RevDocElement;
 import com.squad13.apimonolito.mongo.editor.EspecificacaoDocRepository;
 import com.squad13.apimonolito.mongo.revision.EspecificacaoRevDocElementRepository;
 import com.squad13.apimonolito.repository.editor.EmpreendimentoRepository;
-import com.squad13.apimonolito.repository.revision.ProcessoHistoricoRepository;
 import com.squad13.apimonolito.repository.revision.RevisaoRepository;
 import com.squad13.apimonolito.util.enums.DocElementEnum;
 import com.squad13.apimonolito.util.enums.EmpStatusEnum;

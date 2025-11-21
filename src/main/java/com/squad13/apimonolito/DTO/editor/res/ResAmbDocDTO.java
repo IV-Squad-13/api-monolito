@@ -3,6 +3,7 @@ package com.squad13.apimonolito.DTO.editor.res;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.squad13.apimonolito.models.editor.mongo.AmbienteDocElement;
+import com.squad13.apimonolito.models.editor.structures.DocElement;
 import com.squad13.apimonolito.util.enums.LocalEnum;
 import lombok.*;
 import org.bson.types.ObjectId;
@@ -23,6 +24,16 @@ public class ResAmbDocDTO extends ResDocElementDTO {
     private List<ObjectId> itemIds = new ArrayList<>();
 
     private List<ResItemDocDTO> items = new ArrayList<>();
+
+    @Override
+    public void populateExtraFields(DocElement d) {
+        AmbienteDocElement doc = (AmbienteDocElement) d;
+        this.local = doc.getLocal();
+        this.itemIds = doc.getItemIds();
+        this.items = doc.getItems().stream()
+                .map(ResItemDocDTO::fromDoc)
+                .toList();
+    }
 
     public static ResAmbDocDTO fromDoc(AmbienteDocElement doc) {
         ResAmbDocDTO ambiente = ResDocElementDTO.fromDoc(doc, ResAmbDocDTO::new);

@@ -2,7 +2,7 @@ package com.squad13.apimonolito.util.mapper;
 
 import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
 import com.squad13.apimonolito.DTO.catalog.res.*;
-import com.squad13.apimonolito.exceptions.InvalidCompositorException;
+import com.squad13.apimonolito.exceptions.exceptions.InvalidCompositorException;
 import com.squad13.apimonolito.models.catalog.*;
 import com.squad13.apimonolito.models.catalog.associative.ComposicaoAmbiente;
 import com.squad13.apimonolito.models.catalog.associative.ComposicaoMaterial;
@@ -163,7 +163,7 @@ public class CatalogMapper {
     }
 
     public ResPadraoDTO toResponse(Padrao padrao, LoadCatalogParamsDTO params) {
-        if (padrao == null) return null;
+        if (padrao == null) return null; // Padrao never supplied
 
         List<ResMinDTO> items =
                 (padrao.getAmbienteSet() != null && (params.isLoadItems() || params.isLoadAll()))

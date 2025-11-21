@@ -3,7 +3,6 @@ package com.squad13.apimonolito.models.editor.relational;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.squad13.apimonolito.models.catalog.Padrao;
 import com.squad13.apimonolito.models.revision.relational.ProcessoHistorico;
-import com.squad13.apimonolito.models.revision.relational.Revisao;
 import com.squad13.apimonolito.models.user.associative.UsuarioEmpreendimento;
 import com.squad13.apimonolito.util.Auditable;
 import com.squad13.apimonolito.util.enums.DocInitializationEnum;
@@ -15,8 +14,8 @@ import org.bson.types.ObjectId;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -54,8 +53,8 @@ public class Empreendimento extends Auditable {
             orphanRemoval = true
     )
     @JsonManagedReference
-    private List<UsuarioEmpreendimento> usuarioList = new ArrayList<>();
+    private Set<UsuarioEmpreendimento> usuarioSet = new HashSet<>();
 
     @OneToMany(mappedBy = "emp", fetch = FetchType.LAZY)
-    private List<ProcessoHistorico> processes = new ArrayList<>();
+    private Set<ProcessoHistorico> processes = new HashSet<>();
 }

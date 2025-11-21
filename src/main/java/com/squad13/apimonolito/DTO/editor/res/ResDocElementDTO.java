@@ -2,7 +2,6 @@ package com.squad13.apimonolito.DTO.editor.res;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +24,8 @@ public class ResDocElementDTO {
     private String name;
     private boolean inSync;
 
+    public void populateExtraFields(DocElement doc) { }
+
     public static <D extends DocElement, T extends ResDocElementDTO>
     T fromDoc(D doc, Supplier<T> factory) {
         T instance = factory.get();
@@ -32,6 +33,9 @@ public class ResDocElementDTO {
         instance.setCatalogId(doc.getCatalogId());
         instance.setName(doc.getName());
         instance.setInSync(doc.isInSync());
+
+        instance.populateExtraFields(doc);
+
         return instance;
     }
 }

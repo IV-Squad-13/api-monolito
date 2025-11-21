@@ -21,7 +21,6 @@ public record EmpDTO(
 
         Long empImportId,
 
-        @JsonSerialize(using = ToStringSerializer.class)
         ObjectId docImportId,
 
         @NotNull(message = "Informe a forma de criação da Especificação")

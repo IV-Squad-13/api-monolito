@@ -1,5 +1,6 @@
 package com.squad13.apimonolito.exceptions;
 
+import com.squad13.apimonolito.exceptions.exceptions.*;
 import com.squad13.apimonolito.exceptions.responses.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -72,6 +73,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(PendingEvaluationException.class)
     public ResponseEntity<ErrorResponse> handlePendingEvaluationException(PendingEvaluationException ex, WebRequest request) {
+        return buildResponse(ex, request, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidParameterTypeException.class)
+    public ResponseEntity<ErrorResponse> handleGenericException(InvalidParameterTypeException ex, WebRequest request) {
         return buildResponse(ex, request, HttpStatus.BAD_REQUEST);
     }
 

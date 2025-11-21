@@ -1,19 +1,20 @@
 package com.squad13.apimonolito.util.search;
 
-import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
+import com.squad13.apimonolito.exceptions.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import com.squad13.apimonolito.models.revision.structures.RevDocElement;
 import com.squad13.apimonolito.util.enums.DocElementEnum;
 import lombok.RequiredArgsConstructor;
-import org.bson.BsonValue;
-import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.data.mongodb.core.BulkOperations;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
+import org.springframework.data.mongodb.core.FindAndReplaceOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
+import org.springframework.data.mongodb.core.convert.MongoConverter;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -101,30 +102,34 @@ public class DocumentSearch {
         mongoTemplate.updateMulti(query, update, clazz);
     }
 
-    public <T extends DocElement> ObjectId upsert(T source, Class<? extends T> clazz) {
-        if (source == null || clazz == null) return null;
-
-        org.bson.Document doc = new org.bson.Document();
-        mongoTemplate.getConverter().write(source, doc);
+    public <S extends DocElement> ObjectId upsert(S source, Class<? extends S> sourceClass) {
+        if (source == null || sourceClass == null) return null;
 
         Query query = new Query();
-        source.getUniqueKeys().forEach(key ->
-                query.addCriteria(Criteria.where(key).is(doc.get(key)))
-        );
 
-        doc.remove("_id");
-        doc.remove("_class");
-
-        Update update = new Update();
-        doc.forEach(update::set);
-
-        var result = mongoTemplate.upsert(query, update, clazz);
-
-        if (result.getUpsertedId() != null) {
-            return result.getUpsertedId().asObjectId().getValue();
+        for (String key : source.getUniqueKeys()) {
+            Object value = new BeanWrapperImpl(source).getPropertyValue(key);
+            query.addCriteria(Criteria.where(key).is(value));
         }
 
-        return Objects.requireNonNull(mongoTemplate.findOne(query, clazz)).getId();
+        Update update = new Update();
+        MongoConverter converter = mongoTemplate.getConverter();
+
+        org.bson.Document doc = new org.bson.Document();
+        converter.write(source, doc);
+        doc.forEach(update::set);
+
+        FindAndModifyOptions options = new FindAndModifyOptions()
+                .upsert(true)
+                .returnNew(true);
+
+        S result = mongoTemplate.findAndModify(query, update, options, sourceClass);
+
+        if (result == null) {
+            throw new IllegalStateException("Upsert failed for " + sourceClass.getSimpleName());
+        }
+
+        return result.getId();
     }
 
     @SuppressWarnings("unchecked")

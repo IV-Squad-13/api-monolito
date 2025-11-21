@@ -44,11 +44,11 @@ public class Padrao extends Auditable {
     @JsonManagedReference
     private Set<ComposicaoMaterial> materialSet;
 
-    @OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "padrao", fetch = FetchType.LAZY)
     private Set<Empreendimento> empreendimentoSet;
 
     @PreRemove
-    private void setEspecificacaoNull() {
+    private void setEmpreendimentoNull() {
         empreendimentoSet.forEach(itemDesc -> {
             itemDesc.setPadrao(null);
         });

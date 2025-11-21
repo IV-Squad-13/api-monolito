@@ -1,10 +1,9 @@
 package com.squad13.apimonolito.util.search;
 
-import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
+import com.squad13.apimonolito.exceptions.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

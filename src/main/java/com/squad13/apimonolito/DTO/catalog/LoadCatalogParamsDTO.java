@@ -46,6 +46,6 @@ public class LoadCatalogParamsDTO {
 
     @ModelAttribute("loadAll")
     public static LoadCatalogParamsDTO allTrue() {
-        return new LoadCatalogParamsDTO(true, true, true, true, true, true, true);
+        return new LoadCatalogParamsDTO(true, true, true, true, true, true, false);
     }
 }

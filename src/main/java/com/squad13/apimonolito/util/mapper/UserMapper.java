@@ -6,12 +6,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
 public class UserMapper {
 
-    public List<ResUserDTO> getUsersDTO(List<UsuarioEmpreendimento> userEmpList) {
+    public List<ResUserDTO> getUsersDTO(Set<UsuarioEmpreendimento> userEmpList) {
         return userEmpList.stream()
                 .map(ResUserDTO::from)
                 .toList();

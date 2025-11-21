@@ -1,6 +1,6 @@
 package com.squad13.apimonolito.util.enums;
 
-import com.squad13.apimonolito.exceptions.InvalidAttributeException;
+import com.squad13.apimonolito.exceptions.exceptions.InvalidAttributeException;
 
 import java.util.Arrays;
 

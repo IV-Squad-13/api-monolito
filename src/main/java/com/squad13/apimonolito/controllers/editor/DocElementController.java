@@ -76,9 +76,9 @@ public class DocElementController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("@require.editingStage(#id, #type)")
-    public ResponseEntity<?> delete(@PathVariable ObjectId id, @RequestParam DocElementEnum type) {
-        docElementService.delete(id, type);
-        return ResponseEntity.ok(type.getDocElement() + "deletado com sucesso");
+    @PreAuthorize("@require.editingStage(#id, #docType)")
+    public ResponseEntity<?> delete(@PathVariable ObjectId id, @RequestParam DocElementEnum docType) {
+        docElementService.delete(id, docType);
+        return ResponseEntity.ok(docType.getDocElement() + "deletado com sucesso");
     }
 }

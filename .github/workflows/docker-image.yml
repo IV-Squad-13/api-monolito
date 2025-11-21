@@ -46,7 +46,8 @@ jobs:
             --set *.cache-from=type=gha \
             --set *.cache-to=type=gha,mode=max \
             monolito_api
-          docker tag monolito_api:latest ${{ secrets.DOCKERHUB_USERNAME }}/monolito_api:latest
+          docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/monolito_api:latest
+          docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/monolito_api:previous
           docker images
 
       - name: Tag previous image (if exists)

@@ -46,10 +46,12 @@ jobs:
             --set *.cache-from=type=gha \
             --set *.cache-to=type=gha,mode=max \
             monolito_api
+          docker images
 
       - name: Tag previous image (if exists)
         continue-on-error: true
         run: |
+          docker images
           IMAGE_BASE="${{ secrets.DOCKERHUB_USERNAME }}/monolito_api"
           docker pull $IMAGE_BASE:latest || exit 0
           docker tag  $IMAGE_BASE:latest $IMAGE_BASE:previous
@@ -57,6 +59,7 @@ jobs:
 
       - name: Tag & Push new images
         run: |
+          docker images
           IMAGE_BASE="${{ secrets.DOCKERHUB_USERNAME }}/monolito_api"
           VERSION_TAG=$(date +'%Y%m%d%H%M%')
 

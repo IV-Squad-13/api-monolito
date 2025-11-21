@@ -1,4 +1,4 @@
-package com.squad13.apimonolito.exceptions;
+package com.squad13.apimonolito.exceptions.exceptions;
 
 public class InvalidDocumentTypeException extends RuntimeException {
     public InvalidDocumentTypeException(String message) {

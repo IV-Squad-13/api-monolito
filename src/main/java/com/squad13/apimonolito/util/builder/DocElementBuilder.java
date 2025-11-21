@@ -5,7 +5,7 @@ import com.squad13.apimonolito.DTO.editor.DocElementDTO;
 import com.squad13.apimonolito.DTO.editor.ItemDocDTO;
 import com.squad13.apimonolito.DTO.editor.LoadDocumentParamsDTO;
 import com.squad13.apimonolito.DTO.revision.LoadRevDocParamsDTO;
-import com.squad13.apimonolito.exceptions.InvalidDocumentTypeException;
+import com.squad13.apimonolito.exceptions.exceptions.InvalidDocumentTypeException;
 import com.squad13.apimonolito.models.catalog.ItemType;
 import com.squad13.apimonolito.models.editor.mongo.AmbienteDocElement;
 import com.squad13.apimonolito.models.editor.mongo.ItemDocElement;

@@ -5,7 +5,7 @@ import com.squad13.apimonolito.DTO.editor.EspecificacaoSearchParamsDTO;
 import com.squad13.apimonolito.DTO.editor.LoadDocumentParamsDTO;
 import com.squad13.apimonolito.DTO.editor.edit.EditEspecificacaoDocDTO;
 import com.squad13.apimonolito.DTO.editor.res.ResSpecDTO;
-import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
+import com.squad13.apimonolito.exceptions.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.catalog.Ambiente;
 import com.squad13.apimonolito.models.catalog.ItemDesc;
 import com.squad13.apimonolito.models.catalog.Marca;
@@ -30,6 +30,7 @@ import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -160,12 +161,22 @@ public class EspecificacaoService {
                     .findFirst()
                     .ifPresent(l -> ambiente.setParentId(l.getId()));
 
-            catalogItems.forEach(catalogItem -> {
+            List<ItemDesc> uniqueItems = catalogItems.stream()
+                    .collect(Collectors.toMap(
+                            ItemDesc::getId,
+                            Function.identity(),
+                            (existing, duplicate) -> existing
+                    ))
+                    .values()
+                    .stream()
+                    .toList();
+
+            for (ItemDesc catalogItem : uniqueItems) {
                 ItemDocElement item = editorMapper.fromCatalog(spec.getId(), catalogItem, null);
                 item.setId(newId());
                 item.setParentId(ambiente.getId());
                 itemsToSave.add(item);
-            });
+            }
 
             ambientesToSave.add(ambiente);
         });

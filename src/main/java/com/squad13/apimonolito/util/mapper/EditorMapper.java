@@ -39,11 +39,11 @@ public class EditorMapper {
         if (emp == null) return null;
 
         ResPadraoDTO padrao = emp.getInit().equals(DocInitializationEnum.PADRAO) && (loadParams.isLoadPadrao() || loadParams.isLoadAll())
-                ? catalogMapper.toResponse(emp.getPadrao(), LoadCatalogParamsDTO.allTrue())
+                ? catalogMapper.toResponse(emp.getPadrao(), LoadCatalogParamsDTO.allFalse())
                 : null;
 
         List<ResUserDTO> users = loadParams.isLoadUsers() || loadParams.isLoadAll()
-                ? userMapper.getUsersDTO(emp.getUsuarioList())
+                ? userMapper.getUsersDTO(emp.getUsuarioSet())
                 : null;
 
         return new ResEmpDTO(

@@ -1,8 +1,6 @@
 package com.squad13.apimonolito.util.enums;
 
-import com.squad13.apimonolito.DTO.editor.res.ResSpecDTO;
 import com.squad13.apimonolito.DTO.revision.res.*;
-import com.squad13.apimonolito.exceptions.InvalidDocumentTypeException;
 import com.squad13.apimonolito.models.revision.mongo.*;
 import com.squad13.apimonolito.models.revision.structures.RevDocElement;
 import lombok.Getter;

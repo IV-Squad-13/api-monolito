@@ -1,7 +1,6 @@
 package com.squad13.apimonolito.services.editor;
 
-import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
-import com.squad13.apimonolito.DTO.catalog.res.ResMarcaDTO;
+
 import com.squad13.apimonolito.DTO.editor.EmpDTO;
 import com.squad13.apimonolito.DTO.editor.EmpSearchParamsDTO;
 import com.squad13.apimonolito.DTO.editor.EspecificacaoDocDTO;
@@ -12,10 +11,11 @@ import com.squad13.apimonolito.DTO.editor.res.ResSpecDTO;
 import com.squad13.apimonolito.DTO.revision.ToRevisionDTO;
 import com.squad13.apimonolito.DTO.revision.res.ResRevDTO;
 import com.squad13.apimonolito.DTO.revision.res.ResSpecRevDTO;
-import com.squad13.apimonolito.exceptions.*;
-import com.squad13.apimonolito.models.catalog.Marca;
+import com.squad13.apimonolito.exceptions.exceptions.InvalidStageException;
+import com.squad13.apimonolito.exceptions.exceptions.InvalidUserException;
+import com.squad13.apimonolito.exceptions.exceptions.ResourceAlreadyExistsException;
+import com.squad13.apimonolito.exceptions.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.catalog.Padrao;
-import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
 import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import com.squad13.apimonolito.models.revision.relational.ProcessoHistorico;
 import com.squad13.apimonolito.models.revision.relational.Revisao;
@@ -32,9 +32,6 @@ import com.squad13.apimonolito.util.enums.*;
 import com.squad13.apimonolito.util.enums.rule.RevisionRule;
 import com.squad13.apimonolito.util.mapper.EditorMapper;
 import com.squad13.apimonolito.util.search.CatalogSearch;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.criteria.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -260,7 +257,7 @@ public class EmpreendimentoService {
     private void ensureUniqueName(Empreendimento emp, EditEmpDTO dto) {
         empRepository.findByName(dto.name())
                 .ifPresent(emp1 -> {
-                    if (Objects.equals(emp.getId(), emp1.getId()))
+                    if (!Objects.equals(emp.getId(), emp1.getId()))
                         throw new ResourceAlreadyExistsException(
                                 "O nome '" + dto.name() + "' já está sendo usado."
                         );
@@ -286,8 +283,6 @@ public class EmpreendimentoService {
                         ));
                 emp.setPadrao(novoPadrao);
             }
-        } else {
-            emp.setPadrao(null);
         }
 
         Empreendimento updated = empRepository.save(emp);

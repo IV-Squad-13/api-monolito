@@ -2,13 +2,15 @@ package com.squad13.apimonolito.services.editor;
 
 import com.squad13.apimonolito.DTO.editor.*;
 import com.squad13.apimonolito.DTO.editor.res.*;
-import com.squad13.apimonolito.exceptions.AssociationAlreadyExistsException;
-import com.squad13.apimonolito.exceptions.InvalidDocumentTypeException;
-import com.squad13.apimonolito.exceptions.ResourceAlreadyExistsException;
-import com.squad13.apimonolito.exceptions.ResourceNotFoundException;
+import com.squad13.apimonolito.exceptions.exceptions.AssociationAlreadyExistsException;
+import com.squad13.apimonolito.exceptions.exceptions.InvalidDocumentTypeException;
+import com.squad13.apimonolito.exceptions.exceptions.ResourceAlreadyExistsException;
+import com.squad13.apimonolito.exceptions.exceptions.ResourceNotFoundException;
+import com.squad13.apimonolito.models.catalog.ItemType;
 import com.squad13.apimonolito.models.editor.mongo.*;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
 import com.squad13.apimonolito.mongo.editor.*;
+import com.squad13.apimonolito.repository.catalog.ItemTypeRepository;
 import com.squad13.apimonolito.util.builder.DocElementBuilder;
 import com.squad13.apimonolito.util.builder.MongoUpdateBuilder;
 import com.squad13.apimonolito.util.enums.DocElementEnum;
@@ -49,6 +51,7 @@ public class DocElementService {
     private final ItemDocElementRepository itemDocRepository;
     private final MaterialDocElementRepository materialDocRepository;
     private final MarcaDocElementRepository marcaDocRepository;
+    private final ItemTypeRepository itemTypeRepository;
 
     public List<? extends ResDocElementDTO> getAll(LoadDocumentParamsDTO params, DocElementEnum docType) {
         Aggregation agg = docBuilder.buildAggregation(params);
@@ -94,10 +97,6 @@ public class DocElementService {
     private EspecificacaoDoc getSpecById(ObjectId id) {
         return especificacaoDocRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Especificação não encontrada para o ID: " + id));
-    }
-
-    private ObjectId newId() {
-        return new ObjectId();
     }
 
     public ResDocElementDTO createElement(ObjectId especId, DocElementCatalogCreationDTO dto) {
@@ -192,10 +191,6 @@ public class DocElementService {
             especificacaoDoc.getMateriaisIds().add(material.getId());
             especificacaoDocRepository.save(especificacaoDoc);
         }
-    }
-
-    private boolean isHexString(String string) {
-        return string.matches("^[0-9A-Fa-f]+$");
     }
 
     public ResDocElementDTO createRawElement(ObjectId specId, DocElementDTO dto) {
@@ -420,6 +415,18 @@ public class DocElementService {
 
         if (dto.getName() != null && !dto.getName().isBlank()) {
             item.setName(dto.getName());
+        }
+
+        if (dto.getDesc() != null && !dto.getDesc().isBlank()) {
+            item.setDesc(dto.getDesc());
+        }
+
+        if (dto.getTypeId() != null) {
+            ItemType itemType = itemTypeRepository.findById(dto.getTypeId())
+                    .orElseThrow(() -> new ResourceNotFoundException("TIPO DE ITEM NÂO ENCONTRADO: " + dto.getTypeId()));
+
+            item.setTypeId(itemType.getId());
+            item.setType(itemType.getName());
         }
 
         if (dto.getParentId() != null) {

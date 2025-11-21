@@ -2,7 +2,9 @@ package com.squad13.apimonolito.DTO.editor.res;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.squad13.apimonolito.models.editor.mongo.AmbienteDocElement;
 import com.squad13.apimonolito.models.editor.mongo.MaterialDocElement;
+import com.squad13.apimonolito.models.editor.structures.DocElement;
 import lombok.*;
 import org.bson.types.ObjectId;
 
@@ -20,6 +22,15 @@ public class ResMatDocDTO extends ResDocElementDTO {
     private List<ObjectId> marcaIds = new ArrayList<>();
 
     private List<ResMarDocDTO> marcas = new ArrayList<>();
+
+    @Override
+    public void populateExtraFields(DocElement d) {
+        MaterialDocElement doc = (MaterialDocElement) d;
+        this.marcaIds = doc.getMarcaIds();
+        this.marcas = doc.getMarcas().stream()
+                .map(ResMarDocDTO::fromDoc)
+                .toList();
+    }
 
     public static ResMatDocDTO fromDoc(MaterialDocElement doc) {
         ResMatDocDTO mat = ResDocElementDTO.fromDoc(doc, ResMatDocDTO::new);

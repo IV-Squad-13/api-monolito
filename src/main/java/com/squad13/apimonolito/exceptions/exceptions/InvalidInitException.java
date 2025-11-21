@@ -1,4 +1,4 @@
-package com.squad13.apimonolito.exceptions;
+package com.squad13.apimonolito.exceptions.exceptions;
 
 public class InvalidInitException extends RuntimeException {
     public InvalidInitException(String message) {

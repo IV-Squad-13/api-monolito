@@ -21,34 +21,44 @@ jobs:
           token: ${{ secrets.ORG_ACCESS_TOKEN }}
           path: docker
 
-      - name: Verify structure
-        run: ls -R .
+      - name: Set up Java with Maven cache
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
 
-      - name: Build & run monolito_api
-        run: |
-          cd docker
-          docker compose -p s13 -f docker-compose.yml build monolito_api
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build monolito_api with cache
+        working-directory: docker
+        run: |
+          docker buildx bake \
+            --file docker-compose.yml \
+            --project-name s13 \
+            --set *.cache-from=type=gha \
+            --set *.cache-to=type=gha,mode=max \
+            monolito_api
 
       - name: Tag previous image (if exists)
         continue-on-error: true
         run: |
           IMAGE_BASE="${{ secrets.DOCKERHUB_USERNAME }}/monolito_api"
           docker pull $IMAGE_BASE:latest || exit 0
-          docker tag $IMAGE_BASE:latest $IMAGE_BASE:previous
+          docker tag  $IMAGE_BASE:latest $IMAGE_BASE:previous
           docker push $IMAGE_BASE:previous
 
       - name: Tag & Push new images
         run: |
           IMAGE_BASE="${{ secrets.DOCKERHUB_USERNAME }}/monolito_api"
-          VERSION_TAG=$(date +'%Y%m%d%H%M%S')
-          
-          docker images
+          VERSION_TAG=$(date +'%Y%m%d%H%M%')
 
           docker tag s13-monolito_api:latest $IMAGE_BASE:latest
           docker tag s13-monolito_api:latest $IMAGE_BASE:$VERSION_TAG

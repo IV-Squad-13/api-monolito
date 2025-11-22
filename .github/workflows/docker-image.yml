@@ -41,19 +41,16 @@ jobs:
         working-directory: docker
         run: |
           docker buildx bake \
-            --allow=fs.read=.. \
             --file docker-compose.yml \
             --set *.cache-from=type=gha \
             --set *.cache-to=type=gha,mode=max \
+            --load \
             monolito_api
-          docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/monolito_api:latest
-          docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/monolito_api:previous
           docker images
 
       - name: Tag previous image (if exists)
         continue-on-error: true
         run: |
-          docker images
           IMAGE_BASE="${{ secrets.DOCKERHUB_USERNAME }}/monolito_api"
           docker pull $IMAGE_BASE:latest || exit 0
           docker tag  $IMAGE_BASE:latest $IMAGE_BASE:previous

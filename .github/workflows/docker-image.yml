@@ -61,7 +61,7 @@ jobs:
         run: |
           docker images
           IMAGE_BASE="${{ secrets.DOCKERHUB_USERNAME }}/monolito_api"
-          VERSION_TAG=$(date +'%Y%m%d%H%M%')
+          VERSION_TAG=$(date +'%Y%m%d%H%M')
 
           docker tag s13-monolito_api:latest $IMAGE_BASE:latest
           docker tag s13-monolito_api:latest $IMAGE_BASE:$VERSION_TAG

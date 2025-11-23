@@ -21,6 +21,7 @@ public class ResMatRevDTO extends ResRevDocDTO {
 
     private ResMatDocDTO revisedDoc;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     private List<ObjectId> marcaRevIds = new ArrayList<>();
 
     private List<ResMarRevDTO> marcaRevs =  new ArrayList<>();

@@ -2,6 +2,7 @@ package com.squad13.apimonolito.DTO.revision;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,8 +20,12 @@ public class LoadRevDocParamsDTO {
     private boolean loadMateriais;
     private boolean loadMarcas;
 
-    private boolean loadSpecDocuments; // Não funciona, alguém se importa?
+    private boolean loadSpecDocuments;
     private boolean loadEmpreendimento;
+
+    public LoadRevDocParamsDTO() {
+        this(false, false, false, false, false, false, false, false);
+    }
 
     public static LoadRevDocParamsDTO allFalse() {
         return new LoadRevDocParamsDTO(false, false, false, false, false, false, false, false);

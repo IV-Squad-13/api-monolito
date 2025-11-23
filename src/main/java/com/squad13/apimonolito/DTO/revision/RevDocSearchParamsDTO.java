@@ -41,6 +41,11 @@ public class RevDocSearchParamsDTO {
         this.id = id.toHexString();
     }
 
+    public RevDocSearchParamsDTO(RevDocElementEnum docType, Long revisionId) {
+        this.docType = docType;
+        this.revisionId = revisionId;
+    }
+
     public Map<String, Object> buildFilters(boolean unsetApproval) {
         Map<String, Object> filters = new HashMap<>();
 

@@ -76,8 +76,12 @@ public class EmpreendimentoService {
                     .map(ProcessoHistorico::getRevision)
                     .map(r -> {
                         List<ResSpecRevDTO> resSpecRevs = specRevDocRepository.findByRevisionId(r.getId()).stream()
-                                .map(specRev -> ResSpecRevDTO.fromDoc(specRev, editorMapper.toResponse(specRev.getRevisedDoc())))
-                                .toList();
+                                .map(specRev -> {
+                                    ResSpecDTO specDTO = specRev.getRevisedDoc() != null
+                                            ? editorMapper.toResponse(specRev.getRevisedDoc())
+                                            : specService.findById(specRev.getRevisedDocId(), LoadDocumentParamsDTO.allFalse());
+                                    return ResSpecRevDTO.fromDoc(specRev, specDTO);
+                                }).toList();
 
                         return ResRevDTO.from(r, resSpecRevs, null);
                     })

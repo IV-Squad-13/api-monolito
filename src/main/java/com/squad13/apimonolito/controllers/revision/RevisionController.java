@@ -45,11 +45,11 @@ public class RevisionController {
 
     @GetMapping("/doc/{id}")
     public ResponseEntity<? extends ResRevDocDTO> getDocById(
-            @PathVariable String id,
+            @PathVariable ObjectId id,
             @ModelAttribute LoadRevDocParamsDTO params,
             @RequestParam RevDocElementEnum docType
     ) {
-        return ResponseEntity.ok(revService.findDocById(new ObjectId(id), params, docType));
+        return ResponseEntity.ok(revService.findDocById(id, params, docType));
     }
 
     @GetMapping("/doc/search")

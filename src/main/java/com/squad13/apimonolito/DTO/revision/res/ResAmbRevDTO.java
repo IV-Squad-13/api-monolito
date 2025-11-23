@@ -3,9 +3,12 @@ package com.squad13.apimonolito.DTO.revision.res;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.squad13.apimonolito.DTO.editor.res.ResAmbDocDTO;
+import com.squad13.apimonolito.DTO.editor.res.ResItemDocDTO;
 import com.squad13.apimonolito.models.editor.mongo.AmbienteDocElement;
+import com.squad13.apimonolito.models.editor.structures.DocElement;
 import com.squad13.apimonolito.models.revision.mongo.AmbienteRevDocElement;
 import com.squad13.apimonolito.models.revision.mongo.ItemRevDocElement;
+import com.squad13.apimonolito.models.revision.structures.RevDocElement;
 import lombok.*;
 import org.bson.types.ObjectId;
 
@@ -23,6 +26,7 @@ public class ResAmbRevDTO extends ResRevDocDTO {
 
     private ResAmbDocDTO revisedDoc;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     private List<ObjectId> itemRevIds =  new ArrayList<>();
 
     private List<ResItemRevDTO> itemRevs =  new ArrayList<>();

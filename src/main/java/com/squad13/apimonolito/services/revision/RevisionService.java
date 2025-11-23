@@ -11,6 +11,7 @@ import com.squad13.apimonolito.DTO.revision.res.ResSpecRevDTO;
 import com.squad13.apimonolito.exceptions.exceptions.InvalidStageException;
 import com.squad13.apimonolito.exceptions.exceptions.InvalidUserException;
 import com.squad13.apimonolito.exceptions.exceptions.ResourceNotFoundException;
+import com.squad13.apimonolito.models.editor.mongo.EspecificacaoDoc;
 import com.squad13.apimonolito.models.revision.mongo.*;
 import com.squad13.apimonolito.models.revision.relational.ProcessoHistorico;
 import com.squad13.apimonolito.models.revision.relational.Revisao;
@@ -33,6 +34,7 @@ import com.squad13.apimonolito.util.search.DocumentSearch;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.data.history.Revision;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -140,6 +142,14 @@ public class RevisionService {
 
     public ResRevDocDTO findDocById(ObjectId id, LoadRevDocParamsDTO params, RevDocElementEnum docType) {
         return searchDocs(params, new RevDocSearchParamsDTO(docType, id), false).stream()
+                .findFirst()
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(docType + " não encontrado para o ID: " + id)
+                );
+    }
+
+    public ResRevDocDTO findDocByRevisionId(Long id, LoadRevDocParamsDTO params, RevDocElementEnum docType) {
+        return searchDocs(params, new RevDocSearchParamsDTO(docType, id), true).stream()
                 .findFirst()
                 .orElseThrow(() ->
                         new ResourceNotFoundException(docType + " não encontrado para o ID: " + id)

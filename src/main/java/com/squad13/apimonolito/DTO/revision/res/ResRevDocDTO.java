@@ -26,8 +26,11 @@ public class ResRevDocDTO {
     private ObjectId revisedDocId;
 
     private Long revisionId;
+
     private Boolean isApproved;
     private String comment;
+
+    public void populateExtraFields(RevDocElement doc) { }
 
     public static <D extends RevDocElement, T extends ResRevDocDTO>
     T fromDoc(D doc, Supplier<T> factory) {
@@ -37,6 +40,9 @@ public class ResRevDocDTO {
         instance.setRevisionId(doc.getRevisionId());
         instance.setIsApproved(doc.getIsApproved());
         instance.setComment(doc.getComment());
+
+        instance.populateExtraFields(doc);
+
         return instance;
     }
 }

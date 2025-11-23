@@ -21,6 +21,7 @@ public class ResLocalRevDTO extends ResRevDocDTO {
 
     private ResLocalDocDTO revisedDoc;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     private List<ObjectId> ambienteRevIds = new ArrayList<>();
 
     private List<ResAmbRevDTO> ambienteRevs = new ArrayList<>();

@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -82,53 +83,58 @@ public class ApprovalService {
 
     private ResSpecRevDTO updateEspecificacao(ObjectId id, EditSpecRevDocDTO dto) {
         EspecificacaoRevDocElement specRev = especificacaoRevDocElementRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Revisão de Especificação não encontrada com o id informado: " + id)
-                );
+                .orElseThrow(() -> new ResourceNotFoundException("Revisão de Especificação não encontrada: " + id));
 
-        if (dto.getIsApproved() != specRev.getIsApproved()) {
-            specRev.setIsApproved(dto.getIsApproved());
+        boolean changingApproval = dto.getIsApproved() != null &&
+                !Objects.equals(dto.getIsApproved(), specRev.getIsApproved());
 
-            if (dto.getApprovalType().equals(ApprovalEnum.CASCADE)) {
-                approveLocais(specRev.getIsApproved(), specRev.getLocalRevIds());
-                approveMateriais(specRev.getIsApproved(), specRev.getMaterialRevIds());
+        if (changingApproval) {
+            Boolean newApproval = dto.getIsApproved();
+            specRev.setIsApproved(newApproval);
+
+            specRev.setIsNameApproved(newApproval);
+            specRev.setIsDescApproved(newApproval);
+            specRev.setIsObsApproved(newApproval);
+
+            if (dto.getApprovalType() == ApprovalEnum.CASCADE) {
+                approveLocais(newApproval, specRev.getLocalRevIds());
+                approveMateriais(newApproval, specRev.getMaterialRevIds());
             }
         }
 
-        if (dto.getComment() != null && !dto.getComment().isEmpty()) {
-            specRev.setComment(dto.getComment());
-        }
-
-        if (dto.getIsNameApproved() != specRev.getIsNameApproved()) {
+        if (dto.getIsNameApproved() != null)
             specRev.setIsNameApproved(dto.getIsNameApproved());
-        }
 
-        if (dto.getIsDescApproved() != specRev.getIsDescApproved()) {
+        if (dto.getIsDescApproved() != null)
             specRev.setIsDescApproved(dto.getIsDescApproved());
-        }
 
-        if (dto.getIsObsApproved() != specRev.getIsObsApproved()) {
+        if (dto.getIsObsApproved() != null)
             specRev.setIsObsApproved(dto.getIsObsApproved());
-        }
+
+        if (dto.getComment() != null && !dto.getComment().isBlank())
+            specRev.setComment(dto.getComment());
 
         EspecificacaoDoc specDoc = especificacaoDocRepository.findById(specRev.getRevisedDocId())
-                .orElseThrow(
-                        () -> new ResourceNotFoundException("Documento de Especificação não encontrado para: " + specRev.getRevisedDocId())
-                );
-        return ResSpecRevDTO.fromDoc(especificacaoRevDocElementRepository.save(specRev), editorMapper.toResponse(specDoc));
+                .orElseThrow(() -> new ResourceNotFoundException("Documento não encontrado: " + specRev.getRevisedDocId()));
+
+        return ResSpecRevDTO.fromDoc(
+                especificacaoRevDocElementRepository.save(specRev),
+                editorMapper.toResponse(specDoc)
+        );
     }
 
     private void approveLocais(Boolean isApproved, List<ObjectId> localRevIds) {
-        List<LocalRevDocElement> localRevDocs = documentSearch.findAllByIds(localRevIds, LocalRevDocElement.class);
+        Update updateLocal = new Update().set("isApproved", isApproved);
+        documentSearch.bulkUpdate(localRevIds, updateLocal, LocalRevDocElement.class);
 
-        Update update = new Update().set("isApproved", isApproved);
-        documentSearch.bulkUpdate(localRevIds, update, LocalRevDocElement.class);
+        List<LocalRevDocElement> locals = documentSearch.findAllByIds(localRevIds, LocalRevDocElement.class);
 
-        List<ObjectId> ambienteRevIds = localRevDocs.stream()
-                .flatMap(local -> local.getAmbienteRevs().stream())
+        List<ObjectId> ambienteIds = locals.stream()
+                .flatMap(l -> l.getAmbienteRevs().stream())
                 .map(AmbienteRevDocElement::getId)
                 .toList();
-        approveAmbientes(isApproved, ambienteRevIds);
+
+        approveAmbientes(isApproved, ambienteIds);
     }
 
     private ResLocalRevDTO updateLocal(ObjectId id, EditLocalRevDocDTO dto) {
@@ -153,65 +159,72 @@ public class ApprovalService {
     }
 
     private void approveAmbientes(Boolean isApproved, List<ObjectId> ambienteRevIds) {
-        List<AmbienteRevDocElement> ambienteRevDocs = documentSearch.findAllByIds(ambienteRevIds, AmbienteRevDocElement.class);
+        Update updateAmb = new Update().set("isApproved", isApproved);
+        documentSearch.bulkUpdate(ambienteRevIds, updateAmb, AmbienteRevDocElement.class);
 
-        Update update = new Update().set("isApproved", isApproved);
-        documentSearch.bulkUpdate(ambienteRevIds, update, AmbienteRevDocElement.class);
+        List<AmbienteRevDocElement> ambientes = documentSearch.findAllByIds(ambienteRevIds, AmbienteRevDocElement.class);
 
-        List<ObjectId> itemRevIds = ambienteRevDocs.stream()
-                .flatMap(amb -> amb.getItemRevs().stream())
-                .map(ItemRevDocElement::getId)
+        List<ObjectId> itemIds = ambientes.stream()
+                .flatMap(a -> a.getItemRevIds().stream())
                 .toList();
-        documentSearch.bulkUpdate(itemRevIds, update, ItemRevDocElement.class);
+
+        Update updateItems = new Update()
+                .set("isApproved", isApproved)
+                .set("isDescApproved", isApproved)
+                .set("isTypeApproved", isApproved);
+
+        documentSearch.bulkUpdate(itemIds, updateItems, ItemRevDocElement.class);
     }
 
     private ResAmbRevDTO updateAmbiente(ObjectId id, EditAmbRevDocDTO dto) {
         AmbienteRevDocElement ambienteRev = ambienteRevDocElementRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Revisão de Ambiente não encontrada com o id informado: " + id)
-                );
+                .orElseThrow(() -> new ResourceNotFoundException("Revisão de Ambiente não encontrada: " + id));
 
-        if (dto.getIsApproved() != ambienteRev.getIsApproved()) {
+        if (!Objects.equals(dto.getIsApproved(), ambienteRev.getIsApproved())) {
             ambienteRev.setIsApproved(dto.getIsApproved());
 
-            if (dto.getApprovalType().equals(ApprovalEnum.CASCADE)) {
-                approveItems(ambienteRev.getIsApproved(), ambienteRev.getItemRevIds());
-            }
+            if (dto.getApprovalType() == ApprovalEnum.CASCADE)
+                approveItems(dto.getIsApproved(), ambienteRev.getItemRevIds());
         }
 
-        if (dto.getComment() != null && !dto.getComment().isEmpty()) {
+        if (dto.getComment() != null && !dto.getComment().isBlank())
             ambienteRev.setComment(dto.getComment());
-        }
 
         return ResAmbRevDTO.fromDoc(ambienteRevDocElementRepository.save(ambienteRev));
     }
 
     private void approveItems(Boolean isApproved, List<ObjectId> itemRevIds) {
-        Update update = new Update().set("isApproved", isApproved);
+        Update update = new Update()
+                .set("isApproved", isApproved)
+                .set("isDescApproved", isApproved)
+                .set("isTypeApproved", isApproved);
         documentSearch.bulkUpdate(itemRevIds, update, ItemRevDocElement.class);
     }
 
     private ResItemRevDTO updateItem(ObjectId id, EditItemRevDocDTO dto) {
+
         ItemRevDocElement itemRev = itemRevDocElementRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Revisão de Item não encontrada com o id informado: " + id)
-                );
+                .orElseThrow(() -> new ResourceNotFoundException("Revisão de Item não encontrada: " + id));
 
-        if (dto.getIsApproved() != itemRev.getIsApproved()) {
-            itemRev.setIsApproved(dto.getIsApproved());
+        boolean changingApproval = dto.getIsApproved() != null &&
+                !Objects.equals(dto.getIsApproved(), itemRev.getIsApproved());
+
+        if (changingApproval) {
+            Boolean newApproval = dto.getIsApproved();
+            itemRev.setIsApproved(newApproval);
+
+            itemRev.setIsDescApproved(newApproval);
+            itemRev.setIsTypeApproved(newApproval);
         }
 
-        if (dto.getComment() != null && !dto.getComment().isEmpty()) {
-            itemRev.setComment(dto.getComment());
-        }
-
-        if (dto.getIsDescApproved() != null) {
+        if (dto.getIsDescApproved() != null)
             itemRev.setIsDescApproved(dto.getIsDescApproved());
-        }
 
-        if (dto.getIsTypeApproved() != null) {
+        if (dto.getIsTypeApproved() != null)
             itemRev.setIsTypeApproved(dto.getIsTypeApproved());
-        }
+
+        if (dto.getComment() != null && !dto.getComment().isBlank())
+            itemRev.setComment(dto.getComment());
 
         return ResItemRevDTO.fromDoc(itemRevDocElementRepository.save(itemRev));
     }
@@ -228,6 +241,50 @@ public class ApprovalService {
                 .toList();
         documentSearch.bulkUpdate(marcaRevIds, update, MarcaRevDocElement.class);
     }
+
+    private ResMatRevDTO updateMaterial(ObjectId id, EditMatRevDocDTO dto) {
+        MaterialRevDocElement materialRev = materialRevDocElementRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Revisão de Material não encontrada com o id informado: " + id)
+                );
+
+        if (dto.getIsApproved() != materialRev.getIsApproved()) {
+            materialRev.setIsApproved(dto.getIsApproved());
+
+            if (dto.getApprovalType().equals(ApprovalEnum.CASCADE)) {
+                approveMarcas(materialRev.getIsApproved(), materialRev.getMarcaRevIds());
+            }
+        }
+
+        if (dto.getComment() != null && !dto.getComment().isEmpty()) {
+            materialRev.setComment(dto.getComment());
+        }
+
+        return ResMatRevDTO.fromDoc(materialRevDocElementRepository.save(materialRev));
+    }
+
+    private void approveMarcas(Boolean isApproved, List<ObjectId> marcaRevIds) {
+        Update update = new Update().set("isApproved", isApproved);
+        documentSearch.bulkUpdate(marcaRevIds, update, MarcaRevDocElement.class);
+    }
+
+    private ResMarRevDTO updateMarca(ObjectId id, EditMarRevDocDTO dto) {
+        MarcaRevDocElement marcaRev = marcaRevDocElementRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Revisão de Marca não encontrada com o id informado: " + id)
+                );
+
+        if (dto.getIsApproved() != marcaRev.getIsApproved()) {
+            marcaRev.setIsApproved(dto.getIsApproved());
+        }
+
+        if (dto.getComment() != null && !dto.getComment().isEmpty()) {
+            marcaRev.setComment(dto.getComment());
+        }
+
+        return ResMarRevDTO.fromDoc(marcaRevDocElementRepository.save(marcaRev));
+    }
+
 
     private ProcessoHistorico createProcessFromOrigin(ProcessoHistorico origin, ProcActionEnum action) {
         ProcessoHistorico newProcess = new ProcessoHistorico();
@@ -294,48 +351,5 @@ public class ApprovalService {
 
         rev.setStatus(RevisaoStatusEnum.APROVADA);
         revisaoRepository.save(rev);
-    }
-
-    private ResMatRevDTO updateMaterial(ObjectId id, EditMatRevDocDTO dto) {
-        MaterialRevDocElement materialRev = materialRevDocElementRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Revisão de Material não encontrada com o id informado: " + id)
-                );
-
-        if (dto.getIsApproved() != materialRev.getIsApproved()) {
-            materialRev.setIsApproved(dto.getIsApproved());
-
-            if (dto.getApprovalType().equals(ApprovalEnum.CASCADE)) {
-                approveMarcas(materialRev.getIsApproved(), materialRev.getMarcaRevIds());
-            }
-        }
-
-        if (dto.getComment() != null && !dto.getComment().isEmpty()) {
-            materialRev.setComment(dto.getComment());
-        }
-
-        return ResMatRevDTO.fromDoc(materialRevDocElementRepository.save(materialRev));
-    }
-
-    private void approveMarcas(Boolean isApproved, List<ObjectId> marcaRevIds) {
-        Update update = new Update().set("isApproved", isApproved);
-        documentSearch.bulkUpdate(marcaRevIds, update, MarcaRevDocElement.class);
-    }
-
-    private ResMarRevDTO updateMarca(ObjectId id, EditMarRevDocDTO dto) {
-        MarcaRevDocElement marcaRev = marcaRevDocElementRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Revisão de Marca não encontrada com o id informado: " + id)
-                );
-
-        if (dto.getIsApproved() != marcaRev.getIsApproved()) {
-            marcaRev.setIsApproved(dto.getIsApproved());
-        }
-
-        if (dto.getComment() != null && !dto.getComment().isEmpty()) {
-            marcaRev.setComment(dto.getComment());
-        }
-
-        return ResMarRevDTO.fromDoc(marcaRevDocElementRepository.save(marcaRev));
     }
 }

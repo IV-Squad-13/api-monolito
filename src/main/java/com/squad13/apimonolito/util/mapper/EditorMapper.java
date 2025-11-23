@@ -1,12 +1,14 @@
 package com.squad13.apimonolito.util.mapper;
 
 import com.squad13.apimonolito.DTO.auth.res.ResUserDTO;
+import com.squad13.apimonolito.DTO.auth.res.ResUserEmpDTO;
 import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResPadraoDTO;
 import com.squad13.apimonolito.DTO.editor.LoadDocumentParamsDTO;
 import com.squad13.apimonolito.DTO.editor.res.ResEmpDTO;
 import com.squad13.apimonolito.DTO.editor.res.ResSpecDTO;
 import com.squad13.apimonolito.DTO.revision.res.ResRevDTO;
+import com.squad13.apimonolito.exceptions.exceptions.ResourceNotFoundException;
 import com.squad13.apimonolito.models.catalog.Ambiente;
 import com.squad13.apimonolito.models.catalog.ItemDesc;
 import com.squad13.apimonolito.models.catalog.Marca;
@@ -14,6 +16,7 @@ import com.squad13.apimonolito.models.catalog.Material;
 import com.squad13.apimonolito.models.editor.mongo.*;
 import com.squad13.apimonolito.models.editor.relational.Empreendimento;
 import com.squad13.apimonolito.models.editor.structures.DocElement;
+import com.squad13.apimonolito.util.enums.AccessEnum;
 import com.squad13.apimonolito.util.enums.DocElementEnum;
 import com.squad13.apimonolito.util.enums.DocInitializationEnum;
 import lombok.RequiredArgsConstructor;
@@ -42,20 +45,29 @@ public class EditorMapper {
                 ? catalogMapper.toResponse(emp.getPadrao(), LoadCatalogParamsDTO.allFalse())
                 : null;
 
-        List<ResUserDTO> users = loadParams.isLoadUsers() || loadParams.isLoadAll()
-                ? userMapper.getUsersDTO(emp.getUsuarioSet())
+        List<ResUserEmpDTO> users = loadParams.isLoadUsers() || loadParams.isLoadAll()
+                ? userMapper.getUsersEmpDTO(emp.getUsuarioSet())
                 : null;
+
+        ResUserEmpDTO creator = ResUserEmpDTO.from(
+                emp.getUsuarioSet().stream()
+                        .filter(u -> AccessEnum.CRIADOR.equals(u.getAccessLevel()))
+                        .findFirst()
+                        .orElseThrow(() -> new ResourceNotFoundException("Empreendimento não possuí um criador"))
+        );
 
         return new ResEmpDTO(
                 emp.getId(),
                 emp.getName(),
                 emp.getStatus(),
                 emp.getInit(),
+                emp.getCreatedAt(),
                 padrao,
                 refDoc,
                 loadParams.isLoadEspecificacao() || loadParams.isLoadAll() ? doc : null,
                 loadParams.isLoadRevision() || loadParams.isLoadAll() ? revDTO : null,
-                users
+                users,
+                creator
         );
     }
 

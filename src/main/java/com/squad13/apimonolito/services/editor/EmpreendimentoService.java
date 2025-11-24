@@ -135,7 +135,7 @@ public class EmpreendimentoService {
         empRepository.save(emp);
     }
 
-    private void createUserAccess(Empreendimento emp, Long userId, AccessEnum accessType) {
+    private UsuarioEmpreendimento createUserAccess(Empreendimento emp, Long userId, AccessEnum accessType) {
         Usuario user = findUser(userId);
 
         if (accessType.notAllowed(user.getPapel().getNome()))
@@ -145,7 +145,7 @@ public class EmpreendimentoService {
         userEmp.setUsuario(user);
         userEmp.setEmpreendimento(emp);
         userEmp.setAccessLevel(accessType);
-        userEmpRepository.save(userEmp);
+        return (userEmpRepository.save(userEmp));
     }
 
     private Revisao createRevision() {
@@ -210,7 +210,7 @@ public class EmpreendimentoService {
         processoHistoricoRepository.save(newProcess);
 
         blockEmp(emp);
-        createUserAccess(emp, dto.revisorId(), AccessEnum.REVISOR);
+        UsuarioEmpreendimento revisor = createUserAccess(emp, dto.revisorId(), AccessEnum.REVISOR);
 
         ResEmpDTO resEmpDTO = mappingHelper(emp, LoadDocumentParamsDTO.allFalse());
         return ResRevDTO.from(revision, null, resEmpDTO);
@@ -242,7 +242,8 @@ public class EmpreendimentoService {
         }
 
         Empreendimento saved = empRepository.save(emp);
-        createUserAccess(emp, dto.creatorId(), AccessEnum.CRIADOR);
+        UsuarioEmpreendimento creator = createUserAccess(emp, dto.creatorId(), AccessEnum.CRIADOR);
+        saved.getUsuarioSet().add(creator);
 
         EspecificacaoDocDTO specDocDTO = new EspecificacaoDocDTO(
                 emp.getName(),

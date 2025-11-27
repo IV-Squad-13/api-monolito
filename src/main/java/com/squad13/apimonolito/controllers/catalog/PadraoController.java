@@ -1,6 +1,6 @@
 package com.squad13.apimonolito.controllers.catalog;
 
-import com.squad13.apimonolito.DTO.catalog.EditPadraoDTO;
+import com.squad13.apimonolito.DTO.catalog.edit.EditPadraoDTO;
 import com.squad13.apimonolito.DTO.catalog.LoadCatalogParamsDTO;
 import com.squad13.apimonolito.DTO.catalog.PadraoDTO;
 import com.squad13.apimonolito.DTO.catalog.res.ResComposicaoDTO;

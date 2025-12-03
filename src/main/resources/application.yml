@@ -7,7 +7,7 @@ spring:
   config:
     # .env.properties - ambiente local
     # .env.prod.properties - ambiente preparado para deploy A
-    import: optional:file:.env.properties
+    import: optional:file:.env.dev.properties
 
   data:
     mongodb:

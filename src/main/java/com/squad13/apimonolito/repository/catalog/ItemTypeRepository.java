@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface ItemTypeRepository extends JpaRepository<ItemType, Long> {
 
-    @EntityGraph(attributePaths = {"itemDescSet"})
+    @EntityGraph(attributePaths = {"itemDescSet", "itemDescSet.ambienteSet.ambiente", "itemDescSet.ambienteSet.compSet.padrao"})
     List<ItemType> findAll();
 
     Optional<ItemType> findByIdOrName(Long id, String name);

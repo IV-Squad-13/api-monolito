@@ -46,11 +46,13 @@ public class EspecificacaoDoc {
     @Size(max = 40)
     private String name;
 
+    @Size(max = 80)
+    private String local;
+
     @Size(max = 160)
     private String desc;
 
-    @Size(max = 160)
-    private String obs;
+    private List<String> obs;
 
     @Field("locaisIds")
     @JsonProperty("locais")

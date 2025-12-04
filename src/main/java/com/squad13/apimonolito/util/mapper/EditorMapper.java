@@ -77,6 +77,7 @@ public class EditorMapper {
                 doc.getEmpreendimentoId(),
                 doc.getName(),
                 doc.getDesc(),
+                doc.getLocal(),
                 doc.getObs(),
                 List.of(),
                 List.of()

@@ -143,12 +143,10 @@ public class ApprovalService {
                         new ResourceNotFoundException("Revisão de Local não encontrada com o id informado: " + id)
                 );
 
-        if (dto.getIsApproved() != localRev.getIsApproved()) {
-            localRev.setIsApproved(dto.getIsApproved());
+        localRev.setIsApproved(dto.getIsApproved());
 
-            if (dto.getApprovalType().equals(ApprovalEnum.CASCADE)) {
-                approveAmbientes(localRev.getIsApproved(), localRev.getAmbienteRevIds());
-            }
+        if (dto.getApprovalType().equals(ApprovalEnum.CASCADE)) {
+            approveAmbientes(localRev.getIsApproved(), localRev.getAmbienteRevIds());
         }
 
         if (dto.getComment() != null && !dto.getComment().isEmpty()) {
@@ -330,6 +328,7 @@ public class ApprovalService {
         Arrays.stream(RevDocElementEnum.values()).forEach(docType -> {
             RevDocSearchParamsDTO params = new RevDocSearchParamsDTO();
             params.setDocType(docType);
+            params.setRevisionId(rev.getId());
 
             revisionService.searchDocs(LoadRevDocParamsDTO.allFalse(), params, true).stream()
                     .findAny().ifPresent(revDoc -> {

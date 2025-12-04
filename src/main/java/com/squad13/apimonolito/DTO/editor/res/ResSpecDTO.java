@@ -31,7 +31,8 @@ public class ResSpecDTO {
     private Long empreendimentoId;
     private String name;
     private String desc;
-    private String obs;
+    private String local;
+    private List<String> obs;
 
     private List<ResLocalDocDTO> locais = new ArrayList<>();
     private List<ResMatDocDTO> materiais = new ArrayList<>();

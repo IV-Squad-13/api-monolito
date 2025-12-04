@@ -108,6 +108,7 @@ public class EspecificacaoService {
         spec.setName(dto.name());
         spec.setEmpreendimentoId(dto.empId());
         spec.setDesc(dto.desc());
+        spec.setLocal(dto.local());
         spec.setObs(dto.obs());
 
         spec.setId(newId());
@@ -324,6 +325,10 @@ public class EspecificacaoService {
 
         if (dto.desc() != null) {
             especificacacaoDoc.setDesc(dto.desc());
+        }
+
+        if (dto.local() != null) {
+            especificacacaoDoc.setLocal(dto.local());
         }
 
         if (dto.obs() != null) {

@@ -7,12 +7,15 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.bson.types.ObjectId;
 
+import java.util.List;
+
 public record EspecificacaoDocDTO(
         @NotBlank(message = "A Especificação precisa ter um nome")
         String name,
 
         String desc,
-        String obs,
+        String local,
+        List<String> obs,
 
         @NotNull(message = "A Especificação precisa ter o id do Empreendimento")
         Long empId,

@@ -109,11 +109,3 @@ docker-compose up -d
 ```bash
 ./mvnw spring-boot:run
 ```
-
-### Logs
-
-```bash
-tail -f logs/monolito.log
-```
-
----

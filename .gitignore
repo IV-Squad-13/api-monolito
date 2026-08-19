@@ -23,7 +23,7 @@
 hs_err_pid*
 replay_pid*
 
-.env.dev.properties
-/.env.dev.properties
-./.env.dev.properties
+.env
+.env.*
+*.env.properties
 /target/
